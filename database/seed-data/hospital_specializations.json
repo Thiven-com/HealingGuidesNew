@@ -1,0 +1,79 @@
+[
+    {
+        "hospital_code": "APH001",
+        "specializations": [
+            "Cardiology",
+            "Neurology",
+            "Orthopedics",
+            "ENT",
+            "General Medicine",
+            "Dermatology",
+            "Radiology",
+            "Emergency Medicine",
+            "Critical Care",
+            "Cardiac Surgery",
+            "Neurosurgery",
+            "Gastroenterology"
+        ]
+    },
+    {
+        "hospital_code": "YSH002",
+        "specializations": [
+            "Cardiology",
+            "Oncology",
+            "Pulmonology",
+            "Nephrology",
+            "Radiology",
+            "Pathology",
+            "General Surgery",
+            "Emergency Medicine",
+            "Critical Care",
+            "Urology"
+        ]
+    },
+    {
+        "hospital_code": "KIM003",
+        "specializations": [
+            "Cardiology",
+            "Neurology",
+            "Orthopedics",
+            "Plastic Surgery",
+            "Rheumatology",
+            "Immunology",
+            "Dentistry",
+            "Ophthalmology",
+            "General Medicine",
+            "Physiotherapy"
+        ]
+    },
+    {
+        "hospital_code": "CAR004",
+        "specializations": [
+            "Pediatrics",
+            "Gynecology",
+            "Dermatology",
+            "ENT",
+            "Psychiatry",
+            "Endocrinology",
+            "Cosmetology",
+            "General Medicine",
+            "Emergency Medicine",
+            "Radiology"
+        ]
+    },
+    {
+        "hospital_code": "AST005",
+        "specializations": [
+            "Cardiology",
+            "Orthopedics",
+            "Urology",
+            "Nephrology",
+            "Pulmonology",
+            "Anesthesiology",
+            "General Surgery",
+            "Radiology",
+            "Critical Care",
+            "Physiotherapy"
+        ]
+    }
+]

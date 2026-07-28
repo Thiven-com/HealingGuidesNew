@@ -5,9 +5,12 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\HospitalController;
+use App\Http\Controllers\Admin\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,7 +26,14 @@ Route::get('logout', [AuthController::class, 'logout']);
 Route::group(['middleware' => 'admin'], function () {
     Route::get('dashboard', [AuthController::class, 'dashboard'])
         ->name('admin.dashboard');
-    
+
+    Route::resource('hospitals', HospitalController::class)->names('admin.hospitals');
+    Route::post('hospitals/status/{hospital}', [HospitalController::class, 'status'])->name('admin.hospitals.status');
+
+    Route::resource('specializations', SpecializationController::class)->names('admin.specializations');
+
+    Route::post('specializations/status/{id}', [SpecializationController::class, 'status'])->name('admin.specializations.status');
+
     Route::get('settings/company', 'SiteSettingController@site')->name('admin.settings.company');
     Route::post('setting/company/update', 'SiteSettingController@company_setting_update')->name('admin.settings.company.update');
 

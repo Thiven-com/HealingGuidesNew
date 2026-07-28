@@ -1,0 +1,122 @@
+[
+    {
+        "specialization_name": "Cardiology",
+        "description": "Heart and cardiovascular care"
+    },
+    {
+        "specialization_name": "Neurology",
+        "description": "Brain and nervous system disorders"
+    },
+    {
+        "specialization_name": "Orthopedics",
+        "description": "Bones, joints and muscles"
+    },
+    {
+        "specialization_name": "General Medicine",
+        "description": "General physician consultation"
+    },
+    {
+        "specialization_name": "Pediatrics",
+        "description": "Children healthcare"
+    },
+    {
+        "specialization_name": "Dermatology",
+        "description": "Skin, hair and nail treatments"
+    },
+    {
+        "specialization_name": "ENT",
+        "description": "Ear, Nose and Throat"
+    },
+    {
+        "specialization_name": "Gynecology",
+        "description": "Women healthcare"
+    },
+    {
+        "specialization_name": "Urology",
+        "description": "Urinary tract diseases"
+    },
+    {
+        "specialization_name": "Nephrology",
+        "description": "Kidney care"
+    },
+    {
+        "specialization_name": "Oncology",
+        "description": "Cancer treatment"
+    },
+    {
+        "specialization_name": "Pulmonology",
+        "description": "Lung diseases"
+    },
+    {
+        "specialization_name": "Psychiatry",
+        "description": "Mental health"
+    },
+    {
+        "specialization_name": "Dentistry",
+        "description": "Dental treatments"
+    },
+    {
+        "specialization_name": "Ophthalmology",
+        "description": "Eye care"
+    },
+    {
+        "specialization_name": "Radiology",
+        "description": "Imaging and scans"
+    },
+    {
+        "specialization_name": "Pathology",
+        "description": "Laboratory diagnostics"
+    },
+    {
+        "specialization_name": "Physiotherapy",
+        "description": "Physical rehabilitation"
+    },
+    {
+        "specialization_name": "Endocrinology",
+        "description": "Hormonal disorders"
+    },
+    {
+        "specialization_name": "Gastroenterology",
+        "description": "Digestive system"
+    },
+    {
+        "specialization_name": "Plastic Surgery",
+        "description": "Reconstructive surgery"
+    },
+    {
+        "specialization_name": "Emergency Medicine",
+        "description": "Emergency and trauma care"
+    },
+    {
+        "specialization_name": "Critical Care",
+        "description": "ICU treatments"
+    },
+    {
+        "specialization_name": "Anesthesiology",
+        "description": "Anesthesia services"
+    },
+    {
+        "specialization_name": "General Surgery",
+        "description": "General surgical procedures"
+    },
+    {
+        "specialization_name": "Cardiac Surgery",
+        "description": "Heart surgeries"
+    },
+    {
+        "specialization_name": "Neurosurgery",
+        "description": "Brain surgery"
+    },
+    {
+        "specialization_name": "Rheumatology",
+        "description": "Joint diseases"
+    },
+    {
+        "specialization_name": "Immunology",
+        "description": "Immune disorders"
+    },
+    {
+        "specialization_name": "Cosmetology",
+        "description": "Cosmetic treatments"
+    }
+]
