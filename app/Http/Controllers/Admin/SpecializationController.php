@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HospitalSpecialization;
 use App\Models\Specialization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -156,7 +157,13 @@ class SpecializationController extends Controller
     public function destroy(string $id)
     {
         $specialization = Specialization::findOrFail($id);
+        $isUsed = HospitalSpecialization::where('specialization_id', $specialization->id)->exists();
 
+        if ($isUsed) {
+            return redirect()
+                ->route('admin.specializations.index')
+                ->with('error', 'This specialization is assigned to one or more hospitals and cannot be deleted.');
+        }
         if ($specialization->icon && File::exists(public_path($specialization->icon))) {
             File::delete(public_path($specialization->icon));
         }

@@ -118,5 +118,17 @@
     {
         "specialization_name": "Cosmetology",
         "description": "Cosmetic treatments"
+    },
+    {
+        "specialization_name": "Sports Medicine",
+        "description": "Diagnosis, treatment and prevention of sports-related injuries"
+    },
+    {
+        "specialization_name": "Pain Management",
+        "description": "Management of acute and chronic pain conditions"
+    },
+    {
+        "specialization_name": "Rehabilitation Medicine",
+        "description": "Physical medicine and rehabilitation services"
     }
 ]

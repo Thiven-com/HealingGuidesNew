@@ -33,16 +33,28 @@
                                         </ul>
                                 </li>
                                 <!------schedule----->
+                                <!------ Hospital Management ----->
                                 <li class="submenu-open">
-                                        <h6 class="submenu-hdr">Cars</h6>
+                                        <h6 class="submenu-hdr">Hospital Management</h6>
+
                                         <ul>
-                                                {{-- <li
-                                                        class="{{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
-                                                        <a href="{{ route('admin.contacts.index') }}">
-                                                                <i class="ti ti-address-book fs-16 me-2"></i>
-                                                                <span>Contacts</span>
+
+                                                <li
+                                                        class="{{ request()->routeIs('admin.hospitals.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.hospitals.index') }}">
+                                                                <i class="ti ti-building-hospital fs-16 me-2"></i>
+                                                                <span>Hospitals</span>
                                                         </a>
-                                                </li> --}}
+                                                </li>
+
+                                                <li
+                                                        class="{{ request()->routeIs('admin.specializations.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.specializations.index') }}">
+                                                                <i class="ti ti-stethoscope fs-16 me-2"></i>
+                                                                <span>Specializations</span>
+                                                        </a>
+                                                </li>
+
                                         </ul>
                                 </li>
 

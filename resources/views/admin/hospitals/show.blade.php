@@ -366,6 +366,34 @@
                         </div>
 
                     </div>
+                    <div class="card border-0 shadow-sm mb-4">
+
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="ti ti-stethoscope me-2"></i>
+                                Hospital Specializations
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            @forelse($hospital->hospitalSpecializations as $hospitalSpecialization)
+
+                                <span class="badge bg-primary me-2 mb-2 px-3 py-2">
+                                    {{ $hospitalSpecialization->specialization->specialization_name }}
+                                </span>
+
+                            @empty
+
+                                <span class="text-muted">
+                                    No specializations assigned.
+                                </span>
+
+                            @endforelse
+
+                        </div>
+
+                    </div>
 
                     <!-- Banner -->
 

@@ -53,9 +53,8 @@ class Hospital extends Model
         'status'
 
     ];
-
-    public function departments()
+    public function hospitalSpecializations()
     {
-        return $this->hasMany(Department::class);
+        return $this->hasMany(HospitalSpecialization::class);
     }
 }

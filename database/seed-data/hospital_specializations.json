@@ -75,5 +75,85 @@
             "Critical Care",
             "Physiotherapy"
         ]
+    },
+    {
+        "hospital_code": "CON006",
+        "specializations": [
+            "Cardiology",
+            "Neurology",
+            "Oncology",
+            "Nephrology",
+            "Pulmonology",
+            "Gastroenterology",
+            "Endocrinology",
+            "Radiology",
+            "Critical Care",
+            "Emergency Medicine",
+            "General Surgery",
+            "Anesthesiology"
+        ]
+    },
+    {
+        "hospital_code": "SUN007",
+        "specializations": [
+            "Orthopedics",
+            "Sports Medicine",
+            "Physiotherapy",
+            "General Medicine",
+            "Emergency Medicine",
+            "Cardiology",
+            "Neurology",
+            "Radiology",
+            "Pain Management",
+            "Rehabilitation Medicine"
+        ]
+    },
+    {
+        "hospital_code": "MED008",
+        "specializations": [
+            "Cardiology",
+            "Neurology",
+            "Nephrology",
+            "Oncology",
+            "Pulmonology",
+            "Urology",
+            "General Surgery",
+            "Radiology",
+            "Pathology",
+            "Critical Care",
+            "Emergency Medicine"
+        ]
+    },
+    {
+        "hospital_code": "VIR009",
+        "specializations": [
+            "Cardiology",
+            "General Medicine",
+            "Orthopedics",
+            "ENT",
+            "Dermatology",
+            "Gynecology",
+            "Pediatrics",
+            "Radiology",
+            "Emergency Medicine",
+            "Critical Care"
+        ]
+    },
+    {
+        "hospital_code": "STA010",
+        "specializations": [
+            "Cardiology",
+            "Cardiac Surgery",
+            "Neurology",
+            "Neurosurgery",
+            "Orthopedics",
+            "General Surgery",
+            "Urology",
+            "Oncology",
+            "Pulmonology",
+            "Critical Care",
+            "Emergency Medicine",
+            "Radiology"
+        ]
     }
 ]

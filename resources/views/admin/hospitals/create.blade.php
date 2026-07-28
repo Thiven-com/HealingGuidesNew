@@ -90,31 +90,92 @@
 
                                 <select class="form-select" name="hospital_type">
 
-                                    <option value="">
-                                        Select Type
+                                    <option value="">Select Hospital Type</option>
+
+                                    <option value="General Hospital" {{ old('hospital_type') == 'General Hospital'
+        ? 'selected' : '' }}>
+                                        General Hospital
                                     </option>
 
-                                    <option value="General">General</option>
-
-                                    <option value="Speciality">Speciality</option>
-
-                                    <option value="Multi Speciality">
+                                    <option value="Multi Speciality" {{ old('hospital_type') == 'Multi Speciality'
+        ? 'selected' : '' }}>
                                         Multi Speciality
                                     </option>
 
-                                    <option value="Clinic">
+                                    <option value="Super Speciality" {{ old('hospital_type') == 'Super Speciality'
+        ? 'selected' : '' }}>
+                                        Super Speciality
+                                    </option>
+
+                                    <option value="Government Hospital" {{ old('hospital_type') == 'Government Hospital'
+        ? 'selected' : '' }}>
+                                        Government Hospital
+                                    </option>
+
+                                    <option value="Private Hospital" {{ old('hospital_type') == 'Private Hospital'
+        ? 'selected' : '' }}>
+                                        Private Hospital
+                                    </option>
+
+                                    <option value="Medical College Hospital" {{
+        old('hospital_type') == 'Medical College Hospital' ? 'selected' : '' }}>
+                                        Medical College Hospital
+                                    </option>
+
+                                    <option value="Clinic" {{ old('hospital_type') == 'Clinic' ? 'selected' : '' }}>
                                         Clinic
                                     </option>
 
-                                    <option value="Medical College">
-                                        Medical College
-                                    </option>
-
-                                    <option value="Diagnostic Center">
+                                    <option value="Diagnostic Center" {{ old('hospital_type') == 'Diagnostic Center'
+        ? 'selected' : '' }}>
                                         Diagnostic Center
                                     </option>
 
+                                    <option value="Nursing Home" {{ old('hospital_type') == 'Nursing Home' ? 'selected' : ''
+                                                }}>
+                                        Nursing Home
+                                    </option>
+
                                 </select>
+
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label">
+                                    Hospital Specializations
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <div class="row">
+
+                                    @foreach($specializations as $specialization)
+
+                                        <div class="col-md-4 col-lg-3 mb-2">
+
+                                            <div class="form-check">
+
+                                                <input class="form-check-input" type="checkbox" name="specializations[]"
+                                                    id="specialization{{ $specialization->id }}"
+                                                    value="{{ $specialization->id }}" {{ in_array($specialization->id, old('specializations', [])) ? 'checked' : '' }}>
+
+                                                <label class="form-check-label" for="specialization{{ $specialization->id }}">
+
+                                                    {{ $specialization->specialization_name }}
+
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                    @endforeach
+
+                                </div>
+
+                                @error('specializations')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
 
                             </div>
 
@@ -595,9 +656,9 @@
                 submitBtn.disabled = true;
 
                 submitBtn.innerHTML = `
-                <span class="spinner-border spinner-border-sm me-2"></span>
-                Saving...
-            `;
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Saving...
+                                `;
 
             });
 

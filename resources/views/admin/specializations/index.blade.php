@@ -3,7 +3,15 @@
 @extends('layout.mainlayout')
 
 @section('content')
+    <style>
+        .table-responsive {
+            overflow: visible !important;
+        }
 
+        .dropdown-menu {
+            z-index: 99999 !important;
+        }
+    </style>
     <div class="page-wrapper">
         <div class="content">
 
@@ -320,7 +328,8 @@
 
                                         <td colspan="8" class="text-center py-5">
 
-                                            {{-- <img src="{{ asset('assets/img/icons/empty.svg') }}" width="120" class="mb-3"> --}}
+                                            {{-- <img src="{{ asset('assets/img/icons/empty.svg') }}" width="120" class="mb-3">
+                                            --}}
 
                                             <h6>No Specializations Found</h6>
 

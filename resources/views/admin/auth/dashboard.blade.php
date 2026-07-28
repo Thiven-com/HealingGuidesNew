@@ -504,7 +504,7 @@
                                 </div>
 
                                 <div class="col-lg-3 col-md-4 col-6">
-                                    <a href="#" class="btn btn-info text-white w-100 py-3">
+                                    <a href="{{ route('admin.hospitals.create') }}" class="btn btn-info text-white w-100 py-3">
                                         <i class="ti ti-building-hospital fs-24 d-block mb-2"></i>
                                         Hospital
                                     </a>

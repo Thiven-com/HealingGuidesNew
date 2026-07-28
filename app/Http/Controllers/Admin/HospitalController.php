@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hospital;
+use App\Models\HospitalSpecialization;
+use App\Models\Specialization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,7 +25,11 @@ class HospitalController extends Controller
 
     public function create()
     {
-        return view('admin.hospitals.create');
+        $specializations = Specialization::where('status', 1)
+            ->orderBy('specialization_name')
+            ->get();
+
+        return view('admin.hospitals.create', compact('specializations'));
     }
     public function store(Request $request)
     {
@@ -35,7 +41,9 @@ class HospitalController extends Controller
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
-            'pincode' => 'required'
+            'pincode' => 'required',
+            'specializations' => 'required|array|min:1',
+            'specializations.*' => 'exists:specializations,id',
         ]);
 
         $data = $request->all();
@@ -50,7 +58,9 @@ class HospitalController extends Controller
         // Generate Hospital Code
         $lastHospital = Hospital::latest('id')->first();
         $nextId = $lastHospital ? $lastHospital->id + 1 : 1;
-        $data['hospital_code'] = 'HSP' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        $firstWord = explode(' ', trim($request->hospital_name))[0];
+        $prefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $firstWord), 0, 3));
+        $data['hospital_code'] = $prefix . str_pad($nextId, 3, '0', STR_PAD_LEFT);
 
         if ($request->hasFile('logo')) {
 
@@ -76,7 +86,18 @@ class HospitalController extends Controller
             );
         }
 
-        Hospital::create($data);
+        $hospital = Hospital::create($data);
+
+        // Save Hospital Specializations
+        foreach ($request->specializations as $specializationId) {
+
+            HospitalSpecialization::create([
+                'hospital_id' => $hospital->id,
+                'specialization_id' => $specializationId,
+                'status' => 1,
+            ]);
+
+        }
 
         return redirect()
             ->route('admin.hospitals.index')
@@ -85,12 +106,24 @@ class HospitalController extends Controller
 
     public function show(Hospital $hospital)
     {
+        $hospital->load('hospitalSpecializations.specialization');
+
         return view('admin.hospitals.show', compact('hospital'));
     }
 
+
     public function edit(Hospital $hospital)
     {
-        return view('admin.hospitals.edit', compact('hospital'));
+        $specializations = Specialization::where('status', 1)
+            ->orderBy('specialization_name')
+            ->get();
+
+        $hospital->load('hospitalSpecializations');
+
+        return view(
+            'admin.hospitals.edit',
+            compact('hospital', 'specializations')
+        );
     }
 
     public function update(Request $request, Hospital $hospital)
@@ -104,7 +137,9 @@ class HospitalController extends Controller
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
-            'pincode' => 'required'
+            'pincode' => 'required',
+            'specializations' => 'required|array|min:1',
+            'specializations.*' => 'exists:specializations,id',
         ]);
 
         $data = $request->all();
@@ -150,6 +185,27 @@ class HospitalController extends Controller
         }
 
         $hospital->update($data);
+
+        $existingIds = HospitalSpecialization::where('hospital_id', $hospital->id)
+            ->pluck('specialization_id')
+            ->toArray();
+
+        $newIds = $request->specializations ?? [];
+
+        // Insert only new specializations
+        foreach (array_diff($newIds, $existingIds) as $specializationId) {
+
+            HospitalSpecialization::create([
+                'hospital_id' => $hospital->id,
+                'specialization_id' => $specializationId,
+                'status' => 1,
+            ]);
+        }
+
+        // Delete only unchecked specializations
+        HospitalSpecialization::where('hospital_id', $hospital->id)
+            ->whereIn('specialization_id', array_diff($existingIds, $newIds))
+            ->delete();
 
         return redirect()
             ->route('admin.hospitals.index')
