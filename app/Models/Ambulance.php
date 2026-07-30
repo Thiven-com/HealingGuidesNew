@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Ambulance extends Model
+{
+    protected $fillable = [
+
+        'ambulance_type_id',
+
+        'hospital_id',
+
+        'ambulance_name',
+
+        'ambulance_code',
+
+        'vehicle_number',
+
+        'registration_number',
+
+        'driver_name',
+
+        'driver_mobile',
+
+        'driver_license_number',
+
+        'driver_photo',
+
+        'model',
+
+        'manufacturing_year',
+
+        'current_location',
+
+        'latitude',
+
+        'longitude',
+
+        'base_fare',
+
+        'price_per_km',
+
+        'is_available',
+
+        'status'
+
+    ];
+
+    public function ambulanceType()
+    {
+        return $this->belongsTo(AmbulanceType::class);
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+}

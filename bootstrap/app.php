@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
          $middleware->alias([
             'admin' => \App\Http\Middleware\Admin::class,
+            'customertokenCheck' => \App\Http\Middleware\CustomerTokenCheck::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

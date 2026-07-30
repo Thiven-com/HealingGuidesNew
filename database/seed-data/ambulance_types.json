@@ -1,0 +1,44 @@
+[
+    {
+        "ambulance_type_name": "Basic Life Support",
+        "description": "Basic emergency ambulance equipped with oxygen cylinder, stretcher, first aid kit and essential life support equipment.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "Advanced Life Support",
+        "description": "Advanced ambulance with ventilator, cardiac monitor, defibrillator and trained paramedics.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "ICU Ambulance",
+        "description": "Mobile intensive care unit with ICU equipment for critically ill patients.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "Cardiac Ambulance",
+        "description": "Specialized ambulance for heart attack and other cardiac emergencies.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "Neonatal Ambulance",
+        "description": "Specialized ambulance for newborn babies with neonatal intensive care equipment.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "Mortuary Ambulance",
+        "description": "Vehicle designed for safe transportation of deceased persons.",
+        "image": null,
+        "status": 1
+    },
+    {
+        "ambulance_type_name": "Air Ambulance",
+        "description": "Emergency medical transport by helicopter or aircraft for critical patients.",
+        "image": null,
+        "status": 1
+    }
+]

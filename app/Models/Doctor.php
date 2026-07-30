@@ -17,6 +17,9 @@ class Doctor extends Model
         'designation',
         'experience',
         'consultation_fee',
+        'video_consultation_fee',
+        'chat_consultation_fee',
+        'home_visit_fee',
         'email',
         'mobile',
         'dob',
@@ -40,5 +43,6 @@ class Doctor extends Model
     {
         return $this->belongsTo(HospitalSpecialization::class);
     }
+
 
 }

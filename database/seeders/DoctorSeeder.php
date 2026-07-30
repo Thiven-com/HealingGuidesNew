@@ -79,6 +79,12 @@ class DoctorSeeder extends Seeder
 
                 'consultation_fee' => $doctor['consultation_fee'],
 
+                'video_consultation_fee' => $doctor['video_consultation_fee'] ?? null,
+
+                'chat_consultation_fee' => $doctor['chat_consultation_fee'] ?? null,
+
+                'home_visit_fee' => $doctor['home_visit_fee'] ?? null,
+
                 'email' => $doctor['email'],
 
                 'mobile' => $doctor['mobile'],

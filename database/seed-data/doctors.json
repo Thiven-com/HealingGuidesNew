@@ -18,7 +18,10 @@
         "about": "Expert in interventional cardiology and heart failure management.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 486,
+        "chat_consultation_fee": 293,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Kavya Reddy",
@@ -39,7 +42,10 @@
         "about": "Specialist in epilepsy and stroke management.",
         "available_from": "10:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 607,
+        "chat_consultation_fee": 298,
+        "home_visit_fee": 1203
     },
     {
         "doctor_name": "Dr. Vinay Sharma",
@@ -60,7 +66,10 @@
         "about": "Specialized in joint replacement and trauma surgery.",
         "available_from": "09:30:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 547,
+        "chat_consultation_fee": 445,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Sneha Rao",
@@ -81,7 +90,10 @@
         "about": "Treats skin, hair and cosmetic disorders.",
         "available_from": "11:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 466,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1383
     },
     {
         "doctor_name": "Dr. Arvind Patel",
@@ -102,7 +114,10 @@
         "about": "Experienced physician for chronic diseases.",
         "available_from": "09:00:00",
         "available_to": "16:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 456,
+        "chat_consultation_fee": 381,
+        "home_visit_fee": 1035
     },
     {
         "doctor_name": "Dr. Sandeep Rao",
@@ -123,7 +138,10 @@
         "about": "Specialist in medical oncology and chemotherapy.",
         "available_from": "09:30:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 1025,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Anusha Gupta",
@@ -144,7 +162,10 @@
         "about": "Expert in preventive cardiology.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": 503,
+        "home_visit_fee": 1744
     },
     {
         "doctor_name": "Dr. Rajesh Nair",
@@ -165,7 +186,10 @@
         "about": "Specializes in asthma and respiratory disorders.",
         "available_from": "10:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Priya Menon",
@@ -186,7 +210,10 @@
         "about": "Kidney transplant and dialysis specialist.",
         "available_from": "09:00:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 730,
+        "chat_consultation_fee": 331,
+        "home_visit_fee": 1421
     },
     {
         "doctor_name": "Dr. Mahesh Verma",
@@ -207,7 +234,10 @@
         "about": "Performs advanced laparoscopic surgeries.",
         "available_from": "08:30:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 598,
+        "chat_consultation_fee": 466,
+        "home_visit_fee": 1776
     },
     {
         "doctor_name": "Dr. Lakshmi Devi",
@@ -228,7 +258,10 @@
         "about": "Expert in joint replacement and sports injury management.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 612,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Naveen Reddy",
@@ -249,7 +282,10 @@
         "about": "Interventional cardiologist with extensive cath lab experience.",
         "available_from": "09:00:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 618,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1785
     },
     {
         "doctor_name": "Dr. Swathi Rao",
@@ -270,7 +306,10 @@
         "about": "Specializes in epilepsy, migraine and stroke care.",
         "available_from": "10:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Ravi Teja",
@@ -291,7 +330,10 @@
         "about": "Reconstructive and cosmetic plastic surgeon.",
         "available_from": "09:30:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 938,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1685
     },
     {
         "doctor_name": "Dr. Keerthi Sharma",
@@ -312,7 +354,10 @@
         "about": "Specialist in orthopedic and neurological rehabilitation.",
         "available_from": "08:30:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 340,
+        "chat_consultation_fee": 291,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Arjun Varma",
@@ -333,7 +378,10 @@
         "about": "Emergency physician with trauma care expertise.",
         "available_from": "08:00:00",
         "available_to": "20:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 477,
+        "chat_consultation_fee": 344,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Harika Reddy",
@@ -354,7 +402,10 @@
         "about": "Child healthcare and vaccination specialist.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 438,
+        "chat_consultation_fee": 246,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Srinivas Rao",
@@ -375,7 +426,10 @@
         "about": "High-risk pregnancy and women's healthcare specialist.",
         "available_from": "09:00:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": 310,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Neha Kapoor",
@@ -396,7 +450,10 @@
         "about": "Skin, hair and cosmetic treatment specialist.",
         "available_from": "10:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 439,
+        "chat_consultation_fee": 233,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Meena Iyer",
@@ -417,7 +474,10 @@
         "about": "Experienced cardiologist focusing on preventive heart care.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": 271,
+        "home_visit_fee": 2121
     },
     {
         "doctor_name": "Dr. Rohit Menon",
@@ -438,7 +498,10 @@
         "about": "Expert in knee, hip replacement and trauma surgery.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 802,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1998
     },
     {
         "doctor_name": "Dr. Priyanka Shah",
@@ -459,7 +522,10 @@
         "about": "Kidney disease and dialysis specialist.",
         "available_from": "10:00:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 646,
+        "chat_consultation_fee": 418,
+        "home_visit_fee": 1644
     },
     {
         "doctor_name": "Dr. Kiran Babu",
@@ -480,7 +546,10 @@
         "about": "Specialist in asthma, COPD and respiratory disorders.",
         "available_from": "09:30:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 664,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1500
     },
     {
         "doctor_name": "Dr. Anitha Rao",
@@ -501,7 +570,10 @@
         "about": "Laparoscopic and minimally invasive surgery expert.",
         "available_from": "08:30:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 699,
+        "chat_consultation_fee": null,
+        "home_visit_fee": 1711
     },
     {
         "doctor_name": "Dr. Suresh Kumar",
@@ -522,7 +594,10 @@
         "about": "Interventional cardiologist with 17 years of experience.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 645,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Divya Reddy",
@@ -543,7 +618,10 @@
         "about": "Specialist in stroke, epilepsy and movement disorders.",
         "available_from": "10:00:00",
         "available_to": "18:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": 255,
+        "home_visit_fee": 1291
     },
     {
         "doctor_name": "Dr. Ajay Varma",
@@ -564,7 +642,10 @@
         "about": "Specialized in fracture care and joint replacement.",
         "available_from": "09:00:00",
         "available_to": "17:00:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": null,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Nisha Kapoor",
@@ -585,7 +666,10 @@
         "about": "Expert in chemotherapy and targeted cancer therapy.",
         "available_from": "09:30:00",
         "available_to": "17:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 740,
+        "chat_consultation_fee": null,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Vivek Sharma",
@@ -606,7 +690,10 @@
         "about": "Treats diabetes, hypertension and infectious diseases.",
         "available_from": "09:00:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 522,
+        "chat_consultation_fee": 369,
+        "home_visit_fee": null
     },
     {
         "doctor_name": "Dr. Pooja Mehta",
@@ -627,6 +714,9 @@
         "about": "Performs complex cardiac bypass and valve replacement surgeries.",
         "available_from": "08:30:00",
         "available_to": "16:30:00",
-        "status": 1
+        "status": 1,
+        "video_consultation_fee": 1113,
+        "chat_consultation_fee": 569,
+        "home_visit_fee": null
     }
 ]
