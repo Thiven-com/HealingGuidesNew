@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiagnosticCollection;
 use App\Http\Resources\DiagnosticLabTestCollection;
+use App\Http\Resources\DiagnosticLabTestsCollection;
 use App\Http\Resources\LabTestCollection;
 use App\Models\Diagnostic;
 use App\Models\DiagnosticLabTest;
@@ -185,7 +186,7 @@ class DiagnosticController extends Controller
 
         return response()->json([
             'success' => 1,
-            'data' => new DiagnosticLabTestCollection($labTests),
+            'data' => new DiagnosticLabTestsCollection($labTests),
             'message' => 'Lab Tests Fetched Successfully'
         ]);
     }

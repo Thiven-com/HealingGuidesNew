@@ -64,6 +64,8 @@ class AmbulanceCollection extends ResourceCollection
                 'is_available' => (bool) $ambulance->is_available,
 
                 'status' => (bool) $ambulance->status,
+                'distance' => number_format(rand(5, 100) / 10, 1) . ' KM',
+                'eta' => rand(2, 20) . ' mins',
 
             ];
 

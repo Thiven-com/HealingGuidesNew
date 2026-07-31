@@ -3,6 +3,8 @@
 use App\Http\Controllers\CustomerApp\AmbulanceController;
 use App\Http\Controllers\CustomerApp\CCAvenueController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
+use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
+use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use App\Http\Controllers\CustomerApp\WebhookController;
@@ -39,6 +41,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::any('hospitals', "HospitalController@hospitals");
     Route::any('specializations', "HospitalController@specializations");
     Route::any('doctors', "DoctorController@doctors");
+    Route::any('doctor-slots', [DoctorController::class, 'availableSlots']);
     //diagnostics
     Route::any('diagnostics', [DiagnosticController::class, 'diagnostics']);
     Route::any('lab-tests', [DiagnosticController::class, 'labTests']);
@@ -52,6 +55,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     // Ambulances
     Route::any('ambulances', [AmbulanceController::class, 'ambulances']);
     Route::get('ambulances/{id}', [AmbulanceController::class, 'ambulanceDetails']);
+
+    Route::post('book-doctor-appointment', [DoctorAppointmentController::class, 'bookDoctorAppointment']);
+    Route::any('myAppointments', [DoctorAppointmentController::class, 'myAppointments']);
 });
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);

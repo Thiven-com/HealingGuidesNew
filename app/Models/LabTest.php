@@ -19,5 +19,6 @@ class LabTest extends Model
         'fasting_required',
         'home_collection',
         'status',
+        'image'
     ];
 }

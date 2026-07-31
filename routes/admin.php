@@ -1,15 +1,19 @@
 <?php
 
+use App\Http\Controllers\Admin\AmbulanceController;
+use App\Http\Controllers\Admin\AmbulanceTypeController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HospitalController;
+use App\Http\Controllers\Admin\LabTestController;
 use App\Http\Controllers\Admin\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +37,25 @@ Route::group(['middleware' => 'admin'], function () {
     Route::resource('specializations', SpecializationController::class)->names('admin.specializations');
 
     Route::post('specializations/status/{id}', [SpecializationController::class, 'status'])->name('admin.specializations.status');
+
+    Route::resource('diagnostics', DiagnosticController::class)->names('admin.diagnostics');
+
+    Route::post('diagnostics/status/{id}', [DiagnosticController::class, 'status'])
+        ->name('admin.diagnostics.status');
+
+    Route::resource('lab-tests', LabTestController::class)->names('admin.lab-tests');
+
+    Route::post('lab-tests/status/{id}', [LabTestController::class, 'status'])->name('admin.lab-tests.status');
+
+    Route::resource('ambulance-types', AmbulanceTypeController::class)->names('admin.ambulance-types');
+
+    Route::post('ambulance-types/status/{id}', [AmbulanceTypeController::class, 'status'])->name('admin.ambulance-types.status');
+
+    Route::resource('ambulances', AmbulanceController::class)->names('admin.ambulances');
+
+    Route::post('ambulances/status/{id}', [AmbulanceController::class, 'status'])->name('admin.ambulances.status');
+
+    Route::post('ambulances/availability/{id}', [AmbulanceController::class, 'availabilityStatus'])->name('admin.ambulances.availability');
 
     Route::get('settings/company', 'SiteSettingController@site')->name('admin.settings.company');
     Route::post('setting/company/update', 'SiteSettingController@company_setting_update')->name('admin.settings.company.update');

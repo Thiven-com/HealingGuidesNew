@@ -15,6 +15,7 @@ class Ambulance extends Model
         'ambulance_name',
 
         'ambulance_code',
+        'image',
 
         'vehicle_number',
 

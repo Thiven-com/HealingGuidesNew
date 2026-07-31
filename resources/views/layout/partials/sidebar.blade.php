@@ -54,6 +54,35 @@
                                                                 <span>Specializations</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.diagnostics.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.diagnostics.index') }}">
+                                                                <i class="ti ti-microscope fs-16 me-2"></i>
+                                                                <span>Diagnostics</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.lab-tests.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.lab-tests.index') }}">
+                                                                <i class="ti ti-test-pipe fs-16 me-2"></i>
+                                                                <span>Lab Tests</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.ambulance-types.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.ambulance-types.index') }}">
+                                                                <i class="ti ti-ambulance fs-16 me-2"></i>
+                                                                <span>Ambulance Types</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.ambulances.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.ambulances.index') }}">
+                                                                <i class="ti ti-ambulance fs-16 me-2"></i>
+                                                                <span>Ambulances</span>
+                                                        </a>
+                                                </li>
+
 
                                         </ul>
                                 </li>
