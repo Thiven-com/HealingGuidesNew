@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
@@ -24,6 +25,7 @@ class AccountController extends Controller
             ]);
         }
         $otp = 1234;
+        // $otp = rand(1000, 9999);
         $customer = Customer::where('mobile', $request->mobile)->first();
         if (!$customer) {
             $customer = new Customer();
@@ -34,6 +36,15 @@ class AccountController extends Controller
 
             $customer->customer_code = 'CUS' . str_pad($customer->id, 6, '0', STR_PAD_LEFT);
             $customer->save();
+
+            // try {
+            //     $msg = "Your OTP is {$otp} to log in to your ECM App. Do not share this code with anyone.- E Care Managers";
+            //     $url = "http://sms.hspsms.com/sendSMS?username=Ecm&message=" . urlencode($msg) . "&sendername=ECAREM&smstype=TRANS&numbers=$customer->mobile&apikey=ba52516b-ab36-4b55-a3b4-679af134744e";
+            //     $ret = file($url);
+            //     Log::info($ret);
+            // } catch (\Exception $e) {
+            //     Log::info($e->getMessage());
+            // }
             return response()->json([
                 'success' => 1,
                 'message' => 'OTP Sent Successfully'
@@ -42,6 +53,14 @@ class AccountController extends Controller
             $customer->otp = $otp;
             $customer->save();
 
+            // try {
+            //     $msg = "Your OTP is {$otp} to log in to your ECM App. Do not share this code with anyone.- E Care Managers";
+            //     $url = "http://sms.hspsms.com/sendSMS?username=Ecm&message=" . urlencode($msg) . "&sendername=ECAREM&smstype=TRANS&numbers=$customer->mobile&apikey=ba52516b-ab36-4b55-a3b4-679af134744e";
+            //     $ret = file($url);
+            //     Log::info($ret);
+            // } catch (\Exception $e) {
+            //     Log::info($e->getMessage());
+            // }
             return response()->json([
                 'success' => 1,
                 'message' => 'OTP Sent Successfully'

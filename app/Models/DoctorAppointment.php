@@ -44,7 +44,38 @@ class DoctorAppointment extends Model
 
         'cancel_reason',
 
-        'cancelled_at'
+        'cancelled_at',
+
+        'meeting_provider',
+
+        'meeting_id',
+
+        'meeting_password',
+
+        'meeting_link',
+
+        'meeting_status',
+
+        'chat_room_id',
+
+        'chat_started_at',
+
+        'chat_ended_at',
+
+        'visit_address',
+
+        'visit_city',
+
+        'visit_state',
+
+        'visit_pincode',
+
+        'visit_latitude',
+
+        'visit_longitude',
+
+        'visit_status',
+
 
     ];
 
@@ -71,5 +102,9 @@ class DoctorAppointment extends Model
     public function familyMember()
     {
         return $this->belongsTo(FamilyMember::class);
+    }
+    public function videoRoom()
+    {
+        return $this->hasOne(VideoRoom::class, 'appointment_id');
     }
 }

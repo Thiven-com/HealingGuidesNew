@@ -66,6 +66,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::any('myAppointments', [DoctorAppointmentController::class, 'myAppointments']);
     Route::post('cancel-appointment', [DoctorAppointmentController::class, 'cancelAppointment']);
     Route::post('reschedule-appointment', [DoctorAppointmentController::class, 'rescheduleAppointment']);
+    Route::post('pay-appointment', [DoctorAppointmentController::class, 'payAppointment']);
+    Route::post('join-video-room',[DoctorAppointmentController::class,'joinVideoRoom']);
 });
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);
