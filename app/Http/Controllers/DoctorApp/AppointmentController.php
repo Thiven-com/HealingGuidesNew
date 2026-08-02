@@ -5,8 +5,10 @@ namespace App\Http\Controllers\DoctorApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DoctorAppointmentCollection;
 use App\Http\Resources\DoctorAppointmentDetailCollection;
+use App\Http\Resources\LabTestCollection;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
+use App\Models\LabTest;
 use App\Models\VideoRoom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -793,6 +795,51 @@ class AppointmentController extends Controller
                     'appointment_time' => $appointment->appointment_time,
                 ]
             ]
+        ]);
+    }
+
+        public function labTests(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $labTests = LabTest::where('status', 1);
+
+        if ($request->filled('id')) {
+            $labTests->where('id', $request->id);
+        }
+
+        if ($request->filled('search')) {
+            $labTests->where('test_name', 'LIKE', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('home_collection')) {
+            $labTests->where('home_collection', $request->home_collection);
+        }
+
+        if ($request->filled('fasting_required')) {
+            $labTests->where('fasting_required', $request->fasting_required);
+        }
+
+        $labTests = $labTests->latest()->paginate(20);
+
+        if ($labTests->isEmpty()) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'No Lab Tests Found'
+            ]);
+        }
+
+        return response()->json([
+            'success' => 1,
+            'data' => new LabTestCollection($labTests),
+            'message' => 'Lab Tests Fetched Successfully'
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CustomerApp;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CustomerAppointmentDetailCollection;
 use App\Http\Resources\DoctorAppointmentCollection;
 use App\Models\Doctor;
 use App\Models\DoctorAppointment;
@@ -253,6 +254,67 @@ class DoctorAppointmentController extends Controller
             'success' => 1,
             'data' => new DoctorAppointmentCollection($appointments),
             'message' => 'Appointments Fetched Successfully'
+        ]);
+    }
+
+    public function appointmentDetails($id)
+    {
+        $customer = auth('sanctum')->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $appointments = DoctorAppointment::with([
+
+            // Doctor
+            'doctor.hospitalSpecialization.specialization',
+
+            // Hospital
+            'hospital',
+
+            // Family Member
+            'familyMember',
+
+            // Schedule
+            'schedule',
+
+            // Patient Vitals
+            'patientVitals',
+
+            // Prescription
+            'prescription.medicines',
+
+            // Recommended Lab Tests
+            'prescription.recommendedLabTests.labTest',
+
+            // Medical Reports
+            'medicalReports',
+
+            // Video Room
+            'videoRoom',
+
+        ])
+            ->where('customer_id', $customer->id)
+            ->where('id', $id)
+            ->get();
+
+        if ($appointments->isEmpty()) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Appointment Not Found'
+            ]);
+        }
+
+        return response()->json([
+            'success' => 1,
+            'data' => new CustomerAppointmentDetailCollection(
+                $appointments
+            ),
+            'message' => 'Appointment Details Fetched Successfully'
         ]);
     }
 

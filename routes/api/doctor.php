@@ -34,10 +34,13 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::any('specializations', [ProfileController::class, 'specializations']);
     Route::any('doctor-slots', [ProfileController::class, 'availableSlots']);
     Route::post('updateFees', [ProfileController::class, 'updateFees']);
+    
     //Doctor Module
     Route::get('schedules', [DoctorScheduleController::class, 'schedules']);
 
+
     Route::post('save-schedule', [DoctorScheduleController::class, 'saveSchedule']);
+    Route::post('/delete-schedule', [DoctorScheduleController::class, 'deleteSchedule']);
 
     //Patient Medical Reports
     Route::post('upload-medical-report', [PatientMedicalReportController::class, 'uploadReport']);
@@ -53,13 +56,15 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
 
     //Appointments
     Route::any('appointments', [AppointmentController::class, 'appointments']);
-    Route::get('appointment-details/{id}',[AppointmentController::class, 'appointmentDetails']);
+    Route::get('appointment-details/{id}', [AppointmentController::class, 'appointmentDetails']);
     Route::post('accept-appointment', [AppointmentController::class, 'acceptAppointment']);
     Route::post('reject-appointment', [AppointmentController::class, 'rejectAppointment']);
     Route::post('start-consultation', [AppointmentController::class, 'startConsultation']);
     Route::post('complete-consultation', [AppointmentController::class, 'completeConsultation']);
     Route::post('cancel-appointment', [AppointmentController::class, 'cancelAppointment']);
     Route::post('reschedule-appointment', [AppointmentController::class, 'rescheduleAppointment']);
+
+    Route::any('lab-tests', [AppointmentController::class, 'labTests']);
 
     //Room Video
     Route::post('join-video-room', [VideoCallController::class, 'joinVideoRoom']);

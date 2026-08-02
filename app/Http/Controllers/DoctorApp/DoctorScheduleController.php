@@ -174,4 +174,49 @@ class DoctorScheduleController extends Controller
             'data' => $schedule
         ]);
     }
+
+    public function deleteSchedule(Request $request)
+    {
+        $doctor = auth('sanctum')->user();
+
+        if (!$doctor) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'schedule_id' => [
+                'required',
+                'exists:doctor_schedules,id',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $schedule = DoctorSchedule::where('id', $request->schedule_id)
+            ->where('doctor_id', $doctor->id)
+            ->first();
+
+        if (!$schedule) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Schedule not found or access denied.'
+            ], 404);
+        }
+
+        $schedule->delete();
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Doctor schedule deleted successfully.'
+        ]);
+    }
+
 }

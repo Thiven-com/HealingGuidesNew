@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerApp\AmbulanceController;
+use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
@@ -61,10 +62,22 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     //Doctor Appointments
     Route::post('book-doctor-appointment', [DoctorAppointmentController::class, 'bookDoctorAppointment']);
     Route::any('myAppointments', [DoctorAppointmentController::class, 'myAppointments']);
+    Route::get('appointment-details/{id}', [DoctorAppointmentController::class, 'appointmentDetails']);
+
     Route::post('cancel-appointment', [DoctorAppointmentController::class, 'cancelAppointment']);
     Route::post('reschedule-appointment', [DoctorAppointmentController::class, 'rescheduleAppointment']);
     Route::post('pay-appointment', [DoctorAppointmentController::class, 'payAppointment']);
-    Route::post('join-video-room',[DoctorAppointmentController::class,'joinVideoRoom']);
+    Route::post('join-video-room', [DoctorAppointmentController::class, 'joinVideoRoom']);
+
+
+    // Diagnostic Booking
+    Route::post('book-lab-test', [DiagnosticBookingController::class, 'bookLabTest']);
+
+    Route::get('my-lab-bookings', [DiagnosticBookingController::class, 'myBookings']);
+
+    Route::get('lab-booking-details/{id}', [DiagnosticBookingController::class, 'bookingDetails']);
+    Route::post('pay-lab-booking', [DiagnosticBookingController::class, 'payBooking']);
+    Route::post('cancel-lab-booking', [DiagnosticBookingController::class, 'cancelBooking']);
 });
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);
