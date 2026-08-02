@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DoctorApp;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PatientMedicalReportCollection;
 use App\Models\DoctorAppointment;
 use App\Models\PatientMedicalReport;
 use Illuminate\Http\Request;
@@ -197,7 +198,7 @@ class PatientMedicalReportController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Filters
+        | Report Type Filter
         |--------------------------------------------------------------------------
         */
 
@@ -209,6 +210,12 @@ class PatientMedicalReportController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Report Date Filter
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('report_date')) {
 
             $reports->whereDate(
@@ -217,15 +224,33 @@ class PatientMedicalReportController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Get Reports
+        |--------------------------------------------------------------------------
+        */
+
         $reports = $reports
             ->orderByDesc('report_date')
             ->orderByDesc('id')
             ->paginate(20);
 
+        if ($reports->isEmpty()) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'No Medical Reports Found'
+            ]);
+        }
+
         return response()->json([
             'success' => 1,
-            'message' => 'Patient medical reports fetched successfully.',
-            'data' => $reports
+
+            'data' => new PatientMedicalReportCollection(
+                $reports
+            ),
+
+            'message' => 'Patient medical reports fetched successfully.'
         ]);
     }
 
@@ -247,9 +272,16 @@ class PatientMedicalReportController extends Controller
             ], 401);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Get Report
+        |--------------------------------------------------------------------------
+        */
+
         $report = PatientMedicalReport::find($id);
 
         if (!$report) {
+
             return response()->json([
                 'success' => 0,
                 'message' => 'Medical report not found.'
@@ -272,6 +304,7 @@ class PatientMedicalReportController extends Controller
             )
             ->when(
                 $report->family_member_id,
+
                 function ($query) use ($report) {
 
                     $query->where(
@@ -279,24 +312,42 @@ class PatientMedicalReportController extends Controller
                         $report->family_member_id
                     );
                 },
+
                 function ($query) {
 
-                    $query->whereNull('family_member_id');
+                    $query->whereNull(
+                        'family_member_id'
+                    );
                 }
             )
             ->exists();
 
         if (!$hasAccess) {
+
             return response()->json([
                 'success' => 0,
                 'message' => 'You are not authorized to view this report.'
             ], 403);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Convert Single Record To Collection
+        |--------------------------------------------------------------------------
+        */
+
+        $reports = collect([
+            $report
+        ]);
+
         return response()->json([
             'success' => 1,
-            'message' => 'Medical report fetched successfully.',
-            'data' => $report
+
+            'data' => new PatientMedicalReportCollection(
+                $reports
+            ),
+
+            'message' => 'Medical report fetched successfully.'
         ]);
     }
 
