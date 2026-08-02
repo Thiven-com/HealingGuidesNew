@@ -93,6 +93,10 @@ class DoctorAppointment extends Model
     {
         return $this->belongsTo(DoctorSchedule::class, 'doctor_schedule_id');
     }
+    public function doctorSchedule()
+    {
+        return $this->belongsTo(DoctorSchedule::class, 'doctor_schedule_id');
+    }
 
     public function customer()
     {
@@ -106,5 +110,26 @@ class DoctorAppointment extends Model
     public function videoRoom()
     {
         return $this->hasOne(VideoRoom::class, 'appointment_id');
+    }
+    public function patientVitals()
+    {
+        return $this->hasOne(
+            PatientVital::class,
+            'appointment_id'
+        );
+    }
+    public function prescription()
+    {
+        return $this->hasOne(
+            Prescription::class,
+            'appointment_id'
+        );
+    }
+    public function medicalReports()
+    {
+        return $this->hasMany(
+            PatientMedicalReport::class,
+            'appointment_id'
+        );
     }
 }

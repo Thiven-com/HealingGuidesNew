@@ -1,13 +1,11 @@
 <?php
 
 use App\Http\Controllers\CustomerApp\AmbulanceController;
-use App\Http\Controllers\CustomerApp\CCAvenueController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\ProfileController;
-use App\Http\Controllers\CustomerApp\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('home', 'HomeController@index');
 Route::post('login', 'AccountController@login');
 Route::post('verifyMobile', 'AccountController@verifyMobile');
 Route::post('resendOtp', 'AccountController@resendOtp');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
 use App\Models\FamilyMember;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,7 +46,6 @@ class ProfileController extends Controller
             'alternate_mobile' => 'nullable|digits:10',
             'gender' => 'nullable',
             'dob' => 'nullable|date',
-            'age' => 'nullable|integer',
             'blood_group' => 'nullable|string|max:10',
             'height' => 'nullable|string|max:20',
             'weight' => 'nullable|string|max:20',
@@ -69,6 +69,9 @@ class ProfileController extends Controller
         }
 
         $user->fill($request->only($user->getFillable()));
+        if ($request->filled('dob')) {
+            $user->age = Carbon::parse($request->dob)->age;
+        }
         $user->country = $request->input('country') ?? "India";
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
@@ -101,7 +104,6 @@ class ProfileController extends Controller
             'relationship' => 'required|string',
             'gender' => 'required|string',
             'dob' => 'nullable|date',
-            'age' => 'nullable|integer',
             'blood_group' => 'nullable|string',
             'height' => 'nullable|string',
             'weight' => 'nullable|string',
@@ -124,7 +126,7 @@ class ProfileController extends Controller
             'relationship' => $request->relationship,
             'gender' => $request->gender,
             'dob' => $request->dob,
-            'age' => $request->age,
+            'age' => $request->filled('dob') ? Carbon::parse($request->dob)->age : null,
             'blood_group' => $request->blood_group,
             'height' => $request->height,
             'weight' => $request->weight,
@@ -170,7 +172,7 @@ class ProfileController extends Controller
             'gender' => $request->gender,
             'mobile' => $request->mobile,
             'dob' => $request->dob,
-            'age' => $request->age,
+            'age' => $request->filled('dob') ? Carbon::parse($request->dob)->age : null,
             'blood_group' => $request->blood_group,
             'height' => $request->height,
             'weight' => $request->weight,

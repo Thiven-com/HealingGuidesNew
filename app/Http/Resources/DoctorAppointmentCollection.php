@@ -70,6 +70,7 @@ class DoctorAppointmentCollection extends ResourceCollection
                     'gender' => optional($appointment->familyMember)->gender,
 
                     'age' => optional($appointment->familyMember)->age,
+                    
 
                 ],
 
