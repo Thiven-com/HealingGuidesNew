@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
@@ -7,6 +8,8 @@ use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\LocationController;
+use App\Http\Controllers\CustomerApp\MedicineController;
+use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use Illuminate\Http\Request;
@@ -61,6 +64,17 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::any('ambulances', [AmbulanceController::class, 'ambulances']);
     Route::get('ambulances/{id}', [AmbulanceController::class, 'ambulanceDetails']);
 
+    // Ambulance Booking
+    Route::post('request-ambulance', [AmbulanceBookingController::class, 'requestAmbulance']);
+
+    Route::get('my-ambulance-bookings', [AmbulanceBookingController::class, 'myBookings']);
+
+    Route::get('ambulance-booking-details/{id}', [AmbulanceBookingController::class, 'bookingDetails']);
+
+    Route::post('cancel-ambulance-booking', [AmbulanceBookingController::class, 'cancelBooking']);
+
+    Route::post('pay-ambulance-booking', [AmbulanceBookingController::class, 'payBooking']);
+
     //Doctor Appointments
     Route::post('book-doctor-appointment', [DoctorAppointmentController::class, 'bookDoctorAppointment']);
     Route::any('myAppointments', [DoctorAppointmentController::class, 'myAppointments']);
@@ -100,6 +114,21 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     Route::get('my-vitals', [HealthRecordController::class, 'vitals']);
     Route::get('vital-details/{id}', [HealthRecordController::class, 'vitalDetails']);
+
+    //Medicines
+    Route::get('medicine-categories', [MedicineController::class, 'categories']);
+
+    Route::any('medicines', [MedicineController::class, 'medicines']);
+
+    Route::get('medicine-details/{id}', [MedicineController::class, 'medicineDetails']);
+
+    // Medicine Orders
+    Route::post('place-medicine-order', [MedicineOrderController::class, 'placeOrder']);
+    Route::get('my-medicine-orders',[MedicineOrderController::class, 'myOrders']);
+
+    Route::get('medicine-order-details/{id}',[MedicineOrderController::class, 'orderDetails']);
+
+    Route::post('cancel-medicine-order',[MedicineOrderController::class, 'cancelOrder']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

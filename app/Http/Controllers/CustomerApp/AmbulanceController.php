@@ -128,39 +128,4 @@ class AmbulanceController extends Controller
             'data' => new AmbulanceCollection($ambulances)
         ]);
     }
-
-    /**
-     * Ambulance Details
-     */
-    public function ambulanceDetails($id)
-    {
-        $user = auth('sanctum')->user();
-
-        if (!$user) {
-            return response()->json([
-                'success' => 0,
-                'message' => 'Please Login'
-            ], 401);
-        }
-
-        $ambulance = Ambulance::with([
-            'ambulanceType',
-            'hospital'
-        ])
-            ->where('status', 1)
-            ->find($id);
-
-        if (!$ambulance) {
-            return response()->json([
-                'success' => 0,
-                'message' => 'Ambulance Not Found'
-            ]);
-        }
-
-        return response()->json([
-            'success' => 1,
-            'message' => 'Ambulance Details Fetched Successfully',
-            'data' => new AmbulanceResource($ambulance)
-        ]);
-    }
 }
