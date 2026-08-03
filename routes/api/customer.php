@@ -5,7 +5,9 @@ use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
+use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\LocationController;
+use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +80,27 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('lab-booking-details/{id}', [DiagnosticBookingController::class, 'bookingDetails']);
     Route::post('pay-lab-booking', [DiagnosticBookingController::class, 'payBooking']);
     Route::post('cancel-lab-booking', [DiagnosticBookingController::class, 'cancelBooking']);
+
+
+    // Patient Medical Reports
+    Route::post('upload-medical-report', [PatientMedicalReportController::class, 'uploadReport']);
+
+    Route::get('medical-reports', [PatientMedicalReportController::class, 'reports']);
+
+    Route::get('medical-report/{id}', [PatientMedicalReportController::class, 'reportDetails']);
+
+    Route::post('update-medical-report', [PatientMedicalReportController::class, 'updateReport']);
+
+    Route::post('delete-medical-report', [PatientMedicalReportController::class, 'deleteReport']);
+
+    // Customer Health Records
+// Health Records
+    Route::get('my-prescriptions', [HealthRecordController::class, 'prescriptions']);
+    Route::get('prescription-details/{id}', [HealthRecordController::class, 'prescriptionDetails']);
+
+    Route::get('my-vitals', [HealthRecordController::class, 'vitals']);
+    Route::get('vital-details/{id}', [HealthRecordController::class, 'vitalDetails']);
+
 });
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);

@@ -355,10 +355,13 @@ class DiagnosticBookingController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            $booking->booking_no =
-                'LAB' .
-                now()->format('YmdHis') .
-                rand(100, 999);
+            $lastBooking = DiagnosticBooking::lockForUpdate()
+                ->orderBy('id', 'desc')
+                ->first();
+
+            $nextNumber = $lastBooking ? ($lastBooking->id + 1) : 1;
+
+            $booking->booking_no = 'LAB' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
 
             /*
             |--------------------------------------------------------------------------

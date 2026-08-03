@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DoctorApp;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PrescriptionCollection;
 use App\Models\DoctorAppointment;
 use App\Models\Prescription;
 use App\Models\PrescriptionMedicine;
@@ -581,7 +582,6 @@ class PrescriptionController extends Controller
         $doctor = auth('sanctum')->user();
 
         if (!$doctor) {
-
             return response()->json([
                 'success' => 0,
                 'message' => 'Please Login'
@@ -599,7 +599,6 @@ class PrescriptionController extends Controller
             ->first();
 
         if (!$appointment) {
-
             return response()->json([
                 'success' => 0,
                 'message' => 'Appointment not found.'
@@ -613,34 +612,40 @@ class PrescriptionController extends Controller
         */
 
         $prescription = Prescription::with([
-
+            'doctor',
             'medicines',
-
             'recommendedLabTests.labTest',
-
             'appointment',
-
             'customer',
-
             'familyMember'
-
         ])
             ->where('appointment_id', $appointment->id)
             ->where('doctor_id', $doctor->id)
-            ->first();
+            ->get();
 
-        if (!$prescription) {
+        /*
+        |--------------------------------------------------------------------------
+        | Check Prescription
+        |--------------------------------------------------------------------------
+        */
 
+        if ($prescription->isEmpty()) {
             return response()->json([
                 'success' => 0,
                 'message' => 'Prescription not found.'
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
         return response()->json([
             'success' => 1,
-            'message' => 'Prescription fetched successfully.',
-            'data' => $prescription
+            'data' => new PrescriptionCollection($prescription),
+            'message' => 'Prescription fetched successfully.'
         ]);
     }
 }
