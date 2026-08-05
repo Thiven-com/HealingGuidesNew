@@ -82,7 +82,21 @@
                                                                 <span>Ambulances</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.medicine-categories.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.medicine-categories.index') }}">
+                                                                <i class="ti ti-category fs-16 me-2"></i>
+                                                                <span>Medicine Categories</span>
+                                                        </a>
+                                                </li>
 
+                                                <li
+                                                        class="{{ request()->routeIs('admin.medicines.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.medicines.index') }}">
+                                                                <i class="ti ti-pill fs-16 me-2"></i>
+                                                                <span>Medicines</span>
+                                                        </a>
+                                                </li>
 
                                         </ul>
                                 </li>

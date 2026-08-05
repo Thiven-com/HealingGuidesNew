@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\LabTestController;
+use App\Http\Controllers\Admin\MedicineCategoryController;
+use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SpecializationController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +58,13 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('ambulances/status/{id}', [AmbulanceController::class, 'status'])->name('admin.ambulances.status');
 
     Route::post('ambulances/availability/{id}', [AmbulanceController::class, 'availabilityStatus'])->name('admin.ambulances.availability');
+
+    Route::resource('medicine-categories', MedicineCategoryController::class)->names('admin.medicine-categories');
+    Route::post('medicine-categories/{id}/status', [MedicineCategoryController::class, 'status'])->name('admin.medicine-categories.status');
+
+    Route::resource('medicines',MedicineController::class)->names('admin.medicines');
+
+    Route::post('medicines/{id}/status',[MedicineController::class, 'status'])->name('admin.medicines.status');
 
     Route::get('settings/company', 'SiteSettingController@site')->name('admin.settings.company');
     Route::post('setting/company/update', 'SiteSettingController@company_setting_update')->name('admin.settings.company.update');
