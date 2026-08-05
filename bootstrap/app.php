@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\Admin::class,
             'customertokenCheck' => \App\Http\Middleware\CustomerTokenCheck::class,
             'doctortokenCheck' => \App\Http\Middleware\DoctorTokenCheck::class,
+            'hospitaltokenCheck' => \App\Http\Middleware\HospitalTokenCheck::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

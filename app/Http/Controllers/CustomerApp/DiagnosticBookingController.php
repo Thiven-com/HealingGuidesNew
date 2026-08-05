@@ -438,7 +438,7 @@ class DiagnosticBookingController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if ($request->collection_type == 'home_collection') {
+            // if ($request->collection_type == 'home_collection') {
 
                 $booking->address =
                     $request->address;
@@ -457,7 +457,7 @@ class DiagnosticBookingController extends Controller
 
                 $booking->longitude =
                     $request->longitude;
-            }
+            // }
 
             /*
             |--------------------------------------------------------------------------

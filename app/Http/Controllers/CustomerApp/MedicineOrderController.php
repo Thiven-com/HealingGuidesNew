@@ -41,7 +41,7 @@ class MedicineOrderController extends Controller
         $validator = Validator::make($request->all(), [
 
             'family_member_id' =>
-                'required|exists:family_members,id',
+                'nullable|exists:family_members,id',
 
             'hospital_id' =>
                 'required|exists:hospitals,id',
@@ -104,13 +104,13 @@ class MedicineOrderController extends Controller
             )
             ->first();
 
-        if (!$familyMember) {
+        // if (!$familyMember) {
 
-            return response()->json([
-                'success' => 0,
-                'message' => 'Family member not found.'
-            ]);
-        }
+        //     return response()->json([
+        //         'success' => 0,
+        //         'message' => 'Family member not found.'
+        //     ]);
+        // }
 
         /*
         |--------------------------------------------------------------------------
@@ -163,17 +163,17 @@ class MedicineOrderController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $prescriptionRequired = $medicines
-            ->contains(function ($medicine) {
-                return $medicine->prescription_required;
-            });
+        // $prescriptionRequired = $medicines
+        //     ->contains(function ($medicine) {
+        //         return $medicine->prescription_required;
+        //     });
 
-        if ($prescriptionRequired && !$request->filled('prescription_id')) {
-            return response()->json([
-                'success' => 0,
-                'message' => 'Prescription is required for one or more medicines.'
-            ]);
-        }
+        // if ($prescriptionRequired && !$request->filled('prescription_id')) {
+        //     return response()->json([
+        //         'success' => 0,
+        //         'message' => 'Prescription is required for one or more medicines.'
+        //     ]);
+        // }
 
         DB::beginTransaction();
 
@@ -239,7 +239,7 @@ class MedicineOrderController extends Controller
                     $customer->id,
 
                 'family_member_id' =>
-                    $familyMember->id,
+                    $familyMember->id ?? null,
 
                 'hospital_id' =>
                     $request->hospital_id,

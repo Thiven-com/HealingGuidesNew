@@ -22,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $admin_namespace = 'App\Http\Controllers\Admin';
     protected $app_namespace = 'App\Http\Controllers\CustomerApp';
     protected $doctorapp_namespace = 'App\Http\Controllers\DoctorApp';
+    protected $hospital_namespace = 'App\Http\Controllers\HospitalApp';
 
 
 
@@ -47,6 +48,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')->namespace($this->doctorapp_namespace)
                 ->prefix('api/doctor')
                 ->group(base_path('routes/api/doctor.php'));
+            Route::middleware('api')->namespace($this->hospital_namespace)
+                ->prefix('api/hospital')
+                ->group(base_path('routes/api/hospital.php'));
         });
     }
 }
