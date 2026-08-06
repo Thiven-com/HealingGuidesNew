@@ -32,7 +32,7 @@
     <meta name="description" content="{{ $site->site_name }}">
     <meta name="keywords"
         content="{{ $site->site_name }}">
-    <meta name="author" content="samruddhisilks">
+    <meta name="author" content="{{ $site->site_name }}">
     <meta name="robots" content="noindex, nofollow">
     <title>{{$site->site_name ?? ''}}</title>
 
