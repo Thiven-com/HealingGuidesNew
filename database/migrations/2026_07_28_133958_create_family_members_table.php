@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->bigInteger('customer_id')->nullable();
 
             $table->string('name')->nullable();
+            $table->string('mobile')->nullable();
 
             $table->string('relationship')->nullable();
 
