@@ -4,6 +4,7 @@ namespace App\Http\Controllers\HospitalApp;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DoctorAppointmentCollection;
+use App\Http\Resources\DoctorAppointmentDetailCollection;
 use App\Models\DoctorAppointment;
 use Illuminate\Http\Request;
 
@@ -317,7 +318,7 @@ class AppointmentController extends Controller
         return response()->json([
             'success' => 1,
             'message' => 'Appointment Details Fetched Successfully',
-            'data' => new DoctorAppointmentCollection(collect([$appointment])),
+            'data' => new DoctorAppointmentDetailCollection(collect([$appointment])),
         ]);
     }
 

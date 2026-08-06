@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,7 @@
     <title>Healing Guides Wellness Services</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
         :root {
@@ -51,7 +51,7 @@
         ========================= */
 
         .main-navbar {
-            background: rgba(255,255,255,.96);
+            background: rgba(255, 255, 255, .96);
             border-bottom: 1px solid #f1edf5;
             box-shadow: 0 5px 25px rgba(57, 25, 77, .05);
             padding: 10px 0;
@@ -87,7 +87,7 @@
             color: #fff !important;
             border-radius: 12px;
             padding: 12px 22px !important;
-            box-shadow: 0 8px 20px rgba(118,22,173,.20);
+            box-shadow: 0 8px 20px rgba(118, 22, 173, .20);
         }
 
         /* =========================
@@ -112,7 +112,7 @@
             width: 380px;
             height: 380px;
             border-radius: 50%;
-            background: rgba(118,22,173,.05);
+            background: rgba(118, 22, 173, .05);
             top: -180px;
             left: -120px;
         }
@@ -128,7 +128,7 @@
             color: var(--primary);
             font-weight: 700;
             font-size: 13px;
-            box-shadow: 0 6px 25px rgba(68,28,90,.06);
+            box-shadow: 0 6px 25px rgba(68, 28, 90, .06);
             margin-bottom: 22px;
         }
 
@@ -168,14 +168,14 @@
             padding: 14px 26px;
             border-radius: 12px;
             font-weight: 700;
-            box-shadow: 0 10px 25px rgba(118,22,173,.23);
+            box-shadow: 0 10px 25px rgba(118, 22, 173, .23);
             transition: .3s;
         }
 
         .btn-gradient:hover {
             color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(118,22,173,.30);
+            box-shadow: 0 14px 30px rgba(118, 22, 173, .30);
         }
 
         .btn-outline-custom {
@@ -229,7 +229,7 @@
             height: 390px;
             border-radius: 50%;
             background: linear-gradient(145deg, var(--primary), #9d1bc3, var(--secondary));
-            box-shadow: 0 30px 70px rgba(111,22,166,.25);
+            box-shadow: 0 30px 70px rgba(111, 22, 166, .25);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -242,7 +242,7 @@
             position: absolute;
             inset: 20px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,.22);
+            border: 1px solid rgba(255, 255, 255, .22);
         }
 
         .hero-circle i {
@@ -259,7 +259,7 @@
             align-items: center;
             gap: 12px;
             min-width: 190px;
-            box-shadow: 0 15px 40px rgba(57,27,75,.13);
+            box-shadow: 0 15px 40px rgba(57, 27, 75, .13);
         }
 
         .float-icon {
@@ -383,7 +383,7 @@
 
         .app-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 22px 50px rgba(66,25,88,.10);
+            box-shadow: 0 22px 50px rgba(66, 25, 88, .10);
             border-color: transparent;
         }
 
@@ -481,7 +481,7 @@
 
         .feature-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 16px 35px rgba(65,30,80,.08);
+            box-shadow: 0 16px 35px rgba(65, 30, 80, .08);
         }
 
         .feature-icon {
@@ -527,7 +527,7 @@
             width: 350px;
             height: 350px;
             border-radius: 50%;
-            border: 70px solid rgba(255,255,255,.04);
+            border: 70px solid rgba(255, 255, 255, .04);
             right: -100px;
             top: -140px;
         }
@@ -544,7 +544,7 @@
 
         .stat-item p {
             margin: 0;
-            color: rgba(255,255,255,.75);
+            color: rgba(255, 255, 255, .75);
             font-size: 14px;
         }
 
@@ -708,7 +708,7 @@
             width: 230px;
             height: 230px;
             border-radius: 50%;
-            background: rgba(255,255,255,.05);
+            background: rgba(255, 255, 255, .05);
             right: -90px;
             bottom: -90px;
         }
@@ -719,7 +719,7 @@
         }
 
         .contact-info p {
-            color: rgba(255,255,255,.75);
+            color: rgba(255, 255, 255, .75);
         }
 
         .contact-row {
@@ -732,7 +732,7 @@
         .contact-row .contact-icon {
             width: 45px;
             height: 45px;
-            background: rgba(255,255,255,.13);
+            background: rgba(255, 255, 255, .13);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -743,7 +743,7 @@
         .contact-form {
             background: #fff;
             border: 1px solid #eee7f1;
-            box-shadow: 0 15px 45px rgba(50,24,65,.07);
+            box-shadow: 0 15px 45px rgba(50, 24, 65, .07);
             border-radius: 25px;
             padding: 40px;
         }
@@ -766,7 +766,7 @@
 
         .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(118,22,173,.08);
+            box-shadow: 0 0 0 3px rgba(118, 22, 173, .08);
         }
 
         /* =========================
@@ -788,7 +788,7 @@
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            border: 60px solid rgba(255,255,255,.05);
+            border: 60px solid rgba(255, 255, 255, .05);
             right: -70px;
             top: -100px;
         }
@@ -799,7 +799,7 @@
         }
 
         .cta-box p {
-            color: rgba(255,255,255,.8);
+            color: rgba(255, 255, 255, .8);
         }
 
         /* =========================
@@ -857,7 +857,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,.08);
+            background: rgba(255, 255, 255, .08);
             color: #fff;
             border-radius: 10px;
             margin-right: 7px;
@@ -871,7 +871,7 @@
         }
 
         .copyright {
-            border-top: 1px solid rgba(255,255,255,.08);
+            border-top: 1px solid rgba(255, 255, 255, .08);
             margin-top: 45px;
             padding-top: 22px;
             color: #8f8997;
@@ -982,1192 +982,1170 @@
 
 <body>
 
-{{-- ================= NAVBAR ================= --}}
+    {{-- ================= NAVBAR ================= --}}
 
-<nav class="navbar navbar-expand-lg main-navbar sticky-top">
-    <div class="container">
+    <nav class="navbar navbar-expand-lg main-navbar sticky-top">
+        <div class="container">
 
-        <a class="navbar-brand" href="#home">
-            <img src="{{ asset('logo/logo.png') }}"
-                 alt="Healing Guides"
-                 class="nav-logo">
-        </a>
+            <a class="navbar-brand" href="#home">
+                <img src="{{ asset('logo/logo.png') }}" alt="Healing Guides" class="nav-logo">
+            </a>
 
-        <button class="navbar-toggler border-0 shadow-none"
-                type="button"
-                data-bs-toggle="collapse"
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
                 data-bs-target="#mainMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainMenu">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#apps" class="nav-link">Applications</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#features" class="nav-link">Features</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">How It Works</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
-                </li>
-
-                <li class="nav-item ms-lg-2">
-                    <a href="#contact" class="nav-link nav-contact-btn">
-                        Get Started
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-</nav>
-
-
-{{-- ================= HERO ================= --}}
-
-<section class="hero" id="home">
-    <div class="container position-relative">
-        <div class="row align-items-center">
-
-            <div class="col-lg-6">
-
-                <div class="hero-badge">
-                    <span></span>
-                    Complete Digital Healthcare Platform
-                </div>
-
-                <h1>
-                    Healthcare Made
-                    <span>Simple, Smart & Connected.</span>
-                </h1>
-
-                <p class="hero-description">
-                    One powerful healthcare ecosystem connecting patients,
-                    doctors, hospitals, pharmacies and emergency services
-                    to deliver better care for every family.
-                </p>
-
-                <div class="hero-buttons">
-                    <a href="#apps" class="btn btn-gradient me-2">
-                        Explore Services
-                        <i class="fa-solid fa-arrow-right ms-2"></i>
-                    </a>
-
-                    <a href="#contact" class="btn btn-outline-custom">
-                        <i class="fa-regular fa-calendar-check me-2"></i>
-                        Book a Demo
-                    </a>
-                </div>
-
-                <div class="hero-trust">
-
-                    <div class="trust-item">
-                        <i class="fa-solid fa-circle-check"></i>
-                        Verified Doctors
-                    </div>
-
-                    <div class="trust-item">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        Secure Platform
-                    </div>
-
-                    <div class="trust-item">
-                        <i class="fa-solid fa-headset"></i>
-                        24/7 Support
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-6">
-
-                <div class="hero-visual">
-
-                    <div class="hero-circle">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </div>
-
-                    <div class="floating-card card-doctor">
-                        <div class="float-icon purple">
-                            <i class="fa-solid fa-user-doctor"></i>
-                        </div>
-                        <div>
-                            <h6>Expert Doctors</h6>
-                            <small>500+ Specialists</small>
-                        </div>
-                    </div>
-
-                    <div class="floating-card card-ambulance">
-                        <div class="float-icon orange">
-                            <i class="fa-solid fa-truck-medical"></i>
-                        </div>
-                        <div>
-                            <h6>Emergency Care</h6>
-                            <small>24/7 Ambulance</small>
-                        </div>
-                    </div>
-
-                    <div class="floating-card card-pharmacy">
-                        <div class="float-icon green">
-                            <i class="fa-solid fa-pills"></i>
-                        </div>
-                        <div>
-                            <h6>Online Pharmacy</h6>
-                            <small>Doorstep Delivery</small>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-{{-- ================= APPLICATIONS ================= --}}
-
-<section class="section-space apps-section" id="apps">
-    <div class="container">
-
-        <div class="text-center mb-5">
-            <span class="section-badge">Our Applications</span>
-
-            <h2 class="section-heading">
-                One Platform. <span>Complete Healthcare.</span>
-            </h2>
-
-            <p class="section-description">
-                Purpose-built applications connecting every participant
-                in the healthcare ecosystem.
-            </p>
-        </div>
-
-        <div class="row g-4">
-
-            {{-- Customer --}}
-
-            <div class="col-lg-4 col-md-6">
-                <div class="app-card">
-
-                    <div class="app-icon purple-bg">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <h4>Customer App</h4>
-
-                    <p>
-                        Access healthcare services anytime from one
-                        simple and convenient application.
-                    </p>
-
-                    <ul class="app-features">
-                        <li>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Doctor Appointments
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Video Consultation
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Lab Test Booking
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Medicine Orders
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Ambulance Booking
-                        </li>
-                    </ul>
-
-                    <a href="#" class="card-link">
-                        Explore Customer App
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-
-            {{-- Doctor --}}
-
-            <div class="col-lg-4 col-md-6">
-                <div class="app-card">
-
-                    <div class="app-icon orange-bg">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
-
-                    <h4>Doctor App</h4>
-
-                    <p>
-                        A smart digital workspace for doctors to manage
-                        patients and consultations.
-                    </p>
-
-                    <ul class="app-features">
-                        <li><i class="fa-solid fa-circle-check"></i> Appointments</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Digital Prescriptions</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Patient Records</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Video Consultation</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Earnings Dashboard</li>
-                    </ul>
-
-                    <a href="#" class="card-link">
-                        Explore Doctor App
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-
-            {{-- Hospital --}}
-
-            <div class="col-lg-4 col-md-6">
-                <div class="app-card">
-
-                    <div class="app-icon blue-bg">
-                        <i class="fa-solid fa-hospital"></i>
-                    </div>
-
-                    <h4>Hospital App</h4>
-
-                    <p>
-                        Simplify hospital operations with an integrated
-                        digital management solution.
-                    </p>
-
-                    <ul class="app-features">
-                        <li><i class="fa-solid fa-circle-check"></i> OP & IP Management</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Billing</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Staff Management</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Patient Records</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Reports & Analytics</li>
-                    </ul>
-
-                    <a href="#" class="card-link">
-                        Explore Hospital App
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-
-            {{-- Ambulance --}}
-
-            <div class="col-lg-6 col-md-6">
-                <div class="app-card">
-
-                    <div class="app-icon red-bg">
-                        <i class="fa-solid fa-truck-medical"></i>
-                    </div>
-
-                    <h4>Ambulance App</h4>
-
-                    <p>
-                        Faster emergency response with live location
-                        tracking and smart dispatch management.
-                    </p>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="app-features">
-                                <li><i class="fa-solid fa-circle-check"></i> Live Tracking</li>
-                                <li><i class="fa-solid fa-circle-check"></i> GPS Navigation</li>
-                            </ul>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <ul class="app-features">
-                                <li><i class="fa-solid fa-circle-check"></i> Emergency Requests</li>
-                                <li><i class="fa-solid fa-circle-check"></i> Driver Dashboard</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <a href="#" class="card-link">
-                        Explore Ambulance App
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-
-            {{-- Merchant --}}
-
-            <div class="col-lg-6 col-md-6">
-                <div class="app-card">
-
-                    <div class="app-icon green-bg">
-                        <i class="fa-solid fa-pills"></i>
-                    </div>
-
-                    <h4>Merchant App</h4>
-
-                    <p>
-                        Manage pharmacy inventory, medicine orders,
-                        billing and delivery from one dashboard.
-                    </p>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="app-features">
-                                <li><i class="fa-solid fa-circle-check"></i> Inventory</li>
-                                <li><i class="fa-solid fa-circle-check"></i> Online Orders</li>
-                            </ul>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <ul class="app-features">
-                                <li><i class="fa-solid fa-circle-check"></i> Billing</li>
-                                <li><i class="fa-solid fa-circle-check"></i> Reports</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <a href="#" class="card-link">
-                        Explore Merchant App
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-{{-- ================= WHY CHOOSE ================= --}}
-
-<section class="section-space features-section" id="features">
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span class="section-badge">Why Healing Guides</span>
-
-            <h2 class="section-heading">
-                Healthcare You Can <span>Trust.</span>
-            </h2>
-
-            <p class="section-description">
-                Designed to make quality healthcare more accessible,
-                secure and convenient.
-            </p>
-
-        </div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-3 col-md-6">
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-shield-heart"></i>
-                    </div>
-
-                    <h5>100% Secure</h5>
-
-                    <p>
-                        Your medical records and personal information
-                        are protected with secure technology.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
-
-                    <h5>Expert Doctors</h5>
-
-                    <p>
-                        Connect with experienced and verified
-                        healthcare professionals.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-truck-medical"></i>
-                    </div>
-
-                    <h5>Emergency Support</h5>
-
-                    <p>
-                        Book emergency ambulance services with
-                        real-time tracking.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="feature-card">
-
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-pills"></i>
-                    </div>
-
-                    <h5>Online Pharmacy</h5>
-
-                    <p>
-                        Order medicines online and receive them
-                        conveniently at your doorstep.
-                    </p>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= COUNTERS ================= --}}
-
-<section class="stats-wrapper">
-    <div class="container position-relative">
-
-        <div class="row text-center g-4">
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>500+</h3>
-                    <p>Doctors</p>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>120+</h3>
-                    <p>Hospitals</p>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>15K+</h3>
-                    <p>Customers</p>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>300+</h3>
-                    <p>Ambulances</p>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>1K+</h3>
-                    <p>Medical Stores</p>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="stat-item">
-                    <h3>24/7</h3>
-                    <p>Support</p>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= HOW IT WORKS ================= --}}
-
-<section class="section-space" id="about">
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span class="section-badge">Simple Process</span>
-
-            <h2 class="section-heading">
-                Healthcare in <span>4 Easy Steps.</span>
-            </h2>
-
-            <p class="section-description">
-                Find and access the healthcare service you need
-                without complicated processes.
-            </p>
-
-        </div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-3 col-md-6">
-                <div class="step-card">
-
-                    <div class="step-number">
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>1</span>
-                    </div>
-
-                    <h5>Create Account</h5>
-
-                    <p>
-                        Register using your mobile number
-                        and create your profile.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="step-card">
-
-                    <div class="step-number">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span>2</span>
-                    </div>
-
-                    <h5>Find Service</h5>
-
-                    <p>
-                        Find doctors, hospitals, medicines
-                        or ambulance services.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="step-card">
-
-                    <div class="step-number">
-                        <i class="fa-solid fa-calendar-check"></i>
-                        <span>3</span>
-                    </div>
-
-                    <h5>Book Instantly</h5>
-
-                    <p>
-                        Select your preferred service and
-                        complete your booking.
-                    </p>
-
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="step-card">
-
-                    <div class="step-number">
-                        <i class="fa-solid fa-heart-circle-check"></i>
-                        <span>4</span>
-                    </div>
-
-                    <h5>Get Care</h5>
-
-                    <p>
-                        Receive reliable healthcare assistance
-                        when you need it.
-                    </p>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= TESTIMONIALS ================= --}}
-
-<section class="section-space testimonial-section">
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span class="section-badge">Testimonials</span>
-
-            <h2 class="section-heading">
-                Trusted by Our <span>Community.</span>
-            </h2>
-
-        </div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-4">
-                <div class="testimonial-card">
-
-                    <div class="stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <p class="review">
-                        “The platform makes finding doctors and booking
-                        appointments extremely simple and convenient.”
-                    </p>
-
-                    <div class="review-user">
-                        <div class="review-avatar">RS</div>
-                        <div>
-                            <h6>Rahul Sharma</h6>
-                            <small>Customer</small>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="testimonial-card">
-
-                    <div class="stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <p class="review">
-                        “Managing my appointments, patient records and
-                        prescriptions is now much more efficient.”
-                    </p>
-
-                    <div class="review-user">
-                        <div class="review-avatar">PP</div>
-                        <div>
-                            <h6>Dr. Priya Patel</h6>
-                            <small>Doctor</small>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="testimonial-card">
-
-                    <div class="stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <p class="review">
-                        “A very useful solution for coordinating hospital
-                        operations and patient management.”
-                    </p>
-
-                    <div class="review-user">
-                        <div class="review-avatar">
-                            <i class="fa-solid fa-hospital"></i>
-                        </div>
-                        <div>
-                            <h6>City Hospital</h6>
-                            <small>Hospital Partner</small>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= FAQ ================= --}}
-
-<section class="section-space">
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span class="section-badge">FAQ</span>
-
-            <h2 class="section-heading">
-                Frequently Asked <span>Questions.</span>
-            </h2>
-
-        </div>
-
-        <div class="faq-wrapper">
-
-            <div class="accordion" id="faqAccordion">
-
-                <div class="accordion-item">
-
-                    <h2 class="accordion-header">
-
-                        <button class="accordion-button"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#faq1">
-
-                            How do I register on Healing Guides?
-
-                        </button>
-
-                    </h2>
-
-                    <div id="faq1"
-                         class="accordion-collapse collapse show"
-                         data-bs-parent="#faqAccordion">
-
-                        <div class="accordion-body">
-                            Download the application and register
-                            using your mobile number.
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="accordion-item">
-
-                    <h2 class="accordion-header">
-
-                        <button class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#faq2">
-
-                            Is my medical data secure?
-
-                        </button>
-
-                    </h2>
-
-                    <div id="faq2"
-                         class="accordion-collapse collapse"
-                         data-bs-parent="#faqAccordion">
-
-                        <div class="accordion-body">
-                            Yes. Your healthcare information is stored
-                            securely and protected from unauthorized access.
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="accordion-item">
-
-                    <h2 class="accordion-header">
-
-                        <button class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#faq3">
-
-                            Can hospitals join Healing Guides?
-
-                        </button>
-
-                    </h2>
-
-                    <div id="faq3"
-                         class="accordion-collapse collapse"
-                         data-bs-parent="#faqAccordion">
-
-                        <div class="accordion-body">
-                            Yes. Hospitals can join the platform and manage
-                            doctors, patients, billing and reports.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= CTA ================= --}}
-
-<section class="pb-5">
-    <div class="container">
-
-        <div class="cta-box">
-
-            <div class="row align-items-center position-relative">
-
-                <div class="col-lg-8">
-
-                    <h2>
-                        Ready for Smarter Healthcare?
-                    </h2>
-
-                    <p class="mb-lg-0 mt-3">
-                        Join Healing Guides and experience connected
-                        healthcare for your entire family.
-                    </p>
-
-                </div>
-
-                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-
-                    <a href="#contact"
-                       class="btn btn-light px-4 py-3 rounded-3 fw-bold">
-
-                        Get Started Today
-
-                        <i class="fa-solid fa-arrow-right ms-2"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= CONTACT ================= --}}
-
-<section class="section-space contact-section" id="contact">
-    <div class="container">
-
-        <div class="text-center mb-5">
-
-            <span class="section-badge">Contact Us</span>
-
-            <h2 class="section-heading">
-                We're Here to <span>Help.</span>
-            </h2>
-
-            <p class="section-description">
-                Have questions about Healing Guides?
-                Send us a message and our team will contact you.
-            </p>
-
-        </div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-5">
-
-                <div class="contact-info">
-
-                    <h3>
-                        Let's Talk
-                    </h3>
-
-                    <p class="mt-3">
-                        Connect with our team to learn more about
-                        Healing Guides Wellness Services.
-                    </p>
-
-                    <div class="contact-row">
-
-                        <div class="contact-icon">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-
-                        <div>
-                            <small>Call Us</small>
-                            <div class="fw-bold">
-                                +91 98765 43210
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="contact-row">
-
-                        <div class="contact-icon">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-
-                        <div>
-                            <small>Email Us</small>
-                            <div class="fw-bold">
-                                info@healingguides.com
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="contact-row">
-
-                        <div class="contact-icon">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </div>
-
-                        <div>
-                            <small>Location</small>
-                            <div class="fw-bold">
-                                India
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-lg-7">
-
-                <div class="contact-form">
-
-                    <form>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Your Name
-                                </label>
-
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="Enter your name">
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-                                    Phone Number
-                                </label>
-
-                                <input type="text"
-                                       class="form-control"
-                                       placeholder="Enter phone number">
-
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Email Address
-                            </label>
-
-                            <input type="email"
-                                   class="form-control"
-                                   placeholder="Enter email address">
-
-                        </div>
-
-                        <div class="mb-4">
-
-                            <label class="form-label">
-                                Message
-                            </label>
-
-                            <textarea class="form-control"
-                                      placeholder="How can we help you?"></textarea>
-
-                        </div>
-
-                        <button type="submit"
-                                class="btn btn-gradient">
-
-                            Send Message
-
-                            <i class="fa-solid fa-paper-plane ms-2"></i>
-
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-
-{{-- ================= FOOTER ================= --}}
-
-<footer>
-    <div class="container">
-
-        <div class="row g-4">
-
-            <div class="col-lg-5">
-
-                <img src="{{ asset('logo/logo.png') }}"
-                     class="footer-logo"
-                     alt="Healing Guides">
-
-                <p class="footer-about">
-                    Connecting customers, doctors, hospitals,
-                    ambulances and medical merchants through one
-                    powerful digital healthcare ecosystem.
-                </p>
-
-                <div class="mt-4">
-
-                    <a href="#" class="social-link">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-
-                    <a href="#" class="social-link">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-
-                    <a href="#" class="social-link">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-
-                    <a href="#" class="social-link">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-lg-2 col-md-4">
-
-                <h5 class="footer-title">
-                    Quick Links
-                </h5>
-
-                <ul class="footer-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#apps">Applications</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#about">How It Works</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-
-            </div>
-
-
-            <div class="col-lg-2 col-md-4">
-
-                <h5 class="footer-title">
-                    Applications
-                </h5>
-
-                <ul class="footer-links">
-                    <li><a href="#">Customer App</a></li>
-                    <li><a href="#">Doctor App</a></li>
-                    <li><a href="#">Hospital App</a></li>
-                    <li><a href="#">Ambulance App</a></li>
-                    <li><a href="#">Merchant App</a></li>
-                </ul>
-
-            </div>
-
-
-            <div class="col-lg-3 col-md-4">
-
-                <h5 class="footer-title">
-                    Contact
-                </h5>
-
-                <ul class="footer-links">
-
-                    <li>
-                        <a href="tel:+919876543210">
-                            <i class="fa-solid fa-phone me-2"></i>
-                            +91 98765 43210
-                        </a>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Home</a>
                     </li>
 
-                    <li>
-                        <a href="mailto:info@healingguides.com">
-                            <i class="fa-solid fa-envelope me-2"></i>
-                            info@healingguides.com
-                        </a>
+                    <li class="nav-item">
+                        <a href="#apps" class="nav-link">Applications</a>
                     </li>
 
-                    <li>
-                        <a href="#">
-                            <i class="fa-solid fa-location-dot me-2"></i>
-                            India
-                        </a>
+                    <li class="nav-item">
+                        <a href="#features" class="nav-link">Features</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">How It Works</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+                        <a href="#contact" class="nav-link nav-contact-btn">
+                            Get Started
+                        </a>
+                    </li>
                 </ul>
-
             </div>
 
         </div>
+    </nav>
 
 
-        <div class="copyright">
+    {{-- ================= HERO ================= --}}
 
+    <section class="hero" id="home">
+        <div class="container position-relative">
             <div class="row align-items-center">
 
-                <div class="col-md-6 text-center text-md-start">
-                    © {{ date('Y') }} Healing Guides Wellness Services.
-                    All Rights Reserved.
+                <div class="col-lg-6">
+
+                    <div class="hero-badge">
+                        <span></span>
+                        Complete Digital Healthcare Platform
+                    </div>
+
+                    <h1>
+                        Healthcare Made
+                        <span>Simple, Smart & Connected.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        One powerful healthcare ecosystem connecting patients,
+                        doctors, hospitals, pharmacies and emergency services
+                        to deliver better care for every family.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="#apps" class="btn btn-gradient me-2">
+                            Explore Services
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+
+                        <a href="#contact" class="btn btn-outline-custom">
+                            <i class="fa-regular fa-calendar-check me-2"></i>
+                            Book a Demo
+                        </a>
+                    </div>
+
+                    <div class="hero-trust">
+
+                        <div class="trust-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Verified Doctors
+                        </div>
+
+                        <div class="trust-item">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            Secure Platform
+                        </div>
+
+                        <div class="trust-item">
+                            <i class="fa-solid fa-headset"></i>
+                            24/7 Support
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
-                    Privacy Policy &nbsp; • &nbsp; Terms & Conditions
+                <div class="col-lg-6">
+
+                    <div class="hero-visual">
+
+                        <div class="hero-circle">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+
+                        <div class="floating-card card-doctor">
+                            <div class="float-icon purple">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <div>
+                                <h6>Expert Doctors</h6>
+                                <small>500+ Specialists</small>
+                            </div>
+                        </div>
+
+                        <div class="floating-card card-ambulance">
+                            <div class="float-icon orange">
+                                <i class="fa-solid fa-truck-medical"></i>
+                            </div>
+                            <div>
+                                <h6>Emergency Care</h6>
+                                <small>24/7 Ambulance</small>
+                            </div>
+                        </div>
+
+                        <div class="floating-card card-pharmacy">
+                            <div class="float-icon green">
+                                <i class="fa-solid fa-pills"></i>
+                            </div>
+                            <div>
+                                <h6>Online Pharmacy</h6>
+                                <small>Doorstep Delivery</small>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    {{-- ================= APPLICATIONS ================= --}}
+
+    <section class="section-space apps-section" id="apps">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <span class="section-badge">Our Applications</span>
+
+                <h2 class="section-heading">
+                    One Platform. <span>Complete Healthcare.</span>
+                </h2>
+
+                <p class="section-description">
+                    Purpose-built applications connecting every participant
+                    in the healthcare ecosystem.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                {{-- Customer --}}
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="app-card">
+
+                        <div class="app-icon purple-bg">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <h4>Customer App</h4>
+
+                        <p>
+                            Access healthcare services anytime from one
+                            simple and convenient application.
+                        </p>
+
+                        <ul class="app-features">
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Doctor Appointments
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Video Consultation
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Lab Test Booking
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Medicine Orders
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Ambulance Booking
+                            </li>
+                        </ul>
+
+                        <a href="#" class="card-link">
+                            Explore Customer App
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                {{-- Doctor --}}
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="app-card">
+
+                        <div class="app-icon orange-bg">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                        <h4>Doctor App</h4>
+
+                        <p>
+                            A smart digital workspace for doctors to manage
+                            patients and consultations.
+                        </p>
+
+                        <ul class="app-features">
+                            <li><i class="fa-solid fa-circle-check"></i> Appointments</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Digital Prescriptions</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Patient Records</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Video Consultation</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Earnings Dashboard</li>
+                        </ul>
+
+                        <a href="#" class="card-link">
+                            Explore Doctor App
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                {{-- Hospital --}}
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="app-card">
+
+                        <div class="app-icon blue-bg">
+                            <i class="fa-solid fa-hospital"></i>
+                        </div>
+
+                        <h4>Hospital App</h4>
+
+                        <p>
+                            Simplify hospital operations with an integrated
+                            digital management solution.
+                        </p>
+
+                        <ul class="app-features">
+                            <li><i class="fa-solid fa-circle-check"></i> OP & IP Management</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Billing</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Staff Management</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Patient Records</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Reports & Analytics</li>
+                        </ul>
+
+                        <a href="#" class="card-link">
+                            Explore Hospital App
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                {{-- Ambulance --}}
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="app-card">
+
+                        <div class="app-icon red-bg">
+                            <i class="fa-solid fa-truck-medical"></i>
+                        </div>
+
+                        <h4>Ambulance App</h4>
+
+                        <p>
+                            Faster emergency response with live location
+                            tracking and smart dispatch management.
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ul class="app-features">
+                                    <li><i class="fa-solid fa-circle-check"></i> Live Tracking</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> GPS Navigation</li>
+                                </ul>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <ul class="app-features">
+                                    <li><i class="fa-solid fa-circle-check"></i> Emergency Requests</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Driver Dashboard</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <a href="#" class="card-link">
+                            Explore Ambulance App
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                {{-- Merchant --}}
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="app-card">
+
+                        <div class="app-icon green-bg">
+                            <i class="fa-solid fa-pills"></i>
+                        </div>
+
+                        <h4>Merchant App</h4>
+
+                        <p>
+                            Manage pharmacy inventory, medicine orders,
+                            billing and delivery from one dashboard.
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ul class="app-features">
+                                    <li><i class="fa-solid fa-circle-check"></i> Inventory</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Online Orders</li>
+                                </ul>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <ul class="app-features">
+                                    <li><i class="fa-solid fa-circle-check"></i> Billing</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Reports</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <a href="#" class="card-link">
+                            Explore Merchant App
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    {{-- ================= WHY CHOOSE ================= --}}
+
+    <section class="section-space features-section" id="features">
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-badge">Why Healing Guides</span>
+
+                <h2 class="section-heading">
+                    Healthcare You Can <span>Trust.</span>
+                </h2>
+
+                <p class="section-description">
+                    Designed to make quality healthcare more accessible,
+                    secure and convenient.
+                </p>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </div>
+
+                        <h5>100% Secure</h5>
+
+                        <p>
+                            Your medical records and personal information
+                            are protected with secure technology.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                        <h5>Expert Doctors</h5>
+
+                        <p>
+                            Connect with experienced and verified
+                            healthcare professionals.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-truck-medical"></i>
+                        </div>
+
+                        <h5>Emergency Support</h5>
+
+                        <p>
+                            Book emergency ambulance services with
+                            real-time tracking.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-pills"></i>
+                        </div>
+
+                        <h5>Online Pharmacy</h5>
+
+                        <p>
+                            Order medicines online and receive them
+                            conveniently at your doorstep.
+                        </p>
+
+                    </div>
                 </div>
 
             </div>
 
         </div>
-
-    </div>
-</footer>
+    </section>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- ================= COUNTERS ================= --}}
+
+    <section class="stats-wrapper">
+        <div class="container position-relative">
+
+            <div class="row text-center g-4">
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>500+</h3>
+                        <p>Doctors</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>120+</h3>
+                        <p>Hospitals</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>15K+</h3>
+                        <p>Customers</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>300+</h3>
+                        <p>Ambulances</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>1K+</h3>
+                        <p>Medical Stores</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= HOW IT WORKS ================= --}}
+
+    <section class="section-space" id="about">
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-badge">Simple Process</span>
+
+                <h2 class="section-heading">
+                    Healthcare in <span>4 Easy Steps.</span>
+                </h2>
+
+                <p class="section-description">
+                    Find and access the healthcare service you need
+                    without complicated processes.
+                </p>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>1</span>
+                        </div>
+
+                        <h5>Create Account</h5>
+
+                        <p>
+                            Register using your mobile number
+                            and create your profile.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>2</span>
+                        </div>
+
+                        <h5>Find Service</h5>
+
+                        <p>
+                            Find doctors, hospitals, medicines
+                            or ambulance services.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>3</span>
+                        </div>
+
+                        <h5>Book Instantly</h5>
+
+                        <p>
+                            Select your preferred service and
+                            complete your booking.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            <i class="fa-solid fa-heart-circle-check"></i>
+                            <span>4</span>
+                        </div>
+
+                        <h5>Get Care</h5>
+
+                        <p>
+                            Receive reliable healthcare assistance
+                            when you need it.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= TESTIMONIALS ================= --}}
+
+    <section class="section-space testimonial-section">
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-badge">Testimonials</span>
+
+                <h2 class="section-heading">
+                    Trusted by Our <span>Community.</span>
+                </h2>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+
+                        <p class="review">
+                            “The platform makes finding doctors and booking
+                            appointments extremely simple and convenient.”
+                        </p>
+
+                        <div class="review-user">
+                            <div class="review-avatar">RS</div>
+                            <div>
+                                <h6>Rahul Sharma</h6>
+                                <small>Customer</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+
+                        <p class="review">
+                            “Managing my appointments, patient records and
+                            prescriptions is now much more efficient.”
+                        </p>
+
+                        <div class="review-user">
+                            <div class="review-avatar">PP</div>
+                            <div>
+                                <h6>Dr. Priya Patel</h6>
+                                <small>Doctor</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+
+                        <p class="review">
+                            “A very useful solution for coordinating hospital
+                            operations and patient management.”
+                        </p>
+
+                        <div class="review-user">
+                            <div class="review-avatar">
+                                <i class="fa-solid fa-hospital"></i>
+                            </div>
+                            <div>
+                                <h6>City Hospital</h6>
+                                <small>Hospital Partner</small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= FAQ ================= --}}
+
+    <section class="section-space">
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-badge">FAQ</span>
+
+                <h2 class="section-heading">
+                    Frequently Asked <span>Questions.</span>
+                </h2>
+
+            </div>
+
+            <div class="faq-wrapper">
+
+                <div class="accordion" id="faqAccordion">
+
+                    <div class="accordion-item">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+
+                                How do I register on Healing Guides?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+                                Download the application and register
+                                using your mobile number.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="accordion-item">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+
+                                Is my medical data secure?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+                                Yes. Your healthcare information is stored
+                                securely and protected from unauthorized access.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="accordion-item">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+
+                                Can hospitals join Healing Guides?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+                                Yes. Hospitals can join the platform and manage
+                                doctors, patients, billing and reports.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= CTA ================= --}}
+
+    <section class="pb-5">
+        <div class="container">
+
+            <div class="cta-box">
+
+                <div class="row align-items-center position-relative">
+
+                    <div class="col-lg-8">
+
+                        <h2>
+                            Ready for Smarter Healthcare?
+                        </h2>
+
+                        <p class="mb-lg-0 mt-3">
+                            Join Healing Guides and experience connected
+                            healthcare for your entire family.
+                        </p>
+
+                    </div>
+
+                    <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+
+                        <a href="#contact" class="btn btn-light px-4 py-3 rounded-3 fw-bold">
+
+                            Get Started Today
+
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= CONTACT ================= --}}
+
+    <section class="section-space contact-section" id="contact">
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-badge">Contact Us</span>
+
+                <h2 class="section-heading">
+                    We're Here to <span>Help.</span>
+                </h2>
+
+                <p class="section-description">
+                    Have questions about Healing Guides?
+                    Send us a message and our team will contact you.
+                </p>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-5">
+
+                    <div class="contact-info">
+
+                        <h3>
+                            Let's Talk
+                        </h3>
+
+                        <p class="mt-3">
+                            Connect with our team to learn more about
+                            Healing Guides Wellness Services.
+                        </p>
+
+                        <div class="contact-row">
+
+                            <div class="contact-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+
+                            <div>
+                                <small>Call Us</small>
+                                <div class="fw-bold">
+                                    +91 98765 43210
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="contact-row">
+
+                            <div class="contact-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+
+                            <div>
+                                <small>Email Us</small>
+                                <div class="fw-bold">
+                                    info@healingguides.com
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="contact-row">
+
+                            <div class="contact-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+
+                            <div>
+                                <small>Location</small>
+                                <div class="fw-bold">
+                                    H NO - 37 - 103/2
+                                    SREE COLONEY NEREDMET X ROADS
+                                    SECUNDERABAD. 50006. TELANGANA
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-7">
+
+                    <div class="contact-form">
+
+                        <form>
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        Your Name
+                                    </label>
+
+                                    <input type="text" class="form-control" placeholder="Enter your name">
+
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+                                    <label class="form-label">
+                                        Phone Number
+                                    </label>
+
+                                    <input type="text" class="form-control" placeholder="Enter phone number">
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Email Address
+                                </label>
+
+                                <input type="email" class="form-control" placeholder="Enter email address">
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Message
+                                </label>
+
+                                <textarea class="form-control" placeholder="How can we help you?"></textarea>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-gradient">
+
+                                Send Message
+
+                                <i class="fa-solid fa-paper-plane ms-2"></i>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {{-- ================= FOOTER ================= --}}
+
+    <footer>
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-5">
+
+                    <img src="{{ asset('logo/logo.png') }}" class="footer-logo" alt="Healing Guides">
+
+                    <p class="footer-about">
+                        Connecting customers, doctors, hospitals,
+                        ambulances and medical merchants through one
+                        powerful digital healthcare ecosystem.
+                    </p>
+
+                    <div class="mt-4">
+
+                        <a href="#" class="social-link">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+
+                        <a href="#" class="social-link">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+
+                        <a href="#" class="social-link">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+
+                        <a href="#" class="social-link">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-2 col-md-4">
+
+                    <h5 class="footer-title">
+                        Quick Links
+                    </h5>
+
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#apps">Applications</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">How It Works</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+
+                </div>
+
+
+                <div class="col-lg-2 col-md-4">
+
+                    <h5 class="footer-title">
+                        Applications
+                    </h5>
+
+                    <ul class="footer-links">
+                        <li><a href="#">Customer App</a></li>
+                        <li><a href="#">Doctor App</a></li>
+                        <li><a href="#">Hospital App</a></li>
+                        <li><a href="#">Ambulance App</a></li>
+                        <li><a href="#">Merchant App</a></li>
+                    </ul>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-4">
+
+                    <h5 class="footer-title">
+                        Contact
+                    </h5>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="tel:+919876543210">
+                                <i class="fa-solid fa-phone me-2"></i>
+                                +91 98765 43210
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="mailto:info@healingguides.com">
+                                <i class="fa-solid fa-envelope me-2"></i>
+                                info@healingguides.com
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa-solid fa-location-dot me-2"></i>
+                                H NO - 37 - 103/2
+                                SREE COLONEY NEREDMET X ROADS
+                                SECUNDERABAD. 50006. TELANGANA
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+            <div class="copyright">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6 text-center text-md-start">
+                        © {{ date('Y') }} Healing Guides Wellness Services.
+                        All Rights Reserved.
+                    </div>
+
+                    <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                        Privacy Policy &nbsp; • &nbsp; Terms & Conditions
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
