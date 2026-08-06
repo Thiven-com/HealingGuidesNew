@@ -34,7 +34,7 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'dashboard']);
     //Doctors
-    Route::get('doctors', [DoctorController::class, 'doctors']);
+    Route::any('doctors', [DoctorController::class, 'doctors']);
 
     Route::get('doctor-details/{id}', [DoctorController::class, 'doctorDetails']);
 
@@ -49,9 +49,9 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
     Route::get('diagnostics/{id}/lab-tests', [DiagnosticController::class, 'diagnosticLabTests']);
 
     //Ambulances
-    Route::get('ambulance-types', [AmbulanceController::class, 'ambulanceTypes']);
+    Route::any('ambulance-types', [AmbulanceController::class, 'ambulanceTypes']);
 
-    Route::get('ambulances', [AmbulanceController::class, 'ambulances']);
+    Route::any('ambulances', [AmbulanceController::class, 'ambulances']);
 
     Route::get('ambulance-details/{id}', [AmbulanceController::class, 'ambulanceDetails']);
 
@@ -70,9 +70,9 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
 
     Route::post('ambulance-trip-complete', [AmbulanceBookingController::class, 'completeTrip']);
     //Medicine Inventory
-    Route::get('medicine-categories', [MedicineController::class, 'categories']);
+    Route::any('medicine-categories', [MedicineController::class, 'categories']);
 
-    Route::get('medicines', [MedicineController::class, 'medicines']);
+    Route::any('medicines', [MedicineController::class, 'medicines']);
 
     Route::get('medicine-details/{id}', [MedicineController::class, 'medicineDetails']);
 
@@ -97,7 +97,7 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
 
     Route::post('deliver-medicine-order', [MedicineOrderController::class, 'deliverOrder']);
     //Appointments
-    Route::get('appointments', [AppointmentController::class, 'appointments']);
+    Route::any('appointments', [AppointmentController::class, 'appointments']);
 
     Route::get('appointment-details/{id}', [AppointmentController::class, 'appointmentDetails']);
     Route::get('appointment-summary', [AppointmentController::class, 'appointmentSummary']);
