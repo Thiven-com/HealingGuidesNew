@@ -763,11 +763,11 @@
 
                         <li>
 
-                            <a href="mailto:info@healingguides.com">
+                            <a href="mailto:support@healingguides.in">
 
                                 <i class="fa-solid fa-envelope me-2"></i>
 
-                                info@healingguides.com
+                                support@healingguides.in
 
                             </a>
 

@@ -1243,7 +1243,7 @@
 
 
                             <a
-                                href="mailto:info@healingguides.com?subject=Account%20Deletion%20Request"
+                                href="mailto:support@healingguides.in?subject=Account%20Deletion%20Request"
                                 class="request-email-btn"
                             >
 
@@ -1299,10 +1299,10 @@
                         <br>
 
                         Email:
-                        <a href="mailto:info@healingguides.com"
+                        <a href="mailto:support@healingguides.in"
                            style="color:var(--primary);font-weight:700;">
 
-                            info@healingguides.com
+                            support@healingguides.in
 
                         </a>
 

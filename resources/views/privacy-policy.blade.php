@@ -758,7 +758,7 @@
                         <br>
 
                         Email:
-                        info@healingguides.com
+                        support@healingguides.in
 
                         <br>
 

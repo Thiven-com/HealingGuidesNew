@@ -1913,7 +1913,7 @@
                             <div>
                                 <small>Email Us</small>
                                 <div class="fw-bold">
-                                    info@healingguides.com
+                                    support@healingguides.in
                                 </div>
                             </div>
 
@@ -2101,9 +2101,9 @@
                         </li>
 
                         <li>
-                            <a href="mailto:info@healingguides.com">
+                            <a href="mailto:support@healingguides.in">
                                 <i class="fa-solid fa-envelope me-2"></i>
-                                info@healingguides.com
+                                support@healingguides.in
                             </a>
                         </li>
 

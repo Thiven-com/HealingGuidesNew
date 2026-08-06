@@ -1899,7 +1899,7 @@
                                 <small>Email Address</small>
 
                                 <strong>
-                                    info@healingguides.com
+                                    support@healingguides.in
                                 </strong>
 
                             </div>
