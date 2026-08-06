@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -114,11 +115,10 @@ class HospitalDoctorCollection extends ResourceCollection
                     */
 
                     'available_from' =>
-                        $doctor->available_from,
+                        Carbon::parse($doctor->available_from)->format('H:i'),
 
                     'available_to' =>
-                        $doctor->available_to,
-
+                        Carbon::parse($doctor->available_to)->format('H:i'),
                     /*
                     |--------------------------------------------------------------------------
                     | Specialization
