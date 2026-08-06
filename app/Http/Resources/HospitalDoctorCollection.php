@@ -99,8 +99,7 @@ class HospitalDoctorCollection extends ResourceCollection
                     'blood_group' =>
                         $doctor->blood_group,
 
-                    'photo' =>
-                        $doctor->photo,
+                     'photo' => $doctor->photo ? asset($doctor->photo) : null,
 
                     'address' =>
                         $doctor->address,
