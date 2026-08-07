@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -86,8 +87,8 @@ class PrescriptionCollection extends ResourceCollection
 
                     'photo' =>
                         $prescription->doctor->photo
-                            ? asset($prescription->doctor->photo)
-                            : null,
+                        ? asset($prescription->doctor->photo)
+                        : null,
 
                 ] : null,
 
@@ -132,6 +133,8 @@ class PrescriptionCollection extends ResourceCollection
 
                     'name' =>
                         $prescription->familyMember->name,
+                    'mobile' =>
+                        $prescription->familyMember->mobile,
 
                     'relation' =>
                         $prescription->familyMember->relation,
@@ -141,7 +144,9 @@ class PrescriptionCollection extends ResourceCollection
 
                     'dob' =>
                         $prescription->familyMember->dob,
-
+                    'age' => $prescription->familyMember->dob
+                        ? Carbon::parse($prescription->familyMember->dob)->age
+                        : null,
                 ] : null,
 
                 /*
@@ -213,7 +218,7 @@ class PrescriptionCollection extends ResourceCollection
 
                                 // 'id' =>
                                 //     $recommended->id,
-
+            
                                 'id' =>
                                     $recommended->lab_test_id,
                                 'test_name' =>
@@ -239,10 +244,10 @@ class PrescriptionCollection extends ResourceCollection
 
                                         'image' =>
                                             $recommended->labTest->image
-                                                ? asset(
-                                                    $recommended->labTest->image
-                                                )
-                                                : null,
+                                            ? asset(
+                                                $recommended->labTest->image
+                                            )
+                                            : null,
 
                                         'description' =>
                                             $recommended->labTest->description,

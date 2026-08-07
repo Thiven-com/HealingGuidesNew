@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -91,8 +92,8 @@ class DiagnosticBookingCollection extends ResourceCollection
 
                     'image' =>
                         $booking->diagnostic->image
-                            ? asset($booking->diagnostic->image)
-                            : null,
+                        ? asset($booking->diagnostic->image)
+                        : null,
 
                     'address' =>
                         $booking->diagnostic->address ?? null,
@@ -127,6 +128,7 @@ class DiagnosticBookingCollection extends ResourceCollection
 
                     'name' =>
                         $booking->familyMember->name ?? null,
+                    'mobile' => $booking->familyMember->mobile ?? null,
 
                     'relation' =>
                         $booking->familyMember->relation ?? null,
@@ -136,6 +138,9 @@ class DiagnosticBookingCollection extends ResourceCollection
 
                     'dob' =>
                         $booking->familyMember->dob ?? null,
+                    'age' => $booking->familyMember->dob
+                        ? Carbon::parse($booking->familyMember->dob)->age
+                        : null,
 
                 ] : null,
 
@@ -174,8 +179,8 @@ class DiagnosticBookingCollection extends ResourceCollection
 
                             'image' =>
                                 $item->labTest->image
-                                    ? asset($item->labTest->image)
-                                    : null,
+                                ? asset($item->labTest->image)
+                                : null,
 
                             'description' =>
                                 $item->labTest->description,
@@ -212,28 +217,28 @@ class DiagnosticBookingCollection extends ResourceCollection
 
                 'collection_address' =>
                     $booking->collection_type == 'home_collection'
-                        ? [
+                    ? [
 
-                            'address' =>
-                                $booking->address,
+                        'address' =>
+                            $booking->address,
 
-                            'city' =>
-                                $booking->city,
+                        'city' =>
+                            $booking->city,
 
-                            'state' =>
-                                $booking->state,
+                        'state' =>
+                            $booking->state,
 
-                            'pincode' =>
-                                $booking->pincode,
+                        'pincode' =>
+                            $booking->pincode,
 
-                            'latitude' =>
-                                $booking->latitude,
+                        'latitude' =>
+                            $booking->latitude,
 
-                            'longitude' =>
-                                $booking->longitude,
+                        'longitude' =>
+                            $booking->longitude,
 
-                        ]
-                        : null,
+                    ]
+                    : null,
 
                 /*
                 |--------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -93,8 +94,8 @@ class PatientVitalCollection extends ResourceCollection
 
                     'photo' =>
                         $vital->doctor->photo
-                            ? asset($vital->doctor->photo)
-                            : null,
+                        ? asset($vital->doctor->photo)
+                        : null,
 
                 ] : null,
 
@@ -139,6 +140,8 @@ class PatientVitalCollection extends ResourceCollection
 
                     'name' =>
                         $vital->familyMember->name,
+                    'mobile' =>
+                        $vital->familyMember->mobile,
 
                     'relation' =>
                         $vital->familyMember->relation,
@@ -148,6 +151,9 @@ class PatientVitalCollection extends ResourceCollection
 
                     'dob' =>
                         $vital->familyMember->dob,
+                    'age' => $vital->familyMember->dob
+                        ? Carbon::parse($vital->familyMember->dob)->age
+                        : null,
 
                 ] : null,
 
@@ -159,17 +165,17 @@ class PatientVitalCollection extends ResourceCollection
 
                 'created_at' =>
                     $vital->created_at
-                        ? $vital->created_at->format(
-                            'Y-m-d H:i:s'
-                        )
-                        : null,
+                    ? $vital->created_at->format(
+                        'Y-m-d H:i:s'
+                    )
+                    : null,
 
                 'updated_at' =>
                     $vital->updated_at
-                        ? $vital->updated_at->format(
-                            'Y-m-d H:i:s'
-                        )
-                        : null,
+                    ? $vital->updated_at->format(
+                        'Y-m-d H:i:s'
+                    )
+                    : null,
 
             ];
 

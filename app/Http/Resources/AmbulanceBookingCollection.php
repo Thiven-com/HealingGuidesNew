@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -32,12 +33,16 @@ class AmbulanceBookingCollection extends ResourceCollection
                         'id' => $booking->familyMember->id,
 
                         'name' => $booking->familyMember->name ?? null,
+                        'mobile' => $booking->familyMember->mobile ?? null,
 
                         'relation' => $booking->familyMember->relation ?? null,
 
                         'gender' => $booking->familyMember->gender ?? null,
 
                         'dob' => $booking->familyMember->dob ?? null,
+                        'age' => $booking->familyMember->dob
+                            ? Carbon::parse($booking->familyMember->dob)->age
+                            : null,
 
                         'blood_group' => $booking->familyMember->blood_group ?? null,
 

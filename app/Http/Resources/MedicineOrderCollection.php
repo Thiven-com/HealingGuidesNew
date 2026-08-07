@@ -66,6 +66,8 @@ class MedicineOrderCollection extends ResourceCollection
 
                         'name' =>
                             $order->familyMember->name,
+                        'mobile' =>
+                            $order->familyMember->mobile,
 
                         'relation' =>
                             $order->familyMember->relation,
