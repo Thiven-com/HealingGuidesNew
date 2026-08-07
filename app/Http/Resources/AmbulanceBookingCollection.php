@@ -93,7 +93,7 @@ class AmbulanceBookingCollection extends ResourceCollection
                         'id' => $booking->ambulanceType->id,
 
                         'type_name' =>
-                            $booking->ambulanceType->type_name ?? null,
+                            $booking->ambulanceType->ambulance_type_name ?? null,
 
                         'image' =>
                             $booking->ambulanceType->image ?? null,

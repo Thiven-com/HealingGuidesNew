@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DoctorApp\AccountController;
 use App\Http\Controllers\DoctorApp\AppointmentController;
 use App\Http\Controllers\DoctorApp\DoctorScheduleController;
 use App\Http\Controllers\DoctorApp\PatientMedicalReportController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('register', [AccountController::class, 'register']);
 Route::post('login', 'AccountController@login');
 Route::post('verifyMobile', 'AccountController@verifyMobile');
 Route::post('resendOtp', 'AccountController@resendOtp');
@@ -31,10 +33,10 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::get('dashboard', [ProfileController::class, 'dashboard']);
     Route::get('todaySummary', [ProfileController::class, 'todaySummary']);
     Route::get('statistics', [ProfileController::class, 'statistics']);
-    Route::any('specializations', [ProfileController::class, 'specializations']);
+
     Route::any('doctor-slots', [ProfileController::class, 'availableSlots']);
     Route::post('updateFees', [ProfileController::class, 'updateFees']);
-    
+
     //Doctor Module
     Route::get('schedules', [DoctorScheduleController::class, 'schedules']);
 
@@ -83,3 +85,5 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::get('prescription/{appointment_id}', [PrescriptionController::class, 'prescriptionDetails']);
 
 });
+
+Route::any('specializations', [ProfileController::class, 'specializations']);

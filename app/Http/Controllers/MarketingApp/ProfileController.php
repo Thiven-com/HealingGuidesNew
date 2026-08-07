@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MarketingApp;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MarketingApp\MarketingStaffCollection;
 use App\Models\MarketingStaff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +31,7 @@ class ProfileController extends Controller
         return response()->json([
             'success' => 1,
             'message' => 'Profile Fetched Successfully',
-
-            'data' => $this->profileResponse($staff)
+            'data' => new MarketingStaffCollection(collect([$staff]))
         ]);
     }
 
@@ -45,7 +45,6 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $staff = auth('sanctum')->user();
-
         if (!$staff) {
 
             return response()->json([
@@ -103,7 +102,7 @@ class ProfileController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
 
@@ -136,7 +135,7 @@ class ProfileController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Email Already Exists'
-                ], 422);
+                ]);
             }
         }
 
@@ -303,10 +302,7 @@ class ProfileController extends Controller
         return response()->json([
             'success' => 1,
             'message' => 'Profile Updated Successfully',
-
-            'data' => $this->profileResponse(
-                $staff->fresh()
-            )
+            'data' => new MarketingStaffCollection(collect([$staff]))
         ]);
     }
 
@@ -354,7 +350,7 @@ class ProfileController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
 
@@ -376,14 +372,6 @@ class ProfileController extends Controller
         return response()->json([
             'success' => 1,
             'message' => 'Location Updated Successfully',
-
-            'data' => [
-                'latitude' =>
-                    $staff->latitude,
-
-                'longitude' =>
-                    $staff->longitude,
-            ]
         ]);
     }
 
@@ -422,7 +410,7 @@ class ProfileController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
 

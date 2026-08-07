@@ -204,14 +204,14 @@ class ProfileController extends Controller
 
     public function specializations(Request $request)
     {
-        $doctor = auth('sanctum')->user();
+        // $doctor = auth('sanctum')->user();
 
-        if (!$doctor) {
-            return response()->json([
-                'success' => 0,
-                'message' => 'Please Login'
-            ], 401);
-        }
+        // if (!$doctor) {
+        //     return response()->json([
+        //         'success' => 0,
+        //         'message' => 'Please Login'
+        //     ], 401);
+        // }
 
         $specializations = Specialization::where('status', 1);
         if ($request->filled('id')) {
