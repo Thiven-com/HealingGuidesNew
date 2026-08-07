@@ -1,16 +1,9 @@
 <?php
 
-use App\Http\Controllers\HospitalApp\AppointmentController;
-use App\Http\Controllers\HospitalApp\ProfileController;
-use App\Http\Controllers\HospitalApp\DashboardController;
-use App\Http\Controllers\HospitalApp\DoctorController;
-use App\Http\Controllers\HospitalApp\DiagnosticController;
-use App\Http\Controllers\HospitalApp\AmbulanceController;
-use App\Http\Controllers\HospitalApp\AmbulanceBookingController;
-use App\Http\Controllers\HospitalApp\MedicineController;
-use App\Http\Controllers\HospitalApp\MedicinePrescriptionController;
-use App\Http\Controllers\HospitalApp\MedicineOrderController;
 
+
+use App\Http\Controllers\AmbulanceApp\AccountController;
+use App\Http\Controllers\AmbulanceApp\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,12 +13,12 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::post('login', 'AccountController@login');
-Route::post('verifyMobile', 'AccountController@verifyMobile');
-Route::post('resendOtp', 'AccountController@resendOtp');
+Route::post('login', [AccountController::class,'login']);
+Route::post('verifyMobile', [AccountController::class,'verifyMobile']);
+Route::post('resendOtp', [AccountController::class,'resendOtp']);
 
 
-Route::group(['middleware' => ['hospitaltokenCheck']], function () {
+Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     //Profile
     Route::get('profile', [ProfileController::class, 'profile']);
 });

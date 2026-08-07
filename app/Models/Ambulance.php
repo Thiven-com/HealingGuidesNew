@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Ambulance extends Model
+class Ambulance extends Authenticatable
 {
+    use HasFactory, Notifiable, HasApiTokens;
     protected $fillable = [
 
         'ambulance_type_id',
