@@ -14,64 +14,86 @@ class DashboardController extends Controller
         $ambulance = auth('sanctum')->user();
 
         if (!$ambulance) {
-
             return response()->json([
                 'success' => 0,
                 'message' => 'Please Login'
             ], 401);
         }
-        $ambulance->load([
-            'ambulanceType',
-            'hospital'
-        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
         $baseQuery = AmbulanceBooking::where(
             'ambulance_id',
             $ambulance->id
         );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Booking Counts
+        |--------------------------------------------------------------------------
+        */
+
         $totalBookings = (clone $baseQuery)
             ->count();
+
+
         $assignedBookings = (clone $baseQuery)
             ->where(
                 'booking_status',
-                'assigned'
+                'ambulance_assigned'
             )
             ->count();
-        $acceptedBookings = (clone $baseQuery)
+
+
+        $onTheWayBookings = (clone $baseQuery)
             ->where(
                 'booking_status',
-                'accepted'
+                'on_the_way'
             )
             ->count();
-        $ongoingBookings = (clone $baseQuery)
-            ->where(
-                'booking_status',
-                'ongoing'
-            )
-            ->count();
+
+
         $completedBookings = (clone $baseQuery)
             ->where(
                 'booking_status',
                 'completed'
             )
             ->count();
-        $rejectedBookings = (clone $baseQuery)
-            ->where(
-                'booking_status',
-                'rejected'
-            )
-            ->count();
+
+
         $cancelledBookings = (clone $baseQuery)
             ->where(
                 'booking_status',
                 'cancelled'
             )
             ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Today's Bookings
+        |--------------------------------------------------------------------------
+        */
+
         $todayBookings = (clone $baseQuery)
             ->whereDate(
                 'created_at',
                 today()
             )
             ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Today's Completed Trips
+        |--------------------------------------------------------------------------
+        */
+
         $todayCompletedTrips = (clone $baseQuery)
             ->where(
                 'booking_status',
@@ -82,6 +104,17 @@ class DashboardController extends Controller
                 today()
             )
             ->count();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Earnings
+        |--------------------------------------------------------------------------
+        |
+        | Only completed + paid bookings are counted.
+        |
+        */
+
         $todayEarnings = (clone $baseQuery)
             ->where(
                 'booking_status',
@@ -96,6 +129,8 @@ class DashboardController extends Controller
                 today()
             )
             ->sum('total_amount');
+
+
         $totalEarnings = (clone $baseQuery)
             ->where(
                 'booking_status',
@@ -106,25 +141,45 @@ class DashboardController extends Controller
                 'paid'
             )
             ->sum('total_amount');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Current Booking
+        |--------------------------------------------------------------------------
+        |
+        | Priority:
+        |
+        | 1. on_the_way
+        | 2. ambulance_assigned
+        |
+        */
+
         $currentBooking = (clone $baseQuery)
             ->whereIn(
                 'booking_status',
                 [
-                    'ongoing',
-                    'accepted',
-                    'assigned'
+                    'on_the_way',
+                    'ambulance_assigned'
                 ]
             )
             ->orderByRaw("
-                CASE
-                    WHEN booking_status = 'ongoing' THEN 1
-                    WHEN booking_status = 'accepted' THEN 2
-                    WHEN booking_status = 'assigned' THEN 3
-                    ELSE 4
-                END
-            ")
+            CASE
+                WHEN booking_status = 'on_the_way' THEN 1
+                WHEN booking_status = 'ambulance_assigned' THEN 2
+                ELSE 3
+            END
+        ")
             ->latest('id')
             ->first();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Current Booking Data
+        |--------------------------------------------------------------------------
+        */
+
         $currentBookingData = null;
 
         if ($currentBooking) {
@@ -139,6 +194,14 @@ class DashboardController extends Controller
 
                 'booking_status' =>
                     $currentBooking->booking_status,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Pickup
+                |--------------------------------------------------------------------------
+                */
+
                 'pickup_address' =>
                     $currentBooking->pickup_address,
 
@@ -156,6 +219,14 @@ class DashboardController extends Controller
 
                 'pickup_longitude' =>
                     $currentBooking->pickup_longitude,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Destination
+                |--------------------------------------------------------------------------
+                */
+
                 'destination_address' =>
                     $currentBooking->destination_address,
 
@@ -173,27 +244,74 @@ class DashboardController extends Controller
 
                 'destination_longitude' =>
                     $currentBooking->destination_longitude,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Emergency
+                |--------------------------------------------------------------------------
+                */
+
                 'is_emergency' =>
                     (bool) $currentBooking->is_emergency,
 
                 'emergency_notes' =>
                     $currentBooking->emergency_notes,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Trip
+                |--------------------------------------------------------------------------
+                */
+
                 'distance_km' =>
                     $currentBooking->distance_km,
 
+
+                /*
+                |--------------------------------------------------------------------------
+                | Amount
+                |--------------------------------------------------------------------------
+                */
+
+                'base_amount' =>
+                    $currentBooking->base_amount,
+
+                'distance_amount' =>
+                    $currentBooking->distance_amount,
+
+                'extra_charge' =>
+                    $currentBooking->extra_charge,
+
+                'discount' =>
+                    $currentBooking->discount,
+
+                'tax' =>
+                    $currentBooking->tax,
+
                 'total_amount' =>
                     $currentBooking->total_amount,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Payment
+                |--------------------------------------------------------------------------
+                */
 
                 'payment_method' =>
                     $currentBooking->payment_method,
 
                 'payment_status' =>
                     $currentBooking->payment_status,
-                'accepted_at' =>
-                    $currentBooking->accepted_at
-                    ? $currentBooking->accepted_at
-                        ->format('Y-m-d H:i:s')
-                    : null,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Dates
+                |--------------------------------------------------------------------------
+                */
 
                 'assigned_at' =>
                     $currentBooking->assigned_at
@@ -208,6 +326,14 @@ class DashboardController extends Controller
                     : null,
             ];
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Recent Completed Trips
+        |--------------------------------------------------------------------------
+        */
+
         $recentTrips = (clone $baseQuery)
             ->where(
                 'booking_status',
@@ -251,6 +377,14 @@ class DashboardController extends Controller
                         : null,
                 ];
             });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
         return response()->json([
 
             'success' => 1,
@@ -259,6 +393,13 @@ class DashboardController extends Controller
                 'Dashboard Fetched Successfully',
 
             'data' => [
+
+                /*
+                |--------------------------------------------------------------------------
+                | Overview
+                |--------------------------------------------------------------------------
+                */
+
                 'overview' => [
 
                     'total_bookings' =>
@@ -270,11 +411,8 @@ class DashboardController extends Controller
                     'assigned_bookings' =>
                         $assignedBookings,
 
-                    'accepted_bookings' =>
-                        $acceptedBookings,
-
-                    'ongoing_bookings' =>
-                        $ongoingBookings,
+                    'on_the_way_bookings' =>
+                        $onTheWayBookings,
 
                     'completed_bookings' =>
                         $completedBookings,
@@ -282,12 +420,17 @@ class DashboardController extends Controller
                     'today_completed_trips' =>
                         $todayCompletedTrips,
 
-                    'rejected_bookings' =>
-                        $rejectedBookings,
-
                     'cancelled_bookings' =>
                         $cancelledBookings,
                 ],
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Earnings
+                |--------------------------------------------------------------------------
+                */
+
                 'earnings' => [
 
                     'today_earnings' =>
@@ -306,8 +449,24 @@ class DashboardController extends Controller
                             ''
                         ),
                 ],
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Current Booking
+                |--------------------------------------------------------------------------
+                */
+
                 'current_booking' =>
                     $currentBookingData,
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Recent Trips
+                |--------------------------------------------------------------------------
+                */
+
                 'recent_trips' =>
                     $recentTrips,
             ]
