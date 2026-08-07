@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AmbulanceApp\EarningController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AmbulanceApp\AccountController;
@@ -41,17 +42,14 @@ Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard']);
 
 
-    Route::get('booking-requests', [BookingController::class, 'bookingRequests']);
+    Route::get('bookings', [BookingController::class,'bookings']);
 
     Route::get('booking-details/{id}', [BookingController::class, 'bookingDetails']);
 
-    Route::post('accept-booking', [BookingController::class, 'acceptBooking']);
+    Route::post('start-trip', [BookingController::class, 'startTrip']);
+    Route::post('update-trip-location', [BookingController::class, 'updateTripLocation']);
+    Route::post('complete-trip', [BookingController::class, 'completeTrip']);
+    Route::get('active-trip', [BookingController::class, 'activeTrip']);
 
-    Route::post('reject-booking', [BookingController::class, 'rejectBooking']);
-
-    Route::post('start-trip', [BookingController::class,'startTrip']);
-
-    Route::post('complete-trip', [BookingController::class,'completeTrip']);
-
-    Route::get('booking-history', [BookingController::class,'bookingHistory']);
+    Route::get('earnings', [EarningController::class, 'earnings']);
 });
