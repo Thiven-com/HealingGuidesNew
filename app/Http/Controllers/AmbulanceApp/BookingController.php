@@ -657,7 +657,7 @@ class BookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $booking = AmbulanceBooking::where('id', $request->booking_id)
@@ -668,7 +668,7 @@ class BookingController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Ambulance Booking Not Found'
-            ], 404);
+            ]);
         }
         /*
         |--------------------------------------------------------------------------
