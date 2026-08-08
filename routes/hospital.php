@@ -123,6 +123,21 @@ Route::name('hospital.')
                 'updateStatus'
             ])->name('appointments.status');
 
+            
+            Route::get('appointments/{id}/reschedule', [
+                AppointmentController::class,
+                'reschedule'
+            ])->name('appointments.reschedule');
+            Route::get('appointments/{id}/reschedule-slots', [
+                AppointmentController::class,
+                'getRescheduleSlots'
+            ])->name('appointments.reschedule.slots');
+
+            Route::put('appointments/{id}/reschedule', [
+                AppointmentController::class,
+                'updateReschedule'
+            ])->name('appointments.reschedule.update');
+
 
             /*
             |--------------------------------------------------------------------------

@@ -245,6 +245,28 @@
 
                                 </div>
 
+                                @if(
+    !in_array($appointment->appointment_status, [
+        'completed',
+        'cancelled',
+        'rejected'
+    ])
+)
+
+    <a href="{{ route(
+        'hospital.appointments.reschedule',
+        $appointment->id
+    ) }}"
+       class="btn btn-warning">
+
+        <i class="ti ti-calendar-event me-1"></i>
+
+        Reschedule
+
+    </a>
+
+@endif
+
                             </div>
 
                         </div>

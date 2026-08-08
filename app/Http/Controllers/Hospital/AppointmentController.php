@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Hospital;
 
 use App\Http\Controllers\Controller;
 use App\Models\DoctorAppointment;
+use App\Models\DoctorSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +27,7 @@ class AppointmentController extends Controller
             'customer',
             'familyMember'
         ])
-        ->where('hospital_id', $hospital->id);
+            ->where('hospital_id', $hospital->id);
 
 
         /*
@@ -45,29 +47,29 @@ class AppointmentController extends Controller
                     'like',
                     "%{$search}%"
                 )
-                ->orWhere(
-                    'token_no',
-                    'like',
-                    "%{$search}%"
-                )
-                ->orWhereHas('doctor', function ($doctor) use ($search) {
-
-                    $doctor->where(
-                        'doctor_name',
+                    ->orWhere(
+                        'token_no',
                         'like',
                         "%{$search}%"
-                    );
+                    )
+                    ->orWhereHas('doctor', function ($doctor) use ($search) {
 
-                })
-                ->orWhereHas('customer', function ($customer) use ($search) {
+                        $doctor->where(
+                            'doctor_name',
+                            'like',
+                            "%{$search}%"
+                        );
 
-                    $customer->where(
-                        'name',
-                        'like',
-                        "%{$search}%"
-                    );
+                    })
+                    ->orWhereHas('customer', function ($customer) use ($search) {
 
-                });
+                        $customer->where(
+                            'name',
+                            'like',
+                            "%{$search}%"
+                        );
+
+                    });
 
             });
         }
@@ -165,9 +167,9 @@ class AppointmentController extends Controller
             'hospital_id',
             $hospital->id
         )
-        ->where('status', 1)
-        ->orderBy('doctor_name')
-        ->get();
+            ->where('status', 1)
+            ->orderBy('doctor_name')
+            ->get();
 
 
         return view(
@@ -197,15 +199,15 @@ class AppointmentController extends Controller
             'familyMember',
             'doctorSchedule'
         ])
-        ->where(
-            'hospital_id',
-            $hospital->id
-        )
-        ->where(
-            'id',
-            $id
-        )
-        ->firstOrFail();
+            ->where(
+                'hospital_id',
+                $hospital->id
+            )
+            ->where(
+                'id',
+                $id
+            )
+            ->firstOrFail();
 
 
         return view(
@@ -259,11 +261,11 @@ class AppointmentController extends Controller
             'hospital_id',
             $hospital->id
         )
-        ->where(
-            'id',
-            $request->id
-        )
-        ->first();
+            ->where(
+                'id',
+                $request->id
+            )
+            ->first();
 
 
         if (!$appointment) {
@@ -355,5 +357,254 @@ class AppointmentController extends Controller
             'message' =>
                 'Appointment Status Updated Successfully'
         ]);
+    }
+
+    public function reschedule($id)
+    {
+        $hospital = Auth::guard('hospital')->user();
+
+        $appointment = DoctorAppointment::where('hospital_id', $hospital->id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        return view(
+            'hospital.appointments.reschedule',
+            compact('appointment')
+        );
+    }
+
+
+    public function getRescheduleSlots(Request $request, $id)
+    {
+        $hospital = Auth::guard('hospital')->user();
+
+        $appointment = DoctorAppointment::where('hospital_id', $hospital->id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $request->validate([
+            'appointment_date' => 'required|date',
+        ]);
+
+        $date = $request->appointment_date;
+
+        $day = Carbon::parse($date)->format('l');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor Schedule
+        |--------------------------------------------------------------------------
+        */
+
+        $schedule = DoctorSchedule::where(
+            'doctor_id',
+            $appointment->doctor_id
+        )
+            ->where('day_of_week', $day)
+            ->where('status', 1)
+            ->first();
+
+        if (!$schedule) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Doctor is not available on this day.',
+                'data' => []
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Existing Appointments
+        |--------------------------------------------------------------------------
+        |
+        | Exclude the appointment currently being rescheduled.
+        |
+        */
+
+        $appointments = DoctorAppointment::where(
+            'doctor_id',
+            $appointment->doctor_id
+        )
+            ->whereDate(
+                'appointment_date',
+                $date
+            )
+            ->where('id', '!=', $appointment->id)
+            ->where('appointment_status', '!=', 'cancelled')
+            ->get([
+                'appointment_time',
+                'appointment_status'
+            ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Slot Status Lookup
+        |--------------------------------------------------------------------------
+        */
+
+        $slotStatuses = [];
+
+        foreach ($appointments as $existingAppointment) {
+
+            $time = Carbon::parse(
+                $existingAppointment->appointment_time
+            )->format('H:i');
+
+            switch ($existingAppointment->appointment_status) {
+
+                case 'pending':
+
+                    $slotStatuses[$time] = 'Blocked';
+
+                    break;
+
+                case 'confirmed':
+
+                    $slotStatuses[$time] = 'Booked';
+
+                    break;
+
+                default:
+
+                    $slotStatuses[$time] = 'Booked';
+
+                    break;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate Slots
+        |--------------------------------------------------------------------------
+        */
+
+        $start = Carbon::parse($schedule->available_from);
+
+        $end = Carbon::parse($schedule->available_to);
+
+        $slots = [];
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Lunch Break
+        |--------------------------------------------------------------------------
+        */
+
+        $breakStart = Carbon::createFromTimeString('13:00:00');
+
+        $breakEnd = Carbon::createFromTimeString('14:00:00');
+
+
+        while ($start < $end) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Skip Lunch Break
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $start >= $breakStart &&
+                $start < $breakEnd
+            ) {
+
+                $start->addMinutes(
+                    $schedule->slot_duration
+                );
+
+                continue;
+            }
+
+
+            $time = $start->format('H:i');
+
+            $status = $slotStatuses[$time] ?? 'Available';
+
+
+            $slots[] = [
+
+                'slot' => $time,
+
+                'slot_time' => $start->format('h:i A'),
+
+                'status' => $status,
+
+                'available' => $status === 'Available',
+
+            ];
+
+
+            $start->addMinutes(
+                $schedule->slot_duration
+            );
+        }
+
+
+        return response()->json([
+
+            'success' => 1,
+
+            'message' => 'Available slots fetched successfully.',
+
+            'data' => [
+
+                'schedule_id' => $schedule->id,
+
+                'day' => $day,
+
+                'available_from' => $schedule->available_from,
+
+                'available_to' => $schedule->available_to,
+
+                'slot_duration' => $schedule->slot_duration,
+
+                'slots' => $slots,
+
+            ]
+
+        ]);
+    }
+
+
+    public function updateReschedule(Request $request, $id)
+    {
+        $hospital = Auth::guard('hospital')->user();
+
+        $appointment = DoctorAppointment::where('hospital_id', $hospital->id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'appointment_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+            ],
+            'appointment_time' => [
+                'required',
+            ],
+            'doctor_schedule_id' => [
+                'nullable',
+                'exists:doctor_schedules,id',
+            ],
+        ]);
+
+        $appointment->update([
+            'appointment_date' => $validated['appointment_date'],
+            'appointment_time' => $validated['appointment_time'],
+            'doctor_schedule_id' => $validated['doctor_schedule_id'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('hospital.appointments.show', $appointment->id)
+            ->with(
+                'success',
+                'Appointment rescheduled successfully.'
+            );
     }
 }
