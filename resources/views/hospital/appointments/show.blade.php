@@ -274,7 +274,6 @@
                     </div>
 
 
-                    {{-- PATIENT DETAILS --}}
                     <div class="card">
 
                         <div class="card-header">

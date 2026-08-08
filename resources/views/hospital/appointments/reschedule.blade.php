@@ -64,6 +64,11 @@
                 </div>
 
             @endif
+            @php
+                $patient = $appointment->family_member_id
+                    ? $appointment->familyMember
+                    : $appointment->customer;
+            @endphp
 
 
             <div class="row">
@@ -113,22 +118,22 @@
                             <div class="d-flex align-items-center mb-4">
 
                                 <div class="
-                                                        avatar
-                                                        avatar-lg
-                                                        bg-light-primary
-                                                        rounded-circle
-                                                        d-flex
-                                                        align-items-center
-                                                        justify-content-center
-                                                        me-3
-                                                    ">
+                                                            avatar
+                                                            avatar-lg
+                                                            bg-light-primary
+                                                            rounded-circle
+                                                            d-flex
+                                                            align-items-center
+                                                            justify-content-center
+                                                            me-3
+                                                        ">
 
                                     <i class="
-                                                            ti
-                                                            ti-user
-                                                            text-primary
-                                                            fs-24
-                                                        "></i>
+                                                                ti
+                                                                ti-user
+                                                                text-primary
+                                                                fs-24
+                                                            "></i>
 
                                 </div>
 
@@ -215,6 +220,119 @@
 
                     </div>
 
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h5 class="card-title mb-0">
+
+                                <i class="ti ti-user me-2"></i>
+
+                                Patient Details
+
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <span class="avatar avatar-lg bg-success-transparent me-3">
+
+                                    <i class="ti ti-user fs-24 text-success"></i>
+
+                                </span>
+
+                                <div>
+
+                                    <h5 class="mb-1">
+
+                                        {{ $patient->name ?? '-' }}
+
+                                    </h5>
+
+                                    <small class="text-muted">
+
+                                        @if($appointment->family_member_id)
+
+                                            Family Member
+
+                                        @else
+
+                                            Customer
+
+                                        @endif
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mb-3">
+
+                                <small class="text-muted d-block">
+                                    Mobile
+                                </small>
+
+                                <strong>
+
+                                    {{ $patient->mobile
+        ?? $appointment->customer?->mobile
+        ?? '-' }}
+
+                                </strong>
+
+                            </div>
+
+
+                            @if($patient?->gender)
+
+                                <div class="mb-3">
+
+                                    <small class="text-muted d-block">
+                                        Gender
+                                    </small>
+
+                                    <strong>
+
+                                        {{ ucfirst($patient->gender) }}
+
+                                    </strong>
+
+                                </div>
+
+                            @endif
+
+
+                            @if(
+                                    $appointment->family_member_id &&
+                                    isset($patient->relation)
+                                )
+
+                                <div>
+
+                                    <small class="text-muted d-block">
+                                        Relation
+                                    </small>
+
+                                    <strong>
+
+                                        {{ ucfirst($patient->relation) }}
+
+                                    </strong>
+
+                                </div>
+
+                            @endif
+
+                        </div>
+
+                    </div>
+
                 </div>
 
 
@@ -290,9 +408,9 @@
                                 <div id="slot-section" style="display:none;">
 
                                     <div class="d-flex
-                                                                    justify-content-between
-                                                                    align-items-center
-                                                                    mb-3">
+                                                                        justify-content-between
+                                                                        align-items-center
+                                                                        mb-3">
 
                                         <div>
 
@@ -316,7 +434,7 @@
                                     <div id="slot-loading" class="text-center py-4" style="display:none;">
 
                                         <div class="spinner-border
-                                                                        text-primary" role="status">
+                                                                            text-primary" role="status">
 
                                         </div>
 
@@ -367,14 +485,14 @@
                                 <div id="selected-slot-box" class="alert alert-success mt-4" style="display:none;">
 
                                     <div class="d-flex
-                                                                    align-items-center">
+                                                                        align-items-center">
 
                                         <i class="
-                                                                ti
-                                                                ti-circle-check
-                                                                fs-22
-                                                                me-2
-                                                            "></i>
+                                                                    ti
+                                                                    ti-circle-check
+                                                                    fs-22
+                                                                    me-2
+                                                                "></i>
 
                                         <div>
 
@@ -398,11 +516,11 @@
                                 ================================================== --}}
 
                                 <div class="
-                                                        d-flex
-                                                        justify-content-end
-                                                        gap-2
-                                                        mt-4
-                                                    ">
+                                                            d-flex
+                                                            justify-content-end
+                                                            gap-2
+                                                            mt-4
+                                                        ">
 
                                     <a href="{{ route(
         'hospital.appointments.show',
@@ -417,10 +535,10 @@
                                     <button type="submit" id="reschedule-btn" class="btn btn-primary" disabled>
 
                                         <i class="
-                                                                ti
-                                                                ti-calendar-event
-                                                                me-1
-                                                            "></i>
+                                                                    ti
+                                                                    ti-calendar-event
+                                                                    me-1
+                                                                "></i>
 
                                         Confirm Reschedule
 
@@ -680,15 +798,15 @@
 
                                 button.innerHTML = `
 
-                                                <div class="slot-time">
-                                                    ${slot.slot_time}
-                                                </div>
+                                                    <div class="slot-time">
+                                                        ${slot.slot_time}
+                                                    </div>
 
-                                                <div class="slot-status text-success">
-                                                    Available
-                                                </div>
+                                                    <div class="slot-status text-success">
+                                                        Available
+                                                    </div>
 
-                                            `;
+                                                `;
 
 
                                 button.addEventListener(
@@ -807,15 +925,15 @@
 
                                 button.innerHTML = `
 
-                                                <div class="slot-time">
-                                                    ${slot.slot_time}
-                                                </div>
+                                                    <div class="slot-time">
+                                                        ${slot.slot_time}
+                                                    </div>
 
-                                                <div class="slot-status text-danger">
-                                                    Booked
-                                                </div>
+                                                    <div class="slot-status text-danger">
+                                                        Booked
+                                                    </div>
 
-                                            `;
+                                                `;
 
                             }
 
@@ -834,15 +952,15 @@
 
                                 button.innerHTML = `
 
-                                                <div class="slot-time">
-                                                    ${slot.slot_time}
-                                                </div>
+                                                    <div class="slot-time">
+                                                        ${slot.slot_time}
+                                                    </div>
 
-                                                <div class="slot-status">
-                                                    ${slot.status}
-                                                </div>
+                                                    <div class="slot-status">
+                                                        ${slot.status}
+                                                    </div>
 
-                                            `;
+                                                `;
 
                             }
 
