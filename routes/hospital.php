@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Hospital\CouponController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Hospital\AccountController;
@@ -123,7 +124,7 @@ Route::name('hospital.')
                 'updateStatus'
             ])->name('appointments.status');
 
-            
+
             Route::get('appointments/{id}/reschedule', [
                 AppointmentController::class,
                 'reschedule'
@@ -268,5 +269,13 @@ Route::name('hospital.')
                 MedicineOrderController::class,
                 'deliver'
             ])->name('medicine-orders.deliver');
+
+            //coupons
+            Route::resource('coupons', CouponController::class);
+
+            Route::get(
+                'coupons/{id}/status',
+                [CouponController::class, 'status']
+            )->name('coupons.status');
         });
     });

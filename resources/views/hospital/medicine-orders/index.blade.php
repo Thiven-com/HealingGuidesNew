@@ -978,7 +978,7 @@
 
                         <div>
 
-                            {{ $orders->links() }}
+                            {{ $orders->links('pagination::bootstrap-5') }}
 
                         </div>
 

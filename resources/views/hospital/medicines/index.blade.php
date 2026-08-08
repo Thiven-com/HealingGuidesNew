@@ -860,7 +860,7 @@
 
                             <div>
 
-                                {{ $medicines->links() }}
+                                {{ $medicines->links('pagination::bootstrap-5') }}
 
                             </div>
 

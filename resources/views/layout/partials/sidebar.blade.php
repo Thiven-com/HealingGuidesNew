@@ -97,6 +97,13 @@
                                                                 <span>Medicines</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.coupons.index') }}">
+                                                                <i class="ti ti-ticket fs-16 me-2"></i>
+                                                                <span>Coupons</span>
+                                                        </a>
+                                                </li>
 
                                         </ul>
                                 </li>

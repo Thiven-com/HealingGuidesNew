@@ -208,6 +208,17 @@
                             </a>
 
                         </li>
+                        <li class="{{ request()->routeIs('hospital.coupons*') ? 'active' : '' }}">
+
+                            <a href="{{ route('hospital.coupons.index') }}">
+
+                                <i class="ti ti-ticket fs-16 me-2"></i>
+
+                                <span>Coupons</span>
+
+                            </a>
+
+                        </li>
 
 
                         <li>

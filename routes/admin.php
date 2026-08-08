@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\EnquiryController;
@@ -62,9 +63,15 @@ Route::group(['middleware' => 'admin'], function () {
     Route::resource('medicine-categories', MedicineCategoryController::class)->names('admin.medicine-categories');
     Route::post('medicine-categories/{id}/status', [MedicineCategoryController::class, 'status'])->name('admin.medicine-categories.status');
 
-    Route::resource('medicines',MedicineController::class)->names('admin.medicines');
+    Route::resource('medicines', MedicineController::class)->names('admin.medicines');
 
-    Route::post('medicines/{id}/status',[MedicineController::class, 'status'])->name('admin.medicines.status');
+    Route::post('medicines/{id}/status', [MedicineController::class, 'status'])->name('admin.medicines.status');
+
+    
+    Route::get('coupons/{id}/status', [CouponController::class, 'status'])->name('admin.coupons.status');
+
+    Route::resource('coupons', CouponController::class)->names('admin.coupons');
+
 
     Route::get('settings/company', 'SiteSettingController@site')->name('admin.settings.company');
     Route::post('setting/company/update', 'SiteSettingController@company_setting_update')->name('admin.settings.company.update');

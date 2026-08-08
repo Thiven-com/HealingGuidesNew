@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
+use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
@@ -124,11 +125,19 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     // Medicine Orders
     Route::post('place-medicine-order', [MedicineOrderController::class, 'placeOrder']);
-    Route::get('my-medicine-orders',[MedicineOrderController::class, 'myOrders']);
+    Route::get('my-medicine-orders', [MedicineOrderController::class, 'myOrders']);
 
-    Route::get('medicine-order-details/{id}',[MedicineOrderController::class, 'orderDetails']);
+    Route::get('medicine-order-details/{id}', [MedicineOrderController::class, 'orderDetails']);
 
-    Route::post('cancel-medicine-order',[MedicineOrderController::class, 'cancelOrder']);
+    Route::post('cancel-medicine-order', [MedicineOrderController::class, 'cancelOrder']);
+
+
+    //Coupons
+    Route::get('/coupons', [CouponController::class, 'myCoupons']);
+
+    Route::post('/coupons/validate', [CouponController::class, 'validate']);
+
+    Route::get('/coupons/usage-history', [CouponController::class, 'usageHistory']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

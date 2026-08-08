@@ -5,6 +5,8 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerAppointmentDetailCollection;
 use App\Http\Resources\DoctorAppointmentCollection;
+use App\Models\Coupon;
+use App\Models\CouponUsage;
 use App\Models\Doctor;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
@@ -40,14 +42,17 @@ class DoctorAppointmentController extends Controller
 
             'appointment_time' => 'required',
 
-            'consultation_type' => 'required|in:hospital_visit,video,chat,home_visit',
+            'consultation_type' =>
+                'required|in:hospital_visit,video,chat,home_visit',
 
-            'visit_address' => 'required_if:consultation_type,home_visit',
+            'visit_address' =>
+                'required_if:consultation_type,home_visit',
 
             'visit_latitude' => 'nullable',
 
             'visit_longitude' => 'nullable',
 
+            'coupon_code' => 'nullable|string|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -56,6 +61,14 @@ class DoctorAppointmentController extends Controller
                 'message' => $validator->errors()->first(),
             ]);
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Future Date / Time
+        |--------------------------------------------------------------------------
+        */
+
         $appointmentDateTime = Carbon::parse(
             $request->appointment_date . ' ' . $request->appointment_time
         );
@@ -67,12 +80,29 @@ class DoctorAppointmentController extends Controller
             ]);
         }
 
-        // Check slot already booked
 
-        $alreadyBooked = DoctorAppointment::where('doctor_id', $request->doctor_id)
-            ->whereDate('appointment_date', $request->appointment_date)
-            ->whereTime('appointment_time', $request->appointment_time)
-            ->whereNotIn('appointment_status', ['cancelled'])
+        /*
+        |--------------------------------------------------------------------------
+        | Check Slot Already Booked
+        |--------------------------------------------------------------------------
+        */
+
+        $alreadyBooked = DoctorAppointment::where(
+            'doctor_id',
+            $request->doctor_id
+        )
+            ->whereDate(
+                'appointment_date',
+                $request->appointment_date
+            )
+            ->whereTime(
+                'appointment_time',
+                $request->appointment_time
+            )
+            ->whereNotIn('appointment_status', [
+                'cancelled',
+                'rejected'
+            ])
             ->exists();
 
         if ($alreadyBooked) {
@@ -82,16 +112,41 @@ class DoctorAppointmentController extends Controller
             ]);
         }
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor
+        |--------------------------------------------------------------------------
+        */
+
         $doctor = Doctor::find($request->doctor_id);
+
         if (!$doctor) {
             return response()->json([
                 'success' => 0,
                 'message' => 'Doctor Details Not Found'
             ]);
         }
-        $schedule = DoctorSchedule::where('id', $request->doctor_schedule_id)
-            ->where('doctor_id', $request->doctor_id)
-            ->where('status', 1)
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor Schedule
+        |--------------------------------------------------------------------------
+        */
+
+        $schedule = DoctorSchedule::where(
+            'id',
+            $request->doctor_schedule_id
+        )
+            ->where(
+                'doctor_id',
+                $request->doctor_id
+            )
+            ->where(
+                'status',
+                1
+            )
             ->first();
 
         if (!$schedule) {
@@ -101,109 +156,700 @@ class DoctorAppointmentController extends Controller
             ]);
         }
 
-        $requestedTime = Carbon::parse($request->appointment_time)->format('H:i');
 
-        $start = Carbon::parse($schedule->available_from);
-        $end = Carbon::parse($schedule->available_to);
+        /*
+        |--------------------------------------------------------------------------
+        | Validate Slot
+        |--------------------------------------------------------------------------
+        */
+
+        $requestedTime = Carbon::parse(
+            $request->appointment_time
+        )->format('H:i');
+
+        $start = Carbon::parse(
+            $schedule->available_from
+        );
+
+        $end = Carbon::parse(
+            $schedule->available_to
+        );
 
         $isValidSlot = false;
 
         while ($start < $end) {
 
-            // Skip lunch break (optional)
+            // Skip lunch break
             if (
                 $start->format('H:i') >= '13:00' &&
                 $start->format('H:i') < '14:00'
             ) {
-                $start->addMinutes($schedule->slot_duration);
+                $start->addMinutes(
+                    $schedule->slot_duration
+                );
+
                 continue;
             }
 
-            if ($start->format('H:i') == $requestedTime) {
+            if (
+                $start->format('H:i') === $requestedTime
+            ) {
                 $isValidSlot = true;
                 break;
             }
 
-            $start->addMinutes($schedule->slot_duration);
+            $start->addMinutes(
+                $schedule->slot_duration
+            );
         }
+
 
         if (!$isValidSlot) {
             return response()->json([
                 'success' => 0,
-                'message' => 'Please select a valid available time slot.'
+                'message' =>
+                    'Please select a valid available time slot.'
             ]);
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Consultation Fee
+        |--------------------------------------------------------------------------
+        */
+
         switch ($request->consultation_type) {
 
             case 'video':
+
                 $fee = $doctor->video_consultation_fee;
+
                 break;
 
             case 'chat':
+
                 $fee = $doctor->chat_consultation_fee;
+
                 break;
 
             case 'home_visit':
+
                 $fee = $doctor->home_visit_fee;
+
                 break;
 
             default:
+
                 $fee = $doctor->consultation_fee;
+
                 break;
         }
 
+
+        $fee = (float) $fee;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Coupon Variables
+        |--------------------------------------------------------------------------
+        */
+
+        $coupon = null;
+
+        $discount = 0;
+
+        $totalAmount = $fee;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Apply Coupon
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('coupon_code')) {
+
+            $coupon = Coupon::where(
+                'code',
+                $request->coupon_code
+            )
+                ->where(
+                    'status',
+                    1
+                )
+                ->first();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Coupon Exists
+            |--------------------------------------------------------------------------
+            */
+
+            if (!$coupon) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'Invalid coupon code.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Coupon Start Date
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->starts_at &&
+                now()->lt($coupon->starts_at)
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'This coupon is not active yet.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Coupon Expiry
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->expires_at &&
+                now()->gt($coupon->expires_at)
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'This coupon has expired.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Hospital Check
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->hospital_id !== null &&
+                (int) $coupon->hospital_id !==
+                (int) $doctor->hospital_id
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' =>
+                        'This coupon is not valid for this hospital.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Applicable To
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->applicable_to &&
+                $coupon->applicable_to !== 'all' &&
+                $coupon->applicable_to !== 'appointment'
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' =>
+                        'This coupon cannot be used for appointments.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Total Usage Limit
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->usage_limit !== null &&
+                $coupon->used_count >=
+                $coupon->usage_limit
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' =>
+                        'This coupon usage limit has been reached.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Customer Usage
+            |--------------------------------------------------------------------------
+            */
+
+            $customerUsageCount = CouponUsage::where(
+                'coupon_id',
+                $coupon->id
+            )
+                ->where(
+                    'customer_id',
+                    $customer->id
+                )
+                ->count();
+
+
+            if (
+                $coupon->usage_per_customer !== null &&
+                $customerUsageCount >=
+                $coupon->usage_per_customer
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' =>
+                        'You have already used this coupon.'
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | New Customer Check
+            |--------------------------------------------------------------------------
+            */
+
+            if ($coupon->new_customer_only) {
+
+                $hasPreviousAppointment =
+                    DoctorAppointment::where(
+                        'customer_id',
+                        $customer->id
+                    )
+                        ->whereNotIn(
+                            'appointment_status',
+                            [
+                                'cancelled',
+                                'rejected'
+                            ]
+                        )
+                        ->exists();
+
+
+                if ($hasPreviousAppointment) {
+
+                    return response()->json([
+                        'success' => 0,
+                        'message' =>
+                            'This coupon is available only for new customers.'
+                    ]);
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | First Appointment Check
+            |--------------------------------------------------------------------------
+            */
+
+            if ($coupon->first_appointment_only) {
+
+                $hasPreviousAppointment =
+                    DoctorAppointment::where(
+                        'customer_id',
+                        $customer->id
+                    )
+                        ->whereNotIn(
+                            'appointment_status',
+                            [
+                                'cancelled',
+                                'rejected'
+                            ]
+                        )
+                        ->exists();
+
+
+                if ($hasPreviousAppointment) {
+
+                    return response()->json([
+                        'success' => 0,
+                        'message' =>
+                            'This coupon is available only for your first appointment.'
+                    ]);
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Minimum Amount
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->min_order_amount !== null &&
+                $fee < (float) $coupon->min_order_amount
+            ) {
+
+                return response()->json([
+                    'success' => 0,
+                    'message' =>
+                        'Minimum appointment amount is ₹' .
+                        number_format(
+                            $coupon->min_order_amount,
+                            2
+                        )
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Calculate Discount
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->free_appointment ||
+                $coupon->discount_type === 'free'
+            ) {
+
+                /*
+                 * Free Appointment
+                 */
+
+                $discount = $fee;
+            } elseif (
+                $coupon->discount_type === 'percentage'
+            ) {
+
+                $discount =
+                    ($fee *
+                        (float) $coupon->discount_value)
+                    / 100;
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Max Discount
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    $coupon->max_discount !== null &&
+                    $discount >
+                    (float) $coupon->max_discount
+                ) {
+
+                    $discount =
+                        (float) $coupon->max_discount;
+                }
+            } elseif (
+                $coupon->discount_type === 'fixed'
+            ) {
+
+                $discount =
+                    (float) $coupon->discount_value;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Safety
+            |--------------------------------------------------------------------------
+            */
+
+            if ($discount > $fee) {
+                $discount = $fee;
+            }
+
+            if ($discount < 0) {
+                $discount = 0;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Final Amount
+            |--------------------------------------------------------------------------
+            */
+
+            $totalAmount = $fee - $discount;
+
+            if ($totalAmount < 0) {
+                $totalAmount = 0;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Appointment
+        |--------------------------------------------------------------------------
+        */
+
         $appointment = new DoctorAppointment();
 
-        $appointment->appointment_no = 'APT' . now()->format('YmdHis') . rand(100, 999);
+        $appointment->appointment_no =
+            'APT' .
+            now()->format('YmdHis') .
+            rand(100, 999);
 
-        $appointment->doctor_id = $doctor->id;
+        $appointment->doctor_id =
+            $doctor->id;
 
-        $appointment->hospital_id = $doctor->hospital_id;
+        $appointment->hospital_id =
+            $doctor->hospital_id;
 
-        $appointment->customer_id = $customer->id;
+        $appointment->customer_id =
+            $customer->id;
 
-        $appointment->family_member_id = $request->family_member_id;
+        $appointment->family_member_id =
+            $request->family_member_id;
 
-        $appointment->doctor_schedule_id = $request->doctor_schedule_id;
+        $appointment->doctor_schedule_id =
+            $request->doctor_schedule_id;
 
-        $appointment->appointment_date = $request->appointment_date;
+        $appointment->appointment_date =
+            $request->appointment_date;
 
-        $appointment->appointment_time = $request->appointment_time;
+        $appointment->appointment_time =
+            $request->appointment_time;
 
-        $appointment->consultation_type = $request->consultation_type;
-        if ($request->consultation_type == 'home_visit') {
+        $appointment->consultation_type =
+            $request->consultation_type;
 
-            $appointment->visit_address = $request->visit_address;
-            $appointment->visit_latitude = $request->visit_latitude;
-            $appointment->visit_longitude = $request->visit_longitude;
-            $appointment->visit_status = 'scheduled';
+
+        /*
+        |--------------------------------------------------------------------------
+        | Home Visit
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $request->consultation_type ===
+            'home_visit'
+        ) {
+
+            $appointment->visit_address =
+                $request->visit_address;
+
+            $appointment->visit_latitude =
+                $request->visit_latitude;
+
+            $appointment->visit_longitude =
+                $request->visit_longitude;
+
+            $appointment->visit_status =
+                'scheduled';
         }
-        if ($request->consultation_type == 'video') {
-            $appointment->meeting_status = 'pending';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Video
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $request->consultation_type ===
+            'video'
+        ) {
+
+            $appointment->meeting_status =
+                'pending';
         }
-        if ($request->consultation_type == 'chat') {
-            $appointment->chat_started_at = null;
-            $appointment->chat_ended_at = null;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Chat
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $request->consultation_type ===
+            'chat'
+        ) {
+
+            $appointment->chat_started_at =
+                null;
+
+            $appointment->chat_ended_at =
+                null;
         }
-        $appointment->consultation_fee = $fee;
-        $appointment->discount = 0;
-        $appointment->tax = 0;
-        $appointment->total_amount = $fee;
 
-        $appointment->payment_status = 'pending';
 
-        $appointment->appointment_status = 'pending';
+        /*
+        |--------------------------------------------------------------------------
+        | Amounts
+        |--------------------------------------------------------------------------
+        */
 
-        $appointment->token_no = DoctorAppointment::where('doctor_id', $doctor->id)
-            ->whereDate('appointment_date', $request->appointment_date)
-            ->count() + 1;
+        $appointment->consultation_fee =
+            $fee;
+
+        $appointment->discount =
+            $discount;
+
+        $appointment->tax =
+            0;
+
+        $appointment->total_amount =
+            $totalAmount;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment Status
+        |--------------------------------------------------------------------------
+        */
+
+        if ($totalAmount <= 0) {
+
+            $appointment->payment_status =
+                'paid';
+
+        } else {
+
+            $appointment->payment_status =
+                'pending';
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Appointment Status
+        |--------------------------------------------------------------------------
+        */
+
+        $appointment->appointment_status =
+            'pending';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Token
+        |--------------------------------------------------------------------------
+        */
+
+        $appointment->token_no =
+            DoctorAppointment::where(
+                'doctor_id',
+                $doctor->id
+            )
+                ->whereDate(
+                    'appointment_date',
+                    $request->appointment_date
+                )
+                ->count() + 1;
+
 
         $appointment->save();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Coupon Usage
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        |
+        | We create coupon usage only after appointment
+        | has been successfully created.
+        |
+        */
+
+        if ($coupon) {
+
+            CouponUsage::create([
+
+                'coupon_id' =>
+                    $coupon->id,
+
+                'customer_id' =>
+                    $customer->id,
+
+                'hospital_id' =>
+                    $doctor->hospital_id,
+
+                'appointment_id' =>
+                    $appointment->id,
+
+                'medicine_order_id' =>
+                    null,
+
+                'coupon_code' =>
+                    $coupon->code,
+
+                'discount_amount' =>
+                    $discount,
+
+                'used_at' =>
+                    now(),
+            ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update Coupon Used Count
+            |--------------------------------------------------------------------------
+            */
+
+            $coupon->increment(
+                'used_count'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
         return response()->json([
+
             'success' => 1,
-            'message' => 'Doctor appointment booked successfully.',
-            'data' => $appointment
+
+            'message' =>
+                'Doctor appointment booked successfully.',
+
+            'data' => [
+
+                'appointment' =>
+                    $appointment,
+
+                'coupon' => $coupon ? [
+                    'id' => $coupon->id,
+                    'code' => $coupon->code,
+                    'title' => $coupon->title,
+                    'discount' => $discount,
+                ] : null,
+
+                'consultation_fee' =>
+                    $fee,
+
+                'discount' =>
+                    $discount,
+
+                'total_amount' =>
+                    $totalAmount,
+
+                'payment_required' =>
+                    $totalAmount > 0,
+            ]
         ]);
     }
 
