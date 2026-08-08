@@ -321,7 +321,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Invalid coupon code.'
-            ], 422);
+            ]);
         }
 
 
@@ -339,7 +339,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'This coupon is not active yet.'
-            ], 422);
+            ]);
         }
 
 
@@ -357,7 +357,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'This coupon has expired.'
-            ], 422);
+            ]);
         }
 
 
@@ -377,7 +377,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'This coupon is not valid for this hospital.'
-            ], 422);
+            ]);
         }
 
 
@@ -401,7 +401,7 @@ class CouponController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'This coupon cannot be used for this service.'
-                ], 422);
+                ]);
             }
         }
 
@@ -420,7 +420,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'This coupon usage limit has been reached.'
-            ], 422);
+            ]);
         }
 
 
@@ -450,7 +450,7 @@ class CouponController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'You have already used this coupon.'
-            ], 422);
+            ]);
         }
 
 
@@ -480,7 +480,7 @@ class CouponController extends Controller
                     'success' => 0,
                     'message' =>
                         'This coupon is available only for new customers.'
-                ], 422);
+                ]);
             }
         }
 
@@ -511,7 +511,7 @@ class CouponController extends Controller
                     'success' => 0,
                     'message' =>
                         'This coupon is available only for your first appointment.'
-                ], 422);
+                ]);
             }
         }
 
@@ -536,7 +536,7 @@ class CouponController extends Controller
                         $coupon->min_order_amount,
                         2
                     )
-            ], 422);
+            ]);
         }
 
 

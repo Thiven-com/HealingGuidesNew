@@ -344,7 +344,7 @@ class AmbulanceController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -718,7 +718,7 @@ class AmbulanceController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -1124,7 +1124,7 @@ class AmbulanceController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*

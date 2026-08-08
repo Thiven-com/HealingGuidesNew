@@ -349,7 +349,7 @@ class DoctorController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -572,7 +572,7 @@ class DoctorController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => $validator->errors()->first()
-            ], 422);
+            ]);
         }
 
         /*
@@ -696,7 +696,7 @@ class DoctorController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -1072,7 +1072,7 @@ class DoctorController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*

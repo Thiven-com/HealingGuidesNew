@@ -25,7 +25,7 @@ class AccountController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         $staff = MarketingStaff::where(
@@ -83,7 +83,7 @@ class AccountController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
 
@@ -119,7 +119,7 @@ class AccountController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Invalid OTP',
-            ], 422);
+            ]);
         }
 
         $staff->tokens()->delete();
@@ -226,7 +226,7 @@ class AccountController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
 

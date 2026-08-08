@@ -317,7 +317,7 @@ class AmbulanceBookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         DB::beginTransaction();
@@ -607,7 +607,7 @@ class AmbulanceBookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $booking = AmbulanceBooking::where(
@@ -698,7 +698,7 @@ class AmbulanceBookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $booking = AmbulanceBooking::where(
@@ -810,7 +810,7 @@ class AmbulanceBookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         DB::beginTransaction();

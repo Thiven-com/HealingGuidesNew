@@ -280,7 +280,7 @@ class LeadController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         if ($request->filled('mobile')) {
@@ -305,7 +305,7 @@ class LeadController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Lead Already Exists With This Mobile Number'
-                ], 422);
+                ]);
             }
         }
 
@@ -480,7 +480,7 @@ class LeadController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $lead = MarketingLead::where(
@@ -535,7 +535,7 @@ class LeadController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Lead Already Exists With This Mobile Number'
-                ], 422);
+                ]);
             }
         }
 
@@ -693,7 +693,7 @@ class LeadController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $lead = MarketingLead::where(
@@ -741,7 +741,7 @@ class LeadController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Converted ID Is Required'
-                ], 422);
+                ]);
             }
 
 

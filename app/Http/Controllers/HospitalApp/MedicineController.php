@@ -326,7 +326,7 @@ class MedicineController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -630,7 +630,7 @@ class MedicineController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         /*
@@ -671,7 +671,7 @@ class MedicineController extends Controller
                     return response()->json([
                         'success' => 0,
                         'message' => 'Invalid Medicine Category'
-                    ], 422);
+                    ]);
                 }
 
                 $medicine->medicine_category_id =
@@ -699,7 +699,7 @@ class MedicineController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Medicine Name Is Required'
-                ], 422);
+                ]);
             }
 
             $medicine->medicine_name =
@@ -734,7 +734,7 @@ class MedicineController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Selling Price Cannot Be Greater Than MRP'
-            ], 422);
+            ]);
         }
 
         /*
@@ -1052,7 +1052,7 @@ class MedicineController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $medicine = Medicine::where(
@@ -1126,7 +1126,7 @@ class MedicineController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $medicine = Medicine::where(

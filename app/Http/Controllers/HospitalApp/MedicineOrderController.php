@@ -223,7 +223,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         try {
@@ -265,7 +265,7 @@ class MedicineOrderController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'Only Pending Orders Can Be Accepted'
-                ], 422);
+                ]);
             }
 
             /*
@@ -281,7 +281,7 @@ class MedicineOrderController extends Controller
                 return response()->json([
                     'success' => 0,
                     'message' => 'No Medicines Found In This Order'
-                ], 422);
+                ]);
             }
 
             /*
@@ -426,7 +426,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $order = MedicineOrder::where(
@@ -450,7 +450,7 @@ class MedicineOrderController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Only Pending Orders Can Be Rejected'
-            ], 422);
+            ]);
         }
 
         $order->order_status = 'rejected';
@@ -494,7 +494,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $order = MedicineOrder::where(
@@ -518,7 +518,7 @@ class MedicineOrderController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Order Must Be Accepted First'
-            ], 422);
+            ]);
         }
 
         $order->order_status = 'processing';
@@ -557,7 +557,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $order = MedicineOrder::where(
@@ -581,7 +581,7 @@ class MedicineOrderController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Order Must Be Processing First'
-            ], 422);
+            ]);
         }
 
         $order->order_status = 'ready';
@@ -620,7 +620,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $order = MedicineOrder::where(
@@ -644,7 +644,7 @@ class MedicineOrderController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Order Must Be Ready Before Dispatch'
-            ], 422);
+            ]);
         }
 
         $order->order_status = 'dispatched';
@@ -683,7 +683,7 @@ class MedicineOrderController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $order = MedicineOrder::where(
@@ -707,7 +707,7 @@ class MedicineOrderController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Order Must Be Dispatched First'
-            ], 422);
+            ]);
         }
 
         $order->order_status = 'delivered';
