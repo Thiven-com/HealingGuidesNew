@@ -472,17 +472,13 @@ class BookingController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if (
-                $booking->booking_status !=
-                'on_the_way'
-            ) {
+            if (!in_array($booking->booking_status, ['on_the_way', 'patient_picked'])) {
 
                 DB::rollBack();
 
                 return response()->json([
                     'success' => 0,
-                    'message' =>
-                        'Only Ongoing Trips Can Be Completed'
+                    'message' => 'Only Ongoing Trips Can Be Completed'
                 ]);
             }
 
