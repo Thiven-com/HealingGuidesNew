@@ -243,7 +243,7 @@ class BookingController extends Controller
 
                 'errors' =>
                     $validator->errors()
-            ], 422);
+            ]);
         }
 
         $booking = AmbulanceBooking::where(
@@ -350,7 +350,7 @@ class BookingController extends Controller
                 'success' => 0,
                 'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
-            ], 422);
+            ]);
         }
 
         $booking = AmbulanceBooking::where(
@@ -431,7 +431,7 @@ class BookingController extends Controller
 
                 'errors' =>
                     $validator->errors()
-            ], 422);
+            ]);
         }
 
         DB::beginTransaction();
@@ -680,7 +680,7 @@ class BookingController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'Invalid Pickup Code'
-            ], 422);
+            ]);
         }
 
         /*
