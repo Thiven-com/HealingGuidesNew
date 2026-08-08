@@ -649,7 +649,7 @@ class BookingController extends Controller
 
         $validator = Validator::make($request->all(), [
             'booking_id' => 'required|integer',
-            'pickup_code' => 'required|string|size:6',
+            'pickup_code' => 'required|string|size:4',
         ]);
 
         if ($validator->fails()) {
