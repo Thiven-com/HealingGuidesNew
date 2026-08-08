@@ -370,12 +370,12 @@ class BookingController extends Controller
             ], 404);
         }
 
-        if ($booking->booking_status != 'on_the_way') {
-            return response()->json([
-                'success' => 0,
-                'message' => 'Trip Is Not In Progress'
-            ]);
-        }
+        // if ($booking->booking_status != 'on_the_way') {
+        //     return response()->json([
+        //         'success' => 0,
+        //         'message' => 'Trip Is Not In Progress'
+        //     ]);
+        // }
         $ambulance->latitude =
             $request->latitude;
 
