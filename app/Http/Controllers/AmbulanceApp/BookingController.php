@@ -289,7 +289,7 @@ class BookingController extends Controller
 
         $booking->booking_status =
             'on_the_way';
-
+        $booking->pickup_code = rand(1000, 9999);
         $booking->save();
 
         /*
@@ -633,6 +633,84 @@ class BookingController extends Controller
             'success' => 1,
             'message' => 'Active Trip Fetched Successfully',
             'data' => new AmbulanceBookingCollection(collect([$booking]))
+        ]);
+    }
+
+    public function verifyPickupCode(Request $request)
+    {
+        $ambulance = auth('sanctum')->user();
+
+        if (!$ambulance) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'booking_id' => 'required|integer',
+            'pickup_code' => 'required|string|size:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $booking = AmbulanceBooking::where('id', $request->booking_id)
+            ->where('ambulance_id', $ambulance->id)
+            ->first();
+
+        if (!$booking) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Ambulance Booking Not Found'
+            ], 404);
+        }
+        /*
+        |--------------------------------------------------------------------------
+        | Verify Pickup Code
+        |--------------------------------------------------------------------------
+        */
+
+        if ($booking->pickup_code !== $request->pickup_code) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Invalid Pickup Code'
+            ], 422);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Patient Picked
+        |--------------------------------------------------------------------------
+        */
+
+        $booking->booking_status = 'patient_picked';
+        $booking->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Relations
+        |--------------------------------------------------------------------------
+        */
+
+        $booking->load([
+            'customer',
+            'familyMember',
+            'ambulanceType',
+            'ambulance'
+        ]);
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Pickup Code Verified Successfully. Patient Picked.',
+            'data' => new AmbulanceBookingCollection(
+                collect([$booking])
+            )
         ]);
     }
 }

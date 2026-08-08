@@ -50,6 +50,7 @@ Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     Route::post('update-trip-location', [BookingController::class, 'updateTripLocation']);
     Route::post('complete-trip', [BookingController::class, 'completeTrip']);
     Route::get('active-trip', [BookingController::class, 'activeTrip']);
+    Route::post('/verify-pickup-code', [BookingController::class, 'verifyPickupCode']);
 
     Route::get('earnings', [EarningController::class, 'earnings']);
 });

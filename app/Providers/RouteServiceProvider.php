@@ -20,9 +20,10 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/home';
     protected $namespace = 'App\Http\Controllers\Website';
     protected $admin_namespace = 'App\Http\Controllers\Admin';
+    protected $hospital_namespace = 'App\Http\Controllers\Hospital';
     protected $app_namespace = 'App\Http\Controllers\CustomerApp';
     protected $doctorapp_namespace = 'App\Http\Controllers\DoctorApp';
-    protected $hospital_namespace = 'App\Http\Controllers\HospitalApp';
+    protected $hospitalapp_namespace = 'App\Http\Controllers\HospitalApp';
     protected $ambulance_namespace = 'App\Http\Controllers\AmbulanceApp';
     protected $marketing_namespace = 'App\Http\Controllers\MarketingApp';
 
@@ -44,13 +45,16 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')->namespace($this->admin_namespace)
                 ->prefix('admin')
                 ->group(base_path('routes/admin.php'));
+            Route::middleware('web')->namespace($this->hospital_namespace)
+                ->prefix('hospital')
+                ->group(base_path('routes/hospital.php'));
             Route::middleware('api')->namespace($this->app_namespace)
                 ->prefix('api/customer')
                 ->group(base_path('routes/api/customer.php'));
             Route::middleware('api')->namespace($this->doctorapp_namespace)
                 ->prefix('api/doctor')
                 ->group(base_path('routes/api/doctor.php'));
-            Route::middleware('api')->namespace($this->hospital_namespace)
+            Route::middleware('api')->namespace($this->hospitalapp_namespace)
                 ->prefix('api/hospital')
                 ->group(base_path('routes/api/hospital.php'));
             Route::middleware('api')->namespace($this->ambulance_namespace)

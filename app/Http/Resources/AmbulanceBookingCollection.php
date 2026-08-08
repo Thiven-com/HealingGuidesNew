@@ -202,6 +202,8 @@ class AmbulanceBookingCollection extends ResourceCollection
 
                         'longitude' =>
                             $booking->pickup_longitude,
+                        'pickup_code' =>
+                            $booking->pickup_code,
 
                     ],
 

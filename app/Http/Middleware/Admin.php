@@ -17,8 +17,6 @@ class Admin
 
             return redirect()->route('admin.login');
         }
-        Log::info("Admin Dash");
-
         return $next($request);
     }
 }

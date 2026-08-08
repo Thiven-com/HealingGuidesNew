@@ -46,8 +46,8 @@ class MedicineOrderController extends Controller
             'hospital_id' =>
                 'required|exists:hospitals,id',
 
-            'prescription_id' =>
-                'nullable|exists:prescriptions,id',
+            // 'prescription_id' =>
+            //     'nullable|exists:prescriptions,id',
 
             'medicines' =>
                 'required|array|min:1',
@@ -133,29 +133,29 @@ class MedicineOrderController extends Controller
             ]);
         }
 
-        if ($request->filled('prescription_id')) {
+        // if ($request->filled('prescription_id')) {
 
-            $prescription = Prescription::where(
-                'id',
-                $request->prescription_id
-            )
-                ->where(
-                    'customer_id',
-                    $customer->id
-                )
-                ->where(
-                    'family_member_id',
-                    $familyMember->id
-                )
-                ->first();
+        //     $prescription = Prescription::where(
+        //         'id',
+        //         $request->prescription_id
+        //     )
+        //         ->where(
+        //             'customer_id',
+        //             $customer->id
+        //         )
+        //         ->where(
+        //             'family_member_id',
+        //             $familyMember->id
+        //         )
+        //         ->first();
 
-            if (!$prescription) {
-                return response()->json([
-                    'success' => 0,
-                    'message' => 'Invalid prescription.'
-                ]);
-            }
-        }
+        //     if (!$prescription) {
+        //         return response()->json([
+        //             'success' => 0,
+        //             'message' => 'Invalid prescription.'
+        //         ]);
+        //     }
+        // }
 
         /*
         |--------------------------------------------------------------------------
