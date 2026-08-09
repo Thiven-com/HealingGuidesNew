@@ -753,9 +753,9 @@ class AppointmentController extends Controller
 
                 $room->customer_joined_at = null;
 
-                $room->doctor_left_at = null;
+                // $room->doctor_left_at = null;
 
-                $room->customer_left_at = null;
+                // $room->customer_left_at = null;
 
                 $room->started_at = null;
 

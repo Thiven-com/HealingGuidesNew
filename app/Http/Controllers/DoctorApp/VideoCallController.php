@@ -147,7 +147,7 @@ class VideoCallController extends Controller
         }
 
         $room->doctor_online = false;
-        $room->doctor_left_at = now();
+        // $room->doctor_left_at = now();
 
         if ($room->status != 'ended') {
             $room->status = 'waiting';
