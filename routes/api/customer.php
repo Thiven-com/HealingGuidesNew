@@ -130,6 +130,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('medicine-order-details/{id}', [MedicineOrderController::class, 'orderDetails']);
 
     Route::post('cancel-medicine-order', [MedicineOrderController::class, 'cancelOrder']);
+    Route::post('payMedicineOrder', [MedicineOrderController::class, 'payMedicineOrder']);
 
 
     //Coupons

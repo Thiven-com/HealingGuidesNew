@@ -1581,4 +1581,232 @@ class MedicineOrderController extends Controller
             ], 500);
         }
     }
+
+    public function payMedicineOrder(Request $request)
+    {
+        $customer = auth('sanctum')->user();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Authentication
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$customer) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
+
+        $validator = Validator::make($request->all(), [
+
+            'order_id' => 'required|exists:medicine_orders,id',
+
+            'payment_method' => 'required|in:cash,razorpay,stripe',
+
+            'transaction_id' => 'nullable|string|max:255',
+
+            'payment_id' => 'nullable|string|max:255',
+
+        ]);
+
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Find Order
+        |--------------------------------------------------------------------------
+        */
+
+        $order = MedicineOrder::where('id', $request->order_id)
+            ->where('customer_id', $customer->id)
+            ->first();
+
+
+        if (!$order) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Medicine order not found.'
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Already Paid
+        |--------------------------------------------------------------------------
+        */
+
+        if ($order->payment_status === 'paid') {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Medicine order payment already completed.'
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Cancelled Order
+        |--------------------------------------------------------------------------
+        */
+
+        if ($order->order_status === 'cancelled') {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Cancelled medicine order cannot be paid.'
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delivered Order
+        |--------------------------------------------------------------------------
+        */
+
+        if ($order->order_status === 'delivered') {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Delivered medicine order cannot be paid.'
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment Verification
+        |--------------------------------------------------------------------------
+        |
+        | Razorpay / Stripe verification should be implemented here.
+        |
+        */
+
+        $paymentVerified = true;
+
+
+        if (!$paymentVerified) {
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Payment verification failed.'
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Order
+        |--------------------------------------------------------------------------
+        */
+
+        DB::beginTransaction();
+
+        try {
+
+            $order->payment_method = $request->payment_method;
+
+            $order->transaction_id = $request->transaction_id;
+
+            $order->payment_id = $request->payment_id;
+
+            $order->payment_status = 'paid';
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Order Status
+            |--------------------------------------------------------------------------
+            */
+
+            $order->order_status = 'pending';
+
+
+            $order->save();
+
+
+            DB::commit();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Success Response
+            |--------------------------------------------------------------------------
+            */
+
+            return response()->json([
+
+                'success' => 1,
+
+                'message' => 'Medicine order payment completed successfully.',
+
+                'data' => [
+
+                    'order_id' => $order->id,
+
+                    'order_no' => $order->order_no,
+
+                    'customer_id' => $order->customer_id,
+
+                    'total_amount' => $order->total_amount,
+
+                    'payment_method' => $order->payment_method,
+
+                    'transaction_id' => $order->transaction_id,
+
+                    'payment_id' => $order->payment_id,
+
+                    'payment_status' => $order->payment_status,
+
+                    'order_status' => $order->order_status,
+
+                ]
+
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            \Log::error('Medicine order payment failed', [
+
+                'order_id' => $order->id ?? null,
+
+                'customer_id' => $customer->id,
+
+                'error' => $e->getMessage(),
+
+            ]);
+
+
+            return response()->json([
+
+                'success' => 0,
+
+                'message' => 'Something went wrong while completing the payment.'
+
+            ], 500);
+        }
+    }
 }
