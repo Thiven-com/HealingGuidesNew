@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CustomerApp;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
+use App\Models\AppNotification;
 use App\Models\FamilyMember;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -230,4 +231,63 @@ class ProfileController extends Controller
             'message' => 'Family member deleted successfully'
         ]);
     }
+
+    /**
+ * Get Customer Notifications
+ */
+public function notifications(Request $request)
+{
+    $user = auth('sanctum')->user();
+
+    if (!$user) {
+        return response()->json([
+            'success' => 0,
+            'message' => 'Please Login'
+        ], 401);
+    }
+
+    $notifications = AppNotification::where('notifiable_type', 'customer')
+        // ->where('notifiable_id', $user->id)
+        ->where('status', 1)
+        ->orderByDesc('created_at')
+        ->inRandomOrder()->take(20)->get();
+
+    $data = $notifications->map(function ($notification) {
+
+        return [
+            'id' => $notification->id,
+
+            'type' => $notification->type,
+
+            'title' => $notification->title,
+
+            'message' => $notification->message,
+
+            'reference_type' => $notification->reference_type,
+
+            'reference_id' => $notification->reference_id,
+
+            'action' => $notification->action,
+
+            'data' => $notification->data,
+
+            'is_read' => (bool) $notification->is_read,
+
+            'read_at' => $notification->read_at,
+
+            'created_at' => $notification->created_at,
+        ];
+    });
+
+    return response()->json([
+        'success' => 1,
+        'message' => 'Notifications fetched successfully.',
+        'data' => $data,
+        'unread_count' => AppNotification::where('notifiable_type', 'customer')
+            // ->where('notifiable_id', $user->id)
+            ->where('status', 1)
+            ->where('is_read', 0)
+            ->count()
+    ]);
+}
 }

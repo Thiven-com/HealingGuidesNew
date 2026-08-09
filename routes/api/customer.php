@@ -39,6 +39,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     //Profile
     Route::get('logout', 'AccountController@logout');
     Route::get('profile', 'ProfileController@profile');
+    Route::get('notifications', 'ProfileController@notifications');
     Route::post('updateProfile', 'ProfileController@updateProfile');
     Route::post('/family-member/store', [ProfileController::class, 'storeFamilyMember']);
     Route::post('/family-member/update', [ProfileController::class, 'updateFamilyMember']);
@@ -147,6 +148,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     Route::any('chatbot/history', [ChatbotController::class, 'history']);
     Route::get('chatbot/history/{conversation_id}',[ChatbotController::class, 'conversationHistory']
+
+
 );
 
 });
