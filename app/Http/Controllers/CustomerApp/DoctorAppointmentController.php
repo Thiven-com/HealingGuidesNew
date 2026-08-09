@@ -5,14 +5,18 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerAppointmentDetailCollection;
 use App\Http\Resources\DoctorAppointmentCollection;
+use App\Models\AppNotification;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Doctor;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
 use App\Models\VideoRoom;
+use App\Services\NotificationService;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -812,7 +816,52 @@ class DoctorAppointmentController extends Controller
             );
         }
 
+        try {
 
+            $data = $this->sendWhatsAppMessage(
+                $customer->mobile,
+                'customer_app_book',
+                [
+                    'field_1' => $customer->name,
+                    'field_2' => $doctor->doctor_name,
+                    'field_3' => Carbon::parse($appointment->appointment_date)->format('d M Y'),
+                    'field_4' => Carbon::parse($appointment->appointment_time)->format('h:i A'),
+                    'field_5' => $doctor->hospital->hospital_name ?? ' '
+                ]
+            );
+
+            // $whatsappService = new WhatsAppService();
+
+            // $result = $whatsappService->sendTemplateMessage($data);
+
+            // Log::info($result);
+
+        } catch (\Throwable $e) {
+
+            Log::error('WhatsApp send failed: ' . $e->getMessage());
+        }
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'appointment_booked',
+            'Appointment Booked',
+            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been booked successfully.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $doctor->hospital_id,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'consultation_type' => $appointment->consultation_type,
+                'total_amount' => $appointment->total_amount,
+            ]
+        );
         /*
         |--------------------------------------------------------------------------
         | Response
@@ -1017,6 +1066,35 @@ class DoctorAppointmentController extends Controller
         $appointment->cancelled_at = now();
         $appointment->save();
 
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'appointment_cancelled',
+            'Appointment Cancelled',
+            'Your appointment with Dr. ' .
+            ($appointment->doctor->doctor_name ?? 'Doctor') .
+            ' has been cancelled successfully.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+
+                'doctor_id' => $appointment->doctor_id,
+                'doctor_name' => $appointment->doctor->doctor_name ?? null,
+
+                'hospital_id' => $appointment->hospital_id,
+
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+
+                'cancel_reason' => $appointment->cancel_reason,
+
+                'cancelled_at' => $appointment->cancelled_at,
+            ]
+        );
+
         return response()->json([
             'success' => 1,
             'message' => 'Appointment cancelled successfully.'
@@ -1114,7 +1192,8 @@ class DoctorAppointmentController extends Controller
                 'message' => 'Doctor schedule not found.'
             ]);
         }
-
+        $oldDate = $appointment->appointment_date;
+        $oldTime = $appointment->appointment_time;
         $requestedTime = Carbon::parse($request->appointment_time)->format('H:i');
 
         $start = Carbon::parse($schedule->available_from);
@@ -1172,6 +1251,51 @@ class DoctorAppointmentController extends Controller
             ->count() + 1;
 
         $appointment->save();
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'appointment_rescheduled',
+            'Appointment Rescheduled',
+            'Your appointment with Dr. ' .
+            ($appointment->doctor->doctor_name ?? 'Doctor') .
+            ' has been rescheduled to ' .
+            Carbon::parse($appointment->appointment_date)->format('d M Y') .
+            ' at ' .
+            Carbon::parse($appointment->appointment_time)->format('h:i A') .
+            '.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+
+                'appointment_no' => $appointment->appointment_no,
+
+                'doctor_id' => $appointment->doctor_id,
+
+                'doctor_name' =>
+                    $appointment->doctor->doctor_name ?? null,
+
+                'hospital_id' =>
+                    $appointment->hospital_id,
+
+                'old_appointment_date' => $oldDate,
+
+                'old_appointment_time' => $oldTime,
+
+                'new_appointment_date' =>
+                    $appointment->appointment_date,
+
+                'new_appointment_time' =>
+                    $appointment->appointment_time,
+
+                'appointment_status' =>
+                    $appointment->appointment_status,
+
+                'rescheduled_at' => now(),
+            ]
+        );
 
         return response()->json([
             'success' => 1,
@@ -1475,5 +1599,23 @@ class DoctorAppointmentController extends Controller
 
             ]
         ]);
+    }
+
+    private function sendWhatsAppMessage($cust_mobile, $templateName, array $fields = [])
+    {
+        return [
+            "from_phone_number_id" => "1219830927885128",
+            "phone_number" => '91' . $cust_mobile,
+            "template_name" => $templateName,
+            "template_language" => "en",
+            "field_1" => $fields['field_1'] ?? '',
+            "field_2" => $fields['field_2'] ?? '',
+            "field_3" => $fields['field_3'] ?? '',
+            "field_4" => $fields['field_4'] ?? '',
+            "field_5" => $fields['field_5'] ?? '',
+
+            "button_0" => $fields['field_1'] ?? '',
+            "copy_code" => $fields['field_1'] ?? '',
+        ];
     }
 }

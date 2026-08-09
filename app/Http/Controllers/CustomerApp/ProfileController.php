@@ -7,8 +7,10 @@ use App\Http\Resources\ProfileCollection;
 use App\Models\AppNotification;
 use App\Models\FamilyMember;
 use App\Models\Insurance;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -70,6 +72,9 @@ class ProfileController extends Controller
                 'message' => $validator->errors()->first()
             ]);
         }
+        $isFirstNameUpdate = empty($user->name)
+            && $request->filled('name');
+
 
         $user->fill($request->only($user->getFillable()));
         if ($request->filled('dob')) {
@@ -86,6 +91,29 @@ class ProfileController extends Controller
         }
 
         $user->save();
+        if ($isFirstNameUpdate) {
+            try {
+
+                $data = $this->sendWhatsAppMessage(
+                    $user->mobile,
+                    'customer_welcome',
+                    [
+                        'field_1' => $user->name ?? "User",
+                    ],
+                    'https://healingguides.in/logo/logo.png'
+                );
+
+                // $whatsappService = new WhatsAppService();
+
+                // $result = $whatsappService->sendTemplateMessage($data);
+
+                // Log::info($result);
+
+            } catch (\Throwable $e) {
+
+                Log::error('WhatsApp send failed: ' . $e->getMessage());
+            }
+        }
         return response()->json([
             'success' => 1,
             'data' => new ProfileCollection(collect([$user])),
@@ -249,7 +277,7 @@ class ProfileController extends Controller
         }
 
         $notifications = AppNotification::where('notifiable_type', 'customer')
-            // ->where('notifiable_id', $user->id)
+            ->where('notifiable_id', $user->id)
             ->where('status', 1)
             ->orderByDesc('created_at')
             ->inRandomOrder()->take(20)->get();
@@ -286,7 +314,7 @@ class ProfileController extends Controller
             'message' => 'Notifications fetched successfully.',
             'data' => $data,
             'unread_count' => AppNotification::where('notifiable_type', 'customer')
-                // ->where('notifiable_id', $user->id)
+                ->where('notifiable_id', $user->id)
                 ->where('status', 1)
                 ->where('is_read', 0)
                 ->count()
@@ -575,5 +603,24 @@ class ProfileController extends Controller
             'success' => 1,
             'message' => 'Insurance deleted successfully.'
         ]);
+    }
+
+    private function sendWhatsAppMessage($cust_mobile, $templateName, array $fields = [], $headerImage = null)
+    {
+        return [
+            "from_phone_number_id" => "1219830927885128",
+            "phone_number" => '91' . $cust_mobile,
+            "template_name" => $templateName,
+            "template_language" => "en",
+            "header_image" => $headerImage ?? '',
+            "field_1" => $fields['field_1'] ?? '',
+            "field_2" => $fields['field_2'] ?? '',
+            "field_3" => $fields['field_3'] ?? '',
+            "field_4" => $fields['field_4'] ?? '',
+            "field_5" => $fields['field_5'] ?? '',
+
+            "button_0" => $fields['field_1'] ?? '',
+            "copy_code" => $fields['field_1'] ?? '',
+        ];
     }
 }

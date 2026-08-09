@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
 use App\Models\Customer;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -45,6 +46,20 @@ class AccountController extends Controller
             // } catch (\Exception $e) {
             //     Log::info($e->getMessage());
             // }
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'welcome',
+                'Welcome to Healing Guides!',
+                'Your account has been created successfully. We are happy to have you with us.',
+                'customer',
+                $customer->id,
+                'profile',
+                [
+                    'customer_id' => $customer->id,
+                    'customer_code' => $customer->customer_code,
+                ]
+            );
             return response()->json([
                 'success' => 1,
                 'message' => 'OTP Sent Successfully'

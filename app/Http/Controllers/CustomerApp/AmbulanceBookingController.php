@@ -8,6 +8,7 @@ use App\Models\Ambulance;
 use App\Models\AmbulanceBooking;
 use App\Models\FamilyMember;
 use App\Models\Hospital;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -323,6 +324,30 @@ class AmbulanceBookingController extends Controller
             $request->notes;
 
         $booking->save();
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'ambulance_requested',
+            $booking->is_emergency
+            ? 'Emergency Ambulance Requested'
+            : 'Ambulance Request Sent',
+            'Your ambulance request has been sent to ' .
+            $hospital->hospital_name .
+            '.',
+            'ambulance_booking',
+            $booking->id,
+            'ambulance_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'hospital_id' => $hospital->id,
+                'hospital_name' => $hospital->hospital_name,
+                'ambulance_type_id' => $booking->ambulance_type_id,
+                'is_emergency' => (bool) $booking->is_emergency,
+                'booking_status' => $booking->booking_status,
+            ]
+        );
 
         /*
         |--------------------------------------------------------------------------
