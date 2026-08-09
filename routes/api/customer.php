@@ -147,10 +147,16 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('chatbot/message', [ChatbotController::class, 'sendMessage']);
 
     Route::any('chatbot/history', [ChatbotController::class, 'history']);
-    Route::get('chatbot/history/{conversation_id}',[ChatbotController::class, 'conversationHistory']
+    Route::get('chatbot/history/{conversation_id}', [ChatbotController::class, 'conversationHistory']);
 
+    //Insurance
+    Route::post('/insurance', [ProfileController::class, 'addInsurance']);
 
-);
+    Route::get('/insurances', [ProfileController::class, 'insurances']);
+
+    Route::get('/insurance/{id}', [ProfileController::class, 'insuranceDetails']);
+
+    Route::get('/delete_insurance/{id}', [ProfileController::class, 'deleteInsurance']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

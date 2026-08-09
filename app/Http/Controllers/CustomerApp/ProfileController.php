@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
 use App\Models\AppNotification;
 use App\Models\FamilyMember;
+use App\Models\Insurance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -233,61 +235,345 @@ class ProfileController extends Controller
     }
 
     /**
- * Get Customer Notifications
- */
-public function notifications(Request $request)
-{
-    $user = auth('sanctum')->user();
+     * Get Customer Notifications
+     */
+    public function notifications(Request $request)
+    {
+        $user = auth('sanctum')->user();
 
-    if (!$user) {
-        return response()->json([
-            'success' => 0,
-            'message' => 'Please Login'
-        ], 401);
-    }
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
 
-    $notifications = AppNotification::where('notifiable_type', 'customer')
-        // ->where('notifiable_id', $user->id)
-        ->where('status', 1)
-        ->orderByDesc('created_at')
-        ->inRandomOrder()->take(20)->get();
-
-    $data = $notifications->map(function ($notification) {
-
-        return [
-            'id' => $notification->id,
-
-            'type' => $notification->type,
-
-            'title' => $notification->title,
-
-            'message' => $notification->message,
-
-            'reference_type' => $notification->reference_type,
-
-            'reference_id' => $notification->reference_id,
-
-            'action' => $notification->action,
-
-            'data' => $notification->data,
-
-            'is_read' => (bool) $notification->is_read,
-
-            'read_at' => $notification->read_at,
-
-            'created_at' => $notification->created_at,
-        ];
-    });
-
-    return response()->json([
-        'success' => 1,
-        'message' => 'Notifications fetched successfully.',
-        'data' => $data,
-        'unread_count' => AppNotification::where('notifiable_type', 'customer')
+        $notifications = AppNotification::where('notifiable_type', 'customer')
             // ->where('notifiable_id', $user->id)
             ->where('status', 1)
-            ->where('is_read', 0)
-            ->count()
-    ]);
-}
+            ->orderByDesc('created_at')
+            ->inRandomOrder()->take(20)->get();
+
+        $data = $notifications->map(function ($notification) {
+
+            return [
+                'id' => $notification->id,
+
+                'type' => $notification->type,
+
+                'title' => $notification->title,
+
+                'message' => $notification->message,
+
+                'reference_type' => $notification->reference_type,
+
+                'reference_id' => $notification->reference_id,
+
+                'action' => $notification->action,
+
+                'data' => $notification->data,
+
+                'is_read' => (bool) $notification->is_read,
+
+                'read_at' => $notification->read_at,
+
+                'created_at' => $notification->created_at,
+            ];
+        });
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Notifications fetched successfully.',
+            'data' => $data,
+            'unread_count' => AppNotification::where('notifiable_type', 'customer')
+                // ->where('notifiable_id', $user->id)
+                ->where('status', 1)
+                ->where('is_read', 0)
+                ->count()
+        ]);
+    }
+
+    public function addInsurance(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+
+            'insurance_provider' => 'required|string|max:255',
+
+            'policy_number' => 'required|string|max:255',
+
+            'policy_type' => 'nullable|string|max:255',
+
+            'policy_holder_name' => 'required|string|max:255',
+
+            'member_id' => 'nullable|string|max:255',
+
+            'coverage_amount' => 'nullable|numeric|min:0',
+
+            'start_date' => 'nullable|date',
+
+            'expiry_date' => 'nullable|date|after_or_equal:start_date',
+
+            'document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+
+            'notes' => 'nullable|string',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+
+        $document = null;
+
+        if ($request->hasFile('document')) {
+
+            $file = $request->file('document');
+
+            $document = $file->store(
+                'insurances',
+                'public'
+            );
+        }
+
+        $status = 'active';
+
+        if ($request->expiry_date) {
+
+            if (Carbon::parse($request->expiry_date)->lt(now()->startOfDay())) {
+                $status = 'expired';
+            }
+        }
+
+        $insurance = Insurance::create([
+
+            'customer_id' => $user->id,
+
+            'insurance_provider' => $request->insurance_provider,
+
+            'policy_number' => $request->policy_number,
+
+            'policy_type' => $request->policy_type,
+
+            'policy_holder_name' => $request->policy_holder_name,
+
+            'member_id' => $request->member_id,
+
+            'coverage_amount' => $request->coverage_amount,
+
+            'start_date' => $request->start_date,
+
+            'expiry_date' => $request->expiry_date,
+
+            'document' => $document,
+
+            'notes' => $request->notes,
+
+            'status' => $status,
+        ]);
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Insurance added successfully.',
+            'data' => [
+                'id' => $insurance->id,
+                'insurance_provider' => $insurance->insurance_provider,
+                'policy_number' => $insurance->policy_number,
+                'policy_type' => $insurance->policy_type,
+                'policy_holder_name' => $insurance->policy_holder_name,
+                'member_id' => $insurance->member_id,
+                'coverage_amount' => $insurance->coverage_amount,
+                'start_date' => $insurance->start_date,
+                'expiry_date' => $insurance->expiry_date,
+                'document' => $insurance->document
+                    ? asset($insurance->document)
+                    : null,
+                'notes' => $insurance->notes,
+                'status' => $insurance->status,
+                'created_at' => $insurance->created_at,
+            ]
+        ]);
+    }
+    public function insurances(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $insurances = Insurance::where('customer_id', $user->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $data = $insurances->map(function ($insurance) {
+
+            $status = $insurance->status;
+
+            if (
+                $insurance->expiry_date &&
+                Carbon::parse($insurance->expiry_date)->lt(now()->startOfDay())
+            ) {
+                $status = 'expired';
+            }
+
+            return [
+                'id' => $insurance->id,
+
+                'insurance_provider' => $insurance->insurance_provider,
+
+                'policy_number' => $insurance->policy_number,
+
+                'policy_type' => $insurance->policy_type,
+
+                'policy_holder_name' => $insurance->policy_holder_name,
+
+                'member_id' => $insurance->member_id,
+
+                'coverage_amount' => $insurance->coverage_amount,
+
+                'start_date' => $insurance->start_date
+                    ? $insurance->start_date->format('Y-m-d')
+                    : null,
+
+                'expiry_date' => $insurance->expiry_date
+                    ? $insurance->expiry_date->format('Y-m-d')
+                    : null,
+
+                'document' => $insurance->document
+                    ? asset($insurance->document)
+                    : null,
+
+                'notes' => $insurance->notes,
+
+                'status' => $status,
+
+                'created_at' => $insurance->created_at,
+            ];
+        });
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Insurance details fetched successfully.',
+            'data' => $data,
+        ]);
+    }
+    public function insuranceDetails(Request $request, $id)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $insurance = Insurance::where('id', $id)
+            ->where('customer_id', $user->id)
+            ->first();
+
+        if (!$insurance) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Insurance details not found.'
+            ]);
+        }
+
+        $status = $insurance->status;
+
+        if (
+            $insurance->expiry_date &&
+            Carbon::parse($insurance->expiry_date)->lt(now()->startOfDay())
+        ) {
+            $status = 'expired';
+        }
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Insurance details fetched successfully.',
+            'data' => [
+
+                'id' => $insurance->id,
+
+                'insurance_provider' => $insurance->insurance_provider,
+
+                'policy_number' => $insurance->policy_number,
+
+                'policy_type' => $insurance->policy_type,
+
+                'policy_holder_name' => $insurance->policy_holder_name,
+
+                'member_id' => $insurance->member_id,
+
+                'coverage_amount' => $insurance->coverage_amount,
+
+                'start_date' => $insurance->start_date
+                    ? $insurance->start_date->format('Y-m-d')
+                    : null,
+
+                'expiry_date' => $insurance->expiry_date
+                    ? $insurance->expiry_date->format('Y-m-d')
+                    : null,
+
+                'document' => $insurance->document
+                    ? asset($insurance->document)
+                    : null,
+
+                'notes' => $insurance->notes,
+
+                'status' => $status,
+
+                'created_at' => $insurance->created_at,
+                'updated_at' => $insurance->updated_at,
+            ]
+        ]);
+    }
+    public function deleteInsurance(Request $request, $id)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $insurance = Insurance::where('id', $id)
+            ->where('customer_id', $user->id)
+            ->first();
+
+        if (!$insurance) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Insurance details not found.'
+            ]);
+        }
+
+        if ($insurance->document) {
+            Storage::disk('public')->delete($insurance->document);
+        }
+
+        $insurance->delete();
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Insurance deleted successfully.'
+        ]);
+    }
 }
