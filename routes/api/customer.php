@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
+use App\Http\Controllers\CustomerApp\ChatbotController;
 use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
@@ -139,6 +140,14 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/coupons/validate', [CouponController::class, 'validate']);
 
     Route::get('/coupons/usage-history', [CouponController::class, 'usageHistory']);
+    //Chatbot
+    Route::post('chatbot/start', [ChatbotController::class, 'start']);
+
+    Route::post('chatbot/message', [ChatbotController::class, 'sendMessage']);
+
+    Route::any('chatbot/history', [ChatbotController::class, 'history']);
+    Route::get('chatbot/history/{conversation_id}',[ChatbotController::class, 'conversationHistory']
+);
 
 });
 Route::any('/states', [LocationController::class, 'states']);
