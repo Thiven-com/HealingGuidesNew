@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
+use App\Http\Controllers\CustomerApp\HomeController;
 use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
@@ -157,6 +158,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/insurance/{id}', [ProfileController::class, 'insuranceDetails']);
 
     Route::get('/delete_insurance/{id}', [ProfileController::class, 'deleteInsurance']);
+
+    Route::get('search', [HomeController::class, 'search']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);
