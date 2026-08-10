@@ -11,6 +11,7 @@ use App\Models\Medicine;
 use App\Models\MedicineOrder;
 use App\Models\MedicineOrderItem;
 use App\Models\Prescription;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -836,6 +837,52 @@ class MedicineOrderController extends Controller
                     'used_count'
                 );
             }
+
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'medicine_order_created',
+                'Medicine Order Placed',
+                'Your medicine order ' .
+                $order->order_no .
+                ' has been placed successfully.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+
+                    'order_no' => $order->order_no,
+
+                    'hospital_id' => $order->hospital_id,
+
+                    'prescription_id' => $order->prescription_id,
+
+                    'subtotal' => $order->subtotal,
+
+                    'delivery_charge' => $order->delivery_charge,
+
+                    'discount' => $order->discount,
+
+                    'tax' => $order->tax,
+
+                    'total_amount' => $order->total_amount,
+
+                    'payment_method' => $order->payment_method,
+
+                    'payment_status' => $order->payment_status,
+
+                    'order_status' => $order->order_status,
+
+                    'delivery_address' => $order->delivery_address,
+
+                    'delivery_city' => $order->delivery_city,
+
+                    'delivery_state' => $order->delivery_state,
+
+                    'delivery_pincode' => $order->delivery_pincode,
+                ]
+            );
 
 
             /*

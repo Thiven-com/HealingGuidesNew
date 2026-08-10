@@ -280,7 +280,7 @@ class ProfileController extends Controller
             ->where('notifiable_id', $user->id)
             ->where('status', 1)
             ->orderByDesc('created_at')
-            ->inRandomOrder()->take(20)->get();
+            ->latest()->take(20)->get();
 
         $data = $notifications->map(function ($notification) {
 

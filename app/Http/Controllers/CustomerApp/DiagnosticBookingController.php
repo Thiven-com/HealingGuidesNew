@@ -10,6 +10,7 @@ use App\Models\DiagnosticBookingItem;
 use App\Models\DiagnosticLabTest;
 use App\Models\FamilyMember;
 use App\Models\LabTest;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -440,23 +441,23 @@ class DiagnosticBookingController extends Controller
 
             // if ($request->collection_type == 'home_collection') {
 
-                $booking->address =
-                    $request->address;
+            $booking->address =
+                $request->address;
 
-                $booking->city =
-                    $request->city;
+            $booking->city =
+                $request->city;
 
-                $booking->state =
-                    $request->state;
+            $booking->state =
+                $request->state;
 
-                $booking->pincode =
-                    $request->pincode;
+            $booking->pincode =
+                $request->pincode;
 
-                $booking->latitude =
-                    $request->latitude;
+            $booking->latitude =
+                $request->latitude;
 
-                $booking->longitude =
-                    $request->longitude;
+            $booking->longitude =
+                $request->longitude;
             // }
 
             /*
@@ -492,6 +493,54 @@ class DiagnosticBookingController extends Controller
 
                 $bookingItem->save();
             }
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'lab_test_booked',
+                'Lab Test Booked',
+                'Your lab test booking ' .
+                $booking->booking_no .
+                ' has been booked successfully at ' .
+                $diagnostic->name .
+                '.',
+                'diagnostic_booking',
+                $booking->id,
+                'lab_booking_details',
+                [
+                    'booking_id' => $booking->id,
+
+                    'booking_no' => $booking->booking_no,
+
+                    'customer_id' => $customer->id,
+
+                    'family_member_id' => $booking->family_member_id,
+
+                    'diagnostic_id' => $diagnostic->id,
+
+                    'diagnostic_name' => $diagnostic->diagnostic_name,
+
+                    'collection_type' => $booking->collection_type,
+
+                    'booking_date' => $booking->booking_date,
+
+                    'booking_time' => $booking->booking_time,
+
+                    'subtotal' => $booking->subtotal,
+
+                    'home_collection_charge' =>
+                        $booking->home_collection_charge,
+
+                    'discount' => $booking->discount,
+
+                    'tax' => $booking->tax,
+
+                    'total_amount' => $booking->total_amount,
+
+                    'payment_status' => $booking->payment_status,
+
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
 
             DB::commit();
 
