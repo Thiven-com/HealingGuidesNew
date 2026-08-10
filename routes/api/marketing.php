@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MarketingApp\MembershipRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\MarketingApp\AccountController;
@@ -35,13 +36,19 @@ Route::group(['middleware' => ['marketingtokenCheck']], function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('leads', [LeadController::class,'leads']);
+    Route::get('leads', [LeadController::class, 'leads']);
 
-    Route::get('lead-details/{id}', [LeadController::class,'leadDetails']);
+    Route::get('lead-details/{id}', [LeadController::class, 'leadDetails']);
 
-    Route::post('add-lead', [LeadController::class,'addLead']);
+    Route::post('add-lead', [LeadController::class, 'addLead']);
 
-    Route::post('update-lead', [LeadController::class,'updateLead']);
+    Route::post('update-lead', [LeadController::class, 'updateLead']);
 
-    Route::post('update-lead-status', [LeadController::class,'updateStatus']);
+    Route::post('update-lead-status', [LeadController::class, 'updateStatus']);
+
+    Route::get('/list', [MembershipRegistrationController::class, 'memberships']);
+
+    Route::post('/register', [MembershipRegistrationController::class, 'register']);
+
+    Route::get('/registration/{id}', [MembershipRegistrationController::class, 'show']);
 });
