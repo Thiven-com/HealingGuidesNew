@@ -68,10 +68,7 @@ class DoctorController extends Controller
             ->orderBy('hospital_name')
             ->get();
 
-        $specializations = HospitalSpecialization::with(
-            'specialization'
-        )
-            ->get();
+        $specializations = HospitalSpecialization::with('specialization')->where('status', 1)->get();
 
         return view(
             'admin.doctors.create',

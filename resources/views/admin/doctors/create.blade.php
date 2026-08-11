@@ -108,14 +108,14 @@
 
                                     <label class="form-label">
                                         Hospital
-                                        <span class="text-danger">*</span>
+                                        {{-- <span class="text-danger">*</span> --}}
                                     </label>
 
                                     <select name="hospital_id"
                                             class="form-select"
-                                            required>
+                                            >
 
-                                        <option value="">
+                                        <option value="0">
                                             Select Hospital
                                         </option>
 

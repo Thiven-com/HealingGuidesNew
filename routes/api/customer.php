@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerApp\AddressController;
 use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
 use App\Http\Controllers\CustomerApp\ChatbotController;
@@ -160,6 +161,12 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/delete_insurance/{id}', [ProfileController::class, 'deleteInsurance']);
 
     Route::get('search', [HomeController::class, 'search']);
+
+    //addresses
+    Route::get('/addresses', [AddressController::class, 'addresses']);
+    Route::get('/address/{id}', [AddressController::class, 'address']);
+    Route::post('/address/add', [AddressController::class, 'addAddress']);
+    Route::post('/address/edit/{id}', [AddressController::class, 'editAddress']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);
