@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
+use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
@@ -67,7 +68,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::post('medicines/{id}/status', [MedicineController::class, 'status'])->name('admin.medicines.status');
 
-    
+
     Route::get('coupons/{id}/status', [CouponController::class, 'status'])->name('admin.coupons.status');
 
     Route::resource('coupons', CouponController::class)->names('admin.coupons');
@@ -75,6 +76,9 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('settings/company', 'SiteSettingController@site')->name('admin.settings.company');
     Route::post('setting/company/update', 'SiteSettingController@company_setting_update')->name('admin.settings.company.update');
+
+    Route::resource('doctors', DoctorController::class)->names('admin.doctors');
+    Route::post('doctors/{id}/status', [DoctorController::class, 'status'])->name('admin.doctors.status');
 
 });
 
