@@ -98,7 +98,19 @@
                                                         </a>
                                                 </li>
                                                 <li
-                                                        class="{{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">
+                                                        class="{{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
+
+                                                        <a href="{{ route('admin.doctors.index') }}">
+
+                                                                <i class="ti ti-stethoscope fs-16 me-2"></i>
+
+                                                                <span>Doctors</span>
+
+                                                        </a>
+
+                                                </li>
+
+                                                <li class="{{ request()->routeIs('admin.coupons.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.coupons.index') }}">
                                                                 <i class="ti ti-ticket fs-16 me-2"></i>
                                                                 <span>Coupons</span>
