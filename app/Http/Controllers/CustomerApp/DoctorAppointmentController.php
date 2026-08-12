@@ -49,8 +49,8 @@ class DoctorAppointmentController extends Controller
             'consultation_type' =>
                 'required|in:hospital_visit,video,chat,home_visit',
 
-            'visit_address' =>
-                'required_if:consultation_type,home_visit',
+            // 'visit_address' =>
+            //     'required_if:consultation_type,home_visit',
 
             'visit_latitude' => 'nullable',
 
