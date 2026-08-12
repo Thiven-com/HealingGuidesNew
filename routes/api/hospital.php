@@ -77,6 +77,7 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
     Route::get('medicine-details/{id}', [MedicineController::class, 'medicineDetails']);
 
     Route::post('add-medicine', [MedicineController::class, 'addMedicine']);
+    Route::post('create-medicine', [MedicineController::class, 'addMedicine']);
 
     Route::post('update-medicine', [MedicineController::class, 'updateMedicine']);
 
