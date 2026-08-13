@@ -49,7 +49,7 @@ class PrescriptionController extends Controller
 
             'advice' => 'nullable|string',
 
-            'followup_date' => 'nullable|date|after_or_equal:today',
+            // 'followup_date' => 'nullable|date|after_or_equal:today',
 
             'followup_notes' => 'nullable|string',
 
