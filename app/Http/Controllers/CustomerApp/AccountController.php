@@ -25,8 +25,8 @@ class AccountController extends Controller
                 'message' => $validator->errors()->first()
             ]);
         }
-        // $otp = 1234;
-        $otp = rand(1000, 9999);
+        $otp = 1234;
+        // $otp = rand(1000, 9999);
         $customer = Customer::where('mobile', $request->mobile)->first();
         if (!$customer) {
             $customer = new Customer();
