@@ -29,15 +29,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="{{ $site->site_name }}">
+    <meta name="description" content="{{ $site->site_name ?? ' '}}">
     <meta name="keywords"
-        content="{{ $site->site_name }}">
-    <meta name="author" content="{{ $site->site_name }}">
+        content="{{ $site->site_name ?? ' '}}">
+    <meta name="author" content="{{ $site->site_name ?? ' '}}">
     <meta name="robots" content="noindex, nofollow">
     <title>{{$site->site_name ?? ''}}</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset($site->favicon) }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset($site->favicon ?? ' ') }}">
 
     @include('layout.partials.head')
 </head>

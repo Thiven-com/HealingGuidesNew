@@ -266,7 +266,7 @@
 
             <div class="login-header">
 
-                <img src="{{ asset($site->site_logo) }}" class="login-logo">
+                <img src="{{ asset($site->site_logo ?? ' ') }}" class="login-logo">
 
                 <h2>Welcome Back 👋</h2>
 
@@ -360,7 +360,7 @@
 
             <div class="bottom-text">
 
-                © {{ date('Y') }} {{ $site->site_name }}
+                © {{ date('Y') }} {{ $site->site_name ?? ' '}}
 
             </div>
 

@@ -116,7 +116,8 @@ class DiagnosticBooking extends Model
     {
         return $this->belongsTo(
             Diagnostic::class,
-            'diagnostic_id'
+            'diagnostic_id',
+            'id'
         );
     }
 
@@ -132,5 +133,29 @@ class DiagnosticBooking extends Model
             DiagnosticBookingItem::class,
             'diagnostic_booking_id'
         );
+    }
+
+    /**
+     * Customer Name
+     */
+    public function getCustomerNameAttribute()
+    {
+        return $this->customer?->name;
+    }
+
+    /**
+     * Family Member Name
+     */
+    public function getFamilyMemberNameAttribute()
+    {
+        return $this->familyMember?->name;
+    }
+
+    /**
+     * Diagnostic Name
+     */
+    public function getDiagnosticNameAttribute()
+    {
+        return $this->diagnostic?->name;
     }
 }

@@ -69,6 +69,13 @@
                                                         </a>
                                                 </li>
                                                 <li
+                                                        class="{{ request()->routeIs('admin.lab-tests-bookings.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.lab-tests-bookings.index') }}">
+                                                                <i class="ti ti-test-pipe fs-16 me-2"></i>
+                                                                <span>LabTests Bookings</span>
+                                                        </a>
+                                                </li>
+                                                <li
                                                         class="{{ request()->routeIs('admin.ambulance-types.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.ambulance-types.index') }}">
                                                                 <i class="ti ti-ambulance fs-16 me-2"></i>
@@ -76,11 +83,37 @@
                                                         </a>
                                                 </li>
                                                 <li
+                                                        class="{{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.appointments.index') }}">
+                                                                <i class="ti ti-ambulance fs-16 me-2"></i>
+                                                                <span>Doctor Appointments</span>
+                                                        </a>
+                                                </li>
+                                                {{-- <li
+                                                        class="{{ request()->routeIs('admin.lab-tests-bookings.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.lab-tests-bookings.index') }}">
+                                                                <i class="ti ti-test-pipe fs-16 me-2"></i>
+                                                                <span>Lab Test Bookings</span>
+                                                        </a>
+                                                </li> --}}
+                                                <li
                                                         class="{{ request()->routeIs('admin.ambulances.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.ambulances.index') }}">
                                                                 <i class="ti ti-ambulance fs-16 me-2"></i>
                                                                 <span>Ambulances</span>
                                                         </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.ambulance-bookings.*') ? 'active' : '' }}">
+
+                                                        <a href="{{ route('admin.ambulance-bookings.index') }}">
+
+                                                                <i class="ti ti-map-pin fs-16 me-2"></i>
+
+                                                                <span>Ambulance Requests</span>
+
+                                                        </a>
+
                                                 </li>
                                                 <li
                                                         class="{{ request()->routeIs('admin.medicine-categories.*') ? 'active' : '' }}">
@@ -98,7 +131,18 @@
                                                         </a>
                                                 </li>
                                                 <li
-                                                        class="{{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
+                                                        class="{{ request()->routeIs('admin.medicine-orders.*') ? 'active' : '' }}">
+
+                                                        <a href="{{ route('admin.medicine-orders.index') }}">
+
+                                                                <i class="ti ti-shopping-cart fs-16 me-2"></i>
+
+                                                                <span>Medicine Orders</span>
+
+                                                        </a>
+
+                                                </li>
+                                                <li class="{{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
 
                                                         <a href="{{ route('admin.doctors.index') }}">
 
@@ -116,6 +160,23 @@
                                                                 <span>Coupons</span>
                                                         </a>
                                                 </li>
+
+                                        </ul>
+                                </li>
+                                <li class="submenu-open">
+                                        <h6 class="submenu-hdr">Customer Management</h6>
+
+                                        <ul>
+
+                                                <li
+                                                        class="{{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.customers.index') }}">
+                                                                <i class="ti ti-building-hospital fs-16 me-2"></i>
+                                                                <span>Customers</span>
+                                                        </a>
+                                                </li>
+
+
 
                                         </ul>
                                 </li>

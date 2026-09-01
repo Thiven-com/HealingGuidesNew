@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\DoctorController;
@@ -19,6 +20,11 @@ use App\Http\Controllers\Admin\LabTestController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SpecializationController;
+use App\Http\Controllers\Admin\AmbulanceBookingController;
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\DoctorAppointmentController;
+use App\Http\Controllers\Admin\LabTestBookingController;
+use App\Http\Controllers\Admin\MedicineOrderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,8 +38,155 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    Route::get('/customers', [CustomerController::class, 'index'])
+        ->name('admin.customers.index');
+
+    Route::get('/customers/{id}', [CustomerController::class, 'show'])
+        ->name('admin.customers.show');
+
+    Route::get('/customers/{id}/edit', [CustomerController::class, 'edit'])
+        ->name('admin.customers.edit');
+
+    Route::put('/customers/{id}', [CustomerController::class, 'update'])
+        ->name('admin.customers.update');
+
+    Route::post('/customers/{id}/status', [CustomerController::class, 'status'])
+        ->name('admin.customers.status');
+
+    Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])
+        ->name('admin.customers.destroy');
+
     Route::get('dashboard', [AuthController::class, 'dashboard'])
         ->name('admin.dashboard');
+
+    /*
+       |--------------------------------------------------------------------------
+       | Ambulance Bookings
+       |--------------------------------------------------------------------------
+       */
+
+    Route::get('ambulance-bookings', [
+        AmbulanceBookingController::class,
+        'index'
+    ])->name('admin.ambulance-bookings.index');
+
+    Route::get('ambulance-bookings/{id}', [
+        AmbulanceBookingController::class,
+        'show'
+    ])->name('admin.ambulance-bookings.show');
+
+    Route::post('ambulance-bookings/assign', [
+        AmbulanceBookingController::class,
+        'assignAmbulance'
+    ])->name('admin.ambulance-bookings.assign');
+
+    Route::post('ambulance-bookings/reject', [
+        AmbulanceBookingController::class,
+        'reject'
+    ])->name('admin.ambulance-bookings.reject');
+
+    Route::get('ambulance-bookings/{id}/track', [
+        AmbulanceBookingController::class,
+        'track'
+    ])->name('admin.ambulance-bookings.track');
+
+    Route::post('ambulance-bookings/payment-status', [
+        AmbulanceBookingController::class,
+        'updatePaymentStatus'
+    ])->name('admin.ambulance-bookings.payment-status');
+    Route::get('ambulance-bookings/{id}/location', [
+        AmbulanceBookingController::class,
+        'location'
+    ])->name('admin.ambulance-bookings.location');
+
+
+    /*
+           |--------------------------------------------------------------------------
+           | Medicine Orders
+           |--------------------------------------------------------------------------
+           */
+
+    Route::get('medicine-orders', [
+        MedicineOrderController::class,
+        'index'
+    ])->name('admin.medicine-orders.index');
+
+    Route::get('medicine-orders/{id}', [
+        MedicineOrderController::class,
+        'show'
+    ])->name('admin.medicine-orders.show');
+
+    Route::post('medicine-orders/accept', [
+        MedicineOrderController::class,
+        'accept'
+    ])->name('admin.medicine-orders.accept');
+
+    Route::post('medicine-orders/reject', [
+        MedicineOrderController::class,
+        'reject'
+    ])->name('admin.medicine-orders.reject');
+
+    Route::post('medicine-orders/process', [
+        MedicineOrderController::class,
+        'process'
+    ])->name('admin.medicine-orders.process');
+
+    Route::post('medicine-orders/ready', [
+        MedicineOrderController::class,
+        'ready'
+    ])->name('admin.medicine-orders.ready');
+
+    Route::post('medicine-orders/dispatch', [
+        MedicineOrderController::class,
+        'dispatch'
+    ])->name('admin.medicine-orders.dispatch');
+
+    Route::post('medicine-orders/deliver', [
+        MedicineOrderController::class,
+        'deliver'
+    ])->name('admin.medicine-orders.deliver');
+
+
+    Route::resource('lab-tests-bookings', LabTestBookingController::class)->names('admin.lab-tests-bookings');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Appointments
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('appointments', [
+        AppointmentController::class,
+        'index'
+    ])->name('admin.appointments.index');
+
+    Route::get('appointments/{id}', [
+        AppointmentController::class,
+        'show'
+    ])->name('admin.appointments.show');
+
+    Route::post('appointments/status', [
+        AppointmentController::class,
+        'updateStatus'
+    ])->name('admin.appointments.status');
+
+
+    Route::get('appointments/{id}/reschedule', [
+        AppointmentController::class,
+        'reschedule'
+    ])->name('admin.appointments.reschedule');
+    Route::get('appointments/{id}/reschedule-slots', [
+        AppointmentController::class,
+        'getRescheduleSlots'
+    ])->name('admin.appointments.reschedule.slots');
+
+    Route::put('appointments/{id}/reschedule', [
+        AppointmentController::class,
+        'updateReschedule'
+    ])->name('admin.appointments.reschedule.update');
+
 
     Route::resource('hospitals', HospitalController::class)->names('admin.hospitals');
     Route::post('hospitals/status/{hospital}', [HospitalController::class, 'status'])->name('admin.hospitals.status');
