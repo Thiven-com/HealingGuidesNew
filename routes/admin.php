@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\LabTestBookingController;
 use App\Http\Controllers\Admin\MedicineOrderController;
+use App\Http\Controllers\Admin\PatientMedicalReportController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -186,6 +187,12 @@ Route::group(['middleware' => 'admin'], function () {
         AppointmentController::class,
         'updateReschedule'
     ])->name('admin.appointments.reschedule.update');
+
+    Route::get('patient-medical-reports', [PatientMedicalReportController::class, 'index'])->name('admin.patient-medical-reports.index');
+    Route::get('patient-medical-reports/{id}', [PatientMedicalReportController::class, 'show'])->name('admin.patient-medical-reports.show');
+    Route::get('patient-medical-reports/{id}/edit', [PatientMedicalReportController::class, 'edit'])->name('admin.patient-medical-reports.edit');
+    Route::put('patient-medical-reports/{id}', [PatientMedicalReportController::class, 'update'])->name('admin.patient-medical-reports.update');
+    Route::delete('patient-medical-reports/{id}', [PatientMedicalReportController::class, 'destroy'])->name('admin.patient-medical-reports.destroy');
 
 
     Route::resource('hospitals', HospitalController::class)->names('admin.hospitals');

@@ -89,6 +89,13 @@
                                                                 <span>Doctor Appointments</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.patient-medical-reports.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.patient-medical-reports.index') }}">
+                                                                <i class="ti ti-ambulance fs-16 me-2"></i>
+                                                                <span>Patient Medical Reports</span>
+                                                        </a>
+                                                </li>
                                                 {{-- <li
                                                         class="{{ request()->routeIs('admin.lab-tests-bookings.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.lab-tests-bookings.index') }}">
