@@ -109,7 +109,7 @@
                                     Mobile
                                 </label>
 
-                                <input type="text" name="mobile" class="form-control" value="{{ old(
+                                <input type="text" name="mobile" class="form-control" readonly value="{{ old(
         'mobile',
         $hospital->mobile ?? ''
     ) }}">

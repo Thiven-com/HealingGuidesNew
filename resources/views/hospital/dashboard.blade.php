@@ -5,6 +5,7 @@
 @section('content')
 
 <style>
+
     :root {
         --primary: #2563EB;
         --success: #10B981;
@@ -28,10 +29,6 @@
         padding: 25px;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
     .dashboard-header {
         background: linear-gradient(135deg, #2563EB, #3B82F6);
         border-radius: 22px;
@@ -49,7 +46,7 @@
         width: 250px;
         height: 250px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, .08);
+        background: rgba(255,255,255,.08);
         right: -80px;
         top: -80px;
     }
@@ -60,7 +57,7 @@
         width: 170px;
         height: 170px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, .08);
+        background: rgba(255,255,255,.08);
         left: -40px;
         bottom: -50px;
     }
@@ -84,8 +81,8 @@
     }
 
     .dashboard-date {
-        background: rgba(255, 255, 255, .15);
-        border: 1px solid rgba(255, 255, 255, .15);
+        background: rgba(255,255,255,.15);
+        border: 1px solid rgba(255,255,255,.15);
         padding: 10px 16px;
         border-radius: 12px;
         display: inline-flex;
@@ -94,25 +91,21 @@
         font-size: 14px;
     }
 
-    /* =====================================================
-       STAT CARDS
-    ===================================================== */
+    /* Cards */
 
     .dashboard-card {
         background: #fff;
         border-radius: 18px;
         padding: 24px;
         transition: .35s;
-        box-shadow: 0 8px 25px rgba(15, 23, 42, .05);
+        box-shadow: 0 8px 25px rgba(15,23,42,.05);
         border: 1px solid #eef1f5;
         height: 100%;
-        position: relative;
-        overflow: hidden;
     }
 
     .dashboard-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 18px 40px rgba(15, 23, 42, .10);
+        box-shadow: 0 18px 40px rgba(15,23,42,.10);
     }
 
     .dashboard-icon {
@@ -128,35 +121,35 @@
     }
 
     .bg-blue {
-        background: linear-gradient(135deg, #2563EB, #60A5FA);
+        background: linear-gradient(135deg,#2563EB,#60A5FA);
     }
 
     .bg-green {
-        background: linear-gradient(135deg, #10B981, #34D399);
+        background: linear-gradient(135deg,#10B981,#34D399);
     }
 
     .bg-orange {
-        background: linear-gradient(135deg, #F59E0B, #FBBF24);
+        background: linear-gradient(135deg,#F59E0B,#FBBF24);
     }
 
     .bg-red {
-        background: linear-gradient(135deg, #EF4444, #F87171);
+        background: linear-gradient(135deg,#EF4444,#F87171);
     }
 
     .bg-purple {
-        background: linear-gradient(135deg, #7C3AED, #A78BFA);
+        background: linear-gradient(135deg,#7C3AED,#A78BFA);
     }
 
     .bg-cyan {
-        background: linear-gradient(135deg, #06B6D4, #67E8F9);
+        background: linear-gradient(135deg,#06B6D4,#67E8F9);
     }
 
     .bg-pink {
-        background: linear-gradient(135deg, #EC4899, #F472B6);
+        background: linear-gradient(135deg,#EC4899,#F472B6);
     }
 
     .bg-dark-custom {
-        background: linear-gradient(135deg, #374151, #6B7280);
+        background: linear-gradient(135deg,#374151,#6B7280);
     }
 
     .card-title-custom {
@@ -200,15 +193,13 @@
         color: #2563EB;
     }
 
-    /* =====================================================
-       SECTION CARD
-    ===================================================== */
+    /* Section */
 
     .dashboard-section-card {
         background: #fff;
         border: 1px solid #eef1f5;
         border-radius: 18px;
-        box-shadow: 0 8px 25px rgba(15, 23, 42, .04);
+        box-shadow: 0 8px 25px rgba(15,23,42,.04);
         height: 100%;
         overflow: hidden;
     }
@@ -230,9 +221,7 @@
         padding: 22px;
     }
 
-    /* =====================================================
-       QUICK ACTION
-    ===================================================== */
+    /* Quick Action */
 
     .quick-action {
         display: block;
@@ -246,13 +235,13 @@
         font-weight: 600;
         transition: .3s;
         height: 100%;
+        text-decoration: none;
     }
 
     .quick-action:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(15, 23, 42, .08);
+        box-shadow: 0 10px 25px rgba(15,23,42,.08);
         color: var(--primary);
-        border-color: #dbe7ff;
     }
 
     .quick-action i {
@@ -296,9 +285,7 @@
         color: #0891B2;
     }
 
-    /* =====================================================
-       SUMMARY
-    ===================================================== */
+    /* Summary */
 
     .summary-row {
         display: flex;
@@ -317,45 +304,13 @@
         color: #6B7280;
     }
 
-    .summary-row strong {
-        color: #111827;
+    /* Chart */
+
+    .chart-box {
+        min-height: 340px;
     }
 
-    /* =====================================================
-       STATUS BOX
-    ===================================================== */
-
-    .status-box {
-        text-align: center;
-        padding: 20px 10px;
-        border-radius: 15px;
-    }
-
-    .status-box h2 {
-        font-size: 28px;
-        margin-bottom: 4px;
-        font-weight: 700;
-    }
-
-    .status-box small {
-        color: #6B7280;
-    }
-
-    .status-success {
-        background: #ECFDF5;
-    }
-
-    .status-warning {
-        background: #FFFBEB;
-    }
-
-    .status-danger {
-        background: #FEF2F2;
-    }
-
-    /* =====================================================
-       TABLE
-    ===================================================== */
+    /* Table */
 
     .dashboard-table th {
         background: #F8FAFC;
@@ -364,69 +319,30 @@
         font-weight: 600;
         padding: 14px 16px;
         white-space: nowrap;
-        border-bottom: 1px solid #E5E7EB;
     }
 
     .dashboard-table td {
         padding: 14px 16px;
         font-size: 13px;
         vertical-align: middle;
-        color: #374151;
     }
 
-    .dashboard-table tbody tr:last-child td {
-        border-bottom: none;
-    }
+    @media(max-width:768px) {
 
-    /* =====================================================
-       EMPTY
-    ===================================================== */
-
-    .empty-state {
-        padding: 45px 20px;
-        text-align: center;
-    }
-
-    .empty-state i {
-        font-size: 46px;
-        color: #CBD5E1;
-        display: block;
-        margin-bottom: 15px;
-    }
-
-    .empty-state h6 {
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .empty-state p {
-        color: #94A3B8;
-        font-size: 13px;
-        margin: 0;
-    }
-
-    @media(max-width: 768px) {
+        .content {
+            padding: 15px;
+        }
 
         .dashboard-header {
             padding: 25px;
         }
 
         .dashboard-header h2 {
-            font-size: 27px;
+            font-size: 26px;
         }
 
-        .content {
-            padding: 18px;
-        }
-
-        .dashboard-date {
-            margin-top: 18px;
-        }
-
-        .card-count {
-            font-size: 27px;
-        }
     }
+
 </style>
 
 
@@ -435,9 +351,7 @@
     <div class="content">
 
 
-        {{-- =====================================================
-            WELCOME HEADER
-        ====================================================== --}}
+        {{-- HEADER --}}
 
         <div class="dashboard-header">
 
@@ -452,14 +366,13 @@
                         </h2>
 
                         <p>
-                            {{ $hospital->hospital_name ?? $hospital->name ?? 'Hospital' }}
-                            — here's what's happening at your hospital today.
+                            {{ $hospital->hospital_name ?? 'Hospital' }}
+                            — Here's what's happening today.
                         </p>
 
                     </div>
 
-
-                    <div class="col-lg-4 text-lg-end">
+                    <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
 
                         <div class="dashboard-date">
 
@@ -478,10 +391,7 @@
         </div>
 
 
-
-        {{-- =====================================================
-            MAIN STATISTICS
-        ====================================================== --}}
+        {{-- MAIN STATISTICS --}}
 
         <div class="row g-4">
 
@@ -501,25 +411,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalDoctors ?? 0) }}
+                                {{ number_format($totalDoctors) }}
                             </div>
 
                             <span class="card-growth">
 
-                                <i class="ti ti-user-check me-1"></i>
-
-                                {{ number_format($activeDoctors ?? 0) }}
+                                {{ number_format($activeDoctors) }}
                                 Active
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-green">
-
                             <i class="ti ti-stethoscope"></i>
-
                         </div>
 
                     </div>
@@ -527,7 +432,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- APPOINTMENTS --}}
@@ -545,25 +449,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalAppointments ?? 0) }}
+                                {{ number_format($totalAppointments) }}
                             </div>
 
                             <span class="card-growth info">
 
-                                <i class="ti ti-calendar-event me-1"></i>
-
-                                {{ number_format($todayAppointments ?? 0) }}
+                                {{ number_format($todayAppointments) }}
                                 Today
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-blue">
-
                             <i class="ti ti-calendar-check"></i>
-
                         </div>
 
                     </div>
@@ -571,7 +470,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- AMBULANCES --}}
@@ -589,25 +487,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalAmbulances ?? 0) }}
+                                {{ number_format($totalAmbulances) }}
                             </div>
 
                             <span class="card-growth">
 
-                                <i class="ti ti-circle-check me-1"></i>
-
-                                {{ number_format($availableAmbulances ?? 0) }}
+                                {{ number_format($availableAmbulances) }}
                                 Available
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-red">
-
                             <i class="ti ti-ambulance"></i>
-
                         </div>
 
                     </div>
@@ -615,7 +508,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- MEDICINES --}}
@@ -633,25 +525,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalMedicines ?? 0) }}
+                                {{ number_format($totalMedicines) }}
                             </div>
 
                             <span class="card-growth danger">
 
-                                <i class="ti ti-alert-triangle me-1"></i>
-
-                                {{ number_format($lowStockMedicines ?? 0) }}
+                                {{ number_format($lowStockMedicines) }}
                                 Low Stock
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-orange">
-
                             <i class="ti ti-pill"></i>
-
                         </div>
 
                     </div>
@@ -659,7 +546,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- AMBULANCE REQUESTS --}}
@@ -677,25 +563,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalAmbulanceBookings ?? 0) }}
+                                {{ number_format($totalAmbulanceBookings) }}
                             </div>
 
                             <span class="card-growth warning">
 
-                                <i class="ti ti-clock me-1"></i>
-
-                                {{ number_format($pendingAmbulanceBookings ?? 0) }}
+                                {{ number_format($pendingAmbulanceBookings) }}
                                 Pending
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-cyan">
-
                             <i class="ti ti-map-pin"></i>
-
                         </div>
 
                     </div>
@@ -703,7 +584,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- ACTIVE TRIPS --}}
@@ -721,24 +601,17 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($activeAmbulanceTrips ?? 0) }}
+                                {{ number_format($activeAmbulanceTrips) }}
                             </div>
 
                             <span class="card-growth info">
-
-                                <i class="ti ti-route me-1"></i>
-
                                 Ongoing Trips
-
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-purple">
-
                             <i class="ti ti-route"></i>
-
                         </div>
 
                     </div>
@@ -746,7 +619,6 @@
                 </div>
 
             </div>
-
 
 
             {{-- MEDICINE ORDERS --}}
@@ -764,25 +636,20 @@
                             </div>
 
                             <div class="card-count">
-                                {{ number_format($totalMedicineOrders ?? 0) }}
+                                {{ number_format($totalMedicineOrders) }}
                             </div>
 
                             <span class="card-growth warning">
 
-                                <i class="ti ti-clock me-1"></i>
-
-                                {{ number_format($pendingMedicineOrders ?? 0) }}
+                                {{ number_format($pendingMedicineOrders) }}
                                 Pending
 
                             </span>
 
                         </div>
 
-
                         <div class="dashboard-icon bg-pink">
-
                             <i class="ti ti-shopping-cart"></i>
-
                         </div>
 
                     </div>
@@ -790,64 +657,83 @@
                 </div>
 
             </div>
+        </div>
 
 
+        {{-- REVENUE CARDS --}}
 
-            {{-- DIAGNOSTICS --}}
+        <div class="row g-4 mt-1">
 
-            <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="col-xl-3 col-md-6">
 
                 <div class="dashboard-card">
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="card-title-custom">
+                        Appointment Revenue
+                    </div>
 
-                        <div>
-
-                            <div class="card-title-custom">
-                                Diagnostics
-                            </div>
-
-                            <div class="card-count">
-                                {{ number_format($totalDiagnostics ?? 0) }}
-                            </div>
-
-                            <span class="card-growth info">
-
-                                <i class="ti ti-test-pipe me-1"></i>
-
-                                {{ number_format($totalDiagnosticBookings ?? 0) }}
-                                Bookings
-
-                            </span>
-
-                        </div>
-
-
-                        <div class="dashboard-icon bg-dark-custom">
-
-                            <i class="ti ti-microscope"></i>
-
-                        </div>
-
+                    <div class="card-count text-primary">
+                        ₹{{ number_format($appointmentRevenue, 2) }}
                     </div>
 
                 </div>
 
             </div>
 
+            <div class="col-xl-3 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <div class="card-title-custom">
+                        Ambulance Revenue
+                    </div>
+
+                    <div class="card-count text-danger">
+                        ₹{{ number_format($ambulanceRevenue, 2) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="dashboard-card">
+
+                    <div class="card-title-custom">
+                        Medicine Revenue
+                    </div>
+
+                    <div class="card-count text-success">
+                        ₹{{ number_format($medicineRevenue, 2) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="dashboard-card bg-primary text-white">
+
+                    <div class="card-title-custom text-white">
+                        Total Revenue
+                    </div>
+
+                    <div class="card-count text-white">
+                        ₹{{ number_format($totalRevenue, 2) }}
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
 
-
-        {{-- =====================================================
-            QUICK ACTIONS + TODAY SUMMARY
-        ====================================================== --}}
+        {{-- ANALYTICS CHARTS --}}
 
         <div class="row g-4 mt-1">
-
-
-            {{-- QUICK ACTIONS --}}
 
             <div class="col-xl-8">
 
@@ -856,20 +742,184 @@
                     <div class="card-header">
 
                         <h5>
-
-                            <i class="ti ti-bolt me-2 text-warning"></i>
-
-                            Quick Actions
-
+                            <i class="ti ti-chart-line me-2 text-primary"></i>
+                            Weekly Appointment Overview
                         </h5>
 
                     </div>
 
+                    <div class="card-body">
+
+                        <div id="weeklyAppointmentChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header">
+
+                        <h5>
+                            Appointment Status
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="appointmentStatusChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mt-1">
+
+            <div class="col-xl-8">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header">
+
+                        <h5>
+                            Monthly Appointment Trend
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="monthlyAppointmentChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header">
+
+                        <h5>
+                            Doctor Status
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="doctorStatusChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mt-1">
+
+            <div class="col-xl-8">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header d-flex justify-content-between">
+
+                        <h5>
+                            Revenue Analytics
+                        </h5>
+
+                        <strong class="text-success">
+                            ₹{{ number_format($totalRevenue, 2) }}
+                        </strong>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="revenueChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header">
+
+                        <h5>
+                            Ambulance Availability
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="ambulanceStatusChart"
+                             class="chart-box">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {{-- QUICK ACTIONS + SUMMARY --}}
+
+        <div class="row g-4 mt-1">
+
+            <div class="col-xl-8">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header">
+
+                        <h5>
+                            <i class="ti ti-bolt me-2 text-warning"></i>
+                            Quick Actions
+                        </h5>
+
+                    </div>
 
                     <div class="card-body">
 
                         <div class="row g-3">
-
 
                             <div class="col-lg-4 col-md-4 col-6">
 
@@ -954,7 +1004,6 @@
 
                             </div>
 
-
                         </div>
 
                     </div>
@@ -964,9 +1013,6 @@
             </div>
 
 
-
-            {{-- TODAY SUMMARY --}}
-
             <div class="col-xl-4">
 
                 <div class="dashboard-section-card">
@@ -974,442 +1020,76 @@
                     <div class="card-header">
 
                         <h5>
-
-                            <i class="ti ti-calendar-stats me-2 text-primary"></i>
-
                             Today's Summary
-
                         </h5>
 
                     </div>
 
-
                     <div class="card-body">
 
-
                         <div class="summary-row">
-
-                            <span>
-                                Appointments
-                            </span>
-
-                            <strong>
-                                {{ number_format($todayAppointments ?? 0) }}
-                            </strong>
-
+                            <span>Appointments</span>
+                            <strong>{{ $todayAppointments }}</strong>
                         </div>
 
-
                         <div class="summary-row">
-
-                            <span>
-                                Total Doctors
-                            </span>
-
-                            <strong>
-                                {{ number_format($totalDoctors ?? 0) }}
-                            </strong>
-
+                            <span>Total Doctors</span>
+                            <strong>{{ $totalDoctors }}</strong>
                         </div>
 
-
                         <div class="summary-row">
-
-                            <span>
-                                Active Doctors
-                            </span>
-
+                            <span>Active Doctors</span>
                             <strong class="text-success">
-                                {{ number_format($activeDoctors ?? 0) }}
+                                {{ $activeDoctors }}
                             </strong>
-
                         </div>
 
-
                         <div class="summary-row">
-
-                            <span>
-                                Ambulance Requests
-                            </span>
-
+                            <span>Pending Ambulance</span>
                             <strong class="text-warning">
-                                {{ number_format($pendingAmbulanceBookings ?? 0) }}
+                                {{ $pendingAmbulanceBookings }}
                             </strong>
-
                         </div>
 
-
                         <div class="summary-row">
-
-                            <span>
-                                Active Trips
-                            </span>
-
+                            <span>Active Trips</span>
                             <strong class="text-primary">
-                                {{ number_format($activeAmbulanceTrips ?? 0) }}
+                                {{ $activeAmbulanceTrips }}
                             </strong>
-
                         </div>
-
 
                         <div class="summary-row">
-
-                            <span>
-                                Pending Medicine Orders
-                            </span>
-
+                            <span>Pending Medicine Orders</span>
                             <strong class="text-danger">
-                                {{ number_format($pendingMedicineOrders ?? 0) }}
+                                {{ $pendingMedicineOrders }}
                             </strong>
-
                         </div>
-
 
                     </div>
 
                 </div>
 
             </div>
-
 
         </div>
 
 
-
-        {{-- =====================================================
-            AMBULANCE + PHARMACY + DIAGNOSTICS
-        ====================================================== --}}
+        {{-- RECENT TABLES --}}
 
         <div class="row g-4 mt-1">
 
 
-            {{-- AMBULANCE STATUS --}}
-
-            <div class="col-xl-4">
-
-                <div class="dashboard-section-card">
-
-                    <div class="card-header d-flex align-items-center justify-content-between">
-
-                        <h5>
-
-                            <i class="ti ti-ambulance me-2 text-danger"></i>
-
-                            Ambulance Status
-
-                        </h5>
-
-
-                        <span class="badge bg-danger-subtle text-danger">
-
-                            {{ number_format($totalAmbulances ?? 0) }}
-                            Total
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="card-body">
-
-
-                        <div class="row g-3">
-
-
-                            <div class="col-6">
-
-                                <div class="status-box status-success">
-
-                                    <h2 class="text-success">
-
-                                        {{ number_format($availableAmbulances ?? 0) }}
-
-                                    </h2>
-
-                                    <small>
-                                        Available
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-6">
-
-                                <div class="status-box status-warning">
-
-                                    <h2 class="text-warning">
-
-                                        {{ number_format($activeAmbulanceTrips ?? 0) }}
-
-                                    </h2>
-
-                                    <small>
-                                        Active Trips
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="summary-row mt-3">
-
-                            <span>
-                                Total Requests
-                            </span>
-
-                            <strong>
-
-                                {{ number_format($totalAmbulanceBookings ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Pending Requests
-                            </span>
-
-                            <strong class="text-warning">
-
-                                {{ number_format($pendingAmbulanceBookings ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- PHARMACY --}}
-
-            <div class="col-xl-4">
-
-                <div class="dashboard-section-card">
-
-                    <div class="card-header">
-
-                        <h5>
-
-                            <i class="ti ti-pill me-2 text-success"></i>
-
-                            Pharmacy
-
-                        </h5>
-
-                    </div>
-
-
-                    <div class="card-body">
-
-
-                        <div class="d-flex align-items-center mb-4">
-
-                            <div class="dashboard-icon bg-green me-3">
-
-                                <i class="ti ti-pill"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3 class="mb-1 fw-bold">
-
-                                    {{ number_format($totalMedicines ?? 0) }}
-
-                                </h3>
-
-                                <small class="text-muted">
-
-                                    Total Medicines
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Low Stock
-                            </span>
-
-                            <strong class="text-danger">
-
-                                {{ number_format($lowStockMedicines ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Medicine Orders
-                            </span>
-
-                            <strong>
-
-                                {{ number_format($totalMedicineOrders ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Pending Orders
-                            </span>
-
-                            <strong class="text-warning">
-
-                                {{ number_format($pendingMedicineOrders ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- DIAGNOSTICS --}}
-
-            <div class="col-xl-4">
-
-                <div class="dashboard-section-card">
-
-                    <div class="card-header">
-
-                        <h5>
-
-                            <i class="ti ti-microscope me-2 text-primary"></i>
-
-                            Diagnostics
-
-                        </h5>
-
-                    </div>
-
-
-                    <div class="card-body">
-
-
-                        <div class="d-flex align-items-center mb-4">
-
-                            <div class="dashboard-icon bg-blue me-3">
-
-                                <i class="ti ti-microscope"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3 class="mb-1 fw-bold">
-
-                                    {{ number_format($totalDiagnostics ?? 0) }}
-
-                                </h3>
-
-                                <small class="text-muted">
-
-                                    Total Diagnostics
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Diagnostics
-                            </span>
-
-                            <strong>
-
-                                {{ number_format($totalDiagnostics ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Diagnostic Bookings
-                            </span>
-
-                            <strong class="text-primary">
-
-                                {{ number_format($totalDiagnosticBookings ?? 0) }}
-
-                            </strong>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-
-        {{-- =====================================================
-            RECENT APPOINTMENTS
-        ====================================================== --}}
-
-        <div class="row g-4 mt-1">
-
+            {{-- RECENT APPOINTMENTS --}}
 
             <div class="col-xl-6">
 
                 <div class="dashboard-section-card">
 
-                    <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-header d-flex justify-content-between align-items-center">
 
                         <h5>
-
-                            <i class="ti ti-calendar-time me-2 text-primary"></i>
-
                             Recent Appointments
-
                         </h5>
-
 
                         <a href="{{ route('hospital.appointments.index') }}"
                            class="btn btn-sm btn-primary">
@@ -1420,146 +1100,84 @@
 
                     </div>
 
-
                     <div class="card-body p-0">
 
                         <div class="table-responsive">
 
-                            <table class="table dashboard-table table-hover mb-0">
+                            <table class="table dashboard-table mb-0">
 
                                 <thead>
 
                                     <tr>
-
-                                        <th>#</th>
-
                                         <th>Appointment</th>
-
+                                        <th>Doctor</th>
                                         <th>Status</th>
-
                                         <th>Date</th>
-
                                     </tr>
 
                                 </thead>
 
-
                                 <tbody>
 
+                                    @forelse($recentAppointments as $appointment)
 
-                                @forelse($recentAppointments ?? [] as $appointment)
+                                        @php
 
-                                    @php
+                                            $status = $appointment->appointment_status ?? 'pending';
 
-                                        $appointmentStatus =
-                                            strtolower(
-                                                $appointment->status
-                                                ?? 'pending'
-                                            );
-
-                                        $appointmentStatusClass =
-                                            match($appointmentStatus) {
-
+                                            $class = match($status) {
                                                 'completed' => 'success',
-
-                                                'confirmed' => 'primary',
-
-                                                'accepted' => 'primary',
-
+                                                'confirmed', 'approved' => 'primary',
                                                 'cancelled' => 'danger',
-
-                                                'rejected' => 'danger',
-
                                                 default => 'warning'
                                             };
 
-                                    @endphp
+                                        @endphp
 
+                                        <tr>
 
-                                    <tr>
+                                            <td>
+                                                <strong>
+                                                    {{ $appointment->appointment_no ?? '#' . $appointment->id }}
+                                                </strong>
+                                            </td>
 
-                                        <td>
+                                            <td>
+                                                {{ $appointment->doctor->doctor_name ?? '-' }}
+                                            </td>
 
-                                            {{ $loop->iteration }}
+                                            <td>
 
-                                        </td>
+                                                <span class="badge bg-{{ $class }}">
 
+                                                    {{ ucfirst($status) }}
 
-                                        <td>
+                                                </span>
 
-                                            <strong>
+                                            </td>
 
-                                                #{{ $appointment->id }}
+                                            <td>
 
-                                            </strong>
+                                                {{ optional($appointment->appointment_date)->format('d M Y') ?? $appointment->appointment_date }}
 
-                                        </td>
+                                            </td>
 
+                                        </tr>
 
-                                        <td>
+                                    @empty
 
-                                            <span class="badge bg-{{ $appointmentStatusClass }}">
+                                        <tr>
 
-                                                {{ ucfirst(
-                                                    str_replace(
-                                                        '_',
-                                                        ' ',
-                                                        $appointmentStatus
-                                                    )
-                                                ) }}
+                                            <td colspan="4"
+                                                class="text-center py-4 text-muted">
 
-                                            </span>
+                                                No appointments found
 
-                                        </td>
+                                            </td>
 
+                                        </tr>
 
-                                        <td>
-
-                                            {{ optional(
-                                                $appointment->created_at
-                                            )->format('d M Y') }}
-
-                                            <small class="d-block text-muted">
-
-                                                {{ optional(
-                                                    $appointment->created_at
-                                                )->format('h:i A') }}
-
-                                            </small>
-
-                                        </td>
-
-                                    </tr>
-
-
-                                @empty
-
-
-                                    <tr>
-
-                                        <td colspan="4">
-
-                                            <div class="empty-state">
-
-                                                <i class="ti ti-calendar-off"></i>
-
-                                                <h6>
-                                                    No Appointments Found
-                                                </h6>
-
-                                                <p>
-                                                    Recent appointments will appear here.
-                                                </p>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-
-                                @endforelse
-
+                                    @endforelse
 
                                 </tbody>
 
@@ -1574,25 +1192,17 @@
             </div>
 
 
-
-            {{-- =====================================================
-                RECENT AMBULANCE REQUESTS
-            ====================================================== --}}
+            {{-- RECENT AMBULANCE BOOKINGS --}}
 
             <div class="col-xl-6">
 
                 <div class="dashboard-section-card">
 
-                    <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-header d-flex justify-content-between align-items-center">
 
                         <h5>
-
-                            <i class="ti ti-ambulance me-2 text-danger"></i>
-
                             Recent Ambulance Requests
-
                         </h5>
-
 
                         <a href="{{ route('hospital.ambulance-bookings.index') }}"
                            class="btn btn-sm btn-danger">
@@ -1603,161 +1213,71 @@
 
                     </div>
 
-
                     <div class="card-body p-0">
 
                         <div class="table-responsive">
 
-                            <table class="table dashboard-table table-hover mb-0">
+                            <table class="table dashboard-table mb-0">
 
                                 <thead>
 
                                     <tr>
-
                                         <th>Booking</th>
-
+                                        <th>Type</th>
                                         <th>Status</th>
-
                                         <th>Amount</th>
-
-                                        <th>Date</th>
-
                                     </tr>
 
                                 </thead>
 
-
                                 <tbody>
 
+                                    @forelse($recentAmbulanceBookings as $booking)
 
-                                @forelse($recentAmbulanceBookings ?? [] as $booking)
+                                        <tr>
 
-                                    @php
+                                            <td>
+                                                <strong>
+                                                    {{ $booking->booking_no ?? '#' . $booking->id }}
+                                                </strong>
+                                            </td>
 
-                                        $bookingStatus =
-                                            strtolower(
-                                                $booking->booking_status
-                                                ?? 'pending'
-                                            );
+                                            <td>
+                                                {{ $booking->ambulanceType->name ?? '-' }}
+                                            </td>
 
-                                        $bookingStatusClass =
-                                            match($bookingStatus) {
+                                            <td>
 
-                                                'completed' => 'success',
+                                                <span class="badge bg-info">
 
-                                                'accepted' => 'primary',
+                                                    {{ ucfirst($booking->booking_status ?? 'pending') }}
 
-                                                'assigned' => 'info',
+                                                </span>
 
-                                                'ongoing' => 'warning',
+                                            </td>
 
-                                                'cancelled' => 'danger',
+                                            <td>
 
-                                                'rejected' => 'danger',
+                                                ₹{{ number_format($booking->total_amount ?? 0, 2) }}
 
-                                                default => 'secondary'
-                                            };
+                                            </td>
 
-                                    @endphp
+                                        </tr>
 
+                                    @empty
 
-                                    <tr>
+                                        <tr>
 
+                                            <td colspan="4"
+                                                class="text-center py-4 text-muted">
 
-                                        <td>
+                                                No ambulance requests found
 
-                                            <strong>
+                                            </td>
 
-                                                {{ $booking->booking_no
-                                                    ?? '#' . $booking->id }}
+                                        </tr>
 
-                                            </strong>
-
-                                        </td>
-
-
-                                        <td>
-
-                                            <span class="badge bg-{{ $bookingStatusClass }}">
-
-                                                {{ ucfirst(
-                                                    str_replace(
-                                                        '_',
-                                                        ' ',
-                                                        $bookingStatus
-                                                    )
-                                                ) }}
-
-                                            </span>
-
-                                        </td>
-
-
-                                        <td>
-
-                                            <strong>
-
-                                                ₹{{ number_format(
-                                                    (float) (
-                                                        $booking->total_amount
-                                                        ?? 0
-                                                    ),
-                                                    2
-                                                ) }}
-
-                                            </strong>
-
-                                        </td>
-
-
-                                        <td>
-
-                                            {{ optional(
-                                                $booking->created_at
-                                            )->format('d M Y') }}
-
-                                            <small class="d-block text-muted">
-
-                                                {{ optional(
-                                                    $booking->created_at
-                                                )->format('h:i A') }}
-
-                                            </small>
-
-                                        </td>
-
-
-                                    </tr>
-
-
-                                @empty
-
-
-                                    <tr>
-
-                                        <td colspan="4">
-
-                                            <div class="empty-state">
-
-                                                <i class="ti ti-ambulance"></i>
-
-                                                <h6>
-                                                    No Ambulance Requests
-                                                </h6>
-
-                                                <p>
-                                                    Recent ambulance requests will appear here.
-                                                </p>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-
-                                @endforelse
-
+                                    @endforelse
 
                                 </tbody>
 
@@ -1772,11 +1292,412 @@
             </div>
 
 
-        </div>
+            {{-- RECENT MEDICINE ORDERS --}}
 
+            <div class="col-xl-12">
+
+                <div class="dashboard-section-card">
+
+                    <div class="card-header d-flex justify-content-between align-items-center">
+
+                        <h5>
+                            Recent Medicine Orders
+                        </h5>
+
+                        <a href="{{ route('hospital.medicine-orders.index') }}"
+                           class="btn btn-sm btn-success">
+
+                            View All
+
+                        </a>
+
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+
+                            <table class="table dashboard-table mb-0">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @forelse($recentMedicineOrders as $order)
+
+                                        <tr>
+
+                                            <td>
+                                                <strong>
+                                                    {{ $order->order_no ?? '#' . $order->id }}
+                                                </strong>
+                                            </td>
+
+                                            <td>
+
+                                                <span class="badge bg-primary">
+
+                                                    {{ ucfirst($order->order_status ?? 'pending') }}
+
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                <span class="badge bg-secondary">
+
+                                                    {{ ucfirst($order->payment_status ?? 'pending') }}
+
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                ₹{{ number_format($order->total_amount ?? 0, 2) }}
+
+                                            </td>
+
+                                            <td>
+
+                                                {{ optional($order->created_at)->format('d M Y h:i A') }}
+
+                                            </td>
+
+                                        </tr>
+
+                                    @empty
+
+                                        <tr>
+
+                                            <td colspan="5"
+                                                class="text-center py-4 text-muted">
+
+                                                No medicine orders found
+
+                                            </td>
+
+                                        </tr>
+
+                                    @endforelse
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weekly Appointments
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#weeklyAppointmentChart'),
+        {
+
+            chart: {
+                type: 'area',
+                height: 330,
+                toolbar: {
+                    show: false
+                }
+            },
+
+            series: [{
+                name: 'Appointments',
+                data: @json($weeklyAppointmentData)
+            }],
+
+            xaxis: {
+                categories: @json($weeklyAppointmentLabels)
+            },
+
+            colors: ['#2563EB'],
+
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+
+            dataLabels: {
+                enabled: false
+            },
+
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    opacityFrom: 0.4,
+                    opacityTo: 0.05
+                }
+            }
+
+        }
+    ).render();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Appointment Status
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#appointmentStatusChart'),
+        {
+
+            chart: {
+                type: 'donut',
+                height: 330
+            },
+
+            series: [
+                {{ $pendingAppointments }},
+                {{ $confirmedAppointments }},
+                {{ $completedAppointments }},
+                {{ $cancelledAppointments }}
+            ],
+
+            labels: [
+                'Pending',
+                'Confirmed',
+                'Completed',
+                'Cancelled'
+            ],
+
+            colors: [
+                '#F59E0B',
+                '#2563EB',
+                '#10B981',
+                '#EF4444'
+            ],
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+    ).render();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Monthly Appointments
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#monthlyAppointmentChart'),
+        {
+
+            chart: {
+                type: 'line',
+                height: 330,
+                toolbar: {
+                    show: false
+                }
+            },
+
+            series: [{
+                name: 'Appointments',
+                data: @json($appointmentChartData)
+            }],
+
+            xaxis: {
+                categories: @json($appointmentChartLabels)
+            },
+
+            colors: ['#7C3AED'],
+
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+
+            markers: {
+                size: 5
+            },
+
+            dataLabels: {
+                enabled: false
+            }
+
+        }
+    ).render();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doctor Status
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#doctorStatusChart'),
+        {
+
+            chart: {
+                type: 'donut',
+                height: 330
+            },
+
+            series: [
+                {{ $activeDoctors }},
+                {{ $inactiveDoctors }}
+            ],
+
+            labels: [
+                'Active',
+                'Inactive'
+            ],
+
+            colors: [
+                '#10B981',
+                '#CBD5E1'
+            ],
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+    ).render();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Revenue Chart
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#revenueChart'),
+        {
+
+            chart: {
+                type: 'bar',
+                height: 330,
+                toolbar: {
+                    show: false
+                }
+            },
+
+            series: [{
+                name: 'Revenue',
+                data: @json($revenueChartData)
+            }],
+
+            xaxis: {
+                categories: @json($revenueChartLabels)
+            },
+
+            colors: ['#10B981'],
+
+            plotOptions: {
+                bar: {
+                    borderRadius: 6,
+                    columnWidth: '45%'
+                }
+            },
+
+            dataLabels: {
+                enabled: false
+            },
+
+            tooltip: {
+
+                y: {
+
+                    formatter: function(value) {
+
+                        return '₹' +
+                            Number(value).toLocaleString('en-IN');
+
+                    }
+
+                }
+
+            }
+
+        }
+    ).render();
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ambulance Status
+    |--------------------------------------------------------------------------
+    */
+
+    new ApexCharts(
+        document.querySelector('#ambulanceStatusChart'),
+        {
+
+            chart: {
+                type: 'donut',
+                height: 330
+            },
+
+            series: [
+                {{ $availableAmbulances }},
+                {{ $busyAmbulances }}
+            ],
+
+            labels: [
+                'Available',
+                'Busy'
+            ],
+
+            colors: [
+                '#10B981',
+                '#EF4444'
+            ],
+
+            legend: {
+                position: 'bottom'
+            }
+
+        }
+    ).render();
+
+
+});
+
+</script>
 
 @endsection

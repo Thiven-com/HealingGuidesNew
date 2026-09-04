@@ -189,34 +189,59 @@ class AppointmentController extends Controller
     |--------------------------------------------------------------------------
     */
 
+    // public function show($id)
+    // {
+    //     $hospital = Auth::guard('hospital')->user();
+
+    //     $appointment = DoctorAppointment::with([
+    //         'doctor.hospitalSpecialization.specialization',
+    //         'customer',
+    //         'familyMember',
+    //         'doctorSchedule'
+    //     ])
+    //         ->where(
+    //             'hospital_id',
+    //             $hospital->id
+    //         )
+    //         ->where(
+    //             'id',
+    //             $id
+    //         )
+    //         ->firstOrFail();
+
+
+    //     return view(
+    //         'hospital.appointments.show',
+    //         compact('appointment')
+    //     );
+    // }
     public function show($id)
     {
         $hospital = Auth::guard('hospital')->user();
+
+        if (!$hospital) {
+            return redirect()->route('hospital.login');
+        }
 
         $appointment = DoctorAppointment::with([
             'doctor.hospitalSpecialization.specialization',
             'customer',
             'familyMember',
-            'doctorSchedule'
+            'doctorSchedule',
+            'patientVitals',
+            'medicalReports',
+            'prescription',
+            'prescription.medicines',
         ])
-            ->where(
-                'hospital_id',
-                $hospital->id
-            )
-            ->where(
-                'id',
-                $id
-            )
+            ->where('hospital_id', $hospital->id)
+            ->where('id', $id)
             ->firstOrFail();
-
 
         return view(
             'hospital.appointments.show',
             compact('appointment')
         );
     }
-
-
 
     /*
     |--------------------------------------------------------------------------
