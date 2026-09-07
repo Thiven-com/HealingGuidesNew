@@ -847,11 +847,11 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="#" class="quick-action qa-blue">
+                                    <a href="{{ route('admin.patient-medical-reports.index') }}" class="quick-action qa-blue">
 
                                         <i class="ti ti-user-plus"></i>
 
-                                        Add Patient
+                                        Patient
 
                                     </a>
 
@@ -859,11 +859,11 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="#" class="quick-action qa-green">
+                                    <a href="{{ route('admin.doctors.index') }}" class="quick-action qa-green">
 
                                         <i class="ti ti-user-heart"></i>
 
-                                        Add Doctor
+                                        Doctor
 
                                     </a>
 
@@ -871,7 +871,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="#" class="quick-action qa-orange">
+                                    <a href="{{ route('admin.appointments.index') }}" class="quick-action qa-orange">
 
                                         <i class="ti ti-calendar-plus"></i>
 
@@ -883,7 +883,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="{{ route('admin.hospitals.create') }}" class="quick-action qa-cyan">
+                                    <a href="{{ route('admin.hospitals.index') }}" class="quick-action qa-cyan">
 
                                         <i class="ti ti-building-hospital"></i>
 
@@ -895,7 +895,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="#" class="quick-action qa-red">
+                                    <a href="{{ route('admin.medicines.index') }}" class="quick-action qa-red">
 
                                         <i class="ti ti-pill"></i>
 
@@ -907,7 +907,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="{{ route('admin.lab-tests.create') }}" class="quick-action qa-purple">
+                                    <a href="{{ route('admin.lab-tests.index') }}" class="quick-action qa-purple">
 
                                         <i class="ti ti-test-pipe"></i>
 
@@ -919,7 +919,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="{{ route('admin.ambulances.create') }}" class="quick-action qa-red">
+                                    <a href="{{ route('admin.ambulances.index') }}" class="quick-action qa-red">
 
                                         <i class="ti ti-ambulance"></i>
 
@@ -931,7 +931,7 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="#" class="quick-action qa-blue">
+                                    <a href="{{ route('admin.marketing-staff.all') }}" class="quick-action qa-blue">
 
                                         <i class="ti ti-users-group"></i>
 

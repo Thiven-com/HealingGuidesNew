@@ -50,5 +50,10 @@ class Doctor extends Authenticatable
         return $this->belongsTo(HospitalSpecialization::class);
     }
 
+    public function schedules()
+    {
+        return $this->hasMany(DoctorSchedule::class, 'doctor_id');
+    }
+
 
 }

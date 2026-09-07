@@ -167,6 +167,34 @@
                                                                 <span>Coupons</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.insurances.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.insurances.all') }}">
+                                                                <i class="ti ti-shield-check fs-16 me-2"></i>
+                                                                <span>Insurances</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.marketing-leads.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.marketing-leads.all') }}">
+                                                                <i class="ti ti-bell fs-16 me-2"></i>
+                                                                <span>Marketing Leads</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.marketing-staff.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.marketing-staff.all') }}">
+                                                                <i class="ti ti-user-check fs-16 me-2"></i>
+                                                                <span>Marketing Staff</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.membership-registrations.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.membership-registrations.all') }}">
+                                                                <i class="ti ti-user-check fs-16 me-2"></i>
+                                                                <span>Membership Registrations</span>
+                                                        </a>
+                                                </li>
 
                                         </ul>
                                 </li>

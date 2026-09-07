@@ -16,7 +16,8 @@ class DoctorController extends Controller
     {
         $query = Doctor::with([
             'hospital',
-            'hospitalSpecialization'
+            'hospitalSpecialization',
+            'schedules'
         ])->latest();
 
         if ($request->filled('search')) {

@@ -246,26 +246,25 @@
                                 </div>
 
                                 @if(
-    !in_array($appointment->appointment_status, [
-        'completed',
-        'cancelled',
-        'rejected'
-    ])
-)
+                                                                !in_array($appointment->appointment_status, [
+                                                                    'completed',
+                                                                    'cancelled',
+                                                                    'rejected'
+                                                                ])
+                                                            )
 
-    <a href="{{ route(
-        'admin.appointments.reschedule',
-        $appointment->id
-    ) }}"
-       class="btn btn-warning">
+                                                            <a href="{{ route(
+                                        'admin.appointments.reschedule',
+                                        $appointment->id
+                                    ) }}" class="btn btn-warning">
 
-        <i class="ti ti-calendar-event me-1"></i>
+                                                                <i class="ti ti-calendar-event me-1"></i>
 
-        Reschedule
+                                                                Reschedule
 
-    </a>
+                                                            </a>
 
-@endif
+                                @endif
 
                             </div>
 
@@ -749,6 +748,766 @@
                         </div>
 
                     </div>
+
+                    {{-- =====================================================
+                    PATIENT VITALS
+                    ====================================================== --}}
+                    @if($appointment->patientVitals)
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="avatar avatar-sm bg-danger-transparent me-2">
+                                        <i class="ti ti-heartbeat text-danger"></i>
+                                    </span>
+
+                                    <div>
+
+                                        <h5 class="card-title mb-0">
+                                            Patient Vitals
+                                        </h5>
+
+                                        <small class="text-muted">
+                                            Latest recorded health measurements
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Height
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->height ?? '-' }}
+                                            @if($appointment->patientVitals->height) cm @endif
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Weight
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->weight ?? '-' }}
+                                            @if($appointment->patientVitals->weight) kg @endif
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Blood Pressure
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->blood_pressure ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Heart Rate
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->heart_rate ?? '-' }}
+                                            @if($appointment->patientVitals->heart_rate) bpm @endif
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Temperature
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->temperature ?? '-' }}
+                                            @if($appointment->patientVitals->temperature) °C @endif
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            SpO2
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->spo2 ?? '-' }}
+                                            @if($appointment->patientVitals->spo2) % @endif
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            Blood Sugar
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->blood_sugar ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 col-sm-6 mb-4">
+
+                                        <small class="text-muted d-block">
+                                            BMI
+                                        </small>
+
+                                        <strong>
+                                            {{ $appointment->patientVitals->bmi ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                    {{-- =====================================================
+                    MEDICAL INFORMATION
+                    ====================================================== --}}
+                    @if(
+                            $patient?->blood_group ||
+                            $patient?->allergies ||
+                            $patient?->medical_conditions
+                        )
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="avatar avatar-sm bg-warning-transparent me-2">
+                                        <i class="ti ti-notes-medical text-warning"></i>
+                                    </span>
+
+                                    <div>
+
+                                        <h5 class="card-title mb-0">
+                                            Medical Information
+                                        </h5>
+
+                                        <small class="text-muted">
+                                            Patient medical background
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-4 mb-3">
+
+                                        <small class="text-muted d-block">
+                                            Blood Group
+                                        </small>
+
+                                        <strong>
+                                            {{ $patient?->blood_group ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-4 mb-3">
+
+                                        <small class="text-muted d-block">
+                                            Allergies
+                                        </small>
+
+                                        <strong>
+                                            {{ $patient?->allergies ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-md-4 mb-3">
+
+                                        <small class="text-muted d-block">
+                                            Medical Conditions
+                                        </small>
+
+                                        <strong>
+                                            {{ $patient?->medical_conditions ?? '-' }}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+
+                    {{-- =====================================================
+                    PRESCRIPTION
+                    ====================================================== --}}
+                    @if($appointment->prescription)
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="avatar avatar-sm bg-success-transparent me-2">
+                                        <i class="ti ti-prescription text-success"></i>
+                                    </span>
+
+                                    <div>
+
+                                        <h5 class="card-title mb-0">
+                                            Prescription
+                                        </h5>
+
+                                        <small class="text-muted">
+                                            Prescribed medicines and instructions
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-body">
+
+                                @if($appointment->prescription->notes)
+
+                                    <div class="mb-4">
+
+                                        <small class="text-muted d-block mb-1">
+                                            Doctor Instructions
+                                        </small>
+
+                                        <p class="mb-0">
+                                            {{ $appointment->prescription->notes }}
+                                        </p>
+
+                                    </div>
+
+                                @endif
+
+
+                                @if(
+                                        $appointment->prescription->medicines &&
+                                        $appointment->prescription->medicines->count()
+                                    )
+
+                                    <div class="table-responsive">
+
+                                        <table class="table table-bordered">
+
+                                            <thead>
+
+                                                <tr>
+
+                                                    <th>#</th>
+                                                    <th>Medicine</th>
+                                                    <th>Dosage</th>
+                                                    <th>Frequency</th>
+                                                    <th>Duration</th>
+                                                    <th>Instructions</th>
+
+                                                </tr>
+
+                                            </thead>
+
+
+                                            <tbody>
+
+                                                @foreach(
+                                                        $appointment->prescription->medicines
+                                                        as $key => $medicine
+                                                    )
+
+                                                    <tr>
+
+                                                        <td>
+                                                            {{ $key + 1 }}
+                                                        </td>
+
+                                                        <td>
+                                                            <strong>
+                                                                {{ $medicine->medicine_name ?? '-' }}
+                                                            </strong>
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $medicine->dosage ?? '-' }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $medicine->frequency ?? '-' }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $medicine->duration ?? '-' }}
+                                                        </td>
+
+                                                        <td>
+                                                            {{ $medicine->instructions ?? '-' }}
+                                                        </td>
+
+                                                    </tr>
+
+                                                @endforeach
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                    {{-- =====================================================
+                    MEDICAL REPORTS
+                    ====================================================== --}}
+                    @if(
+                            $appointment->medicalReports &&
+                            $appointment->medicalReports->count()
+                        )
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div class="d-flex align-items-center">
+
+                                        <span class="avatar avatar-sm bg-info-transparent me-2">
+                                            <i class="ti ti-file-medical text-info"></i>
+                                        </span>
+
+                                        <div>
+
+                                            <h5 class="card-title mb-0">
+                                                Medical Reports
+                                            </h5>
+
+                                            <small class="text-muted">
+                                                Uploaded patient reports
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span class="badge bg-primary">
+
+                                        {{ $appointment->medicalReports->count() }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>#</th>
+                                                <th>Report Name</th>
+                                                <th>Report Type</th>
+                                                <th>Uploaded Date</th>
+                                                <th class="text-end">Action</th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody>
+
+                                            @foreach(
+                                                                                $appointment->medicalReports
+                                                                                as $key => $report
+                                                                            )
+
+                                                                            <tr>
+
+                                                                                <td>
+                                                                                    {{ $key + 1 }}
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    <strong>
+                                                                                        {{ $report->report_name
+                                                    ?? $report->title
+                                                    ?? 'Medical Report' }}
+                                                                                    </strong>
+
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    {{ ucfirst(
+                                                    $report->report_type
+                                                    ?? 'Report'
+                                                ) }}
+
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    {{ $report->created_at
+                                                    ? $report->created_at->format('d M Y')
+                                                    : '-' }}
+
+                                                                                </td>
+
+                                                                                <td class="text-end">
+
+                                                                                    @php
+
+                                                                                        $reportFile =
+                                                                                            $report->file
+                                                                                            ?? $report->report_file
+                                                                                            ?? $report->document
+                                                                                            ?? null;
+
+                                                                                    @endphp
+
+
+                                                                                    @if($reportFile)
+
+                                                                                                                        <a href="{{ asset(
+                                                                                            $reportFile
+                                                                                        ) }}" target="_blank"
+                                                                                                                            class="btn btn-sm btn-outline-primary">
+
+                                                                                                                            <i class="ti ti-eye me-1"></i>
+                                                                                                                            View
+
+                                                                                                                        </a>
+
+                                                                                    @else
+
+                                                                                        <span class="text-muted">
+                                                                                            No File
+                                                                                        </span>
+
+                                                                                    @endif
+
+                                                                                </td>
+
+                                                                            </tr>
+
+                                            @endforeach
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                    {{-- =====================================================
+                    LAB TESTS
+                    ====================================================== --}}
+
+                    @if($appointment->labTests && $appointment->labTests->count())
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="avatar avatar-sm bg-warning-transparent me-2">
+                                        <i class="ti ti-microscope text-warning"></i>
+                                    </span>
+
+                                    <div>
+
+                                        <h5 class="card-title mb-0">
+                                            Lab Tests
+                                        </h5>
+
+                                        <small class="text-muted">
+                                            Laboratory test details
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-bordered">
+
+                                        <thead>
+
+                                            <tr>
+                                                <th>Test Name</th>
+                                                <th>Test Date</th>
+                                                <th>Status</th>
+                                                <th>Result</th>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                            @foreach($appointment->labTests as $test)
+
+                                                                        <tr>
+
+                                                                            <td>
+                                                                                <strong>
+                                                                                    {{ $test->test_name
+                                                ?? $test->name
+                                                ?? '-' }}
+                                                                                </strong>
+                                                                            </td>
+
+                                                                            <td>
+                                                                                {{ $test->test_date
+                                                ? \Carbon\Carbon::parse($test->test_date)->format('d M Y')
+                                                : '-' }}
+                                                                            </td>
+
+                                                                            <td>
+
+                                                                                @php
+                                                                                    $testStatus = strtolower($test->status ?? 'pending');
+                                                                                @endphp
+
+                                                                                @if($testStatus === 'completed')
+                                                                                    <span class="badge bg-success">
+                                                                                        Completed
+                                                                                    </span>
+                                                                                @elseif($testStatus === 'cancelled')
+                                                                                    <span class="badge bg-danger">
+                                                                                        Cancelled
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span class="badge bg-warning">
+                                                                                        Pending
+                                                                                    </span>
+                                                                                @endif
+
+                                                                            </td>
+
+                                                                            <td>
+                                                                                {{ $test->result ?? '-' }}
+                                                                            </td>
+
+                                                                        </tr>
+
+                                            @endforeach
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                    {{-- =====================================================
+                    MEETINGS
+                    ====================================================== --}}
+
+                    @if($appointment->meetings && $appointment->meetings->count())
+
+                        <div class="card">
+
+                            <div class="card-header">
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="avatar avatar-sm bg-primary-transparent me-2">
+                                        <i class="ti ti-video text-primary"></i>
+                                    </span>
+
+                                    <div>
+
+                                        <h5 class="card-title mb-0">
+                                            Meetings
+                                        </h5>
+
+                                        <small class="text-muted">
+                                            Online consultation meetings
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-body">
+
+                                @foreach($appointment->meetings as $meeting)
+
+                                                <div class="border rounded p-3 mb-3">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6 mb-3">
+
+                                                            <small class="text-muted d-block">
+                                                                Meeting Provider
+                                                            </small>
+
+                                                            <strong>
+                                                                {{ ucfirst($meeting->provider ?? '-') }}
+                                                            </strong>
+
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+
+                                                            <small class="text-muted d-block">
+                                                                Meeting ID
+                                                            </small>
+
+                                                            <strong>
+                                                                {{ $meeting->meeting_id ?? '-' }}
+                                                            </strong>
+
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+
+                                                            <small class="text-muted d-block">
+                                                                Meeting Status
+                                                            </small>
+
+                                                            <strong>
+
+                                                                {{ $meeting->status
+                                    ? ucfirst($meeting->status)
+                                    : '-' }}
+
+                                                            </strong>
+
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+
+                                                            <small class="text-muted d-block">
+                                                                Scheduled At
+                                                            </small>
+
+                                                            <strong>
+
+                                                                {{ $meeting->scheduled_at
+                                    ? \Carbon\Carbon::parse($meeting->scheduled_at)->format('d M Y, h:i A')
+                                    : '-' }}
+
+                                                            </strong>
+
+                                                        </div>
+
+                                                        @if($meeting->meeting_link)
+
+                                                            <div class="col-12">
+
+                                                                <a href="{{ $meeting->meeting_link }}" target="_blank" class="btn btn-primary">
+
+                                                                    <i class="ti ti-video me-1"></i>
+                                                                    Join Meeting
+
+                                                                </a>
+
+                                                            </div>
+
+                                                        @endif
+
+                                                    </div>
+
+                                                </div>
+
+                                @endforeach
+
+                            </div>
+
+                        </div>
+
+                    @endif
 
 
 
@@ -1359,6 +2118,7 @@
                         </div>
 
                     </div>
+
 
 
 

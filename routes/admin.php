@@ -17,15 +17,20 @@ use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\LabTestController;
+use App\Http\Controllers\Admin\MarketingStaffController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\SpecializationController;
 use App\Http\Controllers\Admin\AmbulanceBookingController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
+use App\Http\Controllers\Admin\DoctorScheduleController;
+use App\Http\Controllers\Admin\InsuranceController;
 use App\Http\Controllers\Admin\LabTestBookingController;
+use App\Http\Controllers\Admin\MarketingLeadController;
 use App\Http\Controllers\Admin\MedicineOrderController;
 use App\Http\Controllers\Admin\PatientMedicalReportController;
+use App\Http\Controllers\Admin\MembershipRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -150,6 +155,17 @@ Route::group(['middleware' => 'admin'], function () {
 
 
     Route::resource('lab-tests-bookings', LabTestBookingController::class)->names('admin.lab-tests-bookings');
+
+    Route::get('/insurances', [InsuranceController::class, 'index'])->name('admin.insurances.all');
+    Route::get('/marketing-leads', [MarketingLeadController::class, 'index'])->name('admin.marketing-leads.all');
+    Route::get('/marketing-staff', [MarketingStaffController::class, 'index'])->name('admin.marketing-staff.all');
+    Route::get('/membership-registrations', [MembershipRegistrationController::class, 'index'])->name('admin.membership-registrations.all');
+    Route::get('/doctor-schedules/create', [DoctorScheduleController::class, 'create'])->name('admin.doctor-schedules.create');
+
+    Route::post('doctor-schedules', [DoctorScheduleController::class, 'store'])->name('admin.doctor-schedules.store');
+    Route::get('doctor-schedules/{doctorSchedule}/edit', [DoctorScheduleController::class, 'edit'])->name('admin.doctor-schedules.edit');
+
+    Route::put('doctor-schedules/{doctorSchedule}', [DoctorScheduleController::class, 'update'])->name('admin.doctor-schedules.update');
 
 
     /*

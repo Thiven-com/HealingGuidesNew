@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\Hospital\CouponController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,7 @@ use App\Http\Controllers\Hospital\AppointmentController;
 use App\Http\Controllers\Hospital\DiagnosticController;
 use App\Http\Controllers\Hospital\AmbulanceController;
 use App\Http\Controllers\Hospital\AmbulanceBookingController;
+use App\Http\Controllers\Hospital\DoctorScheduleController;
 use App\Http\Controllers\Hospital\MedicineController;
 use App\Http\Controllers\Hospital\MedicineOrderController;
 use App\Http\Controllers\Hospital\ProfileController;
@@ -201,6 +203,12 @@ Route::name('hospital.')
                 'location'
             ])->name('ambulance-bookings.location');
 
+
+            Route::get('/doctor-schedules/create', [DoctorScheduleController::class, 'create'])->name('hospital.doctor-schedules.create');
+            Route::post('doctor-schedules', [DoctorScheduleController::class, 'store'])->name('doctor-schedules.store');
+            Route::get('doctor-schedules/{doctorSchedule}/edit', [DoctorScheduleController::class, 'edit'])->name('doctor-schedules.edit');
+
+            Route::put('doctor-schedules/{doctorSchedule}', [DoctorScheduleController::class, 'update'])->name('doctor-schedules.update');
 
             /*
             |--------------------------------------------------------------------------

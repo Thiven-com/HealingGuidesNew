@@ -310,6 +310,400 @@
 
                     </div>
 
+                    
+                        <div class="card">
+
+                            {{-- Header --}}
+                            <div class="card-header d-flex align-items-center justify-content-between">
+
+                                <h5 class="card-title mb-0">
+                                    Doctor Schedule
+                                </h5>
+
+                                {{-- Add Schedule --}}
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#addDoctorScheduleModal">
+
+                                    <i data-feather="plus" class="me-1"></i>
+                                    Add Schedule
+
+                                </button>
+
+                            </div>
+
+                            <div class="card-body">
+
+                                @if($doctor->schedules->count() > 0)
+
+                                    <div class="row g-3">
+
+                                        @foreach($doctor->schedules as $schedule)
+
+                                                            <div class="col-md-6">
+
+                                                                <div class="border rounded p-3 h-100">
+
+                                                                    {{-- Card Header --}}
+                                                                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+                                                                        <h6 class="mb-0 fw-semibold">
+                                                                            {{ ucfirst($schedule->day_of_week) }}
+                                                                        </h6>
+
+                                                                        <div class="d-flex align-items-center gap-2">
+
+                                                                            {{-- Status --}}
+                                                                            @if($schedule->status)
+
+                                                                                <span class="badge bg-success">
+                                                                                    Active
+                                                                                </span>
+
+                                                                            @else
+
+                                                                                <span class="badge bg-danger">
+                                                                                    Inactive
+                                                                                </span>
+
+                                                                            @endif
+
+                                                                            {{-- Edit --}}
+                                                                            <button type="button" class="btn btn-sm btn-light" title="Edit Schedule"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editScheduleModal{{ $schedule->id }}">
+
+                                                                                <i class="ti ti-edit"></i>
+
+                                                                            </button>
+
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    <div class="row g-3">
+
+                                                                        {{-- Time --}}
+                                                                        <div class="col-12">
+
+                                                                            <div class="d-flex align-items-center">
+
+                                                                                <div class="avatar avatar-sm bg-light-primary me-2">
+                                                                                    <i class="ti ti-clock fs-18"></i>
+                                                                                </div>
+
+                                                                                <div>
+
+                                                                                    <span class="text-muted d-block fs-12">
+                                                                                        Available Time
+                                                                                    </span>
+
+                                                                                    <span class="fw-medium">
+
+                                                                                        {{ $schedule->available_from
+                                            ? \Carbon\Carbon::parse(
+                                                $schedule->available_from
+                                            )->format('h:i A')
+                                            : '-' }}
+
+                                                                                        -
+
+                                                                                        {{ $schedule->available_to
+                                            ? \Carbon\Carbon::parse(
+                                                $schedule->available_to
+                                            )->format('h:i A')
+                                            : '-' }}
+
+                                                                                    </span>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                        {{-- Consultation Type --}}
+                                                                        <div class="col-12">
+
+                                                                            <div class="d-flex align-items-center">
+
+                                                                                <div class="avatar avatar-sm bg-light-info me-2">
+                                                                                    <i class="ti ti-stethoscope fs-18"></i>
+                                                                                </div>
+
+                                                                                <div>
+
+                                                                                    <span class="text-muted d-block fs-12">
+                                                                                        Consultation Type
+                                                                                    </span>
+
+                                                                                    <span class="fw-medium">
+
+                                                                                        @if($schedule->consultation_type)
+
+                                                                                                                                        {{ ucwords(
+                                                                                                str_replace(
+                                                                                                    '_',
+                                                                                                    ' ',
+                                                                                                    $schedule->consultation_type
+                                                                                                )
+                                                                                            ) }}
+
+                                                                                        @else
+
+                                                                                            -
+
+                                                                                        @endif
+
+                                                                                    </span>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <!-- Edit Schedule Modal -->
+                                                            <div class="modal fade" id="editScheduleModal{{ $schedule->id }}" tabindex="-1"
+                                                                aria-hidden="true">
+
+                                                                <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                                                                    <div class="modal-content">
+
+                                                                        <div class="modal-header">
+
+                                                                            <div>
+                                                                                <h5 class="modal-title">
+                                                                                    Edit Doctor Schedule
+                                                                                </h5>
+
+                                                                                <small class="text-muted">
+                                                                                    {{ $doctor->doctor_name }}
+                                                                                </small>
+                                                                            </div>
+
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                                            </button>
+
+                                                                        </div>
+
+                                                                        <form action="{{ route('admin.doctor-schedules.update', $schedule->id) }}"
+                                                                            method="POST">
+
+                                                                            @csrf
+                                                                            @method('PUT')
+
+                                                                            <div class="modal-body">
+
+                                                                                <input type="hidden" name="doctor_id" value="{{ $doctor->id }}">
+
+                                                                                <div class="row">
+
+                                                                                    {{-- Day --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label">
+                                                                                            Day <span class="text-danger">*</span>
+                                                                                        </label>
+
+                                                                                        <select name="day_of_week" class="form-select" required>
+
+                                                                                            @foreach([
+                                                                                                    'monday',
+                                                                                                    'tuesday',
+                                                                                                    'wednesday',
+                                                                                                    'thursday',
+                                                                                                    'friday',
+                                                                                                    'saturday',
+                                                                                                    'sunday'
+                                                                                                ] as $day)
+
+                                                                                                <option value="{{ $day }}" {{ strtolower($schedule->day_of_week) == $day ? 'selected' : '' }}>
+
+                                                                                                    {{ ucfirst($day) }}
+
+                                                                                                </option>
+
+                                                                                            @endforeach
+
+                                                                                        </select>
+
+                                                                                    </div>
+
+                                                                                    {{-- Slot Duration --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label">
+                                                                                            Slot Duration <span class="text-danger">*</span>
+                                                                                        </label>
+
+                                                                                        <select name="slot_duration" class="form-select" required>
+
+                                                                                            @foreach([15, 20, 30, 45, 60] as $duration)
+
+                                                                                                <option value="{{ $duration }}" {{ $schedule->slot_duration == $duration ? 'selected' : '' }}>
+
+                                                                                                    {{ $duration }} Minutes
+
+                                                                                                </option>
+
+                                                                                            @endforeach
+
+                                                                                        </select>
+
+                                                                                    </div>
+
+                                                                                    {{-- Available From --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label">
+                                                                                            Available From <span class="text-danger">*</span>
+                                                                                        </label>
+
+                                                                                        <input type="time" name="available_from" class="form-control"
+                                                                                            value="{{ $schedule->available_from
+                                            ? \Carbon\Carbon::parse($schedule->available_from)->format('H:i')
+                                            : '' }}" required>
+
+                                                                                    </div>
+
+                                                                                    {{-- Available To --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label">
+                                                                                            Available To <span class="text-danger">*</span>
+                                                                                        </label>
+
+                                                                                        <input type="time" name="available_to" class="form-control"
+                                                                                            value="{{ $schedule->available_to
+                                            ? \Carbon\Carbon::parse($schedule->available_to)->format('H:i')
+                                            : '' }}" required>
+
+                                                                                    </div>
+
+                                                                                    {{-- Consultation Type --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label">
+                                                                                            Consultation Type
+                                                                                        </label>
+
+                                                                                        <select name="consultation_type" class="form-select">
+
+                                                                                            <option value="">
+                                                                                                Select Type
+                                                                                            </option>
+
+                                                                                            <option value="in_clinic" {{ $schedule->consultation_type == 'in_clinic' ? 'selected' : '' }}>
+                                                                                                In Clinic
+                                                                                            </option>
+
+                                                                                            <option value="online" {{ $schedule->consultation_type == 'online' ? 'selected' : '' }}>
+                                                                                                Online
+                                                                                            </option>
+
+                                                                                            <option value="home_visit" {{ $schedule->consultation_type == 'home_visit' ? 'selected' : '' }}>
+                                                                                                Home Visit
+                                                                                            </option>
+
+                                                                                        </select>
+
+                                                                                    </div>
+
+                                                                                    {{-- Status --}}
+                                                                                    <div class="col-md-6 mb-3">
+
+                                                                                        <label class="form-label d-block">
+                                                                                            Status
+                                                                                        </label>
+
+                                                                                        <div class="form-check form-switch mt-2">
+
+                                                                                            <input type="checkbox" name="status" value="1"
+                                                                                                class="form-check-input" id="status{{ $schedule->id }}"
+                                                                                                {{ $schedule->status ? 'checked' : '' }}>
+
+                                                                                            <label class="form-check-label"
+                                                                                                for="status{{ $schedule->id }}">
+
+                                                                                                Active
+
+                                                                                            </label>
+
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                            <div class="modal-footer">
+
+                                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                                                                                    Cancel
+
+                                                                                </button>
+
+                                                                                <button type="submit" class="btn btn-primary">
+
+                                                                                    <i class="ti ti-device-floppy me-1"></i>
+
+                                                                                    Update Schedule
+
+                                                                                </button>
+
+                                                                            </div>
+
+                                                                        </form>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                        @endforeach
+
+                                    </div>
+
+                                @else
+
+                                    <div class="text-center py-4">
+
+                                        <i data-feather="calendar" style="width:40px;height:40px;"></i>
+
+                                        <p class="text-muted mt-2 mb-3">
+                                            No schedule configured for this doctor.
+                                        </p>
+
+                                        {{-- Add Schedule when empty --}}
+                                        {{-- <a href="{{ route('hospital.doctor-schedules.create', [
+                                                        'doctor_id' => $doctor->id
+                                                    ]) }}" class="btn btn-primary btn-sm">
+
+                                            <i class="ti ti-plus me-1"></i>
+                                            Add Schedule
+
+                                        </a> --}}
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
 
                     <!-- Personal Information -->
                     <div class="card">
@@ -767,6 +1161,197 @@
                     Back to Doctors
 
                 </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Add Doctor Schedule Modal -->
+    <div class="modal fade" id="addDoctorScheduleModal" tabindex="-1" aria-labelledby="addDoctorScheduleModalLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div>
+                        <h5 class="modal-title" id="addDoctorScheduleModalLabel">
+                            Add Doctor Schedule
+                        </h5>
+
+                        <small class="text-muted">
+                            Add availability for {{ $doctor->doctor_name }}
+                        </small>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+
+                </div>
+
+                <form action="{{ route('admin.doctor-schedules.store') }}" method="POST">
+                @csrf
+
+                    <div class="modal-body">
+
+                        <input type="hidden" name="doctor_id" value="{{ $doctor->id }}">
+
+                        <div class="row">
+
+                            <!-- Doctor -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Doctor
+                                </label>
+
+                                <input type="text" class="form-control" value="{{ $doctor->doctor_name }}" readonly>
+
+                            </div>
+
+                            <!-- Day -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Day of Week <span class="text-danger">*</span>
+                                </label>
+
+                                <select name="day_of_week" class="form-select" required>
+
+                                    <option value="">Select Day</option>
+
+                                    <option value="monday">Monday</option>
+                                    <option value="tuesday">Tuesday</option>
+                                    <option value="wednesday">Wednesday</option>
+                                    <option value="thursday">Thursday</option>
+                                    <option value="friday">Friday</option>
+                                    <option value="saturday">Saturday</option>
+                                    <option value="sunday">Sunday</option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Available From -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Available From <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="time" name="available_from" class="form-control" required>
+
+                            </div>
+
+                            <!-- Available To -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Available To <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="time" name="available_to" class="form-control" required>
+
+                            </div>
+
+                            <!-- Slot Duration -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Slot Duration <span class="text-danger">*</span>
+                                </label>
+
+                                <select name="slot_duration" class="form-select" required>
+
+                                    <option value="">Select Duration</option>
+                                    <option value="15">15 Minutes</option>
+                                    <option value="20">20 Minutes</option>
+                                    <option value="30">30 Minutes</option>
+                                    <option value="45">45 Minutes</option>
+                                    <option value="60">60 Minutes</option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Consultation Type -->
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Consultation Type
+                                </label>
+
+                                <select name="consultation_type" class="form-select">
+
+                                    <option value="">
+                                        Select Consultation Type
+                                    </option>
+
+                                    <option value="in_clinic">
+                                        In Clinic
+                                    </option>
+
+                                    <option value="online">
+                                        Online
+                                    </option>
+
+                                    <option value="home_visit">
+                                        Home Visit
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-12">
+
+                                <div class="form-check form-switch">
+
+                                    <input type="checkbox" class="form-check-input" name="status" value="1"
+                                        id="scheduleStatus" checked>
+
+                                    <label class="form-check-label" for="scheduleStatus">
+                                        Active
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+
+                                <div id="scheduleError" class="alert alert-danger d-none">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit" class="btn btn-primary" id="saveScheduleBtn">
+
+                            <i data-feather="save" class="me-1"></i>
+
+                            Save Schedule
+
+                        </button>
+
+                    </div>
+
+                </form>
 
             </div>
 
