@@ -254,6 +254,92 @@
         </div>
 
     </div>
+     {{-- =========================================
+         AGE
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Age
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->age ? $customer->age . ' Years' : '—' }}
+        </div>
+    </div>
+    {{-- =========================================
+         BLOOD GROUP
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Blood Group
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->blood_group ?? '—' }}
+        </div>
+    </div>
+
+    {{-- =========================================
+         HEIGHT
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Height
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->height ? $customer->height . ' cm' : '—' }}
+        </div>
+    </div>
+
+
+    {{-- =========================================
+         WEIGHT
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Weight
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->weight ? $customer->weight . ' kg' : '—' }}
+        </div>
+    </div>
+
+     {{-- =========================================
+         OCCUPATION
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Occupation
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->occupation ?? '—' }}
+        </div>
+    </div>
+
+    {{-- =========================================
+         ADDRESS
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Address
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->address ?? '—' }}
+        </div>
+    </div>
+
+
+
 
 
     {{-- =========================================
@@ -322,6 +408,36 @@
         </div>
 
     </div>
+
+    {{-- =========================================
+         EMERGENCY CONTACT NAME
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Emergency Contact Name
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->emergency_contact_name ?? '—' }}
+        </div>
+    </div>
+
+    {{-- =========================================
+         EMERGENCY CONTACT MOBILE
+    ========================================== --}}
+
+    <div class="row profile-info-item">
+        <div class="col-md-4 col-5 profile-label">
+            Emergency Contact Mobile
+        </div>
+
+        <div class="col-md-8 col-7 profile-value">
+            {{ $customer->emergency_contact_mobile ?? '—' }}
+        </div>
+    </div>
+
+    
 
 
     {{-- =========================================

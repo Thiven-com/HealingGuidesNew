@@ -366,6 +366,98 @@
                                value="{{ old('dob', $customer->dob) }}">
 
                     </div>
+                     <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Age
+        </label>
+
+        <input type="number"
+               name="age"
+               class="form-control"
+               value="{{ old('age', $customer->age) }}"
+               placeholder="Enter age"
+               min="0"
+               max="120">
+
+    </div>
+
+    {{-- Blood Group --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Blood Group
+        </label>
+
+        <select name="blood_group" class="form-select">
+
+            <option value="">Select Blood Group</option>
+
+            @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bloodGroup)
+
+                <option value="{{ $bloodGroup }}"
+                    {{ old('blood_group', $customer->blood_group) == $bloodGroup ? 'selected' : '' }}>
+                    {{ $bloodGroup }}
+                </option>
+
+            @endforeach
+
+        </select>
+
+    </div>
+
+    {{-- Height --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Height (cm)
+        </label>
+
+        <input type="number"
+               name="height"
+               class="form-control"
+               value="{{ old('height', $customer->height) }}"
+               placeholder="Enter height"
+               step="0.01"
+               min="0">
+
+    </div>
+
+    {{-- Weight --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Weight (kg)
+        </label>
+
+        <input type="number"
+               name="weight"
+               class="form-control"
+               value="{{ old('weight', $customer->weight) }}"
+               placeholder="Enter weight"
+               step="0.01"
+               min="0">
+
+    </div>
+
+    {{-- Occupation --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Occupation
+        </label>
+
+        <input type="text"
+               name="occupation"
+               class="form-control"
+               value="{{ old('occupation', $customer->occupation) }}"
+               placeholder="Enter occupation">
+
+    </div>
 
                 </div>
 
@@ -378,6 +470,21 @@
 
 
                 <div class="row">
+
+                    {{-- Address --}}
+
+    <div class="col-md-12 mb-3">
+
+        <label class="form-label">
+            Address
+        </label>
+
+        <textarea name="address"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Enter full address">{{ old('address', $customer->address) }}</textarea>
+
+    </div>
 
                     {{-- City --}}
 
@@ -447,6 +554,48 @@
                     </div>
 
                 </div>
+                {{-- ================= EMERGENCY CONTACT ================= --}}
+
+<div class="section-title mt-4">
+    Emergency Contact
+</div>
+
+<div class="row">
+
+    {{-- Emergency Contact Name --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Emergency Contact Name
+        </label>
+
+        <input type="text"
+               name="emergency_contact_name"
+               class="form-control"
+               value="{{ old('emergency_contact_name', $customer->emergency_contact_name) }}"
+               placeholder="Enter emergency contact name">
+
+    </div>
+
+
+    {{-- Emergency Contact Mobile --}}
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Emergency Contact Number
+        </label>
+
+        <input type="text"
+               name="emergency_contact_mobile"
+               class="form-control"
+               value="{{ old('emergency_contact_mobile', $customer->emergency_contact_mobile) }}"
+               placeholder="Enter emergency contact number">
+
+    </div>
+
+</div>
 
 
                 {{-- ================= STATUS ================= --}}

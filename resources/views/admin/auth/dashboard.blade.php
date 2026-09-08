@@ -847,11 +847,11 @@
 
                                 <div class="col-lg-3 col-md-4 col-6">
 
-                                    <a href="{{ route('admin.patient-medical-reports.index') }}" class="quick-action qa-blue">
+                                    <a href="{{ route('admin.customers.index') }}" class="quick-action qa-blue">
 
                                         <i class="ti ti-user-plus"></i>
 
-                                        Patient
+                                        Customers
 
                                     </a>
 
