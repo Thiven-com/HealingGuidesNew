@@ -140,6 +140,25 @@
 
                 </li>
 
+                <li class="submenu-open">
+
+                    <h6 class="submenu-hdr">
+                        Patients
+                    </h6>
+
+                    <ul>
+
+                        <li class="{{ request()->routeIs('hospital.patients.*') ? 'active' : '' }}">
+                            <a href="{{ route('hospital.patients.all') }}">
+                                <i class="ti ti-users fs-16 me-2"></i>
+                                <span>Patients</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+
 
                 {{-- Pharmacy --}}
                 <li class="submenu-open">

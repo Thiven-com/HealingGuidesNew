@@ -14,6 +14,7 @@ use App\Http\Controllers\Hospital\AmbulanceBookingController;
 use App\Http\Controllers\Hospital\DoctorScheduleController;
 use App\Http\Controllers\Hospital\MedicineController;
 use App\Http\Controllers\Hospital\MedicineOrderController;
+use App\Http\Controllers\Hospital\PatientController;
 use App\Http\Controllers\Hospital\ProfileController;
 
 
@@ -209,6 +210,9 @@ Route::name('hospital.')
             Route::get('doctor-schedules/{doctorSchedule}/edit', [DoctorScheduleController::class, 'edit'])->name('doctor-schedules.edit');
 
             Route::put('doctor-schedules/{doctorSchedule}', [DoctorScheduleController::class, 'update'])->name('doctor-schedules.update');
+            Route::get('patients', [PatientController::class, 'index'])->name('patients.all');
+            Route::get('patients/{type}/{id}', [PatientController::class, 'show'])->name('patients.show');
+
 
             /*
             |--------------------------------------------------------------------------
