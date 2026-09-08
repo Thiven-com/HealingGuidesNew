@@ -186,7 +186,7 @@
 
 
                             {{-- Doctor --}}
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
 
                                 <label class="form-label">
                                     Doctor
@@ -227,11 +227,11 @@
 
                                 @enderror
 
-                            </div>
+                            </div> --}}
 
 
                             {{-- Appointment --}}
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
 
                                 <label class="form-label">
                                     Appointment
@@ -272,7 +272,7 @@
 
                                 @enderror
 
-                            </div>
+                            </div> --}}
 
 
                             {{-- Report Type --}}

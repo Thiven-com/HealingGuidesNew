@@ -108,7 +108,7 @@
 
                                             </a>
 
-                                            <form action="{{ route('admin.hospitals.destroy', $hospital) }}" method="POST"
+                                            {{-- <form action="{{ route('admin.hospitals.destroy', $hospital) }}" method="POST"
                                                 class="d-inline">
 
                                                 @csrf
@@ -121,7 +121,7 @@
 
                                                 </button>
 
-                                            </form>
+                                            </form> --}}
 
                                         </td>
 

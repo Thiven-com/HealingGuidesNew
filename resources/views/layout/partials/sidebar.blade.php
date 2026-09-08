@@ -2,9 +2,13 @@
 <div class="sidebar" id="sidebar">
         <!-- Logo -->
         <div class="sidebar-logo active">
-                <a href="{{ url('admin/dashboard') }}" class="logo logo-normal d-flex align-items-center">
-                        <img src="{{ asset($site->site_logo) }}" alt="Logo">
-                        {{-- <img src="{{ asset('website/images/vishwa.png') }}" alt="Vishwa" style="height:50px;"> --}}
+                <a href="{{ url('admin/dashboard') }}" class="logo logo-normal d-flex align-items-center"
+                        style="width:150px; height:50px; display:flex; align-items:center;">
+
+                        <img src="{{ asset($site->site_logo) }}" alt="Logo"
+                                style="max-width:100%; max-height:45px; width:auto; height:auto; object-fit:contain; display:block;">
+                </a>
+                {{-- <img src="{{ asset('website/images/vishwa.png') }}" alt="Vishwa" style="height:50px;"> --}}
                 </a>
                 <a href="{{url('admin/dashboard')}}" class="logo logo-white">
                         <img src="{{ asset($site->site_logo) }}" alt="Img">

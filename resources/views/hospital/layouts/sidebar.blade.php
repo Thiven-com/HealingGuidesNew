@@ -3,35 +3,28 @@
 
     <div class="sidebar-logo active">
 
-        <a href="{{ route('hospital.dashboard') }}"
-           class="logo logo-normal d-flex align-items-center justify-content-center w-100">
+        <a href="{{ url('admin/dashboard') }}" class="logo logo-normal d-flex align-items-center"
+            style="width:150px; height:50px; display:flex; align-items:center;">
 
-            <img src="{{ asset($site->site_logo) }}"
-                 alt="Logo">
+            <img src="{{ asset($site->site_logo) }}" alt="Logo"
+                style="max-width:100%; max-height:45px; width:auto; height:auto; object-fit:contain; display:block;">
+        </a>
+
+        <a href="{{ route('hospital.dashboard') }}" class="logo logo-white">
+
+            <img src="{{ asset($site->site_logo) }}" alt="Logo">
 
         </a>
 
-        <a href="{{ route('hospital.dashboard') }}"
-           class="logo logo-white">
+        <a href="{{ route('hospital.dashboard') }}" class="logo-small">
 
-            <img src="{{ asset($site->site_logo) }}"
-                 alt="Logo">
+            <img src="{{ asset($site->site_logo) }}" alt="Logo">
 
         </a>
 
-        <a href="{{ route('hospital.dashboard') }}"
-           class="logo-small">
+        <a id="toggle_btn" href="javascript:void(0);">
 
-            <img src="{{ asset($site->site_logo) }}"
-                 alt="Logo">
-
-        </a>
-
-        <a id="toggle_btn"
-           href="javascript:void(0);">
-
-            <i data-feather="chevrons-left"
-               class="feather-16"></i>
+            <i data-feather="chevrons-left" class="feather-16"></i>
 
         </a>
 
@@ -40,8 +33,7 @@
 
     <div class="sidebar-inner slimscroll">
 
-        <div id="sidebar-menu"
-             class="sidebar-menu">
+        <div id="sidebar-menu" class="sidebar-menu">
 
             <ul>
 

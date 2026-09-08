@@ -420,7 +420,7 @@
 
 
                                                     {{-- Delete --}}
-                                                    <a href="javascript:void(0)"
+                                                    {{-- <a href="javascript:void(0)"
                                                        class="dropdown-item text-danger"
                                                        data-bs-toggle="modal"
                                                        data-bs-target="#deleteModal{{ $doctor->id }}">
@@ -429,7 +429,7 @@
 
                                                         Delete
 
-                                                    </a>
+                                                    </a> --}}
 
                                                 </div>
 

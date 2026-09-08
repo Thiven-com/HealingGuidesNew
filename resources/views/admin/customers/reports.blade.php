@@ -19,8 +19,8 @@
 
     <style>
         /* =========================================
-               REPORTS
-            ========================================= */
+                   REPORTS
+                ========================================= */
 
         .reports-card {
             border-radius: 16px;
@@ -455,6 +455,9 @@
                                         <th>Date</th>
 
                                         <th>Status</th>
+                                        <th>
+                                            File
+                                        </th>
 
                                     </tr>
 
@@ -482,20 +485,20 @@
 
                                             <td class="fw-semibold">
 
-    @php
-        $familyMember = $familyMembers->firstWhere(
-            'id',
-            $report->family_member_id
-        );
-    @endphp
+                                                @php
+                                                    $familyMember = $familyMembers->firstWhere(
+                                                        'id',
+                                                        $report->family_member_id
+                                                    );
+                                                @endphp
 
-    @if($familyMember)
-        {{ $familyMember->name }}
-    @else
-        {{ $customer->name ?? 'Customer' }}
-    @endif
+                                                @if($familyMember)
+                                                    {{ $familyMember->name }}
+                                                @else
+                                                    {{ $customer->name ?? 'Customer' }}
+                                                @endif
 
-</td>
+                                            </td>
 
 
                                             <td>
@@ -547,6 +550,31 @@
                                                 @endif
 
                                             </td>
+                                            {{-- File --}}
+                                        <td>
+
+                                            @if($report->report_file)
+
+                                                <a href="{{ asset(
+                                                    'storage/' . $report->report_file
+                                                ) }}"
+                                                   target="_blank"
+                                                   class="btn btn-sm btn-outline-primary">
+
+                                                    <i class="ti ti-file"></i>
+                                                    View
+
+                                                </a>
+
+                                            @else
+
+                                                <span class="text-muted">
+                                                    No File
+                                                </span>
+
+                                            @endif
+
+                                        </td>
 
                                         </tr>
 

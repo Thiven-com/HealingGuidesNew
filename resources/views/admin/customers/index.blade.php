@@ -427,7 +427,7 @@
 
                                                 <!-- Delete -->
 
-                                                <form action="{{ route('admin.customers.destroy', $customer) }}" method="POST"
+                                                {{-- <form action="{{ route('admin.customers.destroy', $customer) }}" method="POST"
                                                     class="d-inline">
 
                                                     @csrf
@@ -441,7 +441,7 @@
 
                                                     </button>
 
-                                                </form>
+                                                </form> --}}
 
                                             </div>
 
