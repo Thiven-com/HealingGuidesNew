@@ -146,7 +146,7 @@
 
                             {{-- Hospital --}}
 
-                            <div class="col-md-4 mb-3 mb-md-0">
+                            {{-- <div class="col-md-4 mb-3 mb-md-0">
 
                                 <label class="form-label">
                                     Hospital ID
@@ -155,7 +155,7 @@
                                 <input type="number" name="hospital_id" class="form-control"
                                     value="{{ request('hospital_id', $hospitalId) }}" placeholder="Enter hospital ID">
 
-                            </div>
+                            </div> --}}
 
 
                             {{-- Button --}}

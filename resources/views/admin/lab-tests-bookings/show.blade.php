@@ -255,7 +255,7 @@
                                         </td>
 
                                         <td>
-                                            {{ $item->labTest->name ?? '-' }}
+                                            {{ $item->labTest?->test_name ?? '-' }}
                                         </td>
 
                                         <td>
