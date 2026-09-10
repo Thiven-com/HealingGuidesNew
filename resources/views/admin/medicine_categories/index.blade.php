@@ -5,7 +5,7 @@
 @section('content')
 
     <style>
-         .table-responsive {
+        .table-responsive {
             overflow-x: auto !important;
             overflow-y: visible !important;
         }
@@ -50,17 +50,10 @@
 
                     <li>
 
-                        <a
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Refresh"
-                            href="{{ route('admin.medicine-categories.index') }}"
-                        >
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh"
+                            href="{{ route('admin.medicine-categories.index') }}">
 
-                            <i
-                                data-feather="rotate-ccw"
-                                class="feather-rotate-ccw"
-                            ></i>
+                            <i data-feather="rotate-ccw" class="feather-rotate-ccw"></i>
 
                         </a>
 
@@ -71,17 +64,9 @@
 
                     <li>
 
-                        <a
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Collapse"
-                            id="collapse-header"
-                        >
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header">
 
-                            <i
-                                data-feather="chevron-up"
-                                class="feather-chevron-up"
-                            ></i>
+                            <i data-feather="chevron-up" class="feather-chevron-up"></i>
 
                         </a>
 
@@ -94,15 +79,9 @@
 
                 <div class="page-btn">
 
-                    <a
-                        href="{{ route('admin.medicine-categories.create') }}"
-                        class="btn btn-added"
-                    >
+                    <a href="{{ route('admin.medicine-categories.create') }}" class="btn btn-added">
 
-                        <i
-                            data-feather="plus-circle"
-                            class="me-2"
-                        ></i>
+                        <i data-feather="plus-circle" class="me-2"></i>
 
                         Add Medicine Category
 
@@ -122,11 +101,7 @@
 
                     {{ session('success') }}
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -141,11 +116,7 @@
 
                     {{ session('error') }}
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -157,6 +128,71 @@
             <div class="card table-list-card">
 
                 <div class="card-body">
+                    {{-- Filters --}}
+
+                    <form method="GET" action="{{ route('admin.medicine-categories.index') }}">
+
+                        <div class="row g-3 align-items-end mb-4">
+
+                            {{-- Search --}}
+                            <div class="col-md-5">
+
+                                <label class="form-label">
+                                    Search
+                                </label>
+
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Category name or description" value="{{ request('search') }}">
+
+                            </div>
+
+                            {{-- Status --}}
+                            <div class="col-md-3">
+
+                                <label class="form-label">
+                                    Status
+                                </label>
+
+                                <select name="status" class="form-select">
+
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- Buttons --}}
+                            <div class="col-md-4 d-flex gap-2">
+
+                                <button type="submit" class="btn btn-primary">
+
+                                    <i class="ti ti-search me-1"></i>
+                                    Filter
+
+                                </button>
+
+                                <a href="{{ route('admin.medicine-categories.index') }}" class="btn btn-secondary">
+
+                                    <i class="ti ti-refresh me-1"></i>
+                                    Reset
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
 
                     <div class="table-responsive">
 
@@ -194,10 +230,7 @@
                                         Status
                                     </th>
 
-                                    <th
-                                        width="100"
-                                        class="text-center"
-                                    >
+                                    <th width="100" class="text-center">
                                         Action
                                     </th>
 
@@ -210,375 +243,321 @@
 
                                 @forelse($categories as $key => $category)
 
-                                    <tr>
+                                                            <tr>
 
-                                        <!-- ID -->
+                                                                <!-- ID -->
 
-                                        <td>
+                                                                <td>
 
-                                            {{ $key + 1 }}
+                                                                    {{ $key + 1 }}
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Image -->
+                                                                <!-- Image -->
 
-                                        <td>
+                                                                <td>
 
-                                            @if($category->image)
+                                                                    @if($category->image)
 
-                                                <img
-                                                    src="{{ asset($category->image) }}"
-                                                    alt="{{ $category->category_name }}"
-                                                    class="img-thumbnail category-image"
-                                                >
+                                                                        <img src="{{ asset($category->image) }}" alt="{{ $category->category_name }}"
+                                                                            class="img-thumbnail category-image">
 
-                                            @else
+                                                                    @else
 
-                                                <img
-                                                    src="{{ asset('assets/img/no-image.png') }}"
-                                                    alt="No Image"
-                                                    class="img-thumbnail category-image"
-                                                >
+                                                                        <img src="{{ asset('assets/img/no-image.png') }}" alt="No Image"
+                                                                            class="img-thumbnail category-image">
 
-                                            @endif
+                                                                    @endif
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Category Name -->
+                                                                <!-- Category Name -->
 
-                                        <td>
+                                                                <td>
 
-                                            <strong>
+                                                                    <strong>
 
-                                                {{ $category->category_name }}
+                                                                        {{ $category->category_name }}
 
-                                            </strong>
+                                                                    </strong>
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Slug -->
+                                                                <!-- Slug -->
 
-                                        <td>
+                                                                <td>
 
-                                            <span class="text-muted">
+                                                                    <span class="text-muted">
 
-                                                {{ $category->slug }}
+                                                                        {{ $category->slug }}
 
-                                            </span>
+                                                                    </span>
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Description -->
+                                                                <!-- Description -->
 
-                                        <td>
+                                                                <td>
 
-                                            @if($category->description)
+                                                                    @if($category->description)
 
-                                                {{ Str::limit(
-                                                    $category->description,
-                                                    60
-                                                ) }}
+                                                                                                    {{ Str::limit(
+                                                                            $category->description,
+                                                                            60
+                                                                        ) }}
 
-                                            @else
+                                                                    @else
 
-                                                <span class="text-muted">
-                                                    -
-                                                </span>
+                                                                        <span class="text-muted">
+                                                                            -
+                                                                        </span>
 
-                                            @endif
+                                                                    @endif
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Sort Order -->
+                                                                <!-- Sort Order -->
 
-                                        <td>
+                                                                <td>
 
-                                            <span class="badge bg-light text-dark">
+                                                                    <span class="badge bg-light text-dark">
 
-                                                {{ $category->sort_order ?? 0 }}
+                                                                        {{ $category->sort_order ?? 0 }}
 
-                                            </span>
+                                                                    </span>
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Status -->
+                                                                <!-- Status -->
 
-                                        <td>
+                                                                <td>
 
-                                            @if($category->status)
+                                                                    @if($category->status)
 
-                                                <span class="badge bg-success">
+                                                                        <span class="badge bg-success">
 
-                                                    Active
+                                                                            Active
 
-                                                </span>
+                                                                        </span>
 
-                                            @else
+                                                                    @else
 
-                                                <span class="badge bg-danger">
+                                                                        <span class="badge bg-danger">
 
-                                                    Inactive
+                                                                            Inactive
 
-                                                </span>
+                                                                        </span>
 
-                                            @endif
+                                                                    @endif
 
-                                        </td>
+                                                                </td>
 
 
-                                        <!-- Actions -->
+                                                                <!-- Actions -->
 
-                                        <td class="text-center">
+                                                                <td class="text-center">
 
-                                            <div class="dropdown">
+                                                                    <div class="dropdown">
 
-                                                <a
-                                                    href="javascript:void(0);"
-                                                    class="btn btn-sm btn-light"
-                                                    data-bs-toggle="dropdown"
-                                                >
+                                                                        <a href="javascript:void(0);" class="btn btn-sm btn-light"
+                                                                            data-bs-toggle="dropdown">
 
-                                                    <i class="ti ti-dots-vertical"></i>
+                                                                            <i class="ti ti-dots-vertical"></i>
 
-                                                </a>
+                                                                        </a>
 
 
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end"
-                                                >
+                                                                        <div class="dropdown-menu dropdown-menu-end">
 
-                                                    <!-- Edit -->
+                                                                            <!-- Edit -->
 
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="{{ route(
-                                                            'admin.medicine-categories.edit',
-                                                            $category->id
-                                                        ) }}"
-                                                    >
+                                                                            <a class="dropdown-item" href="{{ route(
+                                        'admin.medicine-categories.edit',
+                                        $category->id
+                                    ) }}">
 
-                                                        <i class="ti ti-edit me-2"></i>
+                                                                                <i class="ti ti-edit me-2"></i>
 
-                                                        Edit
+                                                                                Edit
 
-                                                    </a>
+                                                                            </a>
 
 
-                                                    <!-- Status -->
+                                                                            <!-- Status -->
 
-                                                    <form
-                                                        action="{{ route(
-                                                            'admin.medicine-categories.status',
-                                                            $category->id
-                                                        ) }}"
-                                                        method="POST"
-                                                    >
+                                                                            <form action="{{ route(
+                                        'admin.medicine-categories.status',
+                                        $category->id
+                                    ) }}" method="POST">
 
-                                                        @csrf
+                                                                                @csrf
 
-                                                        <button
-                                                            type="submit"
-                                                            class="dropdown-item"
-                                                        >
+                                                                                <button type="submit" class="dropdown-item">
 
-                                                            @if($category->status)
+                                                                                    @if($category->status)
 
-                                                                <i class="ti ti-lock me-2"></i>
+                                                                                        <i class="ti ti-lock me-2"></i>
 
-                                                                Inactive
+                                                                                        Inactive
 
-                                                            @else
+                                                                                    @else
 
-                                                                <i class="ti ti-lock-open me-2"></i>
+                                                                                        <i class="ti ti-lock-open me-2"></i>
 
-                                                                Active
+                                                                                        Active
 
-                                                            @endif
+                                                                                    @endif
 
-                                                        </button>
+                                                                                </button>
 
-                                                    </form>
+                                                                            </form>
 
 
-                                                    <!-- Delete -->
+                                                                            <!-- Delete -->
 
-                                                    <a
-                                                        href="javascript:void(0)"
-                                                        class="dropdown-item text-danger"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal{{ $category->id }}"
-                                                    >
+                                                                            <a href="javascript:void(0)" class="dropdown-item text-danger"
+                                                                                data-bs-toggle="modal" data-bs-target="#deleteModal{{ $category->id }}">
 
-                                                        <i class="ti ti-trash me-2"></i>
+                                                                                <i class="ti ti-trash me-2"></i>
 
-                                                        Delete
+                                                                                Delete
 
-                                                    </a>
+                                                                            </a>
 
-                                                </div>
+                                                                        </div>
 
-                                            </div>
+                                                                    </div>
 
-                                        </td>
+                                                                </td>
 
-                                    </tr>
+                                                            </tr>
 
 
-                                    <!-- Delete Modal -->
+                                                            <!-- Delete Modal -->
 
-                                    <div
-                                        class="modal fade"
-                                        id="deleteModal{{ $category->id }}"
-                                        tabindex="-1"
-                                    >
+                                                            <div class="modal fade" id="deleteModal{{ $category->id }}" tabindex="-1">
 
-                                        <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-dialog modal-dialog-centered">
 
-                                            <div class="modal-content">
+                                                                    <div class="modal-content">
 
-                                                <div class="modal-header">
+                                                                        <div class="modal-header">
 
-                                                    <h5 class="modal-title">
+                                                                            <h5 class="modal-title">
 
-                                                        Delete Medicine Category
+                                                                                Delete Medicine Category
 
-                                                    </h5>
+                                                                            </h5>
 
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                    ></button>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
-                                                </div>
+                                                                        </div>
 
 
-                                                <div class="modal-body">
+                                                                        <div class="modal-body">
 
-                                                    Are you sure you want to delete
+                                                                            Are you sure you want to delete
 
-                                                    <strong>
+                                                                            <strong>
 
-                                                        {{ $category->category_name }}
+                                                                                {{ $category->category_name }}
 
-                                                    </strong>?
+                                                                            </strong>?
 
-                                                    <div class="alert alert-warning mt-3 mb-0">
+                                                                            <div class="alert alert-warning mt-3 mb-0">
 
-                                                        <i class="ti ti-alert-triangle me-1"></i>
+                                                                                <i class="ti ti-alert-triangle me-1"></i>
 
-                                                        This category cannot be deleted
-                                                        if medicines are assigned to it.
+                                                                                This category cannot be deleted
+                                                                                if medicines are assigned to it.
 
-                                                    </div>
+                                                                            </div>
 
-                                                </div>
+                                                                        </div>
 
 
-                                                <div class="modal-footer">
+                                                                        <div class="modal-footer">
 
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal"
-                                                    >
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 
-                                                        Cancel
+                                                                                Cancel
 
-                                                    </button>
+                                                                            </button>
 
 
-                                                    <form
-                                                        action="{{ route(
-                                                            'admin.medicine-categories.destroy',
-                                                            $category->id
-                                                        ) }}"
-                                                        method="POST"
-                                                    >
+                                                                            <form action="{{ route(
+                                        'admin.medicine-categories.destroy',
+                                        $category->id
+                                    ) }}" method="POST">
 
-                                                        @csrf
+                                                                                @csrf
 
-                                                        @method('DELETE')
+                                                                                @method('DELETE')
 
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-danger"
-                                                        >
+                                                                                <button type="submit" class="btn btn-danger">
 
-                                                            <i class="ti ti-trash me-1"></i>
+                                                                                    <i class="ti ti-trash me-1"></i>
 
-                                                            Delete
+                                                                                    Delete
 
-                                                        </button>
+                                                                                </button>
 
-                                                    </form>
+                                                                            </form>
 
-                                                </div>
+                                                                        </div>
 
-                                            </div>
+                                                                    </div>
 
-                                        </div>
+                                                                </div>
 
-                                    </div>
+                                                            </div>
 
                                 @empty
 
-                                    <tr>
+                                                            <tr>
 
-                                        <td
-                                            colspan="8"
-                                            class="text-center py-5"
-                                        >
+                                                                <td colspan="8" class="text-center py-5">
 
-                                            <div class="mb-3">
+                                                                    <div class="mb-3">
 
-                                                <i
-                                                    class="ti ti-pill-off"
-                                                    style="
-                                                        font-size: 50px;
-                                                        color: #adb5bd;
-                                                    "
-                                                ></i>
+                                                                        <i class="ti ti-pill-off" style="
+                                                                                        font-size: 50px;
+                                                                                        color: #adb5bd;
+                                                                                    "></i>
 
-                                            </div>
+                                                                    </div>
 
-                                            <h6>
+                                                                    <h6>
 
-                                                No Medicine Categories Found
+                                                                        No Medicine Categories Found
 
-                                            </h6>
+                                                                    </h6>
 
-                                            <p class="text-muted">
+                                                                    <p class="text-muted">
 
-                                                Add your first medicine category.
+                                                                        Add your first medicine category.
 
-                                            </p>
+                                                                    </p>
 
-                                            <a
-                                                href="{{ route(
-                                                    'admin.medicine-categories.create'
-                                                ) }}"
-                                                class="btn btn-added btn-sm"
-                                            >
+                                                                    <a href="{{ route(
+                                        'admin.medicine-categories.create'
+                                    ) }}" class="btn btn-added btn-sm">
 
-                                                <i
-                                                    data-feather="plus-circle"
-                                                    class="me-1"
-                                                ></i>
+                                                                        <i data-feather="plus-circle" class="me-1"></i>
 
-                                                Add Category
+                                                                        Add Category
 
-                                            </a>
+                                                                    </a>
 
-                                        </td>
+                                                                </td>
 
-                                    </tr>
+                                                            </tr>
 
                                 @endforelse
 
@@ -598,70 +577,70 @@
     </div>
 
 
-<script>
+    <script>
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        /*
-        |--------------------------------------------------------------------------
-        | DataTable
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | DataTable
+            |--------------------------------------------------------------------------
+            */
 
-        if ($('.datanew').length) {
+            if ($('.datanew').length) {
 
-            $('.datanew').DataTable({
+                $('.datanew').DataTable({
 
-                responsive: true,
+                    responsive: true,
 
-                autoWidth: false,
+                    autoWidth: false,
 
-                ordering: true,
+                    ordering: true,
 
-                pageLength: 10,
+                    pageLength: 10,
 
-                lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
 
-                columnDefs: [
+                    columnDefs: [
 
-                    {
-                        targets: [1, 7],
-                        orderable: false
+                        {
+                            targets: [1, 7],
+                            orderable: false
+                        }
+
+                    ],
+
+                    language: {
+
+                        search: "",
+
+                        searchPlaceholder:
+                            "Search Medicine Categories..."
+
                     }
 
-                ],
+                });
 
-                language: {
-
-                    search: "",
-
-                    searchPlaceholder:
-                        "Search Medicine Categories..."
-
-                }
-
-            });
-
-        }
+            }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Feather Icons
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | Feather Icons
+            |--------------------------------------------------------------------------
+            */
 
-        if (typeof feather !== "undefined") {
+            if (typeof feather !== "undefined") {
 
-            feather.replace();
+                feather.replace();
 
-        }
+            }
 
-    });
+        });
 
-</script>
+    </script>
 
 @endsection

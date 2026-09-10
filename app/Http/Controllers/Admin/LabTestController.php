@@ -13,11 +13,62 @@ class LabTestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $labTests = LabTest::latest()->get();
+        $labTests = LabTest::query();
 
-        return view('admin.lab-tests.index', compact('labTests'));
+        // Search
+        if ($request->filled('search')) {
+
+            $search = trim($request->search);
+
+            $labTests->where(function ($query) use ($search) {
+
+                $query->where('test_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('test_code', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sample_type', 'LIKE', '%' . $search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $search . '%');
+
+            });
+        }
+
+        // Fasting Required
+        if ($request->filled('fasting_required')) {
+
+            $labTests->where(
+                'fasting_required',
+                $request->fasting_required
+            );
+        }
+
+        // Home Collection
+        if ($request->filled('home_collection')) {
+
+            $labTests->where(
+                'home_collection',
+                $request->home_collection
+            );
+        }
+
+        // Status
+        if ($request->filled('status')) {
+
+            $labTests->where(
+                'status',
+                $request->status
+            );
+        }
+
+        // Pagination
+        $labTests = $labTests
+            ->latest('id')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view(
+            'admin.lab-tests.index',
+            compact('labTests')
+        );
     }
 
     /**

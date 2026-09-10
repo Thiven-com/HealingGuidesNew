@@ -14,12 +14,37 @@ class SpecializationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $specializations = Specialization::latest()->get();
+        $query = Specialization::query();
 
-        return view('admin.specializations.index', compact('specializations'));
+        // Search
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+
+            $query->where(function ($q) use ($search) {
+                $q->where('specialization_name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $specializations = $query
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return view(
+            'admin.specializations.index',
+            compact('specializations')
+        );
     }
+
 
     /**
      * Show the form for creating a new resource.

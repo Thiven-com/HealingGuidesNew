@@ -16,11 +16,48 @@ use Illuminate\Support\Facades\File;
 class HospitalController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $hospitals = Hospital::latest()->paginate(10);
+        $query = Hospital::query();
 
-        return view('admin.hospitals.index', compact('hospitals'));
+        // Hospital Name
+        if ($request->filled('hospital_name')) {
+            $query->where('hospital_name', 'like', '%' . trim($request->hospital_name) . '%');
+        }
+
+        // Hospital Code
+        if ($request->filled('hospital_code')) {
+            $query->where('hospital_code', 'like', '%' . trim($request->hospital_code) . '%');
+        }
+
+        // Hospital Type
+        if ($request->filled('hospital_type')) {
+            $query->where('hospital_type', $request->hospital_type);
+        }
+
+        // Mobile
+        if ($request->filled('mobile')) {
+            $query->where('mobile', 'like', '%' . trim($request->mobile) . '%');
+        }
+
+        // Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $hospitals = $query->latest('id')->get();
+
+        // Get hospital types for dropdown
+        $hospitalTypes = Hospital::whereNotNull('hospital_type')
+            ->where('hospital_type', '!=', '')
+            ->distinct()
+            ->orderBy('hospital_type')
+            ->pluck('hospital_type');
+
+        return view('admin.hospitals.index', compact(
+            'hospitals',
+            'hospitalTypes'
+        ));
     }
 
     public function create()

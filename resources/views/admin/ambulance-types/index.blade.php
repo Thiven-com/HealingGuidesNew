@@ -103,6 +103,75 @@
             <div class="card table-list-card">
 
                 <div class="card-body">
+                    {{-- Filters --}}
+
+        <form method="GET"
+            action="{{ route('admin.ambulance-types.index') }}">
+
+            <div class="row g-3 align-items-end mb-4">
+
+                {{-- Search --}}
+                <div class="col-md-5">
+                    <label class="form-label">
+                        Search
+                    </label>
+
+                    <input type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Ambulance type, code or description"
+                        value="{{ request('search') }}">
+                </div>
+
+                {{-- Status --}}
+                <div class="col-md-3">
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <select name="status" class="form-select">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="1"
+                            {{ request('status') === '1' ? 'selected' : '' }}>
+                            Active
+                        </option>
+
+                        <option value="0"
+                            {{ request('status') === '0' ? 'selected' : '' }}>
+                            Inactive
+                        </option>
+
+                    </select>
+                </div>
+
+                {{-- Buttons --}}
+                <div class="col-md-4 d-flex gap-2">
+
+                    <button type="submit"
+                        class="btn btn-primary">
+
+                        <i class="ti ti-search me-1"></i>
+                        Filter
+
+                    </button>
+
+                    <a href="{{ route('admin.ambulance-types.index') }}"
+                        class="btn btn-secondary">
+
+                        <i class="ti ti-refresh me-1"></i>
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
 
                     <div class="table-responsive">
 

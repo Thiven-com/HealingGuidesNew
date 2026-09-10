@@ -106,6 +106,98 @@
             <div class="card table-list-card">
 
                 <div class="card-body">
+                    {{-- Filters --}}
+
+                    <form method="GET" action="{{ route('admin.diagnostics.index') }}">
+
+                        <div class="row g-3 align-items-end mb-4">
+
+                            {{-- Search --}}
+                            <div class="col-md-5">
+
+                                <label class="form-label">
+                                    Search
+                                </label>
+
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Name, code, registration no, mobile, email or city"
+                                    value="{{ request('search') }}">
+
+                            </div>
+
+                            {{-- Home Collection --}}
+                            <div class="col-md-3">
+
+                                <label class="form-label">
+                                    Home Collection
+                                </label>
+
+                                <select name="home_collection" class="form-select">
+
+                                    <option value="">
+                                        All
+                                    </option>
+
+                                    <option value="1" {{ request('home_collection') === '1' ? 'selected' : '' }}>
+                                        Yes
+                                    </option>
+
+                                    <option value="0" {{ request('home_collection') === '0' ? 'selected' : '' }}>
+                                        No
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- Status --}}
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Status
+                                </label>
+
+                                <select name="status" class="form-select">
+
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- Buttons --}}
+                            <div class="col-md-2 d-flex gap-2">
+
+                                <button type="submit" class="btn btn-primary">
+
+                                    <i class="ti ti-search me-1"></i>
+                                    Filter
+
+                                </button>
+
+                                <a href="{{ route('admin.diagnostics.index') }}" class="btn btn-secondary">
+
+                                    <i class="ti ti-refresh me-1"></i>
+                                    Reset
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
 
                     <div class="table-responsive">
 

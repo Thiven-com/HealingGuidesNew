@@ -11,11 +11,55 @@ use Illuminate\Support\Str;
 
 class DiagnosticController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $diagnostics = Diagnostic::latest()->paginate(15);
+        $diagnostics = Diagnostic::query();
 
-        return view('admin.diagnostics.index', compact('diagnostics'));
+        // Search
+        if ($request->filled('search')) {
+
+            $search = trim($request->search);
+
+            $diagnostics->where(function ($query) use ($search) {
+
+                $query->where('diagnostic_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('diagnostic_code', 'LIKE', '%' . $search . '%')
+                    ->orWhere('registration_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('mobile', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', 'LIKE', '%' . $search . '%')
+                    ->orWhere('city', 'LIKE', '%' . $search . '%');
+
+            });
+        }
+
+        // Home Collection
+        if ($request->filled('home_collection')) {
+
+            $diagnostics->where(
+                'home_collection',
+                $request->home_collection
+            );
+        }
+
+        // Status
+        if ($request->filled('status')) {
+
+            $diagnostics->where(
+                'status',
+                $request->status
+            );
+        }
+
+        // Pagination
+        $diagnostics = $diagnostics
+            ->latest('id')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view(
+            'admin.diagnostics.index',
+            compact('diagnostics')
+        );
     }
 
     public function create()

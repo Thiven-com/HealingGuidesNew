@@ -37,33 +37,20 @@ class MedicineController extends Controller
 
             $medicines->where(function ($query) use ($search) {
 
-                $query->where(
-                    'medicine_name',
-                    'LIKE',
-                    '%' . $search . '%'
-                )
-                    ->orWhere(
-                        'medicine_code',
-                        'LIKE',
-                        '%' . $search . '%'
-                    )
-                    ->orWhere(
-                        'generic_name',
-                        'LIKE',
-                        '%' . $search . '%'
-                    )
-                    ->orWhere(
-                        'brand_name',
-                        'LIKE',
-                        '%' . $search . '%'
-                    )
-                    ->orWhere(
-                        'manufacturer',
-                        'LIKE',
-                        '%' . $search . '%'
-                    );
+                $query->where('medicine_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('medicine_code', 'LIKE', '%' . $search . '%')
+                    ->orWhere('generic_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('brand_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('manufacturer', 'LIKE', '%' . $search . '%');
             });
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hospital
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('hospital_id')) {
 
             $medicines->where(
@@ -71,6 +58,13 @@ class MedicineController extends Controller
                 $request->hospital_id
             );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Category
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('medicine_category_id')) {
 
             $medicines->where(
@@ -78,6 +72,41 @@ class MedicineController extends Controller
                 $request->medicine_category_id
             );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Medicine Type
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('medicine_type')) {
+
+            $medicines->where(
+                'medicine_type',
+                $request->medicine_type
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Prescription Required
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('prescription_required')) {
+
+            $medicines->where(
+                'prescription_required',
+                $request->prescription_required
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('status')) {
 
             $medicines->where(
@@ -85,14 +114,46 @@ class MedicineController extends Controller
                 $request->status
             );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pagination
+        |--------------------------------------------------------------------------
+        */
+
         $medicines = $medicines
             ->latest('id')
             ->paginate(20)
             ->withQueryString();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Filter Dropdown Data
+        |--------------------------------------------------------------------------
+        */
+
+        $hospitals = Hospital::where('status', 1)
+            ->orderBy('hospital_name')
+            ->get();
+
+        $categories = MedicineCategory::where('status', 1)
+            ->orderBy('category_name')
+            ->get();
+
+        $medicineTypes = Medicine::whereNotNull('medicine_type')
+            ->where('medicine_type', '!=', '')
+            ->distinct()
+            ->orderBy('medicine_type')
+            ->pluck('medicine_type');
+
         return view(
             'admin.medicines.index',
-            compact('medicines')
+            compact(
+                'medicines',
+                'hospitals',
+                'categories',
+                'medicineTypes'
+            )
         );
     }
 

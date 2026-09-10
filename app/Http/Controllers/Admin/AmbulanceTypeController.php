@@ -13,9 +13,48 @@ class AmbulanceTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ambulanceTypes = AmbulanceType::latest()->get();
+        $ambulanceTypes = AmbulanceType::query();
+
+        // Search
+        if ($request->filled('search')) {
+
+            $search = trim($request->search);
+
+            $ambulanceTypes->where(function ($query) use ($search) {
+
+                $query->where(
+                    'ambulance_type_name',
+                    'LIKE',
+                    '%' . $search . '%'
+                )
+                    ->orWhere(
+                        'ambulance_type_code',
+                        'LIKE',
+                        '%' . $search . '%'
+                    )
+                    ->orWhere(
+                        'description',
+                        'LIKE',
+                        '%' . $search . '%'
+                    );
+            });
+        }
+
+        // Status
+        if ($request->filled('status')) {
+
+            $ambulanceTypes->where(
+                'status',
+                $request->status
+            );
+        }
+
+        $ambulanceTypes = $ambulanceTypes
+            ->latest('id')
+            ->paginate(20)
+            ->withQueryString();
 
         return view(
             'admin.ambulance-types.index',

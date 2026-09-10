@@ -20,6 +20,12 @@ class MedicineCategoryController extends Controller
     {
         $categories = MedicineCategory::query();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Search
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('search')) {
 
             $search = trim($request->search);
@@ -39,17 +45,31 @@ class MedicineCategoryController extends Controller
             });
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Status
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('status')) {
+
             $categories->where(
                 'status',
                 $request->status
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Pagination
+        |--------------------------------------------------------------------------
+        */
+
         $categories = $categories
             ->orderBy('sort_order')
             ->latest('id')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return view(
             'admin.medicine_categories.index',

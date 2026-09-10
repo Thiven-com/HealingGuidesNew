@@ -121,8 +121,89 @@
 
             <!-- Doctor Table -->
             <div class="card table-list-card">
+                
 
                 <div class="card-body">
+                    {{-- Filters --}}
+
+
+        <form method="GET" action="{{ route('admin.doctors.index') }}">
+
+            <div class="row g-3">
+
+                {{-- Search --}}
+                <div class="col-md-4">
+                    <label class="form-label">Search</label>
+
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Doctor name, code, mobile or email"
+                           value="{{ request('search') }}">
+                </div>
+
+                {{-- Hospital --}}
+                <div class="col-md-3">
+                    <label class="form-label">Hospital</label>
+
+                    <select name="hospital_id" class="form-select">
+
+                        <option value="">All Hospitals</option>
+
+                        @foreach($hospitals as $hospital)
+
+                            <option value="{{ $hospital->id }}"
+                                {{ request('hospital_id') == $hospital->id ? 'selected' : '' }}>
+
+                                {{ $hospital->hospital_name }}
+
+                            </option>
+
+                        @endforeach
+
+                    </select>
+                </div>
+
+                {{-- Status --}}
+                <div class="col-md-2">
+                    <label class="form-label">Status</label>
+
+                    <select name="status" class="form-select">
+
+                        <option value="">All Status</option>
+
+                        <option value="1"
+                            {{ request('status') === '1' ? 'selected' : '' }}>
+                            Active
+                        </option>
+
+                        <option value="0"
+                            {{ request('status') === '0' ? 'selected' : '' }}>
+                            Inactive
+                        </option>
+
+                    </select>
+                </div>
+
+                {{-- Buttons --}}
+                <div class="col-md-3 d-flex align-items-end gap-2">
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-search me-1"></i>
+                        Filter
+                    </button>
+
+                    <a href="{{ route('admin.doctors.index') }}"
+                       class="btn btn-secondary">
+                        <i class="ti ti-refresh me-1"></i>
+                        Reset
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
 
                     <div class="table-responsive">
 
@@ -547,6 +628,7 @@
         </div>
 
     </div>
+    
 
 
     <script>

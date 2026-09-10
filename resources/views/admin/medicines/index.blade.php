@@ -153,6 +153,117 @@
 
                 <div class="card-body">
 
+                    <form method="GET" action="{{ route('admin.medicines.index') }}">
+
+                        <div class="row g-3 align-items-end" style="margin-bottom: 15px;">
+
+                            {{-- Search --}}
+                            <div class="col-md-4">
+                                <label class="form-label">Search</label>
+
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Medicine name, code, generic name, brand..."
+                                    value="{{ request('search') }}">
+                            </div>
+
+                            {{-- Hospital --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Hospital</label>
+
+                                <select name="hospital_id" class="form-select">
+                                    <option value="">All Hospitals</option>
+
+                                    @foreach($hospitals as $hospital)
+                                        <option value="{{ $hospital->id }}" {{ request('hospital_id') == $hospital->id ? 'selected' : '' }}>
+                                            {{ $hospital->hospital_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Category --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Category</label>
+
+                                <select name="medicine_category_id" class="form-select">
+                                    <option value="">All Categories</option>
+
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ request('medicine_category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Type --}}
+                            <div class="col-md-2">
+                                <label class="form-label">Type</label>
+
+                                <select name="medicine_type" class="form-select">
+                                    <option value="">All Types</option>
+
+                                    @foreach($medicineTypes as $type)
+                                        <option value="{{ $type }}" {{ request('medicine_type') == $type ? 'selected' : '' }}>
+                                            {{ ucfirst($type) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Prescription --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Prescription</label>
+
+                                <select name="prescription_required" class="form-select">
+                                    <option value="">All</option>
+
+                                    <option value="1" {{ request('prescription_required') === '1' ? 'selected' : '' }}>
+                                        Required
+                                    </option>
+
+                                    <option value="0" {{ request('prescription_required') === '0' ? 'selected' : '' }}>
+                                        Not Required
+                                    </option>
+                                </select>
+                            </div>
+
+                            {{-- Status --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+
+                                <select name="status" class="form-select">
+                                    <option value="">All Status</option>
+
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
+                                </select>
+                            </div>
+
+                            {{-- Buttons --}}
+                            <div class="col-md-6 d-flex gap-2">
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ti ti-search me-1"></i>
+                                    Filter
+                                </button>
+
+                                <a href="{{ route('admin.medicines.index') }}" class="btn btn-secondary">
+                                    <i class="ti ti-refresh me-1"></i>
+                                    Reset
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
                     <div class="table-responsive">
 
                         <table class="table datanew">
@@ -726,9 +837,9 @@
 
                                                                         <i class="ti ti-pill-off"
                                                                             style="
-                                                                                                                                                                                                                                                        font-size: 55px;
-                                                                                                                                                                                                                                                        color: #adb5bd;
-                                                                                                                                                                                                                                                    "></i>
+                                                                                                                                                                                                                                                                                        font-size: 55px;
+                                                                                                                                                                                                                                                                                        color: #adb5bd;
+                                                                                                                                                                                                                                                                                    "></i>
 
                                                                     </div>
 

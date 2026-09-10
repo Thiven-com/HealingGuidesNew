@@ -15,20 +15,82 @@ class AmbulanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $ambulances = Ambulance::with([
-            'hospital',
-            'ambulanceType'
-        ])
-            ->latest()
-            ->get();
+    public function index(Request $request)
+{
+    $ambulances = Ambulance::with([
+        'hospital',
+        'ambulanceType'
+    ]);
 
-        return view(
-            'admin.ambulances.index',
-            compact('ambulances')
+    // Search
+    if ($request->filled('search')) {
+        $search = trim($request->search);
+
+        $ambulances->where(function ($query) use ($search) {
+            $query->where('ambulance_name', 'LIKE', '%' . $search . '%')
+                ->orWhere('ambulance_code', 'LIKE', '%' . $search . '%')
+                ->orWhere('vehicle_number', 'LIKE', '%' . $search . '%')
+                ->orWhere('driver_name', 'LIKE', '%' . $search . '%')
+                ->orWhere('driver_mobile', 'LIKE', '%' . $search . '%');
+        });
+    }
+
+    // Hospital Filter
+    if ($request->filled('hospital_id')) {
+        $ambulances->where(
+            'hospital_id',
+            $request->hospital_id
         );
     }
+
+    // Ambulance Type Filter
+    if ($request->filled('ambulance_type_id')) {
+        $ambulances->where(
+            'ambulance_type_id',
+            $request->ambulance_type_id
+        );
+    }
+
+    // Availability Filter
+    if ($request->filled('is_available')) {
+        $ambulances->where(
+            'is_available',
+            $request->is_available
+        );
+    }
+
+    // Status Filter
+    if ($request->filled('status')) {
+        $ambulances->where(
+            'status',
+            $request->status
+        );
+    }
+
+    // Final Query + Pagination
+    $ambulances = $ambulances
+        ->latest('id')
+        ->paginate(20)
+        ->withQueryString();
+
+    // Filter Dropdown Data
+    $hospitals = Hospital::where('status', 1)
+        ->orderBy('hospital_name')
+        ->get();
+
+    $ambulanceTypes = AmbulanceType::where('status', 1)
+        ->orderBy('ambulance_type_name')
+        ->get();
+
+    return view(
+        'admin.ambulances.index',
+        compact(
+            'ambulances',
+            'hospitals',
+            'ambulanceTypes'
+        )
+    );
+}
 
     /**
      * Show the form for creating a new resource.

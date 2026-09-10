@@ -103,6 +103,151 @@
 
                 <div class="card-body">
 
+                    {{-- Filters --}}
+
+                    <form method="GET" action="{{ route('admin.ambulances.index') }}">
+
+                        <div class="row g-3 align-items-end mb-4">
+
+                            {{-- Search --}}
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Search
+                                </label>
+
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Name, code, vehicle or driver" value="{{ request('search') }}">
+
+                            </div>
+
+                            {{-- Hospital --}}
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Hospital
+                                </label>
+
+                                <select name="hospital_id" class="form-select">
+
+                                    <option value="">
+                                        All Hospitals
+                                    </option>
+
+                                    @foreach($hospitals as $hospital)
+
+                                        <option value="{{ $hospital->id }}" {{ request('hospital_id') == $hospital->id ? 'selected' : '' }}>
+
+                                            {{ $hospital->hospital_name }}
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                            {{-- Ambulance Type --}}
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Ambulance Type
+                                </label>
+
+                                <select name="ambulance_type_id" class="form-select">
+
+                                    <option value="">
+                                        All Types
+                                    </option>
+
+                                    @foreach($ambulanceTypes as $type)
+
+                                        <option value="{{ $type->id }}" {{ request('ambulance_type_id') == $type->id ? 'selected' : '' }}>
+
+                                            {{ $type->ambulance_type_name }}
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                            {{-- Availability --}}
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Availability
+                                </label>
+
+                                <select name="is_available" class="form-select">
+
+                                    <option value="">
+                                        All Availability
+                                    </option>
+
+                                    <option value="1" {{ request('is_available') === '1' ? 'selected' : '' }}>
+                                        Available
+                                    </option>
+
+                                    <option value="0" {{ request('is_available') === '0' ? 'selected' : '' }}>
+                                        Not Available
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- Status --}}
+                            <div class="col-md-2">
+
+                                <label class="form-label">
+                                    Status
+                                </label>
+
+                                <select name="status" class="form-select">
+
+                                    <option value="">
+                                        All Status
+                                    </option>
+
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- Buttons --}}
+                            <div class="col-md-12 d-flex gap-2">
+
+                                <button type="submit" class="btn btn-primary">
+
+                                    <i class="ti ti-search me-1"></i>
+                                    Filter
+
+                                </button>
+
+                                <a href="{{ route('admin.ambulances.index') }}" class="btn btn-secondary">
+
+                                    <i class="ti ti-refresh me-1"></i>
+                                    Reset
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
                     <div class="table-responsive">
 
                         <table class="table datanew">
