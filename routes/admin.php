@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\LabTestController;
 use App\Http\Controllers\Admin\MarketingStaffController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
 use App\Http\Controllers\Admin\MedicineController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\SpecializationController;
 use App\Http\Controllers\Admin\AmbulanceBookingController;
 use App\Http\Controllers\Admin\AppointmentController;
@@ -388,6 +389,9 @@ Route::group(['middleware' => 'admin'], function () {
     Route::resource('doctors', DoctorController::class)->names('admin.doctors');
     Route::post('doctors/{id}/status', [DoctorController::class, 'status'])->name('admin.doctors.status');
 
+    Route::resource('packages', PackageController::class)->names('admin.packages');
+
+    Route::post('packages/{id}/status', [PackageController::class, 'status'])->name('admin.packages.status');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])
