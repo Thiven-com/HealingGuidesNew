@@ -238,6 +238,21 @@
 
                                 </div>
 
+                                {{-- Preferred Language --}}
+<div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Preferred Language
+    </label>
+
+    <input type="text"
+           name="preffered_language"
+           class="form-control"
+           value="{{ old('preffered_language', $doctor->preffered_language) }}"
+           placeholder="Example: English, Telugu, Hindi">
+
+</div>
+
 
                                 {{-- Experience --}}
                                 <div class="col-md-6 mb-3">
@@ -463,6 +478,30 @@
                                     </div>
 
                                 </div>
+                                {{-- Actual Fee --}}
+<div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_fee"
+               class="form-control"
+               value="{{ old('actual_fee', $doctor->actual_fee) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
 
                                 {{-- Video Consultation --}}
@@ -488,6 +527,29 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Video Consultation Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_video_consultation_fee"
+               class="form-control"
+               value="{{ old('actual_video_consultation_fee', $doctor->actual_video_consultation_fee ?? 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
 
                                 {{-- Chat Consultation --}}
@@ -513,6 +575,29 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Chat Consultation Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_chat_consultation_fee"
+               class="form-control"
+               value="{{ old('actual_chat_consultation_fee', $doctor->actual_chat_consultation_fee ?? 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
 
                                 {{-- Home Visit --}}
@@ -538,6 +623,29 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Home Visit Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_home_visit_fee"
+               class="form-control"
+               value="{{ old('actual_home_visit_fee', $doctor->actual_home_visit_fee ?? 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
                             </div>
 

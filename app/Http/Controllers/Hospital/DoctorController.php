@@ -107,14 +107,24 @@ class DoctorController extends Controller
             'consultation_fee' =>
                 'nullable|numeric|min:0',
 
+            'actual_fee' => 'nullable|numeric|min:0',
+
             'video_consultation_fee' =>
                 'nullable|numeric|min:0',
+
+            'actual_video_consultation_fee' => 'nullable|numeric|min:0',
 
             'chat_consultation_fee' =>
                 'nullable|numeric|min:0',
 
+            'actual_chat_consultation_fee' => 'nullable|numeric|min:0',
+
             'home_visit_fee' =>
                 'nullable|numeric|min:0',
+
+            'actual_home_visit_fee' => 'nullable|numeric|min:0',
+
+            'preffered_language' => 'nullable|string|max:100',
 
             'email' =>
                 'nullable|email|max:255|unique:doctors,email',
@@ -280,14 +290,24 @@ class DoctorController extends Controller
         $doctor->consultation_fee =
             $request->consultation_fee ?? 0;
 
+        $doctor->actual_fee = $request->actual_fee ?? 0;
+
         $doctor->video_consultation_fee =
             $request->video_consultation_fee ?? 0;
+
+        $doctor->actual_video_consultation_fee = $request->actual_video_consultation_fee ?? 0;
 
         $doctor->chat_consultation_fee =
             $request->chat_consultation_fee ?? 0;
 
+        $doctor->actual_chat_consultation_fee = $request->actual_chat_consultation_fee ?? 0;
+
         $doctor->home_visit_fee =
             $request->home_visit_fee ?? 0;
+
+        $doctor->actual_home_visit_fee = $request->actual_home_visit_fee ?? 0;
+
+        $doctor->preffered_language = $request->preffered_language;
 
         $doctor->email =
             $request->email;
@@ -422,6 +442,22 @@ class DoctorController extends Controller
 
             'consultation_fee' =>
                 'nullable|numeric|min:0',
+
+            'actual_fee' => 'nullable|numeric|min:0',
+
+            'video_consultation_fee' => 'nullable|numeric|min:0',
+
+            'actual_video_consultation_fee' => 'nullable|numeric|min:0',
+
+            'chat_consultation_fee' => 'nullable|numeric|min:0',
+
+            'actual_chat_consultation_fee' => 'nullable|numeric|min:0',
+
+            'home_visit_fee' => 'nullable|numeric|min:0',
+
+            'actual_home_visit_fee' => 'nullable|numeric|min:0',
+
+            'preffered_language' => 'nullable|string|max:100',
 
             'email' =>
                 'nullable|email|max:255|unique:doctors,email,'
@@ -565,14 +601,25 @@ class DoctorController extends Controller
         $doctor->consultation_fee =
             $request->consultation_fee ?? 0;
 
+        $doctor->actual_fee = $request->actual_fee ?? 0;
+
         $doctor->video_consultation_fee =
             $request->video_consultation_fee ?? 0;
+
+        $doctor->actual_video_consultation_fee = $request->actual_video_consultation_fee ?? 0;
 
         $doctor->chat_consultation_fee =
             $request->chat_consultation_fee ?? 0;
 
+        $doctor->actual_chat_consultation_fee = $request->actual_chat_consultation_fee ?? 0;
+
         $doctor->home_visit_fee =
             $request->home_visit_fee ?? 0;
+
+        $doctor->actual_home_visit_fee = $request->actual_home_visit_fee ?? 0;
+
+        
+        $doctor->preffered_language = $request->preffered_language;
 
         $doctor->email =
             $request->email;

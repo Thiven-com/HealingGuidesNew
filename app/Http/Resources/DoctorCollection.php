@@ -14,23 +14,96 @@ class DoctorCollection extends ResourceCollection
     {
         return $this->collection->map(function ($doctor) {
 
+            /*
+               |--------------------------------------------------------------------------
+               | Consultation Fee Discount
+               |--------------------------------------------------------------------------
+               */
+            $actualFee = (float) ($doctor->actual_fee ?? 0);
+            $consultationFee = (float) ($doctor->consultation_fee ?? 0);
+
+            $discountPercentage = 0;
+
+            if ($actualFee > 0 && $consultationFee < $actualFee) {
+                $discountPercentage = (($actualFee - $consultationFee) / $actualFee) * 100;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Video Consultation Fee Discount
+            |--------------------------------------------------------------------------
+            */
+            $actualVideoFee = (float) ($doctor->actual_video_consultation_fee ?? 0);
+            $videoConsultationFee = (float) ($doctor->video_consultation_fee ?? 0);
+
+            $videoDiscountPercentage = 0;
+
+            if ($actualVideoFee > 0 && $videoConsultationFee < $actualVideoFee) {
+                $videoDiscountPercentage =
+                    (($actualVideoFee - $videoConsultationFee) / $actualVideoFee) * 100;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Chat Consultation Fee Discount
+            |--------------------------------------------------------------------------
+            */
+            $actualChatFee = (float) ($doctor->actual_chat_consultation_fee ?? 0);
+            $chatConsultationFee = (float) ($doctor->chat_consultation_fee ?? 0);
+
+            $chatDiscountPercentage = 0;
+
+            if ($actualChatFee > 0 && $chatConsultationFee < $actualChatFee) {
+                $chatDiscountPercentage =
+                    (($actualChatFee - $chatConsultationFee) / $actualChatFee) * 100;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Home Visit Fee Discount
+            |--------------------------------------------------------------------------
+            */
+            $actualHomeVisitFee = (float) ($doctor->actual_home_visit_fee ?? 0);
+            $homeVisitFee = (float) ($doctor->home_visit_fee ?? 0);
+
+            $homeVisitDiscountPercentage = 0;
+
+            if ($actualHomeVisitFee > 0 && $homeVisitFee < $actualHomeVisitFee) {
+                $homeVisitDiscountPercentage =
+                    (($actualHomeVisitFee - $homeVisitFee) / $actualHomeVisitFee) * 100;
+            }
+
             return [
                 'id' => $doctor->id,
                 'doctor_name' => $doctor->doctor_name,
                 'doctor_code' => $doctor->doctor_code,
                 'slug' => $doctor->slug,
                 'qualification' => $doctor->qualification,
+                'preferred_language' =>
+                    $doctor->preferred_language,
                 'designation' => $doctor->designation,
                 'experience' => $doctor->experience,
                 'consultation_fee' => $doctor->consultation_fee,
+                'actual_fee' => $doctor->actual_fee,
+                'discount_percentage' => round($discountPercentage, 2),
                 'video_consultation_fee' => $doctor->video_consultation_fee,
+                'actual_video_consultation_fee' => $doctor->actual_video_consultation_fee,
+                'video_discount_percentage' => round($videoDiscountPercentage, 2),
                 'chat_consultation_fee' => $doctor->chat_consultation_fee,
+                'actual_chat_consultation_fee' => $doctor->actual_chat_consultation_fee,
+                'chat_discount_percentage' => round($chatDiscountPercentage, 2),
                 'home_visit_fee' => $doctor->home_visit_fee,
+                'actual_home_visit_fee' => $doctor->actual_home_visit_fee,
+                'home_visit_discount_percentage' => round($homeVisitDiscountPercentage, 2),
                 'email' => $doctor->email,
                 'mobile' => $doctor->mobile,
                 'dob' => $doctor->dob,
                 'gender' => $doctor->gender,
                 'blood_group' => $doctor->blood_group,
+                'preffered_language' => $doctor->preffered_language,
                 'address' => $doctor->address,
                 'about' => $doctor->about,
                 'available_from' => $doctor->available_from,

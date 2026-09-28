@@ -105,13 +105,33 @@ class DoctorController extends Controller
             'consultation_fee' =>
                 'required|numeric|min:0',
 
+            // Actual Fee
+            'actual_fee' =>
+                'nullable|numeric|min:0',
+
+            // Preferred Language
+            'preffered_language' =>
+                'nullable|string|max:100',
+
             'video_consultation_fee' =>
+                'nullable|numeric|min:0',
+
+            // Actual Video Consultation Fee
+            'actual_video_consultation_fee' =>
                 'nullable|numeric|min:0',
 
             'chat_consultation_fee' =>
                 'nullable|numeric|min:0',
 
+            // Actual Chat Consultation Fee
+            'actual_chat_consultation_fee' =>
+                'nullable|numeric|min:0',
+
             'home_visit_fee' =>
+                'nullable|numeric|min:0',
+
+            // Actual Home Visit Fee
+            'actual_home_visit_fee' =>
                 'nullable|numeric|min:0',
 
             'email' =>
@@ -183,14 +203,34 @@ class DoctorController extends Controller
         $doctor->consultation_fee =
             $request->consultation_fee;
 
+        // Actual Fee
+        $doctor->actual_fee =
+            $request->actual_fee ?? 0;
+
+        // Preferred Language
+        $doctor->preffered_language =
+            $request->preffered_language;
+
         $doctor->video_consultation_fee =
             $request->video_consultation_fee ?? 0;
+
+        // Actual Video Consultation
+        $doctor->actual_video_consultation_fee =
+            $request->actual_video_consultation_fee ?? 0;
 
         $doctor->chat_consultation_fee =
             $request->chat_consultation_fee ?? 0;
 
+        // Actual Chat Consultation
+        $doctor->actual_chat_consultation_fee =
+            $request->actual_chat_consultation_fee ?? 0;
+
         $doctor->home_visit_fee =
             $request->home_visit_fee ?? 0;
+
+        // Actual Home Visit
+        $doctor->actual_home_visit_fee =
+            $request->actual_home_visit_fee ?? 0;
 
         $doctor->email =
             $request->email;
@@ -319,13 +359,33 @@ class DoctorController extends Controller
             'consultation_fee' =>
                 'required|numeric|min:0',
 
+            // Actual Fee
+            'actual_fee' =>
+                'nullable|numeric|min:0',
+
+            // Preferred Language
+            'preffered_language' =>
+                'nullable|string|max:100',
+
             'video_consultation_fee' =>
+                'nullable|numeric|min:0',
+
+            // Actual Video Consultation Fee
+            'actual_video_consultation_fee' =>
                 'nullable|numeric|min:0',
 
             'chat_consultation_fee' =>
                 'nullable|numeric|min:0',
 
+            // Actual Chat Consultation Fee
+            'actual_chat_consultation_fee' =>
+                'nullable|numeric|min:0',
+
             'home_visit_fee' =>
+                'nullable|numeric|min:0',
+
+            // Actual Home Visit Fee
+            'actual_home_visit_fee' =>
                 'nullable|numeric|min:0',
 
             'email' =>
@@ -389,15 +449,33 @@ class DoctorController extends Controller
 
         $doctor->consultation_fee =
             $request->consultation_fee;
+        // Actual Fee
+        $doctor->actual_fee =
+            $request->actual_fee ?? 0;
+
+        // Preferred Language
+        $doctor->preffered_language =
+            $request->preffered_language;
 
         $doctor->video_consultation_fee =
             $request->video_consultation_fee ?? 0;
 
+        // Actual Video Consultation Fee
+        $doctor->actual_video_consultation_fee =
+            $request->actual_video_consultation_fee ?? 0;
+
         $doctor->chat_consultation_fee =
             $request->chat_consultation_fee ?? 0;
+        // Actual Chat Consultation Fee
+        $doctor->actual_chat_consultation_fee =
+            $request->actual_chat_consultation_fee ?? 0;
 
         $doctor->home_visit_fee =
             $request->home_visit_fee ?? 0;
+
+        // Actual Home Visit Fee
+        $doctor->actual_home_visit_fee =
+            $request->actual_home_visit_fee ?? 0;
 
         $doctor->email =
             $request->email;

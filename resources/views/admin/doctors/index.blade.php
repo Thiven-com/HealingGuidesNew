@@ -45,9 +45,7 @@
 
                     <li>
 
-                        <a href="{{ route('admin.doctors.index') }}"
-                           data-bs-toggle="tooltip"
-                           title="Refresh">
+                        <a href="{{ route('admin.doctors.index') }}" data-bs-toggle="tooltip" title="Refresh">
 
                             <i data-feather="rotate-ccw"></i>
 
@@ -57,9 +55,7 @@
 
                     <li>
 
-                        <a id="collapse-header"
-                           data-bs-toggle="tooltip"
-                           title="Collapse">
+                        <a id="collapse-header" data-bs-toggle="tooltip" title="Collapse">
 
                             <i data-feather="chevron-up"></i>
 
@@ -71,11 +67,9 @@
 
                 <div class="page-btn">
 
-                    <a href="{{ route('admin.doctors.create') }}"
-                       class="btn btn-added">
+                    <a href="{{ route('admin.doctors.create') }}" class="btn btn-added">
 
-                        <i data-feather="plus-circle"
-                           class="me-2"></i>
+                        <i data-feather="plus-circle" class="me-2"></i>
 
                         Add Doctor
 
@@ -94,9 +88,7 @@
 
                     {{ session('success') }}
 
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -110,9 +102,7 @@
 
                     {{ session('error') }}
 
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -121,89 +111,82 @@
 
             <!-- Doctor Table -->
             <div class="card table-list-card">
-                
+
 
                 <div class="card-body">
                     {{-- Filters --}}
 
 
-        <form method="GET" action="{{ route('admin.doctors.index') }}">
+                    <form method="GET" action="{{ route('admin.doctors.index') }}">
 
-            <div class="row g-3">
+                        <div class="row g-3">
 
-                {{-- Search --}}
-                <div class="col-md-4">
-                    <label class="form-label">Search</label>
+                            {{-- Search --}}
+                            <div class="col-md-4">
+                                <label class="form-label">Search</label>
 
-                    <input type="text"
-                           name="search"
-                           class="form-control"
-                           placeholder="Doctor name, code, mobile or email"
-                           value="{{ request('search') }}">
-                </div>
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Doctor name, code, mobile or email" value="{{ request('search') }}">
+                            </div>
 
-                {{-- Hospital --}}
-                <div class="col-md-3">
-                    <label class="form-label">Hospital</label>
+                            {{-- Hospital --}}
+                            <div class="col-md-3">
+                                <label class="form-label">Hospital</label>
 
-                    <select name="hospital_id" class="form-select">
+                                <select name="hospital_id" class="form-select">
 
-                        <option value="">All Hospitals</option>
+                                    <option value="">All Hospitals</option>
 
-                        @foreach($hospitals as $hospital)
+                                    @foreach($hospitals as $hospital)
 
-                            <option value="{{ $hospital->id }}"
-                                {{ request('hospital_id') == $hospital->id ? 'selected' : '' }}>
+                                        <option value="{{ $hospital->id }}" {{ request('hospital_id') == $hospital->id ? 'selected' : '' }}>
 
-                                {{ $hospital->hospital_name }}
+                                            {{ $hospital->hospital_name }}
 
-                            </option>
+                                        </option>
 
-                        @endforeach
+                                    @endforeach
 
-                    </select>
-                </div>
+                                </select>
+                            </div>
 
-                {{-- Status --}}
-                <div class="col-md-2">
-                    <label class="form-label">Status</label>
+                            {{-- Status --}}
+                            <div class="col-md-2">
+                                <label class="form-label">Status</label>
 
-                    <select name="status" class="form-select">
+                                <select name="status" class="form-select">
 
-                        <option value="">All Status</option>
+                                    <option value="">All Status</option>
 
-                        <option value="1"
-                            {{ request('status') === '1' ? 'selected' : '' }}>
-                            Active
-                        </option>
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
 
-                        <option value="0"
-                            {{ request('status') === '0' ? 'selected' : '' }}>
-                            Inactive
-                        </option>
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
 
-                    </select>
-                </div>
+                                </select>
+                            </div>
 
-                {{-- Buttons --}}
-                <div class="col-md-3 d-flex align-items-end gap-2">
+                            {{-- Buttons --}}
+                            <div class="col-md-3 d-flex align-items-end gap-2">
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="ti ti-search me-1"></i>
-                        Filter
-                    </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ti ti-search me-1"></i>
+                                    Filter
+                                </button>
 
-                    <a href="{{ route('admin.doctors.index') }}"
-                       class="btn btn-secondary">
-                        <i class="ti ti-refresh me-1"></i>
-                        Reset
-                    </a>
+                                <a href="{{ route('admin.doctors.index') }}" class="btn btn-secondary">
+                                    <i class="ti ti-refresh me-1"></i>
+                                    Reset
+                                </a>
 
-                </div>
+                            </div>
 
-            </div>
+                        </div>
 
-        </form>
+                    </form>
 
                     <div class="table-responsive">
 
@@ -237,8 +220,7 @@
 
                                     <th>Status</th>
 
-                                    <th width="90"
-                                        class="text-center">
+                                    <th width="90" class="text-center">
 
                                         Action
 
@@ -267,15 +249,13 @@
 
                                             @if($doctor->photo)
 
-                                                <img src="{{ asset($doctor->photo) }}"
-                                                     class="doctor-photo"
-                                                     alt="{{ $doctor->doctor_name }}">
+                                                <img src="{{ asset($doctor->photo) }}" class="doctor-photo"
+                                                    alt="{{ $doctor->doctor_name }}">
 
                                             @else
 
-                                                <img src="{{ asset('assets/img/no-image.png') }}"
-                                                     class="doctor-photo"
-                                                     alt="No Image">
+                                                <img src="{{ asset('assets/img/no-image.png') }}" class="doctor-photo"
+                                                    alt="No Image">
 
                                             @endif
 
@@ -365,7 +345,13 @@
                                         {{-- Consultation Fee --}}
                                         <td>
 
-                                            ₹ {{ number_format($doctor->consultation_fee ?? 0, 2) }}
+                                            <span class="text-muted text-decoration-line-through">
+                                                ₹ {{ number_format($doctor->actual_fee ?? 0, 2) }}
+                                            </span>
+
+                                            <span class="ms-2">
+                                                ₹ {{ number_format($doctor->consultation_fee ?? 0, 2) }}
+                                            </span>
 
                                         </td>
 
@@ -383,19 +369,19 @@
 
                                             @if($doctor->available_from || $doctor->available_to)
 
-                                                <span class="badge bg-info">
+                                                                        <span class="badge bg-info">
 
-                                                    {{ $doctor->available_from
-                                                        ? \Carbon\Carbon::parse($doctor->available_from)->format('h:i A')
-                                                        : '-' }}
+                                                                            {{ $doctor->available_from
+                                                ? \Carbon\Carbon::parse($doctor->available_from)->format('h:i A')
+                                                : '-' }}
 
-                                                    -
+                                                                            -
 
-                                                    {{ $doctor->available_to
-                                                        ? \Carbon\Carbon::parse($doctor->available_to)->format('h:i A')
-                                                        : '-' }}
+                                                                            {{ $doctor->available_to
+                                                ? \Carbon\Carbon::parse($doctor->available_to)->format('h:i A')
+                                                : '-' }}
 
-                                                </span>
+                                                                        </span>
 
                                             @else
 
@@ -439,9 +425,8 @@
 
                                             <div class="dropdown">
 
-                                                <a href="javascript:void(0)"
-                                                   class="btn btn-sm btn-light"
-                                                   data-bs-toggle="dropdown">
+                                                <a href="javascript:void(0)" class="btn btn-sm btn-light"
+                                                    data-bs-toggle="dropdown">
 
                                                     <i class="ti ti-dots-vertical"></i>
 
@@ -452,7 +437,7 @@
 
                                                     {{-- View --}}
                                                     <a class="dropdown-item"
-                                                       href="{{ route('admin.doctors.show', $doctor->id) }}">
+                                                        href="{{ route('admin.doctors.show', $doctor->id) }}">
 
                                                         <i class="ti ti-eye me-2"></i>
 
@@ -463,7 +448,7 @@
 
                                                     {{-- Edit --}}
                                                     <a class="dropdown-item"
-                                                       href="{{ route('admin.doctors.edit', $doctor->id) }}">
+                                                        href="{{ route('admin.doctors.edit', $doctor->id) }}">
 
                                                         <i class="ti ti-edit me-2"></i>
 
@@ -474,12 +459,11 @@
 
                                                     {{-- Status --}}
                                                     <form action="{{ route('admin.doctors.status', $doctor->id) }}"
-                                                          method="POST">
+                                                        method="POST">
 
                                                         @csrf
 
-                                                        <button type="submit"
-                                                                class="dropdown-item">
+                                                        <button type="submit" class="dropdown-item">
 
                                                             @if($doctor->status)
 
@@ -501,10 +485,8 @@
 
 
                                                     {{-- Delete --}}
-                                                    {{-- <a href="javascript:void(0)"
-                                                       class="dropdown-item text-danger"
-                                                       data-bs-toggle="modal"
-                                                       data-bs-target="#deleteModal{{ $doctor->id }}">
+                                                    {{-- <a href="javascript:void(0)" class="dropdown-item text-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteModal{{ $doctor->id }}">
 
                                                         <i class="ti ti-trash me-2"></i>
 
@@ -522,10 +504,7 @@
 
 
                                     <!-- Delete Modal -->
-                                    <div class="modal fade"
-                                         id="deleteModal{{ $doctor->id }}"
-                                         tabindex="-1"
-                                         aria-hidden="true">
+                                    <div class="modal fade" id="deleteModal{{ $doctor->id }}" tabindex="-1" aria-hidden="true">
 
                                         <div class="modal-dialog">
 
@@ -539,9 +518,7 @@
 
                                                     </h5>
 
-                                                    <button type="button"
-                                                            class="btn-close"
-                                                            data-bs-dismiss="modal"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
                                                 </div>
 
@@ -563,9 +540,7 @@
 
                                                 <div class="modal-footer">
 
-                                                    <button type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 
                                                         Cancel
 
@@ -573,14 +548,13 @@
 
 
                                                     <form action="{{ route('admin.doctors.destroy', $doctor->id) }}"
-                                                          method="POST">
+                                                        method="POST">
 
                                                         @csrf
 
                                                         @method('DELETE')
 
-                                                        <button type="submit"
-                                                                class="btn btn-danger">
+                                                        <button type="submit" class="btn btn-danger">
 
                                                             Delete
 
@@ -600,8 +574,7 @@
 
                                     <tr>
 
-                                        <td colspan="13"
-                                            class="text-center py-5">
+                                        <td colspan="13" class="text-center py-5">
 
                                             <h6>
 
@@ -628,7 +601,7 @@
         </div>
 
     </div>
-    
+
 
 
     <script>

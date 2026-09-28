@@ -443,6 +443,30 @@
                                 </div>
 
                             </div>
+                            {{-- Preferred Language --}}
+<div class="col-lg-4 col-md-6">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Preferred Language
+        </label>
+
+        <input type="text"
+               name="preffered_language"
+               class="form-control @error('preffered_language') is-invalid @enderror"
+               value="{{ old('preffered_language', $doctor->preffered_language ?? '') }}"
+               placeholder="Example: English, Telugu, Hindi">
+
+        @error('preffered_language')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+
+    </div>
+
+</div>
 
 
                             {{-- Doctor Code --}}
@@ -659,6 +683,43 @@
                                 </div>
 
                             </div>
+                             {{-- =====================================================
+            Actual Consultation Fee
+            ====================================================== --}}
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Actual Consultation Fee
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₹
+                        </span>
+
+                        <input type="number"
+                               name="actual_fee"
+                               min="0"
+                               step="0.01"
+                               class="form-control @error('actual_fee') is-invalid @enderror"
+                               value="{{ old('actual_fee', $doctor->actual_fee ?? 0) }}"
+                               placeholder="0.00">
+
+                    </div>
+
+                    @error('actual_fee')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
 
 
 
@@ -688,6 +749,43 @@
                                 </div>
 
                             </div>
+                             {{-- =====================================================
+            Actual Video Consultation Fee
+            ====================================================== --}}
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Actual Video Consultation Fee
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₹
+                        </span>
+
+                        <input type="number"
+                               name="actual_video_consultation_fee"
+                               min="0"
+                               step="0.01"
+                               class="form-control @error('actual_video_consultation_fee') is-invalid @enderror"
+                               value="{{ old('actual_video_consultation_fee', $doctor->actual_video_consultation_fee ?? 0) }}"
+                               placeholder="0.00">
+
+                    </div>
+
+                    @error('actual_video_consultation_fee')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
 
 
 
@@ -718,6 +816,44 @@
 
                             </div>
 
+                            {{-- =====================================================
+            Actual Chat Consultation Fee
+            ====================================================== --}}
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Actual Chat Consultation Fee
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₹
+                        </span>
+
+                        <input type="number"
+                               name="actual_chat_consultation_fee"
+                               min="0"
+                               step="0.01"
+                               class="form-control @error('actual_chat_consultation_fee') is-invalid @enderror"
+                               value="{{ old('actual_chat_consultation_fee', $doctor->actual_chat_consultation_fee ?? 0) }}"
+                               placeholder="0.00">
+
+                    </div>
+
+                    @error('actual_chat_consultation_fee')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
+
 
 
                             {{-- Home Visit --}}
@@ -746,6 +882,44 @@
                                 </div>
 
                             </div>
+
+                            {{-- =====================================================
+            Actual Home Visit Fee
+            ====================================================== --}}
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Actual Home Visit Fee
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₹
+                        </span>
+
+                        <input type="number"
+                               name="actual_home_visit_fee"
+                               min="0"
+                               step="0.01"
+                               class="form-control @error('actual_home_visit_fee') is-invalid @enderror"
+                               value="{{ old('actual_home_visit_fee', $doctor->actual_home_visit_fee ?? 0) }}"
+                               placeholder="0.00">
+
+                    </div>
+
+                    @error('actual_home_visit_fee')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
 
 
                         </div>

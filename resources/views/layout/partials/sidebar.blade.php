@@ -108,6 +108,19 @@
                                                         </a>
                                                 </li>
                                                 <li
+                                                        class="{{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.facilities.index') }}">
+                                                                <i class="ti ti-building-community fs-16 me-2"></i>
+                                                                <span>Facilities</span>
+                                                        </a>
+                                                </li>
+                                                <li class="{{ request()->routeIs('admin.tieups.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.tieups.index') }}">
+                                                                <i class="ti ti-link fs-16 me-2"></i>
+                                                                <span>Tieups</span>
+                                                        </a>
+                                                </li>
+                                                <li
                                                         class="{{ request()->routeIs('admin.medicines.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.medicines.index') }}">
                                                                 <i class="ti ti-pill fs-16 me-2"></i>

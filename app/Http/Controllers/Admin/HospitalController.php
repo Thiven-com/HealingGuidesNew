@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Facility;
 use App\Models\Hospital;
+use App\Models\HospitalFacility;
 use App\Models\HospitalSpecialization;
+use App\Models\HospitalTieup;
 use App\Models\Specialization;
+use App\Models\Tieup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -65,8 +69,11 @@ class HospitalController extends Controller
         $specializations = Specialization::where('status', 1)
             ->orderBy('specialization_name')
             ->get();
+        $facilities = Facility::orderBy('name')
+            ->get();
+        $tieups = Tieup::orderBy('name')->get();
 
-        return view('admin.hospitals.create', compact('specializations'));
+        return view('admin.hospitals.create', compact('specializations', 'facilities', 'tieups'));
     }
     public function store(Request $request)
     {
@@ -81,6 +88,17 @@ class HospitalController extends Controller
             'pincode' => 'required',
             'specializations' => 'required|array|min:1',
             'specializations.*' => 'exists:specializations,id',
+            // Facilities
+            'facilities' => 'required|array|min:1',
+            'facilities.*' => 'exists:facilities,id',
+            // Tieups
+            'tieups' => 'required|array|min:1',
+            'tieups.*' => 'exists:tieups,id',
+
+
+            // Gallery
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'file|mimes:jpg,jpeg,png,webp,mp4,webm,mov,avi|max:51200',
         ]);
 
         $data = $request->all();
@@ -113,14 +131,54 @@ class HospitalController extends Controller
 
         if ($request->hasFile('banner')) {
 
-            $banner = $request->file('banner');
-            $bannerName = $data['hospital_slug'] . '.' . $banner->getClientOriginalExtension();
+            $bannerPaths = [];
 
-            $data['banner'] = $banner->storeAs(
-                'hospital/banner',
-                $bannerName,
-                'public'
-            );
+            foreach ($request->file('banner') as $banner) {
+
+                $extension = $banner->getClientOriginalExtension();
+
+                $bannerName = $data['hospital_slug']
+                    . '-banner-'
+                    . uniqid()
+                    . '.'
+                    . $extension;
+
+                $bannerPath = $banner->storeAs(
+                    'hospital/banner',
+                    $bannerName,
+                    'public'
+                );
+
+                $bannerPaths[] = $bannerPath;
+            }
+
+            $data['banner'] = implode(',', $bannerPaths);
+        }
+
+        // =========================================================
+        // Hospital Gallery - Multiple Photos & Videos
+        // =========================================================
+
+        if ($request->hasFile('gallery')) {
+
+            $galleryFiles = [];
+
+            foreach ($request->file('gallery') as $galleryFile) {
+
+                $galleryName = $data['hospital_slug']
+                    . '-gallery-'
+                    . uniqid()
+                    . '.'
+                    . $galleryFile->getClientOriginalExtension();
+
+                $galleryFiles[] = $galleryFile->storeAs(
+                    'hospital/gallery',
+                    $galleryName,
+                    'public'
+                );
+            }
+
+            $data['gallery'] = implode(',', $galleryFiles);
         }
 
         $hospital = Hospital::create($data);
@@ -135,6 +193,27 @@ class HospitalController extends Controller
             ]);
 
         }
+        foreach ($request->facilities as $facilityId) {
+
+            HospitalFacility::create([
+                'hospital_id' => $hospital->id,
+                'facility_id' => $facilityId,
+                'description' => $request->facility_description[$facilityId] ?? null,
+                'short_description' => $request->facility_short_description[$facilityId] ?? null,
+            ]);
+        }
+        // =========================================================
+        // Save Hospital Tieups
+        // =========================================================
+
+        foreach ($request->tieups as $tieupId) {
+
+            HospitalTieup::create([
+                'hospital' => $hospital->id,
+                'tieup_id' => $tieupId,
+            ]);
+
+        }
 
         return redirect()
             ->route('admin.hospitals.index')
@@ -144,8 +223,11 @@ class HospitalController extends Controller
     public function show(Hospital $hospital)
     {
         $hospital->load('hospitalSpecializations.specialization');
+        $hospitalTieups = HospitalTieup::with('tieup')
+            ->where('hospital', $hospital->id)
+            ->get();
 
-        return view('admin.hospitals.show', compact('hospital'));
+        return view('admin.hospitals.show', compact('hospital', 'hospitalTieups'));
     }
 
 
@@ -156,16 +238,28 @@ class HospitalController extends Controller
             ->get();
 
         $hospital->load('hospitalSpecializations');
+        $facilities = Facility::orderBy('name')
+            ->get();
+        // Get all tieups
+        $tieups = Tieup::orderBy('name')
+            ->get();
+
+        // Get selected tieup IDs for this hospital
+        $selectedTieupIds = HospitalTieup::where(
+            'hospital',
+            $hospital->id
+        )
+            ->pluck('tieup_id')
+            ->toArray();
 
         return view(
             'admin.hospitals.edit',
-            compact('hospital', 'specializations')
+            compact('hospital', 'specializations', 'facilities', 'tieups', 'selectedTieupIds')
         );
     }
 
     public function update(Request $request, Hospital $hospital)
     {
-
         $request->validate([
             'hospital_name' => 'required',
             'hospital_type' => 'required',
@@ -177,6 +271,16 @@ class HospitalController extends Controller
             'pincode' => 'required',
             'specializations' => 'required|array|min:1',
             'specializations.*' => 'exists:specializations,id',
+            // Facilities
+            'facilities' => 'required|array|min:1',
+            'facilities.*' => 'exists:facilities,id',
+            // Tieups
+            'tieups' => 'required|array|min:1',
+            'tieups.*' => 'exists:tieups,id',
+
+            // Gallery
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'file|mimes:jpg,jpeg,png,webp,mp4,webm,mov,avi|max:51200',
         ]);
 
         $data = $request->all();
@@ -199,26 +303,41 @@ class HospitalController extends Controller
                 'public'
             );
         }
-        // Upload banner
+
         if ($request->hasFile('banner')) {
 
-            // Delete old banner
-            if ($hospital->banner && Storage::disk('public')->exists($hospital->banner)) {
-                Storage::disk('public')->delete($hospital->banner);
+            // Existing banners
+            $existingBanners = !empty($hospital->banner)
+                ? array_filter(explode(',', $hospital->banner))
+                : [];
+
+            // New banners
+            $newBannerPaths = [];
+
+            foreach ($request->file('banner') as $banner) {
+
+                $extension = $banner->getClientOriginalExtension();
+
+                $bannerName = $hospital->hospital_slug
+                    . '-banner-'
+                    . uniqid()
+                    . '.'
+                    . $extension;
+
+                $bannerPath = $banner->storeAs(
+                    'hospital/banner',
+                    $bannerName,
+                    'public'
+                );
+
+                $newBannerPaths[] = $bannerPath;
             }
 
-            $extension = $request->file('banner')->getClientOriginalExtension();
-
-            $data['banner'] = $request->file('banner')->storeAs(
-                'hospital/banner',
-                $slug . '.' . $extension,
-                'public'
+            // Keep old + add new
+            $data['banner'] = implode(
+                ',',
+                array_merge($existingBanners, $newBannerPaths)
             );
-        }
-
-        if ($request->hasFile('banner')) {
-            $data['banner'] = $request->file('banner')
-                ->store('hospital/banner', 'public');
         }
 
         $hospital->update($data);
@@ -243,11 +362,76 @@ class HospitalController extends Controller
         HospitalSpecialization::where('hospital_id', $hospital->id)
             ->whereIn('specialization_id', array_diff($existingIds, $newIds))
             ->delete();
+        /*
+           |--------------------------------------------------------------------------
+           | Update Hospital Facilities
+           |--------------------------------------------------------------------------
+           */
+
+        $newFacilityIds = $request->facilities ?? [];
+
+        // Delete unchecked facilities
+        HospitalFacility::where(
+            'hospital_id',
+            $hospital->id
+        )
+            ->whereNotIn(
+                'facility_id',
+                $newFacilityIds
+            )
+            ->delete();
+
+        // Add / update selected facilities
+        foreach ($newFacilityIds as $facilityId) {
+
+            HospitalFacility::updateOrCreate(
+                [
+                    'hospital_id' => $hospital->id,
+                    'facility_id' => $facilityId,
+                ],
+                [
+                    'description' =>
+                        $request->facility_description[$facilityId]
+                        ?? null,
+
+                    'short_description' =>
+                        $request->facility_short_description[$facilityId]
+                        ?? null,
+                ]
+            );
+        }
+
+        // =========================================================
+        // Update Hospital Tieups
+        // =========================================================
+
+        $newTieupIds = $request->tieups ?? [];
+
+        // Delete unchecked tieups
+        HospitalTieup::where(
+            'hospital',
+            $hospital->id
+        )
+            ->whereNotIn(
+                'tieup_id',
+                $newTieupIds
+            )
+            ->delete();
+
+        // Add selected tieups
+        foreach ($newTieupIds as $tieupId) {
+
+            HospitalTieup::updateOrCreate(
+                [
+                    'hospital' => $hospital->id,
+                    'tieup_id' => $tieupId,
+                ]
+            );
+        }
 
         return redirect()
             ->route('admin.hospitals.index')
             ->with('success', 'Hospital Updated Successfully');
-
     }
 
     public function destroy(Hospital $hospital)
@@ -264,6 +448,70 @@ class HospitalController extends Controller
         $hospital->save();
 
         return back()->with('success', 'Status Updated');
+    }
+
+    public function facilityDetails(HospitalFacility $facility)
+    {
+        $facility->with('hospital');
+
+        return view(
+            'admin.hospitals.facility-details',
+            compact('facility')
+        );
+    }
+
+    public function tieupsDetails($tieup)
+    {
+        $tieup = Tieup::findOrFail($tieup);
+
+        $hospitalTieups = HospitalTieup::with('hospital')
+            ->where('tieup_id', $tieup->id)
+            ->latest()
+            ->get();
+
+        return view(
+            'admin.hospitals.tieups-details',
+            compact('tieup', 'hospitalTieups')
+        );
+    }
+
+    public function deleteBanner(Request $request, Hospital $hospital)
+    {
+        $request->validate([
+            'banner' => 'required|string',
+        ]);
+
+        $bannerToDelete = trim($request->banner);
+
+        // Existing banners
+        $banners = !empty($hospital->banner)
+            ? array_filter(explode(',', $hospital->banner))
+            : [];
+
+        // Remove selected banner
+        $remainingBanners = array_filter($banners, function ($banner) use ($bannerToDelete) {
+            return trim($banner) !== $bannerToDelete;
+        });
+
+        // Delete physical file
+        if (
+            !empty($bannerToDelete) &&
+            Storage::disk('public')->exists($bannerToDelete)
+        ) {
+            Storage::disk('public')->delete($bannerToDelete);
+        }
+
+        // Update database
+        $hospital->banner = !empty($remainingBanners)
+            ? implode(',', $remainingBanners)
+            : null;
+
+        $hospital->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Banner deleted successfully.'
+        ]);
     }
 
 }

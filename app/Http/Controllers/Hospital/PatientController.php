@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Hospital;
 
 use App\Http\Controllers\Controller;
 use App\Models\DoctorAppointment;
+use App\Models\PatientMedicalReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,16 +48,94 @@ class PatientController extends Controller
    |--------------------------------------------------------------------------
    */
 
+    // public function show(Request $request, $type, $id)
+    // {
+    //     /*
+    //     |--------------------------------------------------------------------------
+    //     | Family Member Patient
+    //     |--------------------------------------------------------------------------
+    //     */
+    //     $hospital = Auth::guard('hospital')->user();
+
+    //     $hospitalId = $hospital->id;
+    //     if ($type === 'family') {
+
+    //         $appointment = DoctorAppointment::with([
+    //             'familyMember',
+    //             'hospital',
+    //             'customer',
+    //         ])
+    //             ->where('family_member_id', $id)
+    //             ->when($hospitalId, function ($query) use ($hospitalId) {
+    //                 $query->where('hospital_id', $hospitalId);
+    //             })
+    //             ->latest()
+    //             ->firstOrFail();
+
+    //         $patient = $appointment->familyMember;
+
+    //         return view(
+    //             'hospital.patients.show',
+    //             compact(
+    //                 'patient',
+    //                 'appointment',
+    //                 'type'
+    //             )
+    //         );
+    //     }
+
+
+    //     /*
+    //     |--------------------------------------------------------------------------
+    //     | Normal Customer Patient
+    //     |--------------------------------------------------------------------------
+    //     */
+
+    //     $appointment = DoctorAppointment::with([
+    //         'customer',
+    //         'hospital',
+    //     ])
+    //         ->where('customer_id', $id)
+    //         ->when($hospitalId, function ($query) use ($hospitalId) {
+    //             $query->where('hospital_id', $hospitalId);
+    //         })
+    //         ->latest()
+    //         ->firstOrFail();
+
+    //     $patient = $appointment->customer;
+
+    //     return view(
+    //         'hospital.patients.show',
+    //         compact(
+    //             'patient',
+    //             'appointment',
+    //             'type'
+    //         )
+    //     );
+    // }
     public function show(Request $request, $type, $id)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | Logged-in Hospital
+        |--------------------------------------------------------------------------
+        */
+
+        $hospital = Auth::guard('hospital')->user();
+
+        if (!$hospital) {
+            return redirect()->route('hospital.login');
+        }
+
+        $hospitalId = $hospital->hospital_id ?? $hospital->id;
+
+
         /*
         |--------------------------------------------------------------------------
         | Family Member Patient
         |--------------------------------------------------------------------------
         */
-        $hospital = Auth::guard('hospital')->user();
 
-        $hospitalId = $hospital->id;
         if ($type === 'family') {
 
             $appointment = DoctorAppointment::with([
@@ -65,20 +144,40 @@ class PatientController extends Controller
                 'customer',
             ])
                 ->where('family_member_id', $id)
-                ->when($hospitalId, function ($query) use ($hospitalId) {
-                    $query->where('hospital_id', $hospitalId);
-                })
+                ->where('hospital_id', $hospitalId)
                 ->latest()
                 ->firstOrFail();
 
             $patient = $appointment->familyMember;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Get All Medical Reports
+            |--------------------------------------------------------------------------
+            */
+
+            $reports = PatientMedicalReport::where(
+                'family_member_id',
+                $id
+            )
+               
+                ->with([
+                    'appointment',
+                    'doctor',
+                ])
+                ->orderByDesc('report_date')
+                ->orderByDesc('created_at')
+                ->get();
+
 
             return view(
                 'hospital.patients.show',
                 compact(
                     'patient',
                     'appointment',
-                    'type'
+                    'type',
+                    'reports'
                 )
             );
         }
@@ -95,21 +194,44 @@ class PatientController extends Controller
             'hospital',
         ])
             ->where('customer_id', $id)
-            ->when($hospitalId, function ($query) use ($hospitalId) {
-                $query->where('hospital_id', $hospitalId);
-            })
+            ->where('hospital_id', $hospitalId)
             ->latest()
             ->firstOrFail();
 
         $patient = $appointment->customer;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get All Medical Reports
+        |--------------------------------------------------------------------------
+        */
+
+        $reports = PatientMedicalReport::where(
+            'customer_id',
+            $id
+        )
+            ->whereHas('appointment', function ($query) use ($hospitalId) {
+                $query->where('hospital_id', $hospitalId);
+            })
+            ->with([
+                'appointment',
+                'doctor',
+            ])
+            ->orderByDesc('report_date')
+            ->orderByDesc('created_at')
+            ->get();
+
 
         return view(
             'hospital.patients.show',
             compact(
                 'patient',
                 'appointment',
-                'type'
+                'type',
+                'reports'
             )
         );
     }
+
 }

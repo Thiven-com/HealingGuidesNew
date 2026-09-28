@@ -187,6 +187,113 @@
 
                             </div>
 
+                            <!-- Hospital Facilities -->
+
+                            <div class="col-md-12 mb-3">
+
+                                <label class="form-label">
+                                    Hospital Facilities
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                @php
+                                    use App\Models\HospitalFacility;
+
+                                    $selectedFacilities = old(
+                                        'facilities',
+                                        HospitalFacility::where('hospital_id', $hospital->id)
+                                            ->pluck('facility_id')
+                                            ->toArray()
+                                    );
+                                @endphp
+
+                                <div class="row">
+
+                                    @foreach($facilities as $facility)
+
+                                        <div class="col-md-4 mb-2">
+
+                                            <div class="form-check">
+
+                                                <input type="checkbox" class="form-check-input" id="facility{{ $facility->id }}"
+                                                    name="facilities[]" value="{{ $facility->id }}" {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}>
+
+                                                <label class="form-check-label" for="facility{{ $facility->id }}">
+                                                    {{ $facility->name }}
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                    @endforeach
+
+                                </div>
+
+                                @error('facilities')
+                                    <small class="text-danger">
+                                        {{ $message }}
+                                    </small>
+                                @enderror
+
+                            </div>
+
+                            <!-- Hospital Tieups -->
+
+<div class="col-md-12 mb-3">
+
+    <label class="form-label">
+        Hospital Tieups
+        <span class="text-danger">*</span>
+    </label>
+
+    @php
+        $selectedTieups = old(
+            'tieups',
+            $selectedTieupIds ?? []
+        );
+    @endphp
+
+    <div class="row">
+
+        @foreach($tieups as $tieup)
+
+            <div class="col-md-4 col-lg-3 mb-2">
+
+                <div class="form-check">
+
+                    <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="tieup{{ $tieup->id }}"
+                        name="tieups[]"
+                        value="{{ $tieup->id }}"
+                        {{ in_array($tieup->id, $selectedTieups) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="tieup{{ $tieup->id }}"
+                    >
+                        {{ $tieup->name }}
+                    </label>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+    @error('tieups')
+        <small class="text-danger">
+            {{ $message }}
+        </small>
+    @enderror
+
+</div>
+
                             <!-- Registration -->
 
                             <div class="col-md-6 mb-3">
@@ -585,29 +692,92 @@
 
                             <div class="col-md-6">
 
-                                <label class="form-label">
+                               <label class="form-label">
+        Hospital Banners
+    </label>
 
-                                    Hospital Banner
+    {{-- Existing Banners --}}
+    @if($hospital->banner)
 
-                                </label>
+        @php
+            $banners = array_filter(explode(',', $hospital->banner));
+        @endphp
 
-                                @if($hospital->banner)
+        <div class="row mb-3">
 
-                                    <div class="mb-3">
+            @foreach($banners as $index => $banner)
 
-                                        <img src="{{ asset($hospital->banner) }}" class="img-thumbnail w-100" id="bannerPreview"
-                                            style="height:120px;object-fit:cover;">
+                <div class="col-md-4 col-sm-6 mb-4">
 
-                                    </div>
+                    <div style="
+                        position: relative;
+                        width: 100%;
+                        height: 100px;
+                        border-radius: 10px;
+                        overflow: hidden;
+                        border: 1px solid #e5e7eb;
+                        background: #f8fafc;
+                    ">
 
-                                @else
+                        <img
+                            src="{{ asset(trim($banner)) }}"
+                            alt="Hospital Banner {{ $index + 1 }}"
+                            style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                display: block;
+                            "
+                        >
 
-                                    <img id="bannerPreview" class="img-thumbnail w-100 d-none"
-                                        style="height:120px;object-fit:cover;">
+                    </div>
 
-                                @endif
+                </div>
 
-                                <input type="file" class="form-control" name="banner" id="banner" accept="image/*">
+            @endforeach
+
+        </div>
+
+    @else
+
+        <div
+            id="noBannerMessage"
+            style="
+                min-height: 100px;
+                border: 1px dashed #d9e2ef;
+                border-radius: 10px;
+                background: #f8fafc;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #8a98ad;
+                font-size: 14px;
+                margin-bottom: 15px;
+            "
+        >
+            No banners added yet.
+        </div>
+
+    @endif
+
+
+    {{-- New Banner Preview --}}
+    <div id="bannerPreviewContainer" class="row mb-3"></div>
+
+
+    {{-- Multiple Banner Upload --}}
+    <input
+        type="file"
+        class="form-control"
+        name="banner[]"
+        id="banner"
+        accept="image/*"
+        multiple
+    >
+
+    <small class="text-muted">
+        You can select multiple banner images.
+    </small>
 
                             </div>
 
@@ -725,9 +895,9 @@
                     submitBtn.disabled = true;
 
                     submitBtn.innerHTML = `
-                        <span class="spinner-border spinner-border-sm me-2"></span>
-                        Updating...
-                    `;
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Updating...
+                                `;
 
                 });
 

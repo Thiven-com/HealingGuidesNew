@@ -475,6 +475,228 @@
                         </div>
 
                     </div>
+<hr>
+
+{{-- =========================================================
+     MEDICAL REPORTS
+========================================================= --}}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+
+    <div>
+        <h5 class="mb-1">
+            Medical Reports
+        </h5>
+
+        <p class="text-muted mb-0">
+            Patient medical reports and documents
+        </p>
+    </div>
+
+    <span class="badge bg-primary">
+        {{ $reports->count() }} Reports
+    </span>
+
+</div>
+
+
+@if($reports->count())
+
+    <div class="row">
+
+        @foreach($reports as $report)
+
+            <div class="col-md-6 col-lg-4 mb-4">
+
+                <div class="card border shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        {{-- Report Icon --}}
+                        <div class="d-flex align-items-center mb-3">
+
+                            <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center"
+                                 style="
+                                    width:48px;
+                                    height:48px;
+                                 ">
+
+                                <i class="ti ti-file-medical fs-24 text-primary"></i>
+
+                            </div>
+
+                            <div class="ms-3">
+
+                                <h6 class="mb-1">
+
+                                    {{ $report->report_name ?? 'Medical Report' }}
+
+                                </h6>
+
+                                <small class="text-muted">
+
+                                    {{ $report->report_type ?? 'Medical Report' }}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- Report Date --}}
+                        <div class="mb-2">
+
+                            <small class="text-muted d-block">
+                                Report Date
+                            </small>
+
+                            <strong>
+
+                                @if($report->report_date)
+
+                                    {{ \Carbon\Carbon::parse($report->report_date)->format('d-m-Y') }}
+
+                                @else
+
+                                    —
+
+                                @endif
+
+                            </strong>
+
+                        </div>
+
+
+                        {{-- Doctor --}}
+                        @if($report->doctor)
+
+                            <div class="mb-2">
+
+                                <small class="text-muted d-block">
+                                    Doctor
+                                </small>
+
+                                <strong>
+                                    {{ $report->doctor->name ?? '—' }}
+                                </strong>
+
+                            </div>
+
+                        @endif
+
+
+                        {{-- Appointment --}}
+                        @if($report->appointment)
+
+                            <div class="mb-2">
+
+                                <small class="text-muted d-block">
+                                    Appointment
+                                </small>
+
+                                <strong>
+                                    {{ $report->appointment->appointment_no ?? '—' }}
+                                </strong>
+
+                            </div>
+
+                        @endif
+
+
+                        {{-- Notes --}}
+                        @if($report->notes)
+
+                            <div class="mb-3">
+
+                                <small class="text-muted d-block">
+                                    Notes
+                                </small>
+
+                                <p class="mb-0">
+                                    {{ $report->notes }}
+                                </p>
+
+                            </div>
+
+                        @endif
+
+
+                        {{-- File --}}
+                        @if($report->report_file)
+
+                            <div class="mt-3">
+
+                                <a href="{{ asset($report->report_file) }}"
+                                   target="_blank"
+                                   class="btn btn-primary btn-sm">
+
+                                    <i class="ti ti-eye me-1"></i>
+
+                                    View Report
+
+                                </a>
+
+                                <a href="{{ asset($report->report_file) }}"
+                                   download
+                                   class="btn btn-outline-secondary btn-sm">
+
+                                    <i class="ti ti-download me-1"></i>
+
+                                    Download
+
+                                </a>
+
+                            </div>
+
+                        @else
+
+                            <span class="text-muted">
+                                No report file available
+                            </span>
+
+                        @endif
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+@else
+
+    <div class="card border">
+
+        <div class="card-body text-center py-5">
+
+            <div class="mb-3">
+
+                <i class="ti ti-file-off"
+                   style="
+                       font-size:50px;
+                       color:#adb5bd;
+                   ">
+                </i>
+
+            </div>
+
+            <h6>
+                No Medical Reports
+            </h6>
+
+            <p class="text-muted mb-0">
+                No medical reports are available for this patient.
+            </p>
+
+        </div>
+
+    </div>
+
+@endif
 
                 </div>
 

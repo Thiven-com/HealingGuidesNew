@@ -208,13 +208,24 @@
 
                     <ul>
 
-                        <li class="{{ request()->routeIs('hospital.profile*') ? 'active' : '' }}">
+                        {{-- <li class="{{ request()->routeIs('hospital.profile*') ? 'active' : '' }}">
 
                             <a href="{{ route('hospital.profile') }}">
 
                                 <i class="ti ti-user fs-16 me-2"></i>
 
                                 <span>Profile</span>
+
+                            </a>
+
+                        </li> --}}
+                        <li class="{{ request()->routeIs('hospital.hospitalprofile.index') ? 'active' : '' }}">
+
+                            <a href="{{ route('hospital.hospitalprofile.index') }}">
+
+                                <i class="ti ti-building-hospital fs-16 me-2"></i>
+
+                                <span>Hospital Profile</span>
 
                             </a>
 

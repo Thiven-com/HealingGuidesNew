@@ -25,12 +25,15 @@ use App\Http\Controllers\Admin\AmbulanceBookingController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
+use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\HospitalGalleryController;
 use App\Http\Controllers\Admin\InsuranceController;
 use App\Http\Controllers\Admin\LabTestBookingController;
 use App\Http\Controllers\Admin\MarketingLeadController;
 use App\Http\Controllers\Admin\MedicineOrderController;
 use App\Http\Controllers\Admin\PatientMedicalReportController;
 use App\Http\Controllers\Admin\MembershipRegistrationController;
+use App\Http\Controllers\Admin\TieupController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,6 +47,71 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    Route::resource('facilities', FacilityController::class)
+        ->names('admin.facilities');
+    Route::get(
+        '/hospitals/facility/{facility}',
+        [HospitalController::class, 'facilityDetails']
+    )->name('admin.hospitals.facility.details');
+
+    Route::get(
+        '/hospital-galleries',
+        [HospitalGalleryController::class, 'index']
+    )->name('hospital-galleries.index');
+
+    Route::post(
+        '/hospital-galleries/store',
+        [HospitalGalleryController::class, 'store']
+    )->name('admin.hospital-galleries.store');
+
+    Route::get(
+        '/hospital-galleries/{id}',
+        [HospitalGalleryController::class, 'show']
+    )->name('hospital-galleries.show');
+
+    Route::delete(
+        '/admin/hospital-galleries/{id}',
+        [HospitalGalleryController::class, 'destroy']
+    )->name('admin.hospital-galleries.destroy');
+
+
+    Route::get(
+        'admin/tieups',
+        [TieupController::class, 'index']
+    )->name('admin.tieups.index');
+
+    Route::post(
+        'admin/tieups',
+        [TieupController::class, 'store']
+    )->name('admin.tieups.store');
+
+    Route::get(
+        'admin/tieups/{id}/edit',
+        [TieupController::class, 'edit']
+    )->name('admin.tieups.edit');
+
+    Route::put(
+        'admin/tieups/{id}',
+        [TieupController::class, 'update']
+    )->name('admin.tieups.update');
+
+    Route::delete(
+        'admin/tieups/{id}',
+        [TieupController::class, 'destroy']
+    )->name('admin.tieups.destroy');
+
+
+    Route::get(
+        '/admin/hospitals/tieups/{tieup}/details',
+        [HospitalController::class, 'tieupsDetails']
+    )->name('admin.hospitals.tieups-details');
+
+    Route::delete(
+        '/admin/hospitals/{hospital}/banner/delete',
+        [HospitalController::class, 'deleteBanner']
+    )->name('admin.hospitals.banner.delete');
+
 
     Route::get('/customers', [CustomerController::class, 'index'])
         ->name('admin.customers.index');

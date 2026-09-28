@@ -215,6 +215,20 @@
                                            placeholder="Example: MBBS, MD">
 
                                 </div>
+                                {{-- Preferred Language --}}
+<div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Preferred Language
+    </label>
+
+    <input type="text"
+           name="preffered_language"
+           class="form-control"
+           value="{{ old('preffered_language') }}"
+           placeholder="Example: English, Telugu, Hindi">
+
+</div>
 
 
                                 {{-- Experience --}}
@@ -278,7 +292,7 @@
 
 
                                 {{-- DOB --}}
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
                                         Date of Birth
@@ -293,7 +307,7 @@
 
 
                                 {{-- Gender --}}
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
                                         Gender
@@ -327,7 +341,7 @@
 
 
                                 {{-- Blood Group --}}
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
                                         Blood Group
@@ -442,13 +456,39 @@
                                     </div>
 
                                 </div>
+                                {{-- Actual Fee --}}
+<div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Fee
+        <span class="text-danger">*</span>
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_fee"
+               class="form-control"
+               value="{{ old('actual_fee', 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00"
+               required>
+
+    </div>
+
+</div>
 
 
                                 {{-- Video --}}
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label">
-                                        Video Consultation Fee
+                                         Video Consultation Fee
                                     </label>
 
                                     <div class="input-group">
@@ -468,6 +508,30 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Video Consultation Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_video_consultation_fee"
+               class="form-control"
+               value="{{ old('actual_video_consultation_fee', 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
+
 
 
                                 {{-- Chat --}}
@@ -494,6 +558,29 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Chat Consultation Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_chat_consultation_fee"
+               class="form-control"
+               value="{{ old('actual_chat_consultation_fee', 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
 
                                 {{-- Home Visit --}}
@@ -520,6 +607,29 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+
+    <label class="form-label">
+        Actual Home Visit Fee
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            ₹
+        </span>
+
+        <input type="number"
+               name="actual_home_visit_fee"
+               class="form-control"
+               value="{{ old('actual_home_visit_fee', 0) }}"
+               min="0"
+               step="0.01"
+               placeholder="0.00">
+
+    </div>
+
+</div>
 
                             </div>
 

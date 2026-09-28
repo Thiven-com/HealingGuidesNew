@@ -2,6 +2,9 @@
 
 
 use App\Http\Controllers\Hospital\CouponController;
+use App\Http\Controllers\Hospital\FacilityController;
+use App\Http\Controllers\Hospital\HospitalFacilityController;
+use App\Http\Controllers\Hospital\HospitalGalleryController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Hospital\AccountController;
@@ -12,6 +15,7 @@ use App\Http\Controllers\Hospital\DiagnosticController;
 use App\Http\Controllers\Hospital\AmbulanceController;
 use App\Http\Controllers\Hospital\AmbulanceBookingController;
 use App\Http\Controllers\Hospital\DoctorScheduleController;
+use App\Http\Controllers\Hospital\HospitalController;
 use App\Http\Controllers\Hospital\MedicineController;
 use App\Http\Controllers\Hospital\MedicineOrderController;
 use App\Http\Controllers\Hospital\PatientController;
@@ -45,6 +49,116 @@ Route::name('hospital.')
             AccountController::class,
             'resendOtp'
         ])->name('resend-otp');
+
+        /*
+   |--------------------------------------------------------------------------
+   | Hospital Profile
+   |--------------------------------------------------------------------------
+   */
+
+        Route::get('/hospital-profile', [HospitalController::class, 'details'])
+            ->name('hospitalprofile.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hospital Facility Details
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/hospital-profile/facility/{facility}', [HospitalController::class, 'facilityDetails'])
+            ->name('hospitalprofile.facility.details');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hospital Tieup Details
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/hospital-profile/tieup/{tieup}', [HospitalController::class, 'tieupDetails'])
+            ->name('hospitalprofile.tieup.details');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Hospital Banner
+        |--------------------------------------------------------------------------
+        */
+
+        Route::delete('/hospital-profile/banner/delete', [HospitalController::class, 'deleteBanner'])
+            ->name('hospitalprofile.banner.delete');
+
+        /*
+   |--------------------------------------------------------------------------
+   | Hospital Facilities
+   |--------------------------------------------------------------------------
+   */
+
+        Route::get('/facilities', [
+            FacilityController::class,
+            'index'
+        ])->name('hospital.facility-details.index');
+
+        Route::get('/facilities/create', [
+            FacilityController::class,
+            'create'
+        ])->name('hospital.facility-details.create');
+
+        Route::post('/facilities', [
+            FacilityController::class,
+            'store'
+        ])->name('hospital.facility-details.store');
+
+        Route::get('/facilities/{id}/edit', [
+            FacilityController::class,
+            'edit'
+        ])->name('hospital.facility-details.edit');
+
+        Route::put('/facilities/{id}', [
+            FacilityController::class,
+            'update'
+        ])->name('hospital.facility-details.update');
+
+        Route::delete('/facilities/{id}', [
+            FacilityController::class,
+            'destroy'
+        ])->name('hospital.facility-details.destroy');
+
+        Route::get('/hospitals/facility/{facility}', [
+            HospitalController::class,
+            'facilityDetails'
+        ])->name('hospitals.facility.details');
+
+        // Gallery Store
+        Route::post('/hospital-profile/facility/gallery', [
+            HospitalGalleryController::class,
+            'store'
+        ])->name('hospitalprofile.gallery.store');
+
+        // Gallery Delete
+        Route::delete('/hospital-profile/facility/gallery/{gallery}', [
+            HospitalGalleryController::class,
+            'destroy'
+        ])->name('hospitalprofile.gallery.destroy');
+        Route::delete(
+            '/hospitalprofile/banner/delete',
+            [HospitalController::class, 'deleteBanner']
+        )->name('hospital.hospitalprofile.banner.delete');
+        Route::get(
+            '/hospitalprofile/tieup/{tieup}',
+            [HospitalController::class, 'tieupDetails']
+        )->name('hospitalprofile.tieups-details');
+
+        Route::get(
+            '/hospitalprofile/edit',
+            [HospitalController::class, 'edit']
+        )->name('hospitalprofile.edit');
+
+        Route::put(
+            '/hospitalprofile/update',
+            [HospitalController::class, 'update']
+        )->name('hospitalprofile.update');
 
 
         /*

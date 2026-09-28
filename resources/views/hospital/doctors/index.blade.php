@@ -385,13 +385,25 @@
 
                                 <td>
 
-                                    ₹{{ number_format(
-                                        (float) (
-                                            $doctor->consultation_fee
-                                            ?? 0
-                                        ),
-                                        2
-                                    ) }}
+                                    <span class="text-muted text-decoration-line-through">
+        ₹{{ number_format(
+            (float) (
+                $doctor->actual_fee
+                ?? 0
+            ),
+            2
+        ) }}
+    </span>
+
+    <span class="ms-2">
+        ₹{{ number_format(
+            (float) (
+                $doctor->consultation_fee
+                ?? 0
+            ),
+            2
+        ) }}
+    </span>
 
                                 </td>
 

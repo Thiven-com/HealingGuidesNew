@@ -179,6 +179,110 @@
 
                             </div>
 
+                            <!-- Hospital Facilities -->
+
+<div class="col-md-12 mb-3">
+
+    <label class="form-label">
+
+        Hospital Facilities
+        <span class="text-danger">*</span>
+
+    </label>
+
+    <div class="row">
+
+        @foreach($facilities as $facility)
+
+            <div class="col-md-4 col-lg-3 mb-2">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="facilities[]"
+                        id="facility{{ $facility->id }}"
+                        value="{{ $facility->id }}"
+                        {{ in_array($facility->id, old('facilities', [])) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="facility{{ $facility->id }}"
+                    >
+
+                        {{ $facility->name }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+    @error('facilities')
+        <small class="text-danger">
+            {{ $message }}
+        </small>
+    @enderror
+
+</div>
+
+<!-- Hospital Tieups -->
+
+<div class="col-md-12 mb-3">
+
+    <label class="form-label">
+        Hospital Tieups
+        <span class="text-danger">*</span>
+    </label>
+
+    <div class="row">
+
+        @foreach($tieups as $tieup)
+
+            <div class="col-md-4 col-lg-3 mb-2">
+
+                <div class="form-check">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="tieups[]"
+                        id="tieup{{ $tieup->id }}"
+                        value="{{ $tieup->id }}"
+                        {{ in_array($tieup->id, old('tieups', [])) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="tieup{{ $tieup->id }}"
+                    >
+
+                        {{ $tieup->name }}
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+    @error('tieups')
+        <small class="text-danger">
+            {{ $message }}
+        </small>
+    @enderror
+
+</div>
+
                             <!-- Registration -->
 
                             <div class="col-md-6 mb-3">
@@ -543,7 +647,14 @@
                                     Hospital Banner
                                 </label>
 
-                                <input type="file" name="banner" id="banner" class="form-control" accept="image/*">
+                                <input
+        type="file"
+        name="banner[]"
+        id="banner"
+        class="form-control"
+        accept="image/*"
+        multiple
+    >
 
                                 <img id="bannerPreview" class="img-thumbnail mt-3 d-none"
                                     style="max-height:120px; width:100%; object-fit:cover;">
@@ -665,5 +776,66 @@
         });
 
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const bannerInput = document.getElementById('banner');
+        const bannerPreviewContainer =
+            document.getElementById('bannerPreviewContainer');
+
+        if (bannerInput) {
+
+            bannerInput.addEventListener('change', function () {
+
+                bannerPreviewContainer.innerHTML = '';
+
+                const files = Array.from(this.files);
+
+                files.forEach(function (file) {
+
+                    if (!file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    const col = document.createElement('div');
+
+                    col.className = 'col-md-4 col-sm-6 mb-3';
+
+                    const wrapper = document.createElement('div');
+
+                    wrapper.style.cssText = `
+                        position: relative;
+                        width: 100%;
+                        height: 120px;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        border: 1px solid #e5e7eb;
+                    `;
+
+                    const img = document.createElement('img');
+
+                    img.src = URL.createObjectURL(file);
+
+                    img.style.cssText = `
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    `;
+
+                    wrapper.appendChild(img);
+
+                    col.appendChild(wrapper);
+
+                    bannerPreviewContainer.appendChild(col);
+
+                });
+
+            });
+
+        }
+
+    });
+</script>
 
 @endpush
