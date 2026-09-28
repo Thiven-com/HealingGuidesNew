@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
 use App\Models\Hospital;
+use App\Models\HospitalFacilitiesList;
 use App\Models\HospitalFacility;
+use App\Models\HospitalGallery;
 use App\Models\HospitalSpecialization;
 use App\Models\HospitalTieup;
 use App\Models\Specialization;
+use App\Models\SpecializationCategory;
 use App\Models\Tieup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -185,10 +188,12 @@ class HospitalController extends Controller
 
         // Save Hospital Specializations
         foreach ($request->specializations as $specializationId) {
+            $specialization = Specialization::where('id', $specializationId)->first();
 
             HospitalSpecialization::create([
                 'hospital_id' => $hospital->id,
                 'specialization_id' => $specializationId,
+                'specialization_category_id' => $specialization->specialization_category ?? null,
                 'status' => 1,
             ]);
 
@@ -350,10 +355,11 @@ class HospitalController extends Controller
 
         // Insert only new specializations
         foreach (array_diff($newIds, $existingIds) as $specializationId) {
-
+            $specialization = Specialization::where('id', $specializationId)->first();
             HospitalSpecialization::create([
                 'hospital_id' => $hospital->id,
                 'specialization_id' => $specializationId,
+                'specialization_category_id' => $specialization->specialization_category ?? null,
                 'status' => 1,
             ]);
         }
@@ -450,14 +456,28 @@ class HospitalController extends Controller
         return back()->with('success', 'Status Updated');
     }
 
-    public function facilityDetails(HospitalFacility $facility)
+    public function facilityDetails($id)
     {
-        $facility->with('hospital');
+        $facility = HospitalFacility::with([
+            'hospital',
+            'facility'
+        ])->findOrFail($id);
 
-        return view(
-            'admin.hospitals.facility-details',
-            compact('facility')
-        );
+        $facilityId = $facility->facility_id ?? $facility->id;
+        $hospitalId = $facility->hospital_id;
+
+        $hospitalFacilities = HospitalFacilitiesList::latest()->get();
+
+        $galleries = HospitalGallery::where('facility_id', $facilityId)
+            ->where('hospital_id', $hospitalId)
+            ->latest()
+            ->get();
+
+        return view('admin.hospitals.facility-details', compact(
+            'facility',
+            'hospitalFacilities',
+            'galleries'
+        ));
     }
 
     public function tieupsDetails($tieup)

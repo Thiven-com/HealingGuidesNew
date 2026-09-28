@@ -7,6 +7,7 @@ use App\Http\Resources\HospitalCollection;
 use App\Http\Resources\SpecializationCollection;
 use App\Models\Hospital;
 use App\Models\Specialization;
+use App\Models\SpecializationCategory;
 use Illuminate\Http\Request;
 
 class HospitalController extends Controller
@@ -71,6 +72,15 @@ class HospitalController extends Controller
         }
 
         $specializations = Specialization::where('status', 1);
+
+        // Filter by specialization category
+        if ($request->filled('specialization_category')) {
+            $specializations->where(
+                'specialization_category',
+                $request->specialization_category
+            );
+        }
+
         if ($request->filled('id')) {
             $specializations->where('id', $request->id);
         }
@@ -89,4 +99,50 @@ class HospitalController extends Controller
             'message' => 'Specializations Fetched Successfully'
         ]);
     }
+    public function specializationCategories(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $categories = SpecializationCategory::where('status', 1);
+
+        if ($request->filled('id')) {
+            $categories->where('id', $request->id);
+        }
+
+        $categories = $categories->latest()->paginate(20);
+
+        if ($categories->isEmpty()) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'No Specialization Categories Found'
+            ]);
+        }
+
+        return response()->json([
+            'success' => 1,
+            'data' => $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'category_name' => $category->category_name,
+                    'slug' => $category->slug,
+                    'icon' => $category->icon
+                        ? asset($category->icon)
+                        : null,
+                    'image' => $category->image
+                        ? asset($category->image)
+                        : null,
+                    'description' => $category->description,
+                ];
+            })->values(),
+            'message' => 'Specialization Categories Fetched Successfully'
+        ]);
+    }
+
 }

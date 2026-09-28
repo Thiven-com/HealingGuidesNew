@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
+use App\Http\Controllers\CustomerApp\HospitalController;
 use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
@@ -50,6 +51,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     //hospitals
     Route::any('hospitals', "HospitalController@hospitals");
     Route::any('specializations', "HospitalController@specializations");
+    Route::get('specialization-categories',[HospitalController::class, 'specializationCategories']
+    );
 
     //Doctors
     Route::any('doctors', "DoctorController@doctors");

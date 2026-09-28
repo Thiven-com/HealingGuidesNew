@@ -34,6 +34,13 @@ class HospitalCollection extends ResourceCollection
                     return [
                         'id' => $item->specialization->id,
                         'name' => $item->specialization->specialization_name,
+                        'category_id' => $item->specializationCategory
+                            ? $item->specializationCategory->id
+                            : null,
+
+                        'category_name' => $item->specializationCategory
+                            ? $item->specializationCategory->category_name
+                            : null,
                         'icon' => $item->specialization->icon ? asset($item->specialization->icon) : null,
                         'image' => $item->specialization->image ? asset($item->specialization->image) : null,
                     ];

@@ -134,6 +134,8 @@
 
                                     <th>Specialization</th>
 
+                                    <th>Category</th>
+
                                     <th>Slug</th>
 
                                     <th>Description</th>
@@ -194,6 +196,18 @@
                                                 {{ $specialization->specialization_name }}
                                             </strong>
 
+                                        </td>
+                                        {{-- Category --}}
+                                        <td>
+                                            @if($specialization->specializationCategory)
+                                                <span class="badge bg-primary">
+                                                    {{ $specialization->specializationCategory->category_name }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">
+                                                    N/A
+                                                </span>
+                                            @endif
                                         </td>
 
                                         <td>

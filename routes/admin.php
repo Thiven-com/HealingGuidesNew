@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HospitalController;
+use App\Http\Controllers\Admin\HospitalFacilitiesListController;
 use App\Http\Controllers\Admin\LabTestController;
 use App\Http\Controllers\Admin\MarketingStaffController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Admin\MarketingLeadController;
 use App\Http\Controllers\Admin\MedicineOrderController;
 use App\Http\Controllers\Admin\PatientMedicalReportController;
 use App\Http\Controllers\Admin\MembershipRegistrationController;
+use App\Http\Controllers\Admin\SpecializationCategoryController;
 use App\Http\Controllers\Admin\TieupController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +49,68 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+
+    Route::get(
+        'specialization-categories',
+        [SpecializationCategoryController::class, 'index']
+    )->name('admin.specialization-categories.index');
+
+    Route::get(
+        'specialization-categories/create',
+        [SpecializationCategoryController::class, 'create']
+    )->name('admin.specialization-categories.create');
+
+    Route::post(
+        'specialization-categories',
+        [SpecializationCategoryController::class, 'store']
+    )->name('admin.specialization-categories.store');
+
+    Route::get(
+        'specialization-categories/{id}/edit',
+        [SpecializationCategoryController::class, 'edit']
+    )->name('admin.specialization-categories.edit');
+
+    Route::put(
+        'specialization-categories/{id}',
+        [SpecializationCategoryController::class, 'update']
+    )->name('admin.specialization-categories.update');
+
+    Route::delete(
+        'specialization-categories/{id}',
+        [SpecializationCategoryController::class, 'destroy']
+    )->name('admin.specialization-categories.destroy');
+
+
+    Route::get(
+        'hospital-facilities-list',
+        [HospitalFacilitiesListController::class, 'index']
+    )->name('admin.hospital-facilities-list.index');
+
+    Route::get(
+        'hospital-facilities-list/create',
+        [HospitalFacilitiesListController::class, 'create']
+    )->name('admin.hospital-facilities-list.create');
+
+    Route::post(
+        'hospital-facilities-list',
+        [HospitalFacilitiesListController::class, 'store']
+    )->name('admin.hospital-facilities-list.store');
+
+    Route::get(
+        'hospital-facilities-list/{id}/edit',
+        [HospitalFacilitiesListController::class, 'edit']
+    )->name('admin.hospital-facilities-list.edit');
+
+    Route::put(
+        'hospital-facilities-list/{id}',
+        [HospitalFacilitiesListController::class, 'update']
+    )->name('admin.hospital-facilities-list.update');
+
+    Route::delete(
+        'hospital-facilities-list/{id}',
+        [HospitalFacilitiesListController::class, 'destroy']
+    )->name('admin.hospital-facilities-list.destroy');
 
     Route::resource('facilities', FacilityController::class)
         ->names('admin.facilities');

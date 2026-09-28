@@ -92,6 +92,35 @@
 
                             </div>
 
+                            <!-- Specialization Category -->
+<div class="col-lg-6 mb-3">
+
+    <label class="form-label">
+        Specialization Category
+        <span class="text-danger">*</span>
+    </label>
+
+    <select name="specialization_category"
+            id="specialization_category"
+            class="form-select">
+
+        <option value="">Select Specialization Category</option>
+
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}"
+                {{ old('specialization_category', $specialization->specialization_category) == $category->id ? 'selected' : '' }}>
+                {{ $category->category_name }}
+            </option>
+        @endforeach
+
+    </select>
+
+    @error('specialization_category')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+
+</div>
+
                             <!-- Status -->
                             <div class="col-lg-6 mb-3">
 

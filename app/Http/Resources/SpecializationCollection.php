@@ -19,6 +19,7 @@ class SpecializationCollection extends ResourceCollection
             return [
                 'id' => $specialization->id,
                 'specialization_name' => $specialization->specialization_name,
+                'specialization_category' => $specialization->specialization_category,
                 'description' => $specialization->description,
                 'icon' => $specialization->icon
                     ? asset($specialization->icon)

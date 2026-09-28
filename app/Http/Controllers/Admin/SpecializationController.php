@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HospitalSpecialization;
 use App\Models\Specialization;
+use App\Models\SpecializationCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -38,10 +39,13 @@ class SpecializationController extends Controller
             ->latest()
             ->paginate(20)
             ->withQueryString();
+        $categories = SpecializationCategory::where('status', 1)
+            ->orderBy('category_name')
+            ->get();
 
         return view(
             'admin.specializations.index',
-            compact('specializations')
+            compact('specializations', 'categories')
         );
     }
 
@@ -51,7 +55,10 @@ class SpecializationController extends Controller
      */
     public function create()
     {
-        return view('admin.specializations.create');
+        $categories = SpecializationCategory::where('status', 1)
+            ->orderBy('category_name', 'asc')
+            ->get();
+        return view('admin.specializations.create', compact('categories'));
     }
 
     /**
@@ -61,6 +68,7 @@ class SpecializationController extends Controller
     {
         $request->validate([
             'specialization_name' => 'required|string|max:255|unique:specializations,specialization_name',
+            'specialization_category' => 'required|exists:specialization_categories,id',
             'icon' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
             'description' => 'nullable|string',
@@ -70,6 +78,7 @@ class SpecializationController extends Controller
         $specialization = new Specialization();
 
         $specialization->specialization_name = $request->specialization_name;
+        $specialization->specialization_category = $request->specialization_category;
         $specialization->slug = Str::slug($request->specialization_name);
         $specialization->description = $request->description;
         $specialization->status = $request->status;
@@ -117,8 +126,11 @@ class SpecializationController extends Controller
     public function edit(string $id)
     {
         $specialization = Specialization::findOrFail($id);
+        $categories = SpecializationCategory::where('status', 1)
+            ->orderBy('category_name', 'asc')
+            ->get();
 
-        return view('admin.specializations.edit', compact('specialization'));
+        return view('admin.specializations.edit', compact('specialization', 'categories'));
     }
 
     /**

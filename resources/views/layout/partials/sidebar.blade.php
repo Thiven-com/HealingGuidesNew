@@ -99,6 +99,13 @@
                                                                 <span>Doctor Appointments</span>
                                                         </a>
                                                 </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.specialization-categories.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.specialization-categories.index') }}">
+                                                                <i class="ti ti-list-details fs-16 me-2"></i>
+                                                                <span>Specialization Category</span>
+                                                        </a>
+                                                </li>
 
                                                 <li
                                                         class="{{ request()->routeIs('admin.specializations.*') ? 'active' : '' }}">

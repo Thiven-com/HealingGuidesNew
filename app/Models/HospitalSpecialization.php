@@ -9,6 +9,7 @@ class HospitalSpecialization extends Model
     //
     protected $fillable = [
         'hospital_id',
+        'specialization_category_id',
         'specialization_id',
         'status',
     ];
@@ -16,6 +17,13 @@ class HospitalSpecialization extends Model
     public function hospital()
     {
         return $this->belongsTo(Hospital::class);
+    }
+    public function specializationCategory()
+    {
+        return $this->belongsTo(
+            SpecializationCategory::class,
+            'specialization_category_id'
+        );
     }
 
     public function specialization()
