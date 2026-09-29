@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\TieupsList;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -31,6 +32,9 @@ class HospitalCollection extends ResourceCollection
                     ? array_map(fn($banner) => asset(trim($banner)), array_filter(explode(',', $hospital->banner)))
                     : [],
                 'specializations' => $hospital->hospitalSpecializations->map(function ($item) {
+                    if (!$item->specialization) {
+                        return null;
+                    }
                     return [
                         'id' => $item->specialization->id,
                         'name' => $item->specialization->specialization_name,
@@ -47,7 +51,14 @@ class HospitalCollection extends ResourceCollection
                 })->values(),
                 'facilities' => new HospitalFacilityCollection($hospital->facilities),
                 'tieups' => $hospital->hospitalTieups
-                    ->map(function ($item) {
+                    ->map(function ($item) use ($hospital) {
+                        if (!$item->tieup) {
+                            return null;
+                        }
+                        // Hospital-specific tieup lists
+                        $tieupsList = TieupsList::where('hospital_id', $hospital->id)
+                            ->latest()
+                            ->get();
                         return [
                             'id' => $item->tieup->id,
                             'name' => $item->tieup->name,
@@ -56,6 +67,23 @@ class HospitalCollection extends ResourceCollection
                                 ? asset($item->tieup->image)
                                 : null,
                             'description' => $item->tieup->description ?? null,
+                            // Hospital Tieup Lists
+                            'tieups_list' => $tieupsList
+                                ->map(function ($list) {
+                                    return [
+                                        'id' => $list->id,
+                                        'title' => $list->title,
+
+                                        'image' => $list->image
+                                            ? asset('storage/' . $list->image)
+                                            : null,
+
+                                        'description' => $list->description,
+
+                                        'created_at' => $list->created_at,
+                                    ];
+                                })
+                                ->values(),
                         ];
                     })->values(),
                 'rating' => rand(35, 50) / 10,

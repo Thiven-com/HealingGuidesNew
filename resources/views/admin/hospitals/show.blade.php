@@ -661,7 +661,7 @@
                 <div class="tieup-item">
 
                     {{-- Tieup Card --}}
-                    <a href="{{ route('admin.hospitals.tieups-details', $tieup->id) }}"
+                    <a href="{{ route('admin.hospitals.tieups-details', $hospitalTieup->id) }}"
                        style="text-decoration: none; color: inherit;">
 
                         <div class="tieup-box tieup-{{ $colorClass }}">

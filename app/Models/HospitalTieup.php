@@ -16,7 +16,7 @@ class HospitalTieup extends Model
     {
         return $this->belongsTo(Tieup::class, 'tieup_id');
     }
-    public function hospital()
+    public function hospitalDetail()
     {
         return $this->belongsTo(Hospital::class, 'hospital');
     }

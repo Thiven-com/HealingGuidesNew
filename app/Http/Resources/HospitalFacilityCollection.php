@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\HospitalFacilitiesList;
 use App\Models\HospitalGallery;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -16,16 +17,8 @@ class HospitalFacilityCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($facility) {
-            $galleries = HospitalGallery::where(
-                'facility_id',
-                $facility->facility_id
-            )
-                ->where(
-                    'hospital_id',
-                    $facility->hospital_id
-                )
-                ->latest()
-                ->get();
+
+            $facilityList = HospitalFacilitiesList::latest()->get();
             return [
                 'id' => $facility->facility_id,
 
@@ -38,26 +31,44 @@ class HospitalFacilityCollection extends ResourceCollection
                 'description' => $facility->facility->description,
                 'slug' => $facility->facility->slug,
                 'short_description' => $facility->short_description ?? null,
-                'gallery' => $galleries->map(function ($gallery) {
+                'hospital_facilities_list' => $facilityList->map(function ($item) {
+
+                    $galleries = HospitalGallery::where(
+                        'hospital_id',
+                        $item->hospital_id
+                    )
+                        ->where(
+                            'hospital_facility_list_id',
+                            $item->id
+                        )
+                        ->latest()
+                        ->get();
 
                     return [
+                        'id' => $item->id,
 
-                        'id' => $gallery->id,
+                        'title' => $item->title,
 
-                        'hospital_id' => $gallery->hospital_id,
-
-                        'facility_id' => $gallery->facility_id,
-
-                        'file_type' => $gallery->file_type,
-
-                        'file_path' => $gallery->file_path
-                            ? asset($gallery->file_path)
+                        'image' => $item->image
+                            ? asset($item->image)
                             : null,
 
-                        'created_at' => $gallery->created_at,
+                        'description' => $item->description,
+                        'gallery' => $galleries->map(function ($gallery) {
+                            return [
+                                
 
-                        'updated_at' => $gallery->updated_at,
+                                'file_type' => $gallery->file_type,
 
+                                'file_path' => $gallery->file_path
+                                    ? asset('storage/' . $gallery->file_path)
+                                    : null,
+                            ];
+                        })->values()->toArray(),
+
+                        'created_at' => $item->created_at,
+
+                        'updated_at' => $item->updated_at,
                     ];
 
                 })->values()->toArray(),

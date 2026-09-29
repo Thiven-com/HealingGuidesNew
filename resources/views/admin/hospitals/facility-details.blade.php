@@ -384,7 +384,7 @@
                                 <i class="ti ti-plus"></i>
                             </span>
                             <span class="add-gallery-text">
-                                Add Hospital Facility
+                                Add Hospital Facility List
                             </span>
                         </button>
 

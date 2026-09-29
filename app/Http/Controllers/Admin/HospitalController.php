@@ -13,6 +13,7 @@ use App\Models\HospitalTieup;
 use App\Models\Specialization;
 use App\Models\SpecializationCategory;
 use App\Models\Tieup;
+use App\Models\TieupsList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -480,18 +481,26 @@ class HospitalController extends Controller
         ));
     }
 
-    public function tieupsDetails($tieup)
+    public function tieupsDetails($id)
     {
-        $tieup = Tieup::findOrFail($tieup);
-
-        $hospitalTieups = HospitalTieup::with('hospital')
-            ->where('tieup_id', $tieup->id)
+        $hospitalTieup = HospitalTieup::with('hospitalDetail')
+            ->where('id', $id)
+            ->first();
+        $tieup = Tieup::where('id', $hospitalTieup->tieup_id)->first();
+        $hospitalId = $hospitalTieup->hospital;
+        // Get TieupsList records for those hospitals
+        $tieupsList = TieupsList::where('hospital_id', $hospitalId)
             ->latest()
             ->get();
 
         return view(
             'admin.hospitals.tieups-details',
-            compact('tieup', 'hospitalTieups')
+            compact(
+                'tieup',
+                'hospitalTieup',
+                'tieupsList',
+                'hospitalId'
+            )
         );
     }
 

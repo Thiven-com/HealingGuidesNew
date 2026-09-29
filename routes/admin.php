@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\PatientMedicalReportController;
 use App\Http\Controllers\Admin\MembershipRegistrationController;
 use App\Http\Controllers\Admin\SpecializationCategoryController;
 use App\Http\Controllers\Admin\TieupController;
+use App\Http\Controllers\Admin\TieupsListController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -51,6 +52,24 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    // Route::post(
+    //     '/tieups',
+    //     [TieupsListController::class, 'store']
+    // )->name('admin.tieuplist.store');
+
+    // Route::put(
+    //     '/tieups/{id}',
+    //     [TieupsListController::class, 'update']
+    // )->name('admin.tieuplist.update');
+
+    // Route::delete(
+    //     '/tieups/{id}',
+    //     [TieupsListController::class, 'destroy']
+    // )->name('admin.tieuplist.destroy');
+
+    Route::resource('tieuplist', TieupsListController::class)
+        ->names('admin.tieuplist');
 
 
     Route::get(
@@ -137,44 +156,44 @@ Route::group(['middleware' => 'admin'], function () {
     )->name('hospital-galleries.show');
 
     Route::delete(
-        '/admin/hospital-galleries/{id}',
+        '/hospital-galleries/{id}',
         [HospitalGalleryController::class, 'destroy']
     )->name('admin.hospital-galleries.destroy');
 
 
     Route::get(
-        'admin/tieups',
+        '/tieups',
         [TieupController::class, 'index']
     )->name('admin.tieups.index');
 
     Route::post(
-        'admin/tieups',
+        '/tieups',
         [TieupController::class, 'store']
     )->name('admin.tieups.store');
 
     Route::get(
-        'admin/tieups/{id}/edit',
+        '/tieups/{id}/edit',
         [TieupController::class, 'edit']
     )->name('admin.tieups.edit');
 
     Route::put(
-        'admin/tieups/{id}',
+        '/tieups/{id}',
         [TieupController::class, 'update']
     )->name('admin.tieups.update');
 
     Route::delete(
-        'admin/tieups/{id}',
+        '/tieups/{id}',
         [TieupController::class, 'destroy']
     )->name('admin.tieups.destroy');
 
 
     Route::get(
-        '/admin/hospitals/tieups/{tieup}/details',
+        '/hospitals/tieups/{tieup}/details',
         [HospitalController::class, 'tieupsDetails']
     )->name('admin.hospitals.tieups-details');
 
     Route::delete(
-        '/admin/hospitals/{hospital}/banner/delete',
+        '/hospitals/{hospital}/banner/delete',
         [HospitalController::class, 'deleteBanner']
     )->name('admin.hospitals.banner.delete');
 
@@ -394,10 +413,12 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::post('packages/{id}/status', [PackageController::class, 'status'])->name('admin.packages.status');
 
-    Route::get('customers/{customer}/package',[CustomerPackageController::class, 'show']
+    Route::get(
+        'customers/{customer}/package',
+        [CustomerPackageController::class, 'show']
     )->name('customers.package.show');
 
-    Route::post('customers/{customer}/package',[CustomerPackageController::class, 'update'])->name('customers.package.update');
+    Route::post('customers/{customer}/package', [CustomerPackageController::class, 'update'])->name('customers.package.update');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])
