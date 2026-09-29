@@ -227,7 +227,7 @@
                                                                 <div class="d-flex align-items-center">
 
                                                                     @if($staff->photo)
-                                                                        <img src="{{ asset('storage/' . $staff->photo) }}" alt="{{ $staff->name }}"
+                                                                        <img src="{{ asset( $staff->photo) }}" alt="{{ $staff->name }}"
                                                                             class="rounded-circle me-2" width="40" height="40"
                                                                             style="object-fit: cover;">
                                                                     @else

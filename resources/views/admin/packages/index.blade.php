@@ -336,7 +336,7 @@
 
                                             @if(!empty($package->image))
 
-                                                <img src="{{ asset('storage/' . $package->image) }}"
+                                                <img src="{{ asset( $package->image) }}"
                                                      alt="{{ $package->name }}"
                                                      class="rounded"
                                                      width="45"

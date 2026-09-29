@@ -391,7 +391,7 @@
 
 
                                         <a href="{{ asset(
-                                            'storage/' . $report->report_file
+                                             $report->report_file
                                         ) }}"
                                            target="_blank"
                                            class="btn btn-sm btn-outline-primary">

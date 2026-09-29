@@ -641,7 +641,7 @@
 
                             @if(!empty($package->image))
 
-                                <img src="{{ asset('storage/' . $package->image) }}" class="img-fluid rounded"
+                                <img src="{{ asset( $package->image) }}" class="img-fluid rounded"
                                     style="max-height:280px;" alt="{{ $package->name }}">
 
                             @else
