@@ -50,7 +50,8 @@ class Ambulance extends Authenticatable
 
         'is_available',
 
-        'status'
+        'status',
+        'accept_free_booking',
 
     ];
 

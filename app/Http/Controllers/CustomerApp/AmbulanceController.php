@@ -117,7 +117,9 @@ class AmbulanceController extends Controller
                     ->orWhere('driver_name', 'like', '%' . $request->search . '%');
             });
         }
-
+        if ($request->filled('accept_free_booking')) {
+            $query->where('accept_free_booking', $request->accept_free_booking);
+        }
         $ambulances = $query
             ->orderBy('ambulance_name')
             ->paginate(10);

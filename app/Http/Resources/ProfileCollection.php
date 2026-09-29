@@ -35,6 +35,7 @@ class ProfileCollection extends ResourceCollection
                 'city' => $customer->city,
                 'pincode' => $customer->pincode,
                 'emergency_contact_name' => $customer->emergency_contact_name,
+                'emergency_contact_relationship' => $customer->emergency_contact_relationship,
                 'emergency_contact_mobile' => $customer->emergency_contact_mobile,
                 'is_verified' => (int) $customer->is_verified,
                 'status' => (int) $customer->status,

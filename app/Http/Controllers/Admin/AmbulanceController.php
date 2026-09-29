@@ -16,81 +16,81 @@ class AmbulanceController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $ambulances = Ambulance::with([
-        'hospital',
-        'ambulanceType'
-    ]);
+    {
+        $ambulances = Ambulance::with([
+            'hospital',
+            'ambulanceType'
+        ]);
 
-    // Search
-    if ($request->filled('search')) {
-        $search = trim($request->search);
+        // Search
+        if ($request->filled('search')) {
+            $search = trim($request->search);
 
-        $ambulances->where(function ($query) use ($search) {
-            $query->where('ambulance_name', 'LIKE', '%' . $search . '%')
-                ->orWhere('ambulance_code', 'LIKE', '%' . $search . '%')
-                ->orWhere('vehicle_number', 'LIKE', '%' . $search . '%')
-                ->orWhere('driver_name', 'LIKE', '%' . $search . '%')
-                ->orWhere('driver_mobile', 'LIKE', '%' . $search . '%');
-        });
-    }
+            $ambulances->where(function ($query) use ($search) {
+                $query->where('ambulance_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('ambulance_code', 'LIKE', '%' . $search . '%')
+                    ->orWhere('vehicle_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('driver_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('driver_mobile', 'LIKE', '%' . $search . '%');
+            });
+        }
 
-    // Hospital Filter
-    if ($request->filled('hospital_id')) {
-        $ambulances->where(
-            'hospital_id',
-            $request->hospital_id
+        // Hospital Filter
+        if ($request->filled('hospital_id')) {
+            $ambulances->where(
+                'hospital_id',
+                $request->hospital_id
+            );
+        }
+
+        // Ambulance Type Filter
+        if ($request->filled('ambulance_type_id')) {
+            $ambulances->where(
+                'ambulance_type_id',
+                $request->ambulance_type_id
+            );
+        }
+
+        // Availability Filter
+        if ($request->filled('is_available')) {
+            $ambulances->where(
+                'is_available',
+                $request->is_available
+            );
+        }
+
+        // Status Filter
+        if ($request->filled('status')) {
+            $ambulances->where(
+                'status',
+                $request->status
+            );
+        }
+
+        // Final Query + Pagination
+        $ambulances = $ambulances
+            ->latest('id')
+            ->paginate(20)
+            ->withQueryString();
+
+        // Filter Dropdown Data
+        $hospitals = Hospital::where('status', 1)
+            ->orderBy('hospital_name')
+            ->get();
+
+        $ambulanceTypes = AmbulanceType::where('status', 1)
+            ->orderBy('ambulance_type_name')
+            ->get();
+
+        return view(
+            'admin.ambulances.index',
+            compact(
+                'ambulances',
+                'hospitals',
+                'ambulanceTypes'
+            )
         );
     }
-
-    // Ambulance Type Filter
-    if ($request->filled('ambulance_type_id')) {
-        $ambulances->where(
-            'ambulance_type_id',
-            $request->ambulance_type_id
-        );
-    }
-
-    // Availability Filter
-    if ($request->filled('is_available')) {
-        $ambulances->where(
-            'is_available',
-            $request->is_available
-        );
-    }
-
-    // Status Filter
-    if ($request->filled('status')) {
-        $ambulances->where(
-            'status',
-            $request->status
-        );
-    }
-
-    // Final Query + Pagination
-    $ambulances = $ambulances
-        ->latest('id')
-        ->paginate(20)
-        ->withQueryString();
-
-    // Filter Dropdown Data
-    $hospitals = Hospital::where('status', 1)
-        ->orderBy('hospital_name')
-        ->get();
-
-    $ambulanceTypes = AmbulanceType::where('status', 1)
-        ->orderBy('ambulance_type_name')
-        ->get();
-
-    return view(
-        'admin.ambulances.index',
-        compact(
-            'ambulances',
-            'hospitals',
-            'ambulanceTypes'
-        )
-    );
-}
 
     /**
      * Show the form for creating a new resource.
@@ -322,6 +322,7 @@ class AmbulanceController extends Controller
             'price_per_km' => 'required|numeric|min:0',
             'is_available' => 'required|boolean',
             'status' => 'required|boolean',
+            'accept_free_booking' => 'nullable|boolean',
 
         ]);
 
@@ -417,7 +418,7 @@ class AmbulanceController extends Controller
         $ambulance->is_available = $request->is_available;
 
         $ambulance->status = $request->status;
-
+        $ambulance->accept_free_booking = $request->boolean('accept_free_booking');
         $ambulance->save();
 
         return redirect()

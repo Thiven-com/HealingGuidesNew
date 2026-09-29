@@ -40,6 +40,9 @@ class DoctorController extends Controller
         if ($request->filled('id')) {
             $query->where('id', $request->id);
         }
+        if ($request->filled('accept_free_booking')) {
+            $query->where('accept_free_booking', $request->accept_free_booking);
+        }
 
         if ($request->filled('specialization_id')) {
             $query->whereHas('hospitalSpecialization', function ($q) use ($request) {

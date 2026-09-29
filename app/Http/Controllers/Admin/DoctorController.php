@@ -423,6 +423,7 @@ class DoctorController extends Controller
 
             'status' =>
                 'nullable|boolean',
+            'accept_free_booking' => 'nullable|boolean',
         ]);
 
         $doctor->hospital_id =
@@ -508,7 +509,7 @@ class DoctorController extends Controller
             $doctor->status =
                 $request->status;
         }
-
+        $doctor->accept_free_booking = $request->boolean('accept_free_booking');
         if ($request->hasFile('photo')) {
 
             if ($doctor->photo) {

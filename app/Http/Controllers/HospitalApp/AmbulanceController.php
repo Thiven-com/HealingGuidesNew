@@ -183,6 +183,10 @@ class AmbulanceController extends Controller
                 $request->is_available
             );
         }
+        
+         if ($request->filled('accept_free_booking')) {
+            $ambulances->where('accept_free_booking', $request->accept_free_booking);
+        }
 
         /*
         |--------------------------------------------------------------------------

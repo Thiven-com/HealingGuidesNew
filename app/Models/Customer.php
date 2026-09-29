@@ -31,6 +31,7 @@ class Customer extends Authenticatable
         'pincode',
         'emergency_contact_name',
         'emergency_contact_mobile',
+        'emergency_contact_relationship',
         'package_id',
         'package_start_date',
         'package_expiry_date',

@@ -641,6 +641,35 @@
 
                             </div>
 
+                            <div class="col-md-6">
+    <div class="mb-3">
+        <label class="form-label">
+            Accept Free Package Booking
+        </label>
+
+        <div class="form-check form-switch">
+            <input
+                type="checkbox"
+                name="accept_free_booking"
+                value="1"
+                class="form-check-input"
+                id="accept_free_booking"
+                {{ old(
+                    'accept_free_booking',
+                    $ambulance->accept_free_booking ?? false
+                ) ? 'checked' : '' }}
+            >
+
+            <label
+                class="form-check-label"
+                for="accept_free_booking"
+            >
+                Allow free package ambulance bookings
+            </label>
+        </div>
+    </div>
+</div>
+
                         </div>
 
                     </div>

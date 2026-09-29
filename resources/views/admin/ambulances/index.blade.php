@@ -277,7 +277,7 @@
                                     <th>Availability</th>
 
                                     <th>Status</th>
-
+                                    <th>Free Booking</th>
                                     <th width="90" class="text-center">
 
                                         Action
@@ -431,6 +431,17 @@
 
                                             @endif
 
+                                        </td>
+                                        <td>
+                                             @if($ambulance->accept_free_booking)
+    <span class="badge bg-success">
+        Yes
+    </span>
+@else
+    <span class="badge bg-secondary">
+         No
+    </span>
+@endif
                                         </td>
                                         <td class="text-center">
 

@@ -41,7 +41,8 @@ class Doctor extends Authenticatable
         'about',
         'available_from',
         'available_to',
-        'status'
+        'status',
+        'accept_free_booking',
 
     ];
 

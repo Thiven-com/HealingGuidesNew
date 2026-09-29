@@ -217,7 +217,7 @@
                                     <th>Mobile</th>
 
                                     <th>Availability</th>
-
+                                    <th>Free Booking</th>
                                     <th>Status</th>
 
                                     <th width="90" class="text-center">
@@ -393,6 +393,17 @@
 
                                             @endif
 
+                                        </td>
+                                        <td>
+                                            @if($doctor->accept_free_booking)
+    <span class="badge bg-success">
+        Yes
+    </span>
+@else
+    <span class="badge bg-secondary">
+         No
+    </span>
+@endif
                                         </td>
 
 

@@ -62,6 +62,7 @@ class ProfileController extends Controller
             'city' => 'nullable|string|max:100',
             'pincode' => 'nullable|digits:6',
             'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_relationship' => 'nullable|string|max:255',
             'emergency_contact_mobile' => 'nullable|digits:10',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -676,7 +677,7 @@ class ProfileController extends Controller
 
                         'free_home_visit_consultation' => 0,
                         'free_hospital_consultation' => 0,
-                        'free_home_visit' => 0,
+                        'free_home_visit_service' => 0,
 
                         'free_ambulance' => 0,
 
@@ -703,7 +704,7 @@ class ProfileController extends Controller
             'free_video_consultation' => 0,
             'free_home_visit_consultation' => 0,
             'free_hospital_consultation' => 0,
-            'free_home_visit' => 0,
+            'free_home_visit_service' => 0,
             'free_ambulance' => 0,
             'free_surgery_quote' => 0,
             'free_medicine' => 0,
@@ -730,9 +731,9 @@ class ProfileController extends Controller
                 $summary['free_home_visit_consultation'] += $remaining;
 
                 $summary['free_hospital_consultation'] += $remaining;
-            } elseif ($type === 'free_home_visit') {
+            } elseif ($type === 'free_home_visit_service') {
 
-                $summary['free_home_visit'] += $remaining;
+                $summary['free_home_visit_service'] += $remaining;
             } elseif ($type === 'free_ambulance') {
 
                 $summary['free_ambulance'] += $remaining;
