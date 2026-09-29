@@ -49,6 +49,7 @@ class HospitalGalleryController extends Controller
             'hospital_id' => 'required|integer',
             'hospital' => 'required|string|max:255',
             'facility_id' => 'required|integer',
+            'hospital_facility_list_id' => 'required|integer',
             'file_type' => 'required|in:image,video',
             'file_path' => [
                 'required',
@@ -106,6 +107,7 @@ class HospitalGalleryController extends Controller
             'hospital_id' => $request->hospital_id,
             'hospital' => $request->hospital,
             'facility_id' => $request->facility_id,
+            'hospital_facility_list_id' => $request->hospital_facility_list_id,
             'file_type' => $request->file_type,
             'file_path' => $path,
         ]);
