@@ -100,6 +100,13 @@
                                                         </a>
                                                 </li>
                                                 <li
+                                                        class="{{ request()->routeIs('admin.healthcheckups.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.healthcheckups.index') }}">
+                                                                <i class="ti ti-heartbeat fs-16 me-2"></i>
+                                                                <span>Health Checkups</span>
+                                                        </a>
+                                                </li>
+                                                <li
                                                         class="{{ request()->routeIs('admin.specialization-categories.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.specialization-categories.index') }}">
                                                                 <i class="ti ti-list-details fs-16 me-2"></i>
@@ -196,7 +203,8 @@
                                                                 <span>Coupons</span>
                                                         </a>
                                                 </li>
-                                                <li class="{{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
+                                                <li
+                                                        class="{{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.packages.index') }}">
                                                                 <i class="ti ti-box fs-16 me-2"></i>
                                                                 <span>Packages</span>

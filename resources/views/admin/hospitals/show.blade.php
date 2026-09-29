@@ -654,6 +654,8 @@
 
             @php
                 $tieup = $hospitalTieup->tieup;
+                // Default tieup color
+        $colorClass = $tieup->color ?? 'purple';
             @endphp
 
             @if($tieup)

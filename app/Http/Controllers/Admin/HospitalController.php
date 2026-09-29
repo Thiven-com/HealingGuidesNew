@@ -467,9 +467,9 @@ class HospitalController extends Controller
         $facilityId = $facility->facility_id ?? $facility->id;
         $hospitalId = $facility->hospital_id;
 
-        $hospitalFacilities = HospitalFacilitiesList::latest()->get();
+        $hospitalFacilities = HospitalFacilitiesList::where('hospital_id', $hospitalId)->where('hospital_facilities_id', $id)->get();
 
-        $galleries = HospitalGallery::where('facility_id', $facilityId)
+        $galleries = HospitalGallery::where('hospital_facility_list_id', $id)
             ->where('hospital_id', $hospitalId)
             ->latest()
             ->get();

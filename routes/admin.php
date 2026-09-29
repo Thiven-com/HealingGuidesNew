@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\HealthCheckupController;
 use App\Http\Controllers\Admin\HospitalGalleryController;
 use App\Http\Controllers\Admin\InsuranceController;
 use App\Http\Controllers\Admin\LabTestBookingController;
@@ -52,6 +53,26 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    Route::get(
+        '/health-checkups',
+        [HealthCheckupController::class, 'index']
+    )->name('admin.healthcheckups.index');
+
+    Route::post(
+        '/health-checkups',
+        [HealthCheckupController::class, 'store']
+    )->name('admin.healthcheckups.store');
+
+    Route::put(
+        '/health-checkups/{id}',
+        [HealthCheckupController::class, 'update']
+    )->name('admin.healthcheckups.update');
+
+    Route::delete(
+        '/health-checkups/{id}',
+        [HealthCheckupController::class, 'destroy']
+    )->name('admin.healthcheckups.destroy');
 
     // Route::post(
     //     '/tieups',
