@@ -658,7 +658,7 @@
 
 
                             {{-- Consultation Fee --}}
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-4">
 
                                 <div class="mb-3">
 
@@ -687,7 +687,7 @@
             Actual Consultation Fee
             ====================================================== --}}
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-4">
 
                 <div class="mb-3">
 
@@ -720,11 +720,36 @@
                 </div>
 
             </div>
+            
+{{-- Enable / Disable --}}
+                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="consultation_enabled"
+                        name="consultation_enabled"
+                        value="1"
+                        {{ old(
+                            'consultation_enabled',
+                            $doctor->consultation_enabled ?? 1
+                        ) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="consultation_enabled"
+                    >
+                        Enable Consultation
+                    </label>
+
+                </div>
 
 
 
                             {{-- Video Fee --}}
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-4">
 
                                 <div class="mb-3">
 
@@ -753,7 +778,7 @@
             Actual Video Consultation Fee
             ====================================================== --}}
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-4">
 
                 <div class="mb-3">
 
@@ -787,10 +812,35 @@
 
             </div>
 
+            {{-- Enable / Disable --}}
+                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="video_consultation_enabled"
+                        name="video_consultation_enabled"
+                        value="1"
+                        {{ old(
+                            'video_consultation_enabled',
+                            $doctor->video_consultation_enabled ?? 1
+                        ) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="video_consultation_enabled"
+                    >
+                        Enable Video Consultation
+                    </label>
+
+                </div>
+
 
 
                             {{-- Chat Fee --}}
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-4">
 
                                 <div class="mb-3">
 
@@ -820,7 +870,7 @@
             Actual Chat Consultation Fee
             ====================================================== --}}
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-4">
 
                 <div class="mb-3">
 
@@ -853,11 +903,35 @@
                 </div>
 
             </div>
+            {{-- Enable / Disable --}}
+                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="chat_consultation_enabled"
+                        name="chat_consultation_enabled"
+                        value="1"
+                        {{ old(
+                            'chat_consultation_enabled',
+                            $doctor->chat_consultation_enabled ?? 1
+                        ) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="chat_consultation_enabled"
+                    >
+                        Enable Chat Consultation
+                    </label>
+
+                </div>
 
 
 
                             {{-- Home Visit --}}
-                            <div class="col-xl-3 col-md-6">
+                            <div class="col-xl-3 col-md-4">
 
                                 <div class="mb-3">
 
@@ -887,7 +961,7 @@
             Actual Home Visit Fee
             ====================================================== --}}
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-3 col-md-4">
 
                 <div class="mb-3">
 
@@ -920,6 +994,37 @@
                 </div>
 
             </div>
+
+            {{-- Enable / Disable --}}
+                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="home_visit_enabled"
+                        name="home_visit_enabled"
+                        value="1"
+                        {{ old(
+                            'home_visit_enabled',
+                            $doctor->home_visit_enabled ?? 1
+                        ) ? 'checked' : '' }}
+                    >
+
+                    <label
+                        class="form-check-label"
+                        for="home_visit_enabled"
+                    >
+                        Enable Home Visit
+                    </label>
+
+                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
 
                         </div>
