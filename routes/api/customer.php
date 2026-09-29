@@ -51,7 +51,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     //hospitals
     Route::any('hospitals', "HospitalController@hospitals");
     Route::any('specializations', "HospitalController@specializations");
-    Route::get('specialization-categories',[HospitalController::class, 'specializationCategories']
+    Route::get(
+        'specialization-categories',
+        [HospitalController::class, 'specializationCategories']
     );
 
     //Doctors
@@ -162,6 +164,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/insurance/{id}', [ProfileController::class, 'insuranceDetails']);
 
     Route::get('/delete_insurance/{id}', [ProfileController::class, 'deleteInsurance']);
+
+    Route::get('/profile/package',[ProfileController::class, 'packageDetails']);
 
     Route::get('search', [HomeController::class, 'search']);
 

@@ -623,4 +623,85 @@ class ProfileController extends Controller
             "copy_code" => $fields['field_1'] ?? '',
         ];
     }
+
+    public function packageDetails()
+    {
+        $customer = auth('sanctum')->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $customer->load([
+            'package',
+            'packageBenefits'
+        ]);
+
+        if (!$customer->package_id) {
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'No package assigned.',
+                'data' => [
+                    'package' => null,
+                    'package_start_date' => null,
+                    'package_expiry_date' => null,
+                    'is_expired' => false,
+                    'benefits' => [],
+                ]
+            ]);
+        }
+
+        $isExpired =
+            !$customer->package_expiry_date ||
+            now()->startOfDay()->gt(
+                $customer->package_expiry_date
+            );
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Package details fetched successfully.',
+
+            'data' => [
+
+                'package' => $customer->package,
+
+                'package_start_date' =>
+                    $customer->package_start_date,
+
+                'package_expiry_date' =>
+                    $customer->package_expiry_date,
+
+                'is_expired' =>
+                    $isExpired,
+
+                'benefits' =>
+                    $customer->packageBenefits->map(function ($benefit) {
+
+                        return [
+                            'id' => $benefit->id,
+
+                            'benefit_type' =>
+                                $benefit->benefit_type,
+
+                            'benefit_name' =>
+                                $benefit->benefit_name,
+
+                            'total_quantity' =>
+                                $benefit->total_quantity,
+
+                            'used_quantity' =>
+                                $benefit->used_quantity,
+
+                            'remaining_quantity' =>
+                                $benefit->remaining_quantity,
+                        ];
+                    }),
+
+            ]
+        ]);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CustomerApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileCollection;
 use App\Models\Customer;
+use App\Models\Package;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -38,14 +39,28 @@ class AccountController extends Controller
             $customer->customer_code = 'CUS' . str_pad($customer->id, 6, '0', STR_PAD_LEFT);
             $customer->save();
 
-            try {
-                $msg = "Your OTP is {$otp} to log in to your ECM App. Do not share this code with anyone.- E Care Managers";
-                $url = "http://sms.hspsms.com/sendSMS?username=Ecm&message=" . urlencode($msg) . "&sendername=ECAREM&smstype=TRANS&numbers=$customer->mobile&apikey=ba52516b-ab36-4b55-a3b4-679af134744e";
-                $ret = file($url);
-                Log::info($ret);
-            } catch (\Exception $e) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-                Log::info($e->getMessage());
+            $package = Package::where('status', 1)
+                ->where('is_default', 1)
+                ->with('activeBenefits')
+                ->first();
+
+            if ($package) {
+
+                app(\App\Services\CustomerPackageService::class)
+                    ->assignPackage(
+                        $customer,
+                        $package
+                    );
             }
+
+            // try {
+            //     $msg = "Your OTP is {$otp} to log in to your ECM App. Do not share this code with anyone.- E Care Managers";
+            //     $url = "http://sms.hspsms.com/sendSMS?username=Ecm&message=" . urlencode($msg) . "&sendername=ECAREM&smstype=TRANS&numbers=$customer->mobile&apikey=ba52516b-ab36-4b55-a3b4-679af134744e";
+            //     $ret = file($url);
+            //     Log::info($ret);
+            // } catch (\Exception $e) {
+            //     Log::info($e->getMessage());
+            // }
             NotificationService::send(
                 'customer',
                 $customer->id,

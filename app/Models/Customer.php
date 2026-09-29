@@ -31,11 +31,24 @@ class Customer extends Authenticatable
         'pincode',
         'emergency_contact_name',
         'emergency_contact_mobile',
+        'package_id',
+        'package_start_date',
+        'package_expiry_date',
     ];
     // Customer.php
 
     public function familyMembers()
     {
         return $this->hasMany(FamilyMember::class, 'customer_id');
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    public function packageBenefits()
+    {
+        return $this->hasMany(CustomerPackageBenefit::class);
     }
 }

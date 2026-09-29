@@ -38,6 +38,8 @@ class PackageController extends Controller
 
             'free_medicine' =>
                 'Free Medicine',
+            'free_diagnostic' =>
+                'Free Diagnostic',
 
         ];
     }
@@ -72,11 +74,11 @@ class PackageController extends Controller
                     'like',
                     '%' . $search . '%'
                 )
-                ->orWhere(
-                    'slug',
-                    'like',
-                    '%' . $search . '%'
-                );
+                    ->orWhere(
+                        'slug',
+                        'like',
+                        '%' . $search . '%'
+                    );
 
             });
         }
@@ -304,8 +306,8 @@ class PackageController extends Controller
 
                         'status' =>
                             isset($benefit['status'])
-                                ? (bool) $benefit['status']
-                                : true,
+                            ? (bool) $benefit['status']
+                            : true,
 
                     ]);
                 }
@@ -565,8 +567,8 @@ class PackageController extends Controller
 
                     $packageBenefit->status =
                         isset($benefit['status'])
-                            ? (bool) $benefit['status']
-                            : true;
+                        ? (bool) $benefit['status']
+                        : true;
 
                     $packageBenefit->save();
 

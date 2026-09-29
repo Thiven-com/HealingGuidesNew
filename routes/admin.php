@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerPackageController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\DoctorController;
@@ -392,6 +393,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::resource('packages', PackageController::class)->names('admin.packages');
 
     Route::post('packages/{id}/status', [PackageController::class, 'status'])->name('admin.packages.status');
+
+    Route::get('customers/{customer}/package',[CustomerPackageController::class, 'show']
+    )->name('customers.package.show');
+
+    Route::post('customers/{customer}/package',[CustomerPackageController::class, 'update'])->name('customers.package.update');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

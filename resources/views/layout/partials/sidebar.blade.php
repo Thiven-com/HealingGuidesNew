@@ -196,6 +196,12 @@
                                                                 <span>Coupons</span>
                                                         </a>
                                                 </li>
+                                                <li class="{{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.packages.index') }}">
+                                                                <i class="ti ti-box fs-16 me-2"></i>
+                                                                <span>Packages</span>
+                                                        </a>
+                                                </li>
 
 
                                         </ul>

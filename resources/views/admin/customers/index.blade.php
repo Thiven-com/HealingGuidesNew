@@ -423,12 +423,18 @@
                                                     <i class="ti ti-edit"></i>
 
                                                 </a>
+                                                <a href="{{ route('customers.package.show', $customer->id) }}"
+                                                    class="btn btn-sm btn-outline-primary" title="Manage Package">
+
+                                                    <i class="fas fa-box-open"></i>
+
+                                                </a>
 
 
                                                 <!-- Delete -->
 
-                                                {{-- <form action="{{ route('admin.customers.destroy', $customer) }}" method="POST"
-                                                    class="d-inline">
+                                                {{-- <form action="{{ route('admin.customers.destroy', $customer) }}"
+                                                    method="POST" class="d-inline">
 
                                                     @csrf
 
