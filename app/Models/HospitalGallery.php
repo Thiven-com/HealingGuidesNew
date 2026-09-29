@@ -17,6 +17,7 @@ class HospitalGallery extends Model
         'facility_id',
         'file_type',
         'file_path',
+        'hospital_facility_list_id',
     ];
 
     /**

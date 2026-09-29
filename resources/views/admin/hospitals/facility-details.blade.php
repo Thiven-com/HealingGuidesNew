@@ -21,6 +21,71 @@
 
         $facilityId = $facility->facility_id ?? $facility->id;
         $hospitalId = $facility->hospital_id;
+
+
+        $facilityGalleryData = [];
+
+        foreach ($hospitalFacilities as $hospitalFacility) {
+
+            /*
+             * hospital_facilities_lists.id
+             * This is the exact facility-list record.
+             */
+            $hospitalFacilityListId = $hospitalFacility->id;
+
+            /*
+             * Main facility ID
+             */
+            $currentFacilityId =
+                $hospitalFacility->facility_id
+                ?? $hospitalFacility->id;
+
+            /*
+             * Get gallery using the exact hospital facility list.
+             */
+            $facilityGallery = \App\Models\HospitalGallery::where(
+                'hospital_id',
+                $hospitalId
+            )
+                ->where(
+                    'hospital_facility_list_id',
+                    $hospitalFacilityListId
+                )
+                ->latest()
+                ->get();
+
+            $facilityGalleryData[(string) $hospitalFacilityListId] = [
+
+                'id' => $hospitalFacilityListId,
+
+                'facility_id' => $currentFacilityId,
+
+                'title' => $hospitalFacility->title
+                    ?? $hospitalFacility->name
+                    ?? 'Facility',
+
+                'image' => !empty($hospitalFacility->image)
+                    ? asset($hospitalFacility->image)
+                    : null,
+
+                'description' => $hospitalFacility->description ?? '',
+
+                'galleries' => $facilityGallery->map(function ($gallery) {
+
+                    return [
+                        'id' => $gallery->id,
+                        'file_type' => $gallery->file_type,
+                        'file_path' => asset($gallery->file_path),
+                        // DELETE URL
+                        'delete_url' => route(
+                            'admin.hospital-galleries.destroy',
+                            $gallery->id
+                        ),
+                    ];
+
+                })->values()->toArray(),
+            ];
+        }
     @endphp
 
     <div class="page-wrapper">
@@ -337,111 +402,130 @@
 
 
                 {{-- FACILITIES BODY --}}
-                <div class="hospital-gallery-body">
+                {{-- FACILITIES BODY --}}
+                <div class="facility-list-body">
 
                     @forelse($hospitalFacilities as $hospitalFacility)
+                        <input type="hidden" name="facility_id"
+                            value="{{ $hospitalFacility->facility_id ?? $hospitalFacility->id }}">
 
-                        <div class="hospital-gallery-item facility-list-item">
+                        {{-- FACILITY ROW --}}
+                        <div class="facility-list-row" onclick="showFacilityGallery({{ $hospitalFacility->id }})"
+                            style="cursor: pointer;">
 
                             {{-- IMAGE --}}
-                            <div class="hospital-gallery-media">
+                            <div class="facility-list-image">
 
                                 @if(!empty($hospitalFacility->image))
 
-                                    <a href="{{ asset($hospitalFacility->image) }}" target="_blank" rel="noopener noreferrer"
-                                        style="display: block; width: 100%; height: 100%;">
+                                    <a href="{{ asset($hospitalFacility->image) }}" target="_blank" rel="noopener noreferrer">
 
                                         <img src="{{ asset($hospitalFacility->image) }}"
-                                            alt="{{ $hospitalFacility->facility_name }}" class="gallery-media-image">
+                                            alt="{{ $hospitalFacility->title ?? 'Hospital Facility' }}">
 
                                     </a>
 
                                 @else
 
-                                    <div class="facility-image-placeholder">
+                                    <div class="facility-list-placeholder">
                                         <i class="ti ti-building-hospital"></i>
                                     </div>
 
                                 @endif
 
-
-                                {{-- STATUS --}}
-                                <div class="hospital-gallery-type">
-
-                                    <i class="ti ti-building-hospital"></i>
-
-                                    Facility
-
-                                </div>
-
                             </div>
 
 
-                            {{-- FACILITY DETAILS --}}
+                            {{-- CONTENT --}}
                             <div class="facility-list-content">
 
-                                <h5>
-                                    {{ $hospitalFacility->facility_name }}
-                                </h5>
+                                <div class="facility-list-title-row">
+
+                                    <h5>
+                                        {{ $hospitalFacility->title ?? 'Hospital Facility' }}
+                                    </h5>
+
+                                    <span class="facility-list-badge">
+                                        <i class="ti ti-building-hospital"></i>
+                                        Facility
+                                    </span>
+
+                                </div>
 
                                 @if(!empty($hospitalFacility->description))
 
                                     <p>
-                                        {{ Str::limit($hospitalFacility->description, 100) }}
+                                        {{ Str::limit($hospitalFacility->description, 130) }}
                                     </p>
 
                                 @else
 
-                                    <p class="text-muted">
+                                    <p class="facility-list-no-description">
                                         No description available.
                                     </p>
 
                                 @endif
 
+                                <div class="facility-list-meta">
 
-                                {{-- STATUS --}}
-                                <div class="facility-status">
+                                    <span>
+                                        <i class="ti ti-calendar"></i>
+                                        Added {{ $hospitalFacility->created_at?->format('d M Y') ?? 'N/A' }}
+                                    </span>
 
-                                    @if($hospitalFacility->status)
-
-                                        <span class="badge bg-success">
-                                            Active
-                                        </span>
-
-                                    @else
-
-                                        <span class="badge bg-danger">
-                                            Inactive
-                                        </span>
-
-                                    @endif
+                                    <span>
+                                        <i class="ti ti-photo"></i>
+                                        {{ !empty($hospitalFacility->image) ? 'Image Available' : 'No Image' }}
+                                    </span>
 
                                 </div>
 
                             </div>
 
 
-                            {{-- ACTION BUTTONS --}}
+                            {{-- ACTIONS --}}
                             <div class="facility-list-actions">
 
-                                <a href="{{ route('admin.hospital-facilities-list.edit', $hospitalFacility->id) }}"
-                                    class="facility-action-btn edit-btn" title="Edit">
+                                {{-- ADD GALLERY --}}
+                                {{-- ADD GALLERY --}}
+                                <button type="button" class="add-gallery-btn" data-bs-toggle="modal"
+                                    data-bs-target="#addGalleryModal{{ $hospitalFacility->id }}"
+                                    onclick="event.stopPropagation();">
+
+                                    <span class="add-gallery-icon">
+                                        <i class="ti ti-photo-plus"></i>
+                                    </span>
+
+                                    <span class="add-gallery-text">
+                                        Add Gallery
+                                    </span>
+
+                                </button>
+
+
+                                {{-- EDIT --}}
+                                <button type="button" class="facility-list-action edit" title="Edit Facility"
+                                    data-bs-toggle="modal" data-bs-target="#editFacilityModal{{ $hospitalFacility->id }}"
+                                    onclick="event.stopPropagation();">
 
                                     <i class="ti ti-edit"></i>
+                                    <span>Edit</span>
 
-                                </a>
+                                </button>
 
 
+                                {{-- DELETE --}}
                                 <form action="{{ route('admin.hospital-facilities-list.destroy', $hospitalFacility->id) }}"
-                                    method="POST"
+                                    method="POST" onclick="event.stopPropagation();"
                                     onsubmit="return confirm('Are you sure you want to delete this hospital facility?');">
 
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="facility-action-btn delete-btn" title="Delete">
+                                    <button type="submit" class="facility-list-action delete" title="Delete Facility">
 
                                         <i class="ti ti-trash"></i>
+                                        <span>Delete</span>
 
                                     </button>
 
@@ -451,12 +535,346 @@
 
                         </div>
 
+
+                        {{-- =====================================================
+                        EDIT FACILITY MODAL
+                        ====================================================== --}}
+                        <div class="modal fade" id="editFacilityModal{{ $hospitalFacility->id }}" tabindex="-1"
+                            aria-labelledby="editFacilityModalLabel{{ $hospitalFacility->id }}" aria-hidden="true">
+
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                                <div class="modal-content facility-edit-modal">
+
+                                    {{-- MODAL HEADER --}}
+                                    <div class="modal-header">
+
+                                        <div>
+                                            <h5 class="modal-title" id="editFacilityModalLabel{{ $hospitalFacility->id }}">
+
+                                                Edit Hospital Facility
+
+                                            </h5>
+
+                                            <p class="facility-modal-subtitle">
+                                                Update hospital facility information
+                                            </p>
+                                        </div>
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        </button>
+
+                                    </div>
+
+
+                                    {{-- FORM --}}
+                                    <form action="{{ route('admin.hospital-facilities-list.update', $hospitalFacility->id) }}"
+                                        method="POST" enctype="multipart/form-data">
+
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div class="modal-body">
+
+                                            <div class="row g-3">
+
+                                                {{-- TITLE --}}
+                                                <div class="col-md-12">
+
+                                                    <label class="facility-form-label">
+                                                        Facility Title
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <input type="text" name="title" class="form-control facility-form-control"
+                                                        value="{{ $hospitalFacility->title }}"
+                                                        placeholder="Enter facility title" required>
+
+                                                </div>
+
+
+                                                {{-- CURRENT IMAGE --}}
+                                                <div class="col-md-5">
+
+                                                    <label class="facility-form-label">
+                                                        Current Image
+                                                    </label>
+
+                                                    <div class="facility-current-image">
+
+                                                        @if(!empty($hospitalFacility->image))
+
+                                                            <img src="{{ asset($hospitalFacility->image) }}"
+                                                                alt="{{ $hospitalFacility->title ?? 'Facility' }}">
+
+                                                        @else
+
+                                                            <div class="facility-current-placeholder">
+
+                                                                <i class="ti ti-building-hospital"></i>
+
+                                                                <span>No Image</span>
+
+                                                            </div>
+
+                                                        @endif
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                {{-- NEW IMAGE --}}
+                                                <div class="col-md-7">
+
+                                                    <label class="facility-form-label">
+                                                        Change Image
+                                                    </label>
+
+                                                    <input type="file" name="image" class="form-control facility-form-control"
+                                                        accept=".jpg,.jpeg,.png,.webp">
+
+                                                    <small class="facility-form-help">
+                                                        JPG, JPEG, PNG or WEBP. Maximum 5MB.
+                                                    </small>
+
+                                                </div>
+
+
+                                                {{-- DESCRIPTION --}}
+                                                <div class="col-md-12">
+
+                                                    <label class="facility-form-label">
+                                                        Description
+                                                    </label>
+
+                                                    <textarea name="description" rows="5"
+                                                        class="form-control facility-form-control"
+                                                        placeholder="Enter facility description">{{ $hospitalFacility->description }}</textarea>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        {{-- FOOTER --}}
+                                        <div class="modal-footer">
+
+                                            <button type="button" class="facility-modal-cancel" data-bs-dismiss="modal">
+
+                                                Cancel
+
+                                            </button>
+
+                                            <button type="submit" class="facility-modal-save">
+
+                                                <i class="ti ti-device-floppy"></i>
+
+                                                Update Facility
+
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        {{-- =========================================================
+                        ADD GALLERY MODAL
+                        ========================================================= --}}
+
+                        <div class="modal fade" id="addGalleryModal{{ $hospitalFacility->id }}" tabindex="-1"
+                            aria-labelledby="addGalleryModalLabel{{ $hospitalFacility->id }}" aria-hidden="true">
+
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+
+                                <div class="modal-content gallery-modal-content">
+
+                                    {{-- MODAL HEADER --}}
+                                    <div class="modal-header gallery-modal-header">
+
+                                        <div class="gallery-modal-title-wrapper">
+
+                                            <div class="gallery-modal-icon">
+                                                <i class="ti ti-photo-plus"></i>
+                                            </div>
+
+                                            <div>
+                                                <h5 class="modal-title" id="addGalleryModalLabel{{ $hospitalFacility->id }}">
+                                                    Add Hospital Gallery
+                                                </h5>
+
+                                                <p>
+                                                    Upload an image or video for this hospital facility.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        </button>
+
+                                    </div>
+
+
+
+                                    {{-- MODAL BODY --}}
+                                    <form action="{{ route('admin.hospital-galleries.store', $hospitalFacility->id) }}"
+                                        method="POST" enctype="multipart/form-data">
+
+                                        @csrf
+
+                                        <div class="modal-body gallery-modal-body">
+
+                                            {{-- HOSPITAL ID --}}
+                                            <input type="hidden" name="hospital_id" value="{{ $facility->hospital->id ?? '' }}">
+
+                                            {{-- FACILITY ID --}}
+                                            <input type="hidden" name="facility_id"
+                                                value="{{ $facility->facility_id ?? $facility->id }}">
+
+                                            {{-- HOSPITAL NAME --}}
+                                            <input type="hidden" name="hospital"
+                                                value="{{ $facility->hospital->hospital_name ?? $facility->hospital->name ?? 'Hospital' }}">
+                                            <input type="hidden" name="hospital_facility_list_id"
+                                                value="{{$hospitalFacility->id }}">
+
+                                            {{-- FILE TYPE --}}
+                                            <div class="gallery-form-group">
+
+                                                <label class="gallery-form-label">
+                                                    File Type
+                                                    <span>*</span>
+                                                </label>
+
+                                                <div class="gallery-type-options">
+
+                                                    {{-- IMAGE --}}
+                                                    <label class="gallery-type-option">
+
+                                                        <input type="radio" name="file_type" value="image" checked>
+
+                                                        <span class="gallery-type-card">
+
+                                                            <span class="gallery-type-icon image">
+                                                                <i class="ti ti-photo"></i>
+                                                            </span>
+
+                                                            <span>
+                                                                <strong>Image</strong>
+                                                                <small>JPG, PNG, WEBP, GIF</small>
+                                                            </span>
+
+                                                        </span>
+
+                                                    </label>
+
+
+                                                    {{-- VIDEO --}}
+                                                    <label class="gallery-type-option">
+
+                                                        <input type="radio" name="file_type" value="video">
+
+                                                        <span class="gallery-type-card">
+
+                                                            <span class="gallery-type-icon video">
+                                                                <i class="ti ti-video"></i>
+                                                            </span>
+
+                                                            <span>
+                                                                <strong>Video</strong>
+                                                                <small>MP4, MOV, AVI, WEBM</small>
+                                                            </span>
+
+                                                        </span>
+
+                                                    </label>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            {{-- FILE UPLOAD --}}
+                                            <div class="gallery-form-group">
+
+                                                <label class="gallery-form-label">
+                                                    Upload File
+                                                    <span>*</span>
+                                                </label>
+
+                                                <div class="gallery-upload-box" id="galleryUploadBox">
+
+                                                    <input type="file" name="file_path" id="galleryFile"
+                                                        class="gallery-file-input" accept="image/*" required>
+
+                                                    <div class="gallery-upload-content">
+
+                                                        <div class="gallery-upload-icon">
+                                                            <i class="ti ti-cloud-upload"></i>
+                                                        </div>
+
+                                                        <h6>
+                                                            Click to upload
+                                                        </h6>
+
+                                                        <p id="galleryUploadText">
+                                                            Select an image from your computer
+                                                        </p>
+
+                                                        <span>
+                                                            Maximum file size: 50 MB
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                {{-- FILE PREVIEW --}}
+                                                <div id="galleryPreview" class="gallery-preview" style="display:none;">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        {{-- MODAL FOOTER --}}
+                                        <div class="modal-footer gallery-modal-footer">
+
+                                            <button type="button" class="gallery-cancel-btn" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+
+                                            <button type="submit" class="gallery-submit-btn">
+
+                                                <i class="ti ti-upload"></i>
+
+                                                Upload Gallery
+
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+
                     @empty
 
-                        {{-- EMPTY --}}
-                        <div class="hospital-gallery-empty">
+                        <div class="facility-list-empty">
 
-                            <div class="hospital-gallery-empty-icon">
+                            <div class="facility-list-empty-icon">
                                 <i class="ti ti-building-hospital"></i>
                             </div>
 
@@ -470,15 +888,20 @@
 
                             <button type="button" class="add-gallery-btn" data-bs-toggle="modal"
                                 data-bs-target="#addFacilityModal">
+
                                 <span class="add-gallery-icon">
                                     <i class="ti ti-plus"></i>
                                 </span>
+
                                 <span class="add-gallery-text">
                                     Add Hospital Facility
                                 </span>
+
                             </button>
 
                         </div>
+
+
 
                     @endforelse
 
@@ -517,140 +940,30 @@
                     </div>
 
 
-                    {{-- RIGHT: ADD BUTTON + COUNT --}}
-                    <div class="hospital-gallery-header-actions">
 
-                        <button type="button" class="add-gallery-btn" data-bs-toggle="modal"
-                            data-bs-target="#addGalleryModal">
-
-                            <span class="add-gallery-icon">
-                                <i class="ti ti-photo-plus"></i>
-                            </span>
-
-                            <span class="add-gallery-text">
-                                Add Gallery
-                            </span>
-
-                        </button>
-
-
-                        <div class="hospital-gallery-count">
-
-                            {{ $galleries->count() }}
-
-                            {{ $galleries->count() == 1 ? 'File' : 'Files' }}
-
-                        </div>
-
-                    </div>
 
                 </div>
 
 
                 {{-- GALLERY BODY --}}
-                <div class="hospital-gallery-body">
+                {{-- GALLERY BODY --}}
+                <div class="hospital-gallery-body" id="hospitalGalleryBody">
 
-                    @forelse($galleries as $gallery)
+                    <div class="hospital-gallery-empty">
 
-                        <div class="hospital-gallery-item">
-                            {{-- REMOVE BUTTON - TOP RIGHT --}}
-                            <form action="{{ route('admin.hospital-galleries.destroy', $gallery->id) }}" method="POST"
-                                onsubmit="return confirm('Are you sure you want to remove this gallery file?');"
-                                style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit" title="Remove"
-                                    style="
-                                                                                                                                                                                                                width: 32px;
-                                                                                                                                                                                                                height: 32px;
-                                                                                                                                                                                                                padding: 0;
-                                                                                                                                                                                                                border: 0;
-                                                                                                                                                                                                                border-radius: 6px;
-                                                                                                                                                                                                                background: #dc3545;
-                                                                                                                                                                                                                color: #fff;
-                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                align-items: center;
-                                                                                                                                                                                                                justify-content: center;
-                                                                                                                                                                                                                cursor: pointer;
-                                                                                                                                                                                                            ">
-
-                                    <i class="ti ti-trash" style="font-size: 16px;"></i>
-
-                                </button>
-
-                            </form>
-
-                            {{-- IMAGE --}}
-                            @if($gallery->file_type === 'image')
-
-                                <div class="hospital-gallery-media">
-                                    <a href="{{ asset($gallery->file_path) }}" target="_blank" rel="noopener noreferrer"
-                                        style="display: block; width: 100%; height: 100%;">
-
-                                        <img src="{{ asset($gallery->file_path) }}"
-                                            alt="{{ $gallery->hospital ?? 'Hospital Gallery' }}" class="gallery-media-image"
-                                            onclick="openGalleryPreview('{{ asset($gallery->file_path) }}','image')">
-                                    </a>
-
-
-                                    <div class="hospital-gallery-type">
-                                        <i class="ti ti-photo"></i>
-                                        Image
-                                    </div>
-
-                                </div>
-
-
-                                {{-- VIDEO --}}
-                            @elseif($gallery->file_type === 'video')
-
-                                <div class="hospital-gallery-media">
-                                    <a href="{{ asset($gallery->file_path) }}" target="_blank" rel="noopener noreferrer"
-                                        style="display: block; width: 100%; height: 100%;">
-
-                                        <video class="gallery-media-video" autoplay muted loop playsinline preload="auto"
-                                            style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;">
-
-                                            <source src="{{ asset($gallery->file_path) }}" type="video/mp4">
-
-                                            Your browser does not support video playback.
-
-                                        </video>
-                                    </a>
-
-                                    <div class="hospital-gallery-type video-type">
-                                        <i class="ti ti-video"></i>
-                                        Video
-                                    </div>
-
-                                </div>
-
-                            @endif
-
+                        <div class="hospital-gallery-empty-icon">
+                            <i class="ti ti-photo-off"></i>
                         </div>
 
-                    @empty
+                        <h5>
+                            Select a Facility
+                        </h5>
 
-                        {{-- EMPTY GALLERY --}}
-                        <div class="hospital-gallery-empty">
+                        <p>
+                            Click a facility above to view its gallery.
+                        </p>
 
-                            <div class="hospital-gallery-empty-icon">
-                                <i class="ti ti-photo-off"></i>
-                            </div>
-
-                            <h5>
-                                No Gallery Files
-                            </h5>
-
-                            <p>
-                                No images or videos have been uploaded for this facility yet.
-                            </p>
-
-                        </div>
-
-                    @endforelse
+                    </div>
 
                 </div>
 
@@ -660,201 +973,7 @@
         </div>
 
     </div>
-    {{-- =========================================================
-    ADD GALLERY MODAL
-    ========================================================= --}}
 
-    <div class="modal fade" id="addGalleryModal" tabindex="-1" aria-labelledby="addGalleryModalLabel" aria-hidden="true">
-
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-
-            <div class="modal-content gallery-modal-content">
-
-                {{-- MODAL HEADER --}}
-                <div class="modal-header gallery-modal-header">
-
-                    <div class="gallery-modal-title-wrapper">
-
-                        <div class="gallery-modal-icon">
-                            <i class="ti ti-photo-plus"></i>
-                        </div>
-
-                        <div>
-                            <h5 class="modal-title" id="addGalleryModalLabel">
-                                Add Hospital Gallery
-                            </h5>
-
-                            <p>
-                                Upload an image or video for this hospital facility.
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-
-                </div>
-
-
-
-                {{-- MODAL BODY --}}
-                <form action="{{ route('admin.hospital-galleries.store') }}" method="POST" enctype="multipart/form-data">
-
-                    @csrf
-
-                    <div class="modal-body gallery-modal-body">
-
-                        {{-- HOSPITAL ID --}}
-                        <input type="hidden" name="hospital_id" value="{{ $facility->hospital->id ?? '' }}">
-
-                        {{-- FACILITY ID --}}
-                        <input type="hidden" name="facility_id" value="{{ $facility->facility_id ?? $facility->id }}">
-
-                        {{-- HOSPITAL NAME --}}
-                        <input type="hidden" name="hospital"
-                            value="{{ $facility->hospital->hospital_name ?? $facility->hospital->name ?? 'Hospital' }}">
-
-
-                        {{-- HOSPITAL --}}
-                        <div class="gallery-form-group">
-
-                            <label class="gallery-form-label">
-                                Hospital
-                                <span>*</span>
-                            </label>
-
-                            <div class="form-control bg-light">
-                                {{ $facility->facility->hospital_name ?? $facility->facility->name ?? 'Hospital Facility' }}
-                            </div>
-
-                        </div>
-
-
-                        {{-- FILE TYPE --}}
-                        <div class="gallery-form-group">
-
-                            <label class="gallery-form-label">
-                                File Type
-                                <span>*</span>
-                            </label>
-
-                            <div class="gallery-type-options">
-
-                                {{-- IMAGE --}}
-                                <label class="gallery-type-option">
-
-                                    <input type="radio" name="file_type" value="image" checked>
-
-                                    <span class="gallery-type-card">
-
-                                        <span class="gallery-type-icon image">
-                                            <i class="ti ti-photo"></i>
-                                        </span>
-
-                                        <span>
-                                            <strong>Image</strong>
-                                            <small>JPG, PNG, WEBP, GIF</small>
-                                        </span>
-
-                                    </span>
-
-                                </label>
-
-
-                                {{-- VIDEO --}}
-                                <label class="gallery-type-option">
-
-                                    <input type="radio" name="file_type" value="video">
-
-                                    <span class="gallery-type-card">
-
-                                        <span class="gallery-type-icon video">
-                                            <i class="ti ti-video"></i>
-                                        </span>
-
-                                        <span>
-                                            <strong>Video</strong>
-                                            <small>MP4, MOV, AVI, WEBM</small>
-                                        </span>
-
-                                    </span>
-
-                                </label>
-
-                            </div>
-
-                        </div>
-
-
-                        {{-- FILE UPLOAD --}}
-                        <div class="gallery-form-group">
-
-                            <label class="gallery-form-label">
-                                Upload File
-                                <span>*</span>
-                            </label>
-
-                            <div class="gallery-upload-box" id="galleryUploadBox">
-
-                                <input type="file" name="file_path" id="galleryFile" class="gallery-file-input"
-                                    accept="image/*" required>
-
-                                <div class="gallery-upload-content">
-
-                                    <div class="gallery-upload-icon">
-                                        <i class="ti ti-cloud-upload"></i>
-                                    </div>
-
-                                    <h6>
-                                        Click to upload
-                                    </h6>
-
-                                    <p id="galleryUploadText">
-                                        Select an image from your computer
-                                    </p>
-
-                                    <span>
-                                        Maximum file size: 50 MB
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-
-                            {{-- FILE PREVIEW --}}
-                            <div id="galleryPreview" class="gallery-preview" style="display:none;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- MODAL FOOTER --}}
-                    <div class="modal-footer gallery-modal-footer">
-
-                        <button type="button" class="gallery-cancel-btn" data-bs-dismiss="modal">
-                            Cancel
-                        </button>
-
-                        <button type="submit" class="gallery-submit-btn">
-
-                            <i class="ti ti-upload"></i>
-
-                            Upload Gallery
-
-                        </button>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
-    </div>
 
     <!-- Add Hospital Facility Modal -->
     <div class="modal fade" id="addFacilityModal" tabindex="-1" aria-labelledby="addFacilityModalLabel" aria-hidden="true">
@@ -982,6 +1101,816 @@
 
         </div>
     </div>
+    {{-- EDIT FACILITY MODAL --}}
+    <div class="modal fade" id="editFacilityModal{{ $hospitalFacility->id }}" tabindex="-1"
+        aria-labelledby="editFacilityModalLabel{{ $hospitalFacility->id }}" aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content facility-edit-modal">
+
+                <div class="modal-header">
+
+                    <div>
+                        <h5 class="modal-title" id="editFacilityModalLabel{{ $hospitalFacility->id }}">
+                            Edit Hospital Facility
+                        </h5>
+
+                        <p class="facility-modal-subtitle">
+                            Update hospital facility information
+                        </p>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+
+                </div>
+
+                <form action="{{ route('admin.hospital-facilities-list.update', $hospitalFacility->id) }}" method="POST"
+                    enctype="multipart/form-data">
+
+                    @csrf
+                    @method('PUT')
+
+                    <div class="modal-body">
+
+                        <div class="row g-3">
+
+                            {{-- TITLE --}}
+                            <div class="col-md-12">
+
+                                <label class="facility-form-label">
+                                    Facility Title
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input type="text" name="title" class="form-control facility-form-control"
+                                    value="{{ old('title', $hospitalFacility->title) }}" placeholder="Enter facility title"
+                                    required>
+
+                            </div>
+
+
+                            {{-- CURRENT IMAGE --}}
+                            <div class="col-md-5">
+
+                                <label class="facility-form-label">
+                                    Current Image
+                                </label>
+
+                                <div class="facility-current-image">
+
+                                    @if(!empty($hospitalFacility->image))
+
+                                        <img src="{{ asset('storage/' . $hospitalFacility->image) }}"
+                                            alt="{{ $hospitalFacility->title ?? 'Facility' }}">
+
+                                    @else
+
+                                        <div class="facility-current-placeholder">
+                                            <i class="ti ti-building-hospital"></i>
+                                            <span>No Image</span>
+                                        </div>
+
+                                    @endif
+
+                                </div>
+
+                            </div>
+
+
+                            {{-- NEW IMAGE --}}
+                            <div class="col-md-7">
+
+                                <label class="facility-form-label">
+                                    Change Image
+                                </label>
+
+                                <input type="file" name="image" class="form-control facility-form-control"
+                                    accept=".jpg,.jpeg,.png,.webp">
+
+                                <small class="facility-form-help">
+                                    JPG, JPEG, PNG or WEBP. Maximum 5MB.
+                                </small>
+
+                            </div>
+
+
+                            {{-- DESCRIPTION --}}
+                            <div class="col-md-12">
+
+                                <label class="facility-form-label">
+                                    Description
+                                </label>
+
+                                <textarea name="description" rows="5" class="form-control facility-form-control"
+                                    placeholder="Enter facility description">{{ old('description', $hospitalFacility->description) }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="facility-modal-cancel" data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit" class="facility-modal-save">
+
+                            <i class="ti ti-device-floppy"></i>
+                            Update Facility
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    <style>
+        /* =========================================================
+                                                   EDIT FACILITY MODAL
+                                                ========================================================= */
+
+        .facility-edit-modal {
+            border: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(30, 52, 84, 0.15);
+        }
+
+        .facility-edit-modal .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #edf1f6;
+            background: #ffffff;
+        }
+
+        .facility-edit-modal .modal-title {
+            margin: 0;
+            color: #1e3454;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .facility-modal-subtitle {
+            margin: 4px 0 0;
+            color: #98a5b7;
+            font-size: 11px;
+        }
+
+        .facility-edit-modal .modal-body {
+            padding: 24px;
+            background: #ffffff;
+        }
+
+        .facility-form-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #52647e;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .facility-form-control {
+            min-height: 40px;
+            border: 1px solid #dfe6ef;
+            border-radius: 8px;
+            color: #394b63;
+            font-size: 12px;
+            box-shadow: none;
+        }
+
+        .facility-form-control:focus {
+            border-color: #8b6bd9;
+            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.08);
+        }
+
+        textarea.facility-form-control {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .facility-form-help {
+            display: block;
+            margin-top: 7px;
+            color: #9aa7b8;
+            font-size: 10px;
+        }
+
+
+        /* CURRENT IMAGE */
+
+        .facility-current-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            border: 1px solid #e3e9f1;
+            border-radius: 10px;
+            background: #f5f7fa;
+        }
+
+        .facility-current-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .facility-current-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            color: #9aa7b8;
+        }
+
+        .facility-current-placeholder i {
+            font-size: 35px;
+        }
+
+        .facility-current-placeholder span {
+            font-size: 11px;
+        }
+
+
+        /* FOOTER */
+
+        .facility-edit-modal .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 16px 24px;
+            border-top: 1px solid #edf1f6;
+            background: #fafbfd;
+        }
+
+        .facility-modal-cancel,
+        .facility-modal-save {
+            height: 36px;
+            padding: 0 15px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .facility-modal-cancel {
+            border: 1px solid #dce3ec;
+            background: #ffffff;
+            color: #65758c;
+        }
+
+        .facility-modal-cancel:hover {
+            background: #f5f7fa;
+        }
+
+        .facility-modal-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #6d28d9;
+            background: #6d28d9;
+            color: #ffffff;
+        }
+
+        .facility-modal-save:hover {
+            background: #5b21b6;
+            border-color: #5b21b6;
+        }
+
+        .facility-modal-save i {
+            font-size: 14px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 575px) {
+
+            .facility-edit-modal .modal-header {
+                padding: 17px;
+            }
+
+            .facility-edit-modal .modal-body {
+                padding: 17px;
+            }
+
+            .facility-edit-modal .modal-footer {
+                padding: 14px 17px;
+            }
+
+            .facility-current-image {
+                height: 130px;
+            }
+
+            .facility-modal-cancel,
+            .facility-modal-save {
+                flex: 1;
+            }
+
+        }
+    </style>
+    <style>
+        /* =========================================================
+                                                                   HOSPITAL FACILITIES LIST
+                                                                ========================================================= */
+
+        .facility-list-body {
+            padding: 18px 25px 25px;
+        }
+
+
+        /* =========================================================
+                                                                   FACILITY ROW
+                                                                ========================================================= */
+
+        .facility-list-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            padding: 16px;
+
+            margin-bottom: 12px;
+
+            border: 1px solid #e5ebf4;
+            border-radius: 14px;
+
+            background: #ffffff;
+
+            transition: all 0.2s ease;
+        }
+
+        .facility-list-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .facility-list-row:hover {
+            border-color: #d5c6f7;
+
+            box-shadow: 0 6px 20px rgba(46, 42, 90, 0.07);
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================================
+                                                                   IMAGE
+                                                                ========================================================= */
+
+        .facility-list-image {
+            width: 110px;
+            height: 90px;
+
+            min-width: 110px;
+
+            overflow: hidden;
+
+            border-radius: 11px;
+
+            background: #f3f5f9;
+
+            border: 1px solid #e5ebf4;
+        }
+
+        .facility-list-image a {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+        }
+
+        .facility-list-image img {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            transition: transform 0.25s ease;
+        }
+
+        .facility-list-row:hover .facility-list-image img {
+            transform: scale(1.04);
+        }
+
+
+        /* =========================================================
+                                                                   IMAGE PLACEHOLDER
+                                                                ========================================================= */
+
+        .facility-list-placeholder {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #edf5ff;
+
+            color: #6095e6;
+        }
+
+        .facility-list-placeholder i {
+            font-size: 36px;
+        }
+
+
+        /* =========================================================
+                                                                   CONTENT
+                                                                ========================================================= */
+
+        .facility-list-content {
+            flex: 1;
+
+            min-width: 0;
+
+            padding-right: 15px;
+        }
+
+
+        /* TITLE ROW */
+
+        .facility-list-title-row {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 6px;
+        }
+
+        .facility-list-title-row h5 {
+            margin: 0;
+
+            color: #1e3454;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            line-height: 1.4;
+        }
+
+
+        /* BADGE */
+
+        .facility-list-badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 4px 9px;
+
+            border-radius: 15px;
+
+            background: #f0eaff;
+
+            color: #6d28d9;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        .facility-list-badge i {
+            font-size: 12px;
+        }
+
+
+        /* DESCRIPTION */
+
+        .facility-list-content>p {
+            margin: 0 0 9px;
+
+            color: #7e8da3;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            max-width: 700px;
+        }
+
+        .facility-list-no-description {
+            color: #a1adbc !important;
+
+            font-style: italic;
+        }
+
+
+        /* =========================================================
+                                                                   META
+                                                                ========================================================= */
+
+        .facility-list-meta {
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            flex-wrap: wrap;
+        }
+
+        .facility-list-meta span {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            color: #9aa7b8;
+
+            font-size: 10px;
+        }
+
+        .facility-list-meta i {
+            font-size: 13px;
+
+            color: #7c8da8;
+        }
+
+
+        /* =========================================================
+                                                                   ACTIONS
+                                                                ========================================================= */
+
+        .facility-list-actions {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            min-width: 150px;
+
+            justify-content: flex-end;
+        }
+
+        .facility-list-actions form {
+            margin: 0;
+        }
+
+
+        /* ACTION BUTTON */
+
+        .facility-list-action {
+            height: 34px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            padding: 0 10px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+            transition: all 0.2s ease;
+
+            cursor: pointer;
+        }
+
+
+        /* EDIT */
+
+        .facility-list-action.edit {
+            border: 1px solid #ddd0f7;
+
+            background: #f7f3ff;
+
+            color: #6d28d9;
+        }
+
+        .facility-list-action.edit:hover {
+            background: #6d28d9;
+
+            border-color: #6d28d9;
+
+            color: #ffffff;
+
+            box-shadow: 0 4px 10px rgba(109, 40, 217, 0.18);
+        }
+
+
+        /* DELETE */
+
+        .facility-list-action.delete {
+            border: 1px solid #f2d2d6;
+
+            background: #fff5f6;
+
+            color: #dc5965;
+        }
+
+        .facility-list-action.delete:hover {
+            background: #dc5965;
+
+            border-color: #dc5965;
+
+            color: #ffffff;
+
+            box-shadow: 0 4px 10px rgba(220, 89, 101, 0.18);
+        }
+
+        .facility-list-action i {
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+                                                                   EMPTY
+                                                                ========================================================= */
+
+        .facility-list-empty {
+            text-align: center;
+
+            padding: 55px 20px;
+        }
+
+        .facility-list-empty-icon {
+            width: 65px;
+            height: 65px;
+
+            margin: 0 auto 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #f2f5f9;
+
+            color: #a1adbc;
+        }
+
+        .facility-list-empty-icon i {
+            font-size: 30px;
+        }
+
+        .facility-list-empty h5 {
+            margin: 0 0 5px;
+
+            color: #52647e;
+
+            font-size: 15px;
+        }
+
+        .facility-list-empty p {
+            margin: 0 0 16px;
+
+            color: #9aa7b8;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+                                                                   RESPONSIVE
+                                                                ========================================================= */
+
+        @media (max-width: 991px) {
+
+            .facility-list-row {
+                align-items: flex-start;
+
+                flex-wrap: wrap;
+            }
+
+            .facility-list-content {
+                flex: 1;
+            }
+
+            .facility-list-actions {
+                width: 100%;
+
+                min-width: 100%;
+
+                justify-content: flex-end;
+
+                padding-top: 12px;
+
+                border-top: 1px solid #edf1f6;
+            }
+
+        }
+
+
+        @media (max-width: 767px) {
+
+            .facility-list-body {
+                padding: 15px;
+            }
+
+            .facility-list-row {
+                gap: 13px;
+
+                padding: 14px;
+            }
+
+            .facility-list-image {
+                width: 85px;
+
+                height: 75px;
+
+                min-width: 85px;
+            }
+
+            .facility-list-content {
+                width: calc(100% - 100px);
+            }
+
+            .facility-list-title-row {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 5px;
+            }
+
+            .facility-list-title-row h5 {
+                font-size: 14px;
+            }
+
+            .facility-list-actions {
+                justify-content: stretch;
+            }
+
+            .facility-list-action {
+                flex: 1;
+            }
+
+        }
+
+
+        @media (max-width: 575px) {
+
+            .facility-list-row {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .facility-list-image {
+                width: 100%;
+
+                height: 160px;
+
+                min-width: 100%;
+            }
+
+            .facility-list-content {
+                width: 100%;
+
+                padding-right: 0;
+            }
+
+            .facility-list-actions {
+                width: 100%;
+
+                min-width: 100%;
+
+                padding-top: 12px;
+            }
+
+            .facility-list-action {
+                flex: 1;
+            }
+
+        }
+    </style>
 
     <style>
         .facility-edit-modal {
@@ -1144,8 +2073,8 @@
     </style>
     <style>
         /* =========================================================
-                                                                                                   HOSPITAL GALLERY
-                                                                                                ========================================================= */
+                                                                                                                                                                   HOSPITAL GALLERY
+                                                                                                                                                                ========================================================= */
 
         .hospital-gallery-card {
             margin-top: 22px;
@@ -1448,8 +2377,8 @@
 
 
         /* =========================================================
-                                                                                                   GALLERY RESPONSIVE
-                                                                                                ========================================================= */
+                                                                                                                                                                   GALLERY RESPONSIVE
+                                                                                                                                                                ========================================================= */
 
         @media (max-width: 1199px) {
 
@@ -1493,8 +2422,8 @@
     </style>
     <style>
         /* =========================================================
-                                                                                                               ADD GALLERY MODAL
-                                                                                                            ========================================================= */
+                                                                                                                                                                               ADD GALLERY MODAL
+                                                                                                                                                                            ========================================================= */
 
         .gallery-modal-content {
             border: 0;
@@ -1972,8 +2901,8 @@
 
     <style>
         /* =========================================================
-                                                                                                                                       PAGE HEADER
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       PAGE HEADER
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-page-header {
             display: flex;
@@ -2049,8 +2978,8 @@
 
 
         /* =========================================================
-                                                                                                                                       MAIN FACILITY CARD
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       MAIN FACILITY CARD
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-details-card {
             background: #ffffff;
@@ -2070,8 +2999,8 @@
 
 
         /* =========================================================
-                                                                                                                                       FACILITY TOP
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       FACILITY TOP
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-top-section {
             display: flex;
@@ -2172,8 +3101,8 @@
 
 
         /* =========================================================
-                                                                                                                                       FACILITY INFORMATION
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       FACILITY INFORMATION
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-info-grid {
             display: grid;
@@ -2251,8 +3180,8 @@
 
 
         /* =========================================================
-                                                                                                                                       DESCRIPTION
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       DESCRIPTION
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-description-box {
             display: flex;
@@ -2310,8 +3239,8 @@
 
 
         /* =========================================================
-                                                                                                                                       HOSPITAL LIST CARD
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       HOSPITAL LIST CARD
+                                                                                                                                                                                                    ========================================================= */
 
         .hospital-list-card {
             background: #ffffff;
@@ -2399,8 +3328,8 @@
 
 
         /* =========================================================
-                                                                                                                                       HOSPITAL LIST BODY
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       HOSPITAL LIST BODY
+                                                                                                                                                                                                    ========================================================= */
 
         .hospital-list-body {
             padding: 18px 25px 25px;
@@ -2408,8 +3337,8 @@
 
 
         /* =========================================================
-                                                                                                                                       HOSPITAL ITEM
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       HOSPITAL ITEM
+                                                                                                                                                                                                    ========================================================= */
 
         .hospital-item {
             display: flex;
@@ -2531,8 +3460,8 @@
 
 
         /* =========================================================
-                                                                                                                                       HOSPITAL META
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       HOSPITAL META
+                                                                                                                                                                                                    ========================================================= */
 
         .hospital-item-meta {
             width: 225px;
@@ -2596,8 +3525,8 @@
 
 
         /* =========================================================
-                                                                                                                                       EMPTY STATE
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       EMPTY STATE
+                                                                                                                                                                                                    ========================================================= */
 
         .facility-empty-state {
             text-align: center;
@@ -2643,8 +3572,8 @@
 
 
         /* =========================================================
-                                                                                                                                       RESPONSIVE
-                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                       RESPONSIVE
+                                                                                                                                                                                                    ========================================================= */
 
         @media (max-width: 991px) {
 
@@ -2895,5 +3824,234 @@
 
         });
     </script>
+   <script>
+    const facilityGalleryData = @json($facilityGalleryData ?? []);
+
+    function showFacilityGallery(facilityId) {
+
+        const section = document.getElementById('facilityGallerySection');
+        const title = document.getElementById('facilityGalleryTitle');
+        const count = document.getElementById('facilityGalleryCount');
+        const body = document.getElementById('hospitalGalleryBody');
+
+        if (!body) {
+            console.error('hospitalGalleryBody not found');
+            return;
+        }
+
+        const selectedFacilityId = String(facilityId);
+        const facility = facilityGalleryData[selectedFacilityId];
+
+        if (!facility) {
+
+            if (title) {
+                title.textContent = 'Gallery';
+            }
+
+            if (count) {
+                count.textContent = '0 Files';
+            }
+
+            body.innerHTML = `
+                <div class="hospital-gallery-empty">
+                    <div class="hospital-gallery-empty-icon">
+                        <i class="ti ti-photo-off"></i>
+                    </div>
+
+                    <h5>No Gallery Files</h5>
+
+                    <p>
+                        No images or videos have been uploaded for this facility yet.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        if (title) {
+            title.textContent = 'Gallery - ' + facility.title;
+        }
+
+        const galleries = Array.isArray(facility.galleries)
+            ? facility.galleries
+            : [];
+
+        if (count) {
+            count.textContent =
+                galleries.length +
+                (galleries.length === 1 ? ' File' : ' Files');
+        }
+
+        body.innerHTML = '';
+
+        if (galleries.length === 0) {
+
+            body.innerHTML = `
+                <div class="hospital-gallery-empty">
+                    <div class="hospital-gallery-empty-icon">
+                        <i class="ti ti-photo-off"></i>
+                    </div>
+
+                    <h5>No Gallery Files</h5>
+
+                    <p>
+                        No images or videos have been uploaded for this facility yet.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        galleries.forEach(function (gallery) {
+
+            const item = document.createElement('div');
+
+            // KEEP EXISTING CLASS
+            item.className = 'hospital-gallery-item';
+
+            let mediaHtml = '';
+
+            // IMAGE
+            if (gallery.file_type === 'image') {
+
+                mediaHtml = `
+                    <div class="hospital-gallery-media">
+
+                        <a
+                            href="${gallery.file_path}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="display: block; width: 100%; height: 100%;"
+                        >
+
+                            <img
+                                src="${gallery.file_path}"
+                                alt="${facility.title}"
+                                class="gallery-media-image"
+                                onclick="openGalleryPreview('${gallery.file_path}', 'image')"
+                            >
+
+                        </a>
+
+                        <div class="hospital-gallery-type">
+                            <i class="ti ti-photo"></i>
+                            Image
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            // VIDEO
+            else if (gallery.file_type === 'video') {
+
+                mediaHtml = `
+                    <div class="hospital-gallery-media">
+
+                        <a
+                            href="${gallery.file_path}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="display: block; width: 100%; height: 100%;"
+                        >
+
+                            <video
+                                class="gallery-media-video"
+                                autoplay
+                                muted
+                                loop
+                                playsinline
+                                preload="metadata"
+                                style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    cursor: pointer;
+                                "
+                            >
+                                <source
+                                    src="${gallery.file_path}"
+                                    type="video/mp4"
+                                >
+                            </video>
+
+                        </a>
+
+                        <div class="hospital-gallery-type video-type">
+                            <i class="ti ti-video"></i>
+                            Video
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            // DELETE FORM
+            const deleteHtml = `
+                <form
+                    action="${gallery.delete_url}"
+                    method="POST"
+                    onsubmit="return confirm('Are you sure you want to remove this gallery file?');"
+                    style="
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        z-index: 10;
+                    "
+                >
+
+                    <input
+                        type="hidden"
+                        name="_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_method"
+                        value="DELETE"
+                    >
+
+                    <button
+                        type="submit"
+                        title="Remove"
+                        style="
+                            width: 32px;
+                            height: 32px;
+                            padding: 0;
+                            border: 0;
+                            border-radius: 6px;
+                            background: #dc3545;
+                            color: #fff;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                        "
+                    >
+                        <i
+                            class="ti ti-trash"
+                            style="font-size: 16px;"
+                        ></i>
+                    </button>
+
+                </form>
+            `;
+
+            item.innerHTML = deleteHtml + mediaHtml;
+
+            body.appendChild(item);
+        });
+
+        if (section) {
+            section.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+</script>
 
 @endsection
