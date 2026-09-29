@@ -22,6 +22,7 @@ class DoctorCollection extends ResourceCollection
             $actualFee = (float) ($doctor->actual_fee ?? 0);
             $consultationFee = (float) ($doctor->consultation_fee ?? 0);
 
+
             $discountPercentage = 0;
 
             if ($actualFee > 0 && $consultationFee < $actualFee) {
@@ -98,6 +99,10 @@ class DoctorCollection extends ResourceCollection
                 'home_visit_fee' => $doctor->home_visit_fee,
                 'actual_home_visit_fee' => $doctor->actual_home_visit_fee,
                 'home_visit_discount_percentage' => round($homeVisitDiscountPercentage, 2),
+                'consultation_enabled' => $doctor->consultation_enabled ? 1 : 0,
+                'video_consultation_enabled' => $doctor->video_consultation_enabled ? 1 : 0,
+                'chat_consultation_enabled' => $doctor->chat_consultation_enabled ? 1 : 0,
+                'home_visit_enabled' => $doctor->home_visit_enabled ? 1 : 0,
                 'email' => $doctor->email,
                 'mobile' => $doctor->mobile,
                 'dob' => $doctor->dob,
