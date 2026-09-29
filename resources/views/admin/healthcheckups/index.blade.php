@@ -23,21 +23,13 @@
                 <ul class="table-top-head">
 
                     <li>
-                        <a
-                            href="{{ route('admin.healthcheckups.index') }}"
-                            data-bs-toggle="tooltip"
-                            title="Refresh"
-                        >
+                        <a href="{{ route('admin.healthcheckups.index') }}" data-bs-toggle="tooltip" title="Refresh">
                             <i data-feather="rotate-ccw"></i>
                         </a>
                     </li>
 
                     <li>
-                        <a
-                            id="collapse-header"
-                            data-bs-toggle="tooltip"
-                            title="Collapse"
-                        >
+                        <a id="collapse-header" data-bs-toggle="tooltip" title="Collapse">
                             <i data-feather="chevron-up"></i>
                         </a>
                     </li>
@@ -46,12 +38,8 @@
 
                 <div class="page-btn">
 
-                    <button
-                        type="button"
-                        class="btn btn-added"
-                        data-bs-toggle="modal"
-                        data-bs-target="#addHealthCheckupModal"
-                    >
+                    <button type="button" class="btn btn-added" data-bs-toggle="modal"
+                        data-bs-target="#addHealthCheckupModal">
                         <i data-feather="plus-circle" class="me-2"></i>
                         Add Health Checkup
                     </button>
@@ -69,11 +57,7 @@
 
                     {{ session('success') }}
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -87,11 +71,7 @@
 
                     {{ session('error') }}
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -111,11 +91,7 @@
 
                     </ul>
 
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 
                 </div>
 
@@ -141,8 +117,6 @@
 
                                     <th>Name</th>
 
-                                    <th>Slug</th>
-
                                     <th>Description</th>
 
                                     <th>Created</th>
@@ -160,410 +134,317 @@
 
                                 @forelse($healthCheckups as $key => $healthCheckup)
 
-                                    <tr>
+                                                            <tr>
 
-                                        {{-- ID --}}
-                                        <td>
-                                            {{ $healthCheckups->firstItem() + $key }}
-                                        </td>
+                                                                {{-- ID --}}
+                                                                <td>
+                                                                    {{ $healthCheckups->firstItem() + $key }}
+                                                                </td>
 
 
-                                        {{-- Image --}}
-                                        <td>
+                                                                {{-- Image --}}
+                                                                <td>
 
-                                            @if($healthCheckup->image)
+                                                                    @if($healthCheckup->image)
 
-                                                <img
-                                                    src="{{ asset('storage/' . $healthCheckup->image) }}"
-                                                    class="img-thumbnail"
-                                                    alt="{{ $healthCheckup->name }}"
-                                                    style="
-                                                        width:60px;
-                                                        height:60px;
-                                                        object-fit:cover;
-                                                    "
-                                                >
+                                                                        <img src="{{ asset($healthCheckup->image) }}" class="img-thumbnail"
+                                                                            alt="{{ $healthCheckup->name }}" style="
+                                                                                                                                width:60px;
+                                                                                                                                height:60px;
+                                                                                                                                object-fit:cover;
+                                                                                                                            ">
 
-                                            @else
+                                                                    @else
 
-                                                <img
-                                                    src="{{ asset('assets/img/no-image.png') }}"
-                                                    class="img-thumbnail"
-                                                    alt="No Image"
-                                                    style="
-                                                        width:60px;
-                                                        height:60px;
-                                                        object-fit:cover;
-                                                    "
-                                                >
+                                                                        <img src="{{ asset('assets/img/no-image.png') }}" class="img-thumbnail"
+                                                                            alt="No Image" style="
+                                                                                                                                width:60px;
+                                                                                                                                height:60px;
+                                                                                                                                object-fit:cover;
+                                                                                                                            ">
 
-                                            @endif
+                                                                    @endif
 
-                                        </td>
+                                                                </td>
 
 
-                                        {{-- Name --}}
-                                        <td>
+                                                                {{-- Name --}}
+                                                                <td>
 
-                                            <strong>
-                                                {{ $healthCheckup->name }}
-                                            </strong>
+                                                                    <strong>
+                                                                        {{ $healthCheckup->name }}
+                                                                    </strong>
 
-                                        </td>
+                                                                </td>
 
 
-                                        {{-- Slug --}}
-                                        <td>
 
-                                            <span class="badge bg-light text-dark">
-                                                {{ $healthCheckup->slug }}
-                                            </span>
 
-                                        </td>
+                                                                {{-- Description --}}
+                                                                <td>
 
+                                                                    @if($healthCheckup->description)
 
-                                        {{-- Description --}}
-                                        <td>
+                                                                                                    {{ \Illuminate\Support\Str::limit(
+                                                                            $healthCheckup->description,
+                                                                            100
+                                                                        ) }}
 
-                                            @if($healthCheckup->description)
+                                                                    @else
 
-                                                {{ \Illuminate\Support\Str::limit(
-                                                    $healthCheckup->description,
-                                                    100
-                                                ) }}
+                                                                        <span class="text-muted">
+                                                                            -
+                                                                        </span>
 
-                                            @else
+                                                                    @endif
 
-                                                <span class="text-muted">
-                                                    -
-                                                </span>
+                                                                </td>
 
-                                            @endif
 
-                                        </td>
+                                                                {{-- Created --}}
+                                                                <td>
 
+                                                                    {{ $healthCheckup->created_at?->format('d M Y') }}
 
-                                        {{-- Created --}}
-                                        <td>
+                                                                </td>
 
-                                            {{ $healthCheckup->created_at?->format('d M Y') }}
 
-                                        </td>
+                                                                {{-- Action --}}
+                                                                <td class="text-center">
 
+                                                                    <div class="d-flex align-items-center justify-content-center gap-2">
 
-                                        {{-- Action --}}
-                                        <td class="text-center">
+                                                                        {{-- Edit --}}
+                                                                        <a href="javascript:void(0)" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                                                                            data-bs-target="#editHealthCheckupModal{{ $healthCheckup->id }}"
+                                                                            title="Edit">
 
-                                            <div class="dropdown">
+                                                                            <i class="ti ti-edit"></i>
 
-                                                <a
-                                                    href="javascript:void(0)"
-                                                    class="btn btn-sm btn-light"
-                                                    data-bs-toggle="dropdown"
-                                                >
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </a>
+                                                                        </a>
 
+                                                                        {{-- Delete --}}
+                                                                        <a href="javascript:void(0)" class="btn btn-sm btn-light text-danger"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#deleteHealthCheckupModal{{ $healthCheckup->id }}"
+                                                                            title="Delete">
 
-                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                            <i class="ti ti-trash"></i>
 
-                                                    {{-- Edit --}}
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0)"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editHealthCheckupModal{{ $healthCheckup->id }}"
-                                                    >
-                                                        <i class="ti ti-edit me-2"></i>
-                                                        Edit
-                                                    </a>
+                                                                        </a>
 
+                                                                    </div>
 
-                                                    {{-- Delete --}}
-                                                    <a
-                                                        href="javascript:void(0)"
-                                                        class="dropdown-item text-danger"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteHealthCheckupModal{{ $healthCheckup->id }}"
-                                                    >
-                                                        <i class="ti ti-trash me-2"></i>
-                                                        Delete
-                                                    </a>
+                                                                </td>
 
-                                                </div>
+                                                            </tr>
 
-                                            </div>
 
-                                        </td>
+                                                            {{-- ================================================= --}}
+                                                            {{-- EDIT MODAL --}}
+                                                            {{-- ================================================= --}}
 
-                                    </tr>
+                                                            <div class="modal fade" id="editHealthCheckupModal{{ $healthCheckup->id }}" tabindex="-1"
+                                                                aria-hidden="true">
 
+                                                                <div class="modal-dialog modal-lg modal-dialog-centered">
 
-                                    {{-- ================================================= --}}
-                                    {{-- EDIT MODAL --}}
-                                    {{-- ================================================= --}}
+                                                                    <div class="modal-content">
 
-                                    <div
-                                        class="modal fade"
-                                        id="editHealthCheckupModal{{ $healthCheckup->id }}"
-                                        tabindex="-1"
-                                        aria-hidden="true"
-                                    >
+                                                                        <form action="{{ route(
+                                        'admin.healthcheckups.update',
+                                        $healthCheckup->id
+                                    ) }}" method="POST" enctype="multipart/form-data">
 
-                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                            @csrf
+                                                                            @method('PUT')
 
-                                            <div class="modal-content">
 
-                                                <form
-                                                    action="{{ route(
-                                                        'admin.healthcheckups.update',
-                                                        $healthCheckup->id
-                                                    ) }}"
-                                                    method="POST"
-                                                    enctype="multipart/form-data"
-                                                >
+                                                                            <div class="modal-header">
 
-                                                    @csrf
-                                                    @method('PUT')
+                                                                                <h5 class="modal-title">
+                                                                                    Edit Health Checkup
+                                                                                </h5>
 
+                                                                                <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal"></button>
 
-                                                    <div class="modal-header">
+                                                                            </div>
 
-                                                        <h5 class="modal-title">
-                                                            Edit Health Checkup
-                                                        </h5>
 
-                                                        <button
-                                                            type="button"
-                                                            class="btn-close"
-                                                            data-bs-dismiss="modal"
-                                                        ></button>
+                                                                            <div class="modal-body">
 
-                                                    </div>
+                                                                                {{-- Name --}}
+                                                                                <div class="mb-3">
 
+                                                                                    <label class="form-label">
+                                                                                        Name
+                                                                                        <span class="text-danger">*</span>
+                                                                                    </label>
 
-                                                    <div class="modal-body">
+                                                                                    <input type="text" name="name" class="form-control"
+                                                                                        value="{{ $healthCheckup->name }}" required>
 
-                                                        {{-- Name --}}
-                                                        <div class="mb-3">
+                                                                                </div>
 
-                                                            <label class="form-label">
-                                                                Name
-                                                                <span class="text-danger">*</span>
-                                                            </label>
 
-                                                            <input
-                                                                type="text"
-                                                                name="name"
-                                                                class="form-control"
-                                                                value="{{ $healthCheckup->name }}"
-                                                                required
-                                                            >
+                                                                                {{-- Slug --}}
+                                                                                <div class="mb-3">
 
-                                                        </div>
+                                                                                    <label class="form-label">
+                                                                                        Slug
+                                                                                    </label>
 
+                                                                                    <input type="text" name="slug" class="form-control"
+                                                                                        value="{{ $healthCheckup->slug }}"
+                                                                                        placeholder="health-checkup-slug">
 
-                                                        {{-- Slug --}}
-                                                        <div class="mb-3">
+                                                                                </div>
 
-                                                            <label class="form-label">
-                                                                Slug
-                                                            </label>
 
-                                                            <input
-                                                                type="text"
-                                                                name="slug"
-                                                                class="form-control"
-                                                                value="{{ $healthCheckup->slug }}"
-                                                                placeholder="health-checkup-slug"
-                                                            >
+                                                                                {{-- Image --}}
+                                                                                <div class="mb-3">
 
-                                                        </div>
+                                                                                    <label class="form-label">
+                                                                                        Image
+                                                                                    </label>
 
+                                                                                    @if($healthCheckup->image)
 
-                                                        {{-- Image --}}
-                                                        <div class="mb-3">
+                                                                                                                                    <div class="mb-2">
 
-                                                            <label class="form-label">
-                                                                Image
-                                                            </label>
+                                                                                                                                        <img src="{{ asset(
+                                                                                            $healthCheckup->image
+                                                                                        ) }}"
+                                                                                                                                            alt="{{ $healthCheckup->name }}" class="img-thumbnail"
+                                                                                                                                            style="
+                                                                                                                                                                                                                                            width:120px;
+                                                                                                                                                                                                                                            height:90px;
+                                                                                                                                                                                                                                            object-fit:cover;
+                                                                                                                                                                                                                                        ">
 
-                                                            @if($healthCheckup->image)
+                                                                                                                                    </div>
 
-                                                                <div class="mb-2">
+                                                                                    @endif
 
-                                                                    <img
-                                                                        src="{{ asset(
-                                                                            'storage/' .
-                                                                            $healthCheckup->image
-                                                                        ) }}"
-                                                                        alt="{{ $healthCheckup->name }}"
-                                                                        class="img-thumbnail"
-                                                                        style="
-                                                                            width:120px;
-                                                                            height:90px;
-                                                                            object-fit:cover;
-                                                                        "
-                                                                    >
+
+                                                                                    <input type="file" name="image" class="form-control"
+                                                                                        accept=".jpg,.jpeg,.png,.webp">
+
+                                                                                    <small class="text-muted">
+                                                                                        JPG, JPEG, PNG or WEBP. Max 5MB.
+                                                                                    </small>
+
+                                                                                </div>
+
+
+                                                                                {{-- Description --}}
+                                                                                <div class="mb-3">
+
+                                                                                    <label class="form-label">
+                                                                                        Description
+                                                                                    </label>
+
+                                                                                    <textarea name="description" rows="5" class="form-control"
+                                                                                        placeholder="Enter description">{{ $healthCheckup->description }}</textarea>
+
+                                                                                </div>
+
+                                                                            </div>
+
+
+                                                                            <div class="modal-footer">
+
+                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                                    Cancel
+                                                                                </button>
+
+                                                                                <button type="submit" class="btn btn-primary">
+                                                                                    Update Health Checkup
+                                                                                </button>
+
+                                                                            </div>
+
+                                                                        </form>
+
+                                                                    </div>
 
                                                                 </div>
 
-                                                            @endif
+                                                            </div>
 
 
-                                                            <input
-                                                                type="file"
-                                                                name="image"
-                                                                class="form-control"
-                                                                accept=".jpg,.jpeg,.png,.webp"
-                                                            >
+                                                            {{-- ================================================= --}}
+                                                            {{-- DELETE MODAL --}}
+                                                            {{-- ================================================= --}}
 
-                                                            <small class="text-muted">
-                                                                JPG, JPEG, PNG or WEBP. Max 5MB.
-                                                            </small>
+                                                            <div class="modal fade" id="deleteHealthCheckupModal{{ $healthCheckup->id }}" tabindex="-1"
+                                                                aria-hidden="true">
 
-                                                        </div>
+                                                                <div class="modal-dialog modal-dialog-centered">
 
+                                                                    <div class="modal-content">
 
-                                                        {{-- Description --}}
-                                                        <div class="mb-3">
+                                                                        <div class="modal-header">
 
-                                                            <label class="form-label">
-                                                                Description
-                                                            </label>
+                                                                            <h5 class="modal-title">
+                                                                                Delete Health Checkup
+                                                                            </h5>
 
-                                                            <textarea
-                                                                name="description"
-                                                                rows="5"
-                                                                class="form-control"
-                                                                placeholder="Enter description"
-                                                            >{{ $healthCheckup->description }}</textarea>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
-                                                        </div>
-
-                                                    </div>
+                                                                        </div>
 
 
-                                                    <div class="modal-footer">
+                                                                        <div class="modal-body">
 
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal"
-                                                        >
-                                                            Cancel
-                                                        </button>
+                                                                            <p class="mb-0">
 
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-primary"
-                                                        >
-                                                            Update Health Checkup
-                                                        </button>
+                                                                                Are you sure you want to delete
 
-                                                    </div>
+                                                                                <strong>
+                                                                                    {{ $healthCheckup->name }}
+                                                                                </strong>?
 
-                                                </form>
+                                                                            </p>
 
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+                                                                        </div>
 
 
-                                    {{-- ================================================= --}}
-                                    {{-- DELETE MODAL --}}
-                                    {{-- ================================================= --}}
+                                                                        <div class="modal-footer">
 
-                                    <div
-                                        class="modal fade"
-                                        id="deleteHealthCheckupModal{{ $healthCheckup->id }}"
-                                        tabindex="-1"
-                                        aria-hidden="true"
-                                    >
-
-                                        <div class="modal-dialog modal-dialog-centered">
-
-                                            <div class="modal-content">
-
-                                                <div class="modal-header">
-
-                                                    <h5 class="modal-title">
-                                                        Delete Health Checkup
-                                                    </h5>
-
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                    ></button>
-
-                                                </div>
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                                Cancel
+                                                                            </button>
 
 
-                                                <div class="modal-body">
+                                                                            <form action="{{ route(
+                                        'admin.healthcheckups.destroy',
+                                        $healthCheckup->id
+                                    ) }}" method="POST">
 
-                                                    <p class="mb-0">
+                                                                                @csrf
+                                                                                @method('DELETE')
 
-                                                        Are you sure you want to delete
+                                                                                <button type="submit" class="btn btn-danger">
+                                                                                    Delete
+                                                                                </button>
 
-                                                        <strong>
-                                                            {{ $healthCheckup->name }}
-                                                        </strong>?
+                                                                            </form>
 
-                                                    </p>
+                                                                        </div>
 
-                                                </div>
+                                                                    </div>
 
+                                                                </div>
 
-                                                <div class="modal-footer">
-
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal"
-                                                    >
-                                                        Cancel
-                                                    </button>
-
-
-                                                    <form
-                                                        action="{{ route(
-                                                            'admin.healthcheckups.destroy',
-                                                            $healthCheckup->id
-                                                        ) }}"
-                                                        method="POST"
-                                                    >
-
-                                                        @csrf
-                                                        @method('DELETE')
-
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-danger"
-                                                        >
-                                                            Delete
-                                                        </button>
-
-                                                    </form>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+                                                            </div>
 
                                 @empty
 
                                     <tr>
 
-                                        <td
-                                            colspan="7"
-                                            class="text-center py-5"
-                                        >
+                                        <td colspan="7" class="text-center py-5">
 
                                             <h6>
                                                 No Health Checkups Found
@@ -610,22 +491,13 @@
     {{-- ADD HEALTH CHECKUP MODAL --}}
     {{-- ========================================================= --}}
 
-    <div
-        class="modal fade"
-        id="addHealthCheckupModal"
-        tabindex="-1"
-        aria-hidden="true"
-    >
+    <div class="modal fade" id="addHealthCheckupModal" tabindex="-1" aria-hidden="true">
 
         <div class="modal-dialog modal-lg modal-dialog-centered">
 
             <div class="modal-content">
 
-                <form
-                    action="{{ route('admin.healthcheckups.store') }}"
-                    method="POST"
-                    enctype="multipart/form-data"
-                >
+                <form action="{{ route('admin.healthcheckups.store') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
 
@@ -636,11 +508,7 @@
                             Add Health Checkup
                         </h5>
 
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                        ></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
                     </div>
 
@@ -655,14 +523,8 @@
                                 <span class="text-danger">*</span>
                             </label>
 
-                            <input
-                                type="text"
-                                name="name"
-                                class="form-control"
-                                value="{{ old('name') }}"
-                                placeholder="Enter health checkup name"
-                                required
-                            >
+                            <input type="text" name="name" id="healthCheckupName" class="form-control"
+                                value="{{ old('name') }}" placeholder="Enter health checkup name" required>
 
                         </div>
 
@@ -674,16 +536,11 @@
                                 Slug
                             </label>
 
-                            <input
-                                type="text"
-                                name="slug"
-                                class="form-control"
-                                value="{{ old('slug') }}"
-                                placeholder="health-checkup-slug"
-                            >
+                            <input type="text" name="slug" id="healthCheckupSlug" class="form-control"
+                                value="{{ old('slug') }}" placeholder="health-checkup-slug" readonly>
 
                             <small class="text-muted">
-                                Leave empty to generate automatically from name.
+                                Slug will be generated automatically from the name.
                             </small>
 
                         </div>
@@ -696,12 +553,7 @@
                                 Image
                             </label>
 
-                            <input
-                                type="file"
-                                name="image"
-                                class="form-control"
-                                accept=".jpg,.jpeg,.png,.webp"
-                            >
+                            <input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
 
                             <small class="text-muted">
                                 JPG, JPEG, PNG or WEBP. Max 5MB.
@@ -717,12 +569,8 @@
                                 Description
                             </label>
 
-                            <textarea
-                                name="description"
-                                rows="5"
-                                class="form-control"
-                                placeholder="Enter health checkup description"
-                            >{{ old('description') }}</textarea>
+                            <textarea name="description" rows="5" class="form-control"
+                                placeholder="Enter health checkup description">{{ old('description') }}</textarea>
 
                         </div>
 
@@ -731,18 +579,11 @@
 
                     <div class="modal-footer">
 
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </button>
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
+                        <button type="submit" class="btn btn-primary">
                             Add Health Checkup
                         </button>
 
@@ -785,6 +626,30 @@
 
             if (typeof feather !== "undefined") {
                 feather.replace();
+            }
+
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const nameInput = document.getElementById('healthCheckupName');
+            const slugInput = document.getElementById('healthCheckupSlug');
+
+            if (nameInput && slugInput) {
+
+                nameInput.addEventListener('input', function () {
+
+                    let slug = this.value
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^a-z0-9\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-');
+
+                    slugInput.value = slug;
+                });
+
             }
 
         });
