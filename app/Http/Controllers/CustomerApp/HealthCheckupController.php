@@ -16,7 +16,7 @@ class HealthCheckupController extends Controller
         $healthCheckups = HealthCheckup::latest()->get();
 
         return response()->json([
-            'status' => true,
+            'success' => 1,
             'message' => 'Health checkups fetched successfully.',
             'data' => $healthCheckups->map(function ($healthCheckup) {
                 return [
@@ -24,7 +24,7 @@ class HealthCheckupController extends Controller
                     'name' => $healthCheckup->name,
                     'slug' => $healthCheckup->slug,
                     'image' => $healthCheckup->image
-                        ? asset('storage/' . $healthCheckup->image)
+                        ? asset($healthCheckup->image)
                         : null,
                     'description' => $healthCheckup->description,
                     'created_at' => $healthCheckup->created_at,
