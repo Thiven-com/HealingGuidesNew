@@ -43,6 +43,10 @@ class Doctor extends Authenticatable
         'available_to',
         'status',
         'accept_free_booking',
+        'consultation_enabled',
+        'video_consultation_enabled',
+        'chat_consultation_enabled',
+        'home_visit_enabled',
 
     ];
 
