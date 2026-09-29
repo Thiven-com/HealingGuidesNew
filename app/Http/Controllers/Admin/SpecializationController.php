@@ -152,6 +152,7 @@ class SpecializationController extends Controller
         $specialization->slug = Str::slug($request->specialization_name);
         $specialization->description = $request->description;
         $specialization->status = $request->status;
+        $specialization->specialization_category = $request->specialization_category;
 
         if ($request->hasFile('icon')) {
 

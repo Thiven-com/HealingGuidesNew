@@ -635,40 +635,161 @@ class ProfileController extends Controller
             ], 401);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Load Customer Package
+        |--------------------------------------------------------------------------
+        */
+
         $customer->load([
             'package',
             'packageBenefits'
         ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | No Package
+        |--------------------------------------------------------------------------
+        */
 
         if (!$customer->package_id) {
 
             return response()->json([
                 'success' => 1,
                 'message' => 'No package assigned.',
+
                 'data' => [
+
                     'package' => null,
+
                     'package_start_date' => null,
+
                     'package_expiry_date' => null,
+
                     'is_expired' => false,
+                    'benefit_summary' => [
+
+                        'free_consultation' => 0,
+
+                        'free_video_consultation' => 0,
+
+                        'free_home_visit_consultation' => 0,
+                        'free_hospital_consultation' => 0,
+                        'free_home_visit' => 0,
+
+                        'free_ambulance' => 0,
+
+                        'free_surgery_quote' => 0,
+
+                        'free_medicine' => 0,
+
+                        'free_diagnostic' => 0,
+                    ],
+
                     'benefits' => [],
                 ]
             ]);
         }
-
         $isExpired =
             !$customer->package_expiry_date ||
             now()->startOfDay()->gt(
-                $customer->package_expiry_date
+                Carbon::parse(
+                    $customer->package_expiry_date
+                )->startOfDay()
             );
+        $summary = [
+            'free_consultation' => 0,
+            'free_video_consultation' => 0,
+            'free_home_visit_consultation' => 0,
+            'free_hospital_consultation' => 0,
+            'free_home_visit' => 0,
+            'free_ambulance' => 0,
+            'free_surgery_quote' => 0,
+            'free_medicine' => 0,
+            'free_diagnostic' => 0,
+        ];
+        foreach ($customer->packageBenefits as $benefit) {
+            $type = $benefit->benefit_type;
 
+            $remaining = (int) (
+                $benefit->remaining_quantity ?? 0
+            );
+            if ($type === 'free_consultation') {
+
+                $summary['free_consultation'] += $remaining;
+
+                $summary['free_hospital_consultation'] += $remaining;
+            } elseif ($type === 'free_video_consultation') {
+
+                $summary['free_video_consultation'] += $remaining;
+
+                $summary['free_hospital_consultation'] += $remaining;
+            } elseif ($type === 'free_home_visit_consultation') {
+
+                $summary['free_home_visit_consultation'] += $remaining;
+
+                $summary['free_hospital_consultation'] += $remaining;
+            } elseif ($type === 'free_home_visit') {
+
+                $summary['free_home_visit'] += $remaining;
+            } elseif ($type === 'free_ambulance') {
+
+                $summary['free_ambulance'] += $remaining;
+            } elseif ($type === 'free_surgery_quote') {
+
+                $summary['free_surgery_quote'] += $remaining;
+            } elseif ($type === 'free_medicine') {
+
+                $summary['free_medicine'] += $remaining;
+            } elseif ($type === 'free_diagnostic') {
+
+                $summary['free_diagnostic'] += $remaining;
+            }
+        }
+        $benefits = $customer->packageBenefits
+            ->map(function ($benefit) {
+
+                return [
+
+                    'id' =>
+                        $benefit->id,
+
+                    'benefit_type' =>
+                        $benefit->benefit_type,
+
+                    'benefit_name' =>
+                        $benefit->benefit_name,
+
+                    'total_quantity' =>
+                        (int) (
+                            $benefit->total_quantity ?? 0
+                        ),
+
+                    'used_quantity' =>
+                        (int) (
+                            $benefit->used_quantity ?? 0
+                        ),
+
+                    'remaining_quantity' =>
+                        (int) (
+                            $benefit->remaining_quantity ?? 0
+                        ),
+
+                ];
+
+            })
+            ->values();
         return response()->json([
+
             'success' => 1,
-            'message' => 'Package details fetched successfully.',
+
+            'message' =>
+                'Package details fetched successfully.',
 
             'data' => [
-
-                'package' => $customer->package,
-
+                'package' =>
+                    $customer->package,
                 'package_start_date' =>
                     $customer->package_start_date,
 
@@ -678,30 +799,96 @@ class ProfileController extends Controller
                 'is_expired' =>
                     $isExpired,
 
+                'benefit_summary' =>
+                    $summary,
+
                 'benefits' =>
-                    $customer->packageBenefits->map(function ($benefit) {
-
-                        return [
-                            'id' => $benefit->id,
-
-                            'benefit_type' =>
-                                $benefit->benefit_type,
-
-                            'benefit_name' =>
-                                $benefit->benefit_name,
-
-                            'total_quantity' =>
-                                $benefit->total_quantity,
-
-                            'used_quantity' =>
-                                $benefit->used_quantity,
-
-                            'remaining_quantity' =>
-                                $benefit->remaining_quantity,
-                        ];
-                    }),
+                    $benefits,
 
             ]
+
         ]);
     }
+
+
+    // public function packageDetails()
+    // {
+    //     $customer = auth('sanctum')->user();
+
+    //     if (!$customer) {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'Please Login'
+    //         ], 401);
+    //     }
+
+    //     $customer->load([
+    //         'package',
+    //         'packageBenefits'
+    //     ]);
+
+    //     if (!$customer->package_id) {
+
+    //         return response()->json([
+    //             'success' => 1,
+    //             'message' => 'No package assigned.',
+    //             'data' => [
+    //                 'package' => null,
+    //                 'package_start_date' => null,
+    //                 'package_expiry_date' => null,
+    //                 'is_expired' => false,
+    //                 'benefits' => [],
+    //             ]
+    //         ]);
+    //     }
+
+    //     $isExpired =
+    //         !$customer->package_expiry_date ||
+    //         now()->startOfDay()->gt(
+    //             $customer->package_expiry_date
+    //         );
+
+    //     return response()->json([
+    //         'success' => 1,
+    //         'message' => 'Package details fetched successfully.',
+
+    //         'data' => [
+
+    //             'package' => $customer->package,
+
+    //             'package_start_date' =>
+    //                 $customer->package_start_date,
+
+    //             'package_expiry_date' =>
+    //                 $customer->package_expiry_date,
+
+    //             'is_expired' =>
+    //                 $isExpired,
+
+    //             'benefits' =>
+    //                 $customer->packageBenefits->map(function ($benefit) {
+
+    //                     return [
+    //                         'id' => $benefit->id,
+
+    //                         'benefit_type' =>
+    //                             $benefit->benefit_type,
+
+    //                         'benefit_name' =>
+    //                             $benefit->benefit_name,
+
+    //                         'total_quantity' =>
+    //                             $benefit->total_quantity,
+
+    //                         'used_quantity' =>
+    //                             $benefit->used_quantity,
+
+    //                         'remaining_quantity' =>
+    //                             $benefit->remaining_quantity,
+    //                     ];
+    //                 }),
+
+    //         ]
+    //     ]);
+    // }
 }

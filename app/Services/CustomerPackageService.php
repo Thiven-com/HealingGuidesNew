@@ -112,10 +112,13 @@ class CustomerPackageService
 
     public function consumeBenefit(
         Customer $customer,
-        string $benefitType
+        string $benefitType,
+        $referenceType = null,
+        $referenceId = null,
+        $notes = null
     ) {
 
-        return DB::transaction(function () use ($customer, $benefitType) {
+        return DB::transaction(function () use ($customer, $benefitType, $referenceType, $referenceId, $notes) {
 
             /*
             |--------------------------------------------------------------------------
@@ -142,7 +145,9 @@ class CustomerPackageService
             if (
                 !$customer->package_expiry_date ||
                 now()->startOfDay()->gt(
-                    $customer->package_expiry_date
+                    \Carbon\Carbon::parse(
+                        $customer->package_expiry_date
+                    )->startOfDay()
                 )
             ) {
 
@@ -156,25 +161,24 @@ class CustomerPackageService
 
             /*
             |--------------------------------------------------------------------------
-            | Benefit
+            | Get Customer Benefit
             |--------------------------------------------------------------------------
             */
 
-            $benefit =
-                CustomerPackageBenefit::where(
-                    'customer_id',
-                    $customer->id
+            $benefit = CustomerPackageBenefit::where(
+                'customer_id',
+                $customer->id
+            )
+                ->where(
+                    'package_id',
+                    $customer->package_id
                 )
-                    ->where(
-                        'package_id',
-                        $customer->package_id
-                    )
-                    ->where(
-                        'benefit_type',
-                        $benefitType
-                    )
-                    ->lockForUpdate()
-                    ->first();
+                ->where(
+                    'benefit_type',
+                    $benefitType
+                )
+                ->lockForUpdate()
+                ->first();
 
 
             if (!$benefit) {
@@ -193,10 +197,12 @@ class CustomerPackageService
             |--------------------------------------------------------------------------
             */
 
-            if (
-                $benefit->used_quantity >=
-                $benefit->total_quantity
-            ) {
+            $remainingQuantity =
+                (int) $benefit->total_quantity -
+                (int) $benefit->used_quantity;
+
+
+            if ($remainingQuantity <= 0) {
 
                 return [
                     'success' => false,
@@ -208,23 +214,94 @@ class CustomerPackageService
 
             /*
             |--------------------------------------------------------------------------
-            | Use Benefit
+            | Consume Benefit
             |--------------------------------------------------------------------------
             */
 
             $benefit->increment(
-                'used_quantity'
+                'used_quantity',
+                1
             );
 
             $benefit->refresh();
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | Store Usage History
+            |--------------------------------------------------------------------------
+            */
+
+            $usageHistory =
+                PackageBenefitUsageHistory::create([
+
+                    'customer_id' =>
+                        $customer->id,
+
+                    'package_id' =>
+                        $customer->package_id,
+
+                    'package_benefit_id' =>
+                        $benefit->id,
+
+                    'benefit_type' =>
+                        $benefit->benefit_type,
+
+                    'benefit_name' =>
+                        $benefit->benefit_name,
+
+                    'quantity' =>
+                        1,
+
+                    'reference_type' =>
+                        $referenceType,
+
+                    'reference_id' =>
+                        $referenceId,
+
+                    'usage_type' =>
+                        'used',
+
+                    'notes' =>
+                        $notes,
+
+                ]);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Remaining Quantity
+            |--------------------------------------------------------------------------
+            */
+
+            $remaining =
+                (int) $benefit->total_quantity -
+                (int) $benefit->used_quantity;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Response
+            |--------------------------------------------------------------------------
+            */
+
             return [
+
                 'success' => true,
+
                 'message' =>
                     'Package benefit used successfully.',
+
                 'benefit' => $benefit,
+
+                'usage_history' =>
+                    $usageHistory,
+
+                'remaining_quantity' =>
+                    $remaining,
+
             ];
+
         });
     }
 

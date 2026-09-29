@@ -116,7 +116,7 @@ class HospitalController extends Controller
             $categories->where('id', $request->id);
         }
 
-        $categories = $categories->latest()->paginate(20);
+        $categories = $categories->paginate(20);
 
         if ($categories->isEmpty()) {
             return response()->json([
@@ -128,21 +128,37 @@ class HospitalController extends Controller
         return response()->json([
             'success' => 1,
             'data' => $categories->map(function ($category) {
+
+                $specializations = Specialization::where('status', 1)
+                    ->where('specialization_category', $category->id)
+                    ->get();
+
                 return [
                     'id' => $category->id,
                     'category_name' => $category->category_name,
                     'slug' => $category->slug,
+
                     'icon' => $category->icon
                         ? asset($category->icon)
                         : null,
+
                     'image' => $category->image
                         ? asset($category->image)
                         : null,
+
                     'description' => $category->description,
+
+                    // Use SpecializationCollection here
+                    'specializations' => new SpecializationCollection(
+                        $specializations
+                    ),
                 ];
             })->values(),
+
             'message' => 'Specialization Categories Fetched Successfully'
         ]);
     }
+
+
 
 }

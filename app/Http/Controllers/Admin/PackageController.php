@@ -27,17 +27,21 @@ class PackageController extends Controller
             'free_video_consultation' =>
                 'Free Video Consultation',
 
+            'free_home_visit_consultation' =>
+                'Free Home Visit Consultation',
+
+            'free_home_visit_service' =>
+                'Free Home Visit Service',
+
             'free_ambulance' =>
                 'Free Ambulance',
-
-            'free_home_visit' =>
-                'Free Home Visit',
 
             'free_surgery_quote' =>
                 'Free Surgery Quote',
 
             'free_medicine' =>
                 'Free Medicine',
+
             'free_diagnostic' =>
                 'Free Diagnostic',
 
