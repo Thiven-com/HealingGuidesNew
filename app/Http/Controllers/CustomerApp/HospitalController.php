@@ -34,6 +34,9 @@ class HospitalController extends Controller
         if ($request->filled('city')) {
             $query->where('city', $request->city);
         }
+        if ($request->filled('hospital_type')) {
+            $query->where('hospital_type', $request->hospital_type);
+        }
         if ($request->filled('id')) {
             $query->where('id', $request->id);
         }

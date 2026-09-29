@@ -12,6 +12,7 @@ use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
 use App\Http\Controllers\CustomerApp\HospitalController;
+use App\Http\Controllers\CustomerApp\HospitalTypeController;
 use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
@@ -55,6 +56,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         'specialization-categories',
         [HospitalController::class, 'specializationCategories']
     );
+
+    Route::get('/hospital-types', [HospitalTypeController::class, 'index']);
+
 
     //Doctors
     Route::any('doctors', "DoctorController@doctors");
@@ -165,7 +169,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     Route::get('/delete_insurance/{id}', [ProfileController::class, 'deleteInsurance']);
 
-    Route::get('/profile/package',[ProfileController::class, 'packageDetails']);
+    Route::get('/profile/package', [ProfileController::class, 'packageDetails']);
 
     Route::get('search', [HomeController::class, 'search']);
 
