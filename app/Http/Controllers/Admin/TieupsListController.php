@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HospitalTieup;
 use App\Models\TieupsList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -36,14 +37,20 @@ class TieupsListController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'hospital_id' => 'required|exists:hospitals,id',
+            'hospital_tieups_id' => 'required|exists:hospital_tieups,id',
             'title' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'description' => 'nullable|string',
         ]);
 
+        // Get hospital tieup
+        $hospitalTieup = HospitalTieup::findOrFail(
+            $validated['hospital_tieups_id']
+        );
+
         $data = [
-            'hospital_id' => $validated['hospital_id'],
+            'hospital_id' => $hospitalTieup->hospital_id,
+            'hospital_tieups_id' => $hospitalTieup->id,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
         ];
@@ -55,10 +62,12 @@ class TieupsListController extends Controller
             );
         }
 
-        $tieupList = TieupsList::create($data);
+        TieupsList::create($data);
 
         return redirect()
-            ->back()
+            ->route('admin.hospitals.tieups-details', [
+                'tieup' => $hospitalTieup->id,
+            ])
             ->with('success', 'Hospital tie-up added successfully.');
     }
 

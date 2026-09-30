@@ -735,6 +735,480 @@
     </div>
 
 </div>
+
+
+{{-- =========================================================
+    Emergency Connect
+========================================================= --}}
+
+<div class="card border-0 shadow-sm mb-4 emergency-connect-card">
+
+    {{-- Header --}}
+    <div class="card-header border-0 bg-white pt-4 px-4">
+
+        <div class="emergency-connect-title">
+
+            <span class="emergency-connect-title-line"></span>
+
+            <div>
+                <h4 class="mb-1">
+                    Emergency Connect
+                </h4>
+
+                <p class="mb-0 text-muted">
+                    Quick access to hospital emergency services
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- Services --}}
+    <div class="card-body px-4 pb-4">
+
+        <div class="emergency-connect-grid">
+
+            {{-- Front Office --}}
+            <a
+                href="{{ route('admin.emergency-connect.show', [
+                    'hospital' => $hospital->id,
+                    'slug' => 'front-office'
+                ]) }}"
+                class="emergency-connect-item"
+            >
+
+                <div class="emergency-connect-box emergency-purple">
+
+                    <div class="emergency-connect-icon">
+
+                        <i class="ti ti-building"></i>
+
+                    </div>
+
+                    <h5>
+                        Front Office
+                    </h5>
+
+                    <span class="emergency-connect-arrow">
+                        <i class="ti ti-arrow-up-right"></i>
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            {{-- Diagnostics --}}
+            <a
+                href="{{ route('admin.emergency-connect.show', [
+                    'hospital' => $hospital->id,
+                    'slug' => 'diagnostics'
+                ]) }}"
+                class="emergency-connect-item"
+            >
+
+                <div class="emergency-connect-box emergency-green">
+
+                    <div class="emergency-connect-icon">
+
+                        <i class="ti ti-flask"></i>
+
+                    </div>
+
+                    <h5>
+                        Diagnostics
+                    </h5>
+
+                    <span class="emergency-connect-arrow">
+                        <i class="ti ti-arrow-up-right"></i>
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            {{-- Room Service --}}
+            <a
+                href="{{ route('admin.emergency-connect.show', [
+                    'hospital' => $hospital->id,
+                    'slug' => 'room-service'
+                ]) }}"
+                class="emergency-connect-item"
+            >
+
+                <div class="emergency-connect-box emergency-orange">
+
+                    <div class="emergency-connect-icon">
+
+                        <i class="ti ti-bell"></i>
+
+                    </div>
+
+                    <h5>
+                        Room Service
+                    </h5>
+
+                    <span class="emergency-connect-arrow">
+                        <i class="ti ti-arrow-up-right"></i>
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            {{-- Ambulance --}}
+            <a
+                href="{{ route('admin.emergency-connect.show', [
+                    'hospital' => $hospital->id,
+                    'slug' => 'ambulance'
+                ]) }}"
+                class="emergency-connect-item"
+            >
+
+                <div class="emergency-connect-box emergency-pink">
+
+                    <div class="emergency-connect-icon">
+
+                        <i class="ti ti-ambulance"></i>
+
+                    </div>
+
+                    <h5>
+                        Ambulance
+                    </h5>
+
+                    <span class="emergency-connect-arrow">
+                        <i class="ti ti-arrow-up-right"></i>
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<style>
+    /* =========================================================
+   EMERGENCY CONNECT
+========================================================= */
+
+.emergency-connect-card {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.emergency-connect-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.emergency-connect-title-line {
+    width: 5px;
+    height: 48px;
+    display: block;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        180deg,
+        #df3f69,
+        #ff6b8a
+    );
+}
+
+.emergency-connect-title h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #202b3c;
+}
+
+.emergency-connect-title p {
+    font-size: 14px;
+    color: #8a93a3 !important;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.emergency-connect-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   ITEM
+========================================================= */
+
+.emergency-connect-item {
+    width: 100%;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+
+/* =========================================================
+   BOX
+========================================================= */
+
+.emergency-connect-box {
+    position: relative;
+
+    width: 100%;
+    min-height: 160px;
+
+    padding: 22px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.emergency-connect-box:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.08);
+
+    border-color: transparent;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.emergency-connect-icon {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+}
+
+.emergency-connect-icon i {
+    font-size: 40px;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.emergency-connect-box h5 {
+
+    margin: 0;
+
+    padding-right: 45px;
+
+    font-size: 15px;
+
+    line-height: 1.35;
+
+    font-weight: 700;
+
+    width: fit-content;
+
+    color: #202b3c;
+}
+
+
+/* =========================================================
+   ARROW
+========================================================= */
+
+.emergency-connect-arrow {
+
+    position: absolute;
+
+    right: 15px;
+    bottom: 15px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.25s ease;
+}
+
+.emergency-connect-arrow i {
+    font-size: 22px;
+}
+
+.emergency-connect-box:hover
+.emergency-connect-arrow {
+    transform: translate(3px, -3px);
+}
+
+
+/* =========================================================
+   FRONT OFFICE - PURPLE
+========================================================= */
+
+.emergency-purple .emergency-connect-icon {
+    background: #f0ebff;
+}
+
+.emergency-purple .emergency-connect-icon i {
+    color: #7651d6;
+}
+
+.emergency-purple .emergency-connect-arrow {
+    background: #f4f0ff;
+}
+
+.emergency-purple .emergency-connect-arrow i {
+    color: #7651d6;
+}
+
+
+/* =========================================================
+   DIAGNOSTICS - GREEN
+========================================================= */
+
+.emergency-green .emergency-connect-icon {
+    background: #eaf9f6;
+}
+
+.emergency-green .emergency-connect-icon i {
+    color: #13a69c;
+}
+
+.emergency-green .emergency-connect-arrow {
+    background: #effbf9;
+}
+
+.emergency-green .emergency-connect-arrow i {
+    color: #13a69c;
+}
+
+
+/* =========================================================
+   ROOM SERVICE - ORANGE
+========================================================= */
+
+.emergency-orange .emergency-connect-icon {
+    background: #fff7e9;
+}
+
+.emergency-orange .emergency-connect-icon i {
+    color: #e49a20;
+}
+
+.emergency-orange .emergency-connect-arrow {
+    background: #fffaf1;
+}
+
+.emergency-orange .emergency-connect-arrow i {
+    color: #e49a20;
+}
+
+
+/* =========================================================
+   AMBULANCE - PINK
+========================================================= */
+
+.emergency-pink .emergency-connect-icon {
+    background: #fff0f6;
+}
+
+.emergency-pink .emergency-connect-icon i {
+    color: #e45b9e;
+}
+
+.emergency-pink .emergency-connect-arrow {
+    background: #fff5f9;
+}
+
+.emergency-pink .emergency-connect-arrow i {
+    color: #e45b9e;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1199px) {
+
+    .emergency-connect-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 991px) {
+
+    .emergency-connect-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 575px) {
+
+    .emergency-connect-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .emergency-connect-box {
+        min-height: 165px;
+    }
+
+    .emergency-connect-title h4 {
+        font-size: 20px;
+    }
+
+}
+</style>
+</style>
 <style>
     /* ==========================================
        Hospital Tieups
