@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\HealthCheckupPackageController;
 use App\Http\Controllers\Admin\HealthCheckupTestController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\HospitalFacilitiesListController;
@@ -479,6 +480,11 @@ Route::group(['middleware' => 'admin'], function () {
             Route::post('/{healthCheckupTest}/status', 'status')
                 ->name('status');
         });
+
+    Route::resource(
+        'health-checkup-packages',
+        HealthCheckupPackageController::class
+    )->names('admin.health-checkup-packages');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

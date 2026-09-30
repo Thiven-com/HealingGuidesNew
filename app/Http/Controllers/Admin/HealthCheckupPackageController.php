@@ -18,17 +18,47 @@ class HealthCheckupPackageController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
+    public function index(Request $request)
     {
-        $packages = HealthCheckupPackage::with('healthCheckup')
-            ->withCount('tests')
+        $query = HealthCheckupPackage::with([
+            'healthCheckup',
+            'tests'
+        ]);
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('slug', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('health_checkup_id')) {
+            $query->where(
+                'health_checkup_id',
+                $request->health_checkup_id
+            );
+        }
+
+        if ($request->filled('status')) {
+            $query->where(
+                'status',
+                $request->status
+            );
+        }
+
+        $packages = $query
             ->orderBy('display_order')
             ->orderByDesc('id')
-            ->get();
+            ->paginate(10);
+
+        $healthCheckups = HealthCheckup::orderBy('name')->get();
 
         return view(
             'admin.health_checkup_packages.index',
-            compact('packages')
+            compact(
+                'packages',
+                'healthCheckups'
+            )
         );
     }
 
@@ -104,7 +134,7 @@ class HealthCheckupPackageController extends Controller
                 'max:5120',
             ],
 
-            'original_price' => [
+            'mrp' => [
                 'required',
                 'numeric',
                 'min:0',
@@ -237,8 +267,8 @@ class HealthCheckupPackageController extends Controller
                     'image' =>
                         $image,
 
-                    'original_price' =>
-                        $validated['original_price'],
+                    'mrp' =>
+                        $validated['mrp'],
 
                     'price' =>
                         $validated['price'],
@@ -401,7 +431,7 @@ class HealthCheckupPackageController extends Controller
                 'max:5120',
             ],
 
-            'original_price' => [
+            'mrp' => [
                 'required',
                 'numeric',
                 'min:0',
@@ -539,8 +569,8 @@ class HealthCheckupPackageController extends Controller
                 'image' =>
                     $image,
 
-                'original_price' =>
-                    $validated['original_price'],
+                'mrp' =>
+                    $validated['mrp'],
 
                 'price' =>
                     $validated['price'],

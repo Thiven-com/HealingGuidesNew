@@ -9,10 +9,10 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
 
             <div>
-                <h4 class="mb-1">Add Health Checkup Package</h4>
+                <h4 class="mb-1">Edit Health Checkup Package</h4>
 
                 <p class="text-muted mb-0">
-                    Create a health checkup package and select the tests included in it.
+                    Update package details, pricing and included tests.
                 </p>
             </div>
 
@@ -65,15 +65,19 @@
 
 
         <form
-            action="{{ route('admin.health-checkup-packages.store') }}"
+            action="{{ route(
+                'admin.health-checkup-packages.update',
+                $healthCheckupPackage->id
+            ) }}"
             method="POST"
             enctype="multipart/form-data">
 
             @csrf
+            @method('PUT')
 
 
             {{-- ========================================================= --}}
-            {{-- Basic Information --}}
+            {{-- Package Information --}}
             {{-- ========================================================= --}}
 
             <div class="card mb-4">
@@ -120,7 +124,13 @@
 
                                     <option
                                         value="{{ $healthCheckup->id }}"
-                                        {{ old('health_checkup_id') == $healthCheckup->id ? 'selected' : '' }}>
+                                        {{ old(
+                                            'health_checkup_id',
+                                            $healthCheckupPackage->health_checkup_id
+                                        ) == $healthCheckup->id
+                                            ? 'selected'
+                                            : ''
+                                        }}>
 
                                         {{ $healthCheckup->name }}
 
@@ -153,7 +163,10 @@
                                 name="display_order"
                                 min="0"
                                 class="form-control @error('display_order') is-invalid @enderror"
-                                value="{{ old('display_order', 0) }}"
+                                value="{{ old(
+                                    'display_order',
+                                    $healthCheckupPackage->display_order
+                                ) }}"
                                 placeholder="0">
 
                             @error('display_order')
@@ -182,7 +195,10 @@
                                     name="status"
                                     value="1"
                                     id="status"
-                                    {{ old('status', 1) ? 'checked' : '' }}>
+                                    {{ old(
+                                        'status',
+                                        $healthCheckupPackage->status
+                                    ) ? 'checked' : '' }}>
 
                                 <label
                                     class="form-check-label"
@@ -213,7 +229,10 @@
                                 name="name"
                                 id="packageName"
                                 class="form-control @error('name') is-invalid @enderror"
-                                value="{{ old('name') }}"
+                                value="{{ old(
+                                    'name',
+                                    $healthCheckupPackage->name
+                                ) }}"
                                 placeholder="Example: Comprehensive Full Body Checkup"
                                 required>
 
@@ -239,8 +258,12 @@
                                 type="text"
                                 name="slug"
                                 id="packageSlug"
+                                data-manual="true"
                                 class="form-control @error('slug') is-invalid @enderror"
-                                value="{{ old('slug') }}"
+                                value="{{ old(
+                                    'slug',
+                                    $healthCheckupPackage->slug
+                                ) }}"
                                 placeholder="package-slug">
 
                             @error('slug')
@@ -250,10 +273,6 @@
                                 </div>
 
                             @enderror
-
-                            <small class="text-muted">
-                                Leave empty to generate automatically.
-                            </small>
 
                         </div>
 
@@ -265,42 +284,85 @@
                                 Package Image
                             </label>
 
-                            <input
-                                type="file"
-                                name="image"
-                                id="packageImage"
-                                class="form-control @error('image') is-invalid @enderror"
-                                accept=".jpg,.jpeg,.png,.webp">
+                            <div class="row align-items-start g-3">
 
-                            @error('image')
+                                {{-- Existing Image --}}
+                                @if($healthCheckupPackage->image)
 
-                                <div class="invalid-feedback">
-                                    {{ $message }}
+                                    <div class="col-md-3">
+
+                                        <div class="border rounded p-2">
+
+                                            <small class="text-muted d-block mb-2">
+                                                Current Image
+                                            </small>
+
+                                            <img
+                                                src="{{ asset(
+                                                    $healthCheckupPackage->image
+                                                ) }}"
+                                                alt="{{ $healthCheckupPackage->name }}"
+                                                class="img-fluid rounded"
+                                                style="
+                                                    width:100%;
+                                                    height:140px;
+                                                    object-fit:cover;
+                                                ">
+
+                                        </div>
+
+                                    </div>
+
+                                @endif
+
+
+                                <div class="col-md-{{ $healthCheckupPackage->image ? '9' : '12' }}">
+
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        id="packageImage"
+                                        class="form-control @error('image') is-invalid @enderror"
+                                        accept=".jpg,.jpeg,.png,.webp">
+
+                                    @error('image')
+
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+
+                                    @enderror
+
+                                    <small class="text-muted">
+                                        Upload a new image only if you want to replace the current image.
+                                        JPG, JPEG, PNG or WEBP. Maximum 5MB.
+                                    </small>
+
+
+                                    {{-- New Image Preview --}}
+                                    <div
+                                        id="imagePreviewWrapper"
+                                        class="mt-3"
+                                        style="display:none;">
+
+                                        <small class="text-muted d-block mb-2">
+                                            New Image Preview
+                                        </small>
+
+                                        <img
+                                            id="imagePreview"
+                                            src=""
+                                            alt="New Package Preview"
+                                            class="rounded border"
+                                            style="
+                                                width:180px;
+                                                height:120px;
+                                                object-fit:cover;
+                                            ">
+
+                                    </div>
+
                                 </div>
-
-                            @enderror
-
-                            <small class="text-muted">
-                                JPG, JPEG, PNG or WEBP. Maximum 5MB.
-                            </small>
-
-
-                            {{-- Image Preview --}}
-                            <div
-                                id="imagePreviewWrapper"
-                                class="mt-3"
-                                style="display:none;">
-
-                                <img
-                                    id="imagePreview"
-                                    src=""
-                                    alt="Package Preview"
-                                    class="rounded border"
-                                    style="
-                                        width:180px;
-                                        height:120px;
-                                        object-fit:cover;
-                                    ">
 
                             </div>
 
@@ -318,7 +380,10 @@
                                 type="text"
                                 name="short_description"
                                 class="form-control @error('short_description') is-invalid @enderror"
-                                value="{{ old('short_description') }}"
+                                value="{{ old(
+                                    'short_description',
+                                    $healthCheckupPackage->short_description
+                                ) }}"
                                 placeholder="Enter short package description">
 
                             @error('short_description')
@@ -343,7 +408,10 @@
                                 name="description"
                                 rows="6"
                                 class="form-control @error('description') is-invalid @enderror"
-                                placeholder="Enter complete package description">{{ old('description') }}</textarea>
+                                placeholder="Enter complete package description">{{ old(
+                                    'description',
+                                    $healthCheckupPackage->description
+                                ) }}</textarea>
 
                             @error('description')
 
@@ -385,7 +453,6 @@
 
                     <div class="row g-4">
 
-
                         {{-- Original Price --}}
                         <div class="col-md-6">
 
@@ -410,7 +477,10 @@
                                     step="0.01"
                                     min="0"
                                     class="form-control @error('mrp') is-invalid @enderror"
-                                    value="{{ old('mrp', 0) }}"
+                                    value="{{ old(
+                                        'mrp',
+                                        $healthCheckupPackage->mrp
+                                    ) }}"
                                     placeholder="0.00"
                                     required>
 
@@ -451,7 +521,10 @@
                                     step="0.01"
                                     min="0"
                                     class="form-control @error('price') is-invalid @enderror"
-                                    value="{{ old('price', 0) }}"
+                                    value="{{ old(
+                                        'price',
+                                        $healthCheckupPackage->price
+                                    ) }}"
                                     placeholder="0.00"
                                     required>
 
@@ -468,7 +541,7 @@
                         </div>
 
 
-                        {{-- Discount Preview --}}
+                        {{-- Discount --}}
                         <div class="col-md-12">
 
                             <div
@@ -491,10 +564,13 @@
                                         </span>
 
                                         <span class="ms-2">
+
                                             You save ₹
+
                                             <span id="discountAmount">
                                                 0.00
                                             </span>
+
                                         </span>
 
                                     </div>
@@ -556,11 +632,9 @@
 
                 <div class="card-body">
 
-
                     @if($tests->count())
 
-
-                        {{-- Search Tests --}}
+                        {{-- Search --}}
                         <div class="mb-3">
 
                             <div class="input-group">
@@ -608,15 +682,27 @@
                             id="testsContainer"
                             class="row g-3">
 
-
                             @foreach($tests as $test)
+
+                                @php
+
+                                    $isSelected =
+                                        in_array(
+                                            $test->id,
+                                            old(
+                                                'tests',
+                                                $selectedTests ?? []
+                                            )
+                                        );
+
+                                @endphp
 
                                 <div
                                     class="col-md-6 col-lg-4 test-item"
                                     data-test-name="{{ strtolower($test->name) }}">
 
                                     <div
-                                        class="border rounded p-3 h-100 test-card">
+                                        class="border rounded p-3 h-100 test-card {{ $isSelected ? 'selected' : '' }}">
 
                                         <div class="form-check">
 
@@ -626,10 +712,7 @@
                                                 value="{{ $test->id }}"
                                                 id="test_{{ $test->id }}"
                                                 class="form-check-input test-checkbox"
-                                                {{ in_array(
-                                                    $test->id,
-                                                    old('tests', [])
-                                                ) ? 'checked' : '' }}>
+                                                {{ $isSelected ? 'checked' : '' }}>
 
                                             <label
                                                 class="form-check-label w-100"
@@ -679,7 +762,6 @@
 
                         </div>
 
-
                     @else
 
                         <div class="text-center py-5">
@@ -698,11 +780,13 @@
                             </h6>
 
                             <p class="text-muted mb-3">
-                                Create health checkup tests before creating a package.
+                                Create health checkup tests before updating a package.
                             </p>
 
                             <a
-                                href="{{ route('admin.health-checkup-tests.create') }}"
+                                href="{{ route(
+                                    'admin.health-checkup-tests.create'
+                                ) }}"
                                 class="btn btn-primary">
 
                                 <i class="ti ti-plus me-1"></i>
@@ -727,7 +811,9 @@
             <div class="d-flex align-items-center justify-content-end gap-2 mb-4">
 
                 <a
-                    href="{{ route('admin.health-checkup-packages.index') }}"
+                    href="{{ route(
+                        'admin.health-checkup-packages.index'
+                    ) }}"
                     class="btn btn-light">
 
                     Cancel
@@ -741,7 +827,7 @@
 
                     <i class="ti ti-device-floppy me-1"></i>
 
-                    Save Package
+                    Update Package
 
                 </button>
 
@@ -784,52 +870,6 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | Slug Generation
-    |--------------------------------------------------------------------------
-    */
-
-    const packageName =
-        document.getElementById('packageName');
-
-    const packageSlug =
-        document.getElementById('packageSlug');
-
-
-    if (packageName && packageSlug) {
-
-        packageName.addEventListener('input', function () {
-
-            if (
-                packageSlug.dataset.manual === 'true'
-            ) {
-                return;
-            }
-
-            packageSlug.value =
-                this.value
-                    .toLowerCase()
-                    .trim()
-                    .replace(/[^a-z0-9\s-]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-');
-
-        });
-
-
-        packageSlug.addEventListener('input', function () {
-
-            this.dataset.manual =
-                this.value.length > 0
-                    ? 'true'
-                    : 'false';
-
-        });
-
-    }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -988,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Tests
+    | Test Selection
     |--------------------------------------------------------------------------
     */
 

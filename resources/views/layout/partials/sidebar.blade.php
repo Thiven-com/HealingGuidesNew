@@ -119,9 +119,16 @@
                                                 </li>
                                                 <li
                                                         class="{{ request()->routeIs('admin.health-checkup-tests.*') ? 'active' : '' }}">
-                                                        <a href="{{ route('admin.healthcheckups.index') }}">
+                                                        <a href="{{ route('admin.health-checkup-tests.index') }}">
                                                                 <i class="ti ti-heartbeat fs-16 me-2"></i>
                                                                 <span>Health Checkup Tests</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.health-checkup-packages.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.health-checkup-packages.index') }}">
+                                                                <i class="ti ti-heartbeat fs-16 me-2"></i>
+                                                                <span>Health Checkup Packages</span>
                                                         </a>
                                                 </li>
                                                 <li
