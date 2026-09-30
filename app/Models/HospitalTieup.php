@@ -18,6 +18,6 @@ class HospitalTieup extends Model
     }
     public function hospitalDetail()
     {
-        return $this->belongsTo(Hospital::class, 'hospital');
+        return $this->belongsTo(Hospital::class, 'hospital_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\HospitalEmergencyConnect;
 use App\Models\TieupsList;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -86,6 +87,52 @@ class HospitalCollection extends ResourceCollection
                                 ->values(),
                         ];
                     })->values(),
+
+                /*
+            |--------------------------------------------------------------------------
+            | Emergency Connect
+            |--------------------------------------------------------------------------
+            */
+                'emergency_connect' => HospitalEmergencyConnect::where(
+                    'hospital_id',
+                    $hospital->id
+                )
+                    ->latest()
+                    ->get()
+                    ->groupBy('slug')
+                    ->map(function ($items, $slug) {
+                        return [
+                            'slug' => $slug,
+
+                            'name' => $items->first()->name,
+
+                            'contacts' => $items->map(function ($emergencyConnect) {
+                                return [
+                                    'id' => $emergencyConnect->id,
+                                    'hospital_id' => $emergencyConnect->hospital_id,
+                                    'slug' => $emergencyConnect->slug,
+                                    'name' => $emergencyConnect->name,
+
+                                    'image' => $emergencyConnect->image
+                                        ? asset($emergencyConnect->image)
+                                        : null,
+
+                                    'designation' => $emergencyConnect->designation,
+                                    'department' => $emergencyConnect->department,
+
+                                    'whatsapp_number' =>
+                                        $emergencyConnect->whatsapp_number,
+
+                                    'contact_number' =>
+                                        $emergencyConnect->contact_number,
+
+                                    'created_at' => $emergencyConnect->created_at,
+                                    'updated_at' => $emergencyConnect->updated_at,
+                                ];
+                            })->values(),
+                        ];
+                    })
+                    ->values(),
                 'rating' => rand(35, 50) / 10,
                 'rating_count' => rand(60, 100),
                 'distance' => number_format(rand(5, 100) / 10, 1) . ' KM',

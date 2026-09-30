@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\HealthCheckupController;
+use App\Http\Controllers\Admin\HospitalEmergencyConnectController;
 use App\Http\Controllers\Admin\HospitalGalleryController;
 use App\Http\Controllers\Admin\InsuranceController;
 use App\Http\Controllers\Admin\LabTestBookingController;
@@ -57,6 +58,31 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    Route::get(
+        'hospitals/{hospital}/emergency-connect/{slug}',
+        [HospitalEmergencyConnectController::class, 'show']
+    )->name('admin.emergency-connect.show');
+
+    Route::get(
+        'hospitals/{hospital}/emergency-connect',
+        [HospitalEmergencyConnectController::class, 'index']
+    )->name('admin.emergency-connect.index');
+
+    Route::post(
+        'hospitals/{hospital}/emergency-connect',
+        [HospitalEmergencyConnectController::class, 'store']
+    )->name('admin.emergency-connect.store');
+
+    Route::put(
+        'hospitals/emergency-connect/{emergencyConnect}',
+        [HospitalEmergencyConnectController::class, 'update']
+    )->name('admin.emergency-connect.update');
+
+    Route::delete(
+        'hospitals/emergency-connect/{emergencyConnect}',
+        [HospitalEmergencyConnectController::class, 'destroy']
+    )->name('admin.emergency-connect.destroy');
 
     Route::get(
         '/health-checkups',

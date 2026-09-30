@@ -3,25 +3,7 @@
 @section('content')
 
 
-    @if ($errors->any())
-
-        <div class="alert alert-danger">
-
-            <strong>Please fix the following:</strong>
-
-            <ul class="mb-0 mt-2">
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-
-        </div>
-
-    @endif
+   
 
     <div class="page-wrapper">
 
@@ -188,6 +170,26 @@
     </div>
 
 </div>
+
+@if ($errors->any())
+
+        <div class="alert alert-danger">
+
+            <strong>Please fix the following:</strong>
+
+            <ul class="mb-0 mt-2">
+
+                @foreach ($errors->all() as $error)
+
+                    <li>{{ $error }}</li>
+
+                @endforeach
+
+            </ul>
+
+        </div>
+
+    @endif
 
             {{-- =========================================================
             HOSPITAL TIEUPS LIST
@@ -515,8 +517,10 @@
 
                     @csrf
 
-                    <input type="hidden" name="hospital_id" value="{{ $hospitalId }}"
-    >
+                    <input type="hidden" name="hospital_id" value="{{ $hospitalId }}">
+
+                    <input type="hidden" name="hospital_tieups_id" value="{{ $hospitalTieup->id }}">
+                    
 
 
                         {{-- HEADER --}}

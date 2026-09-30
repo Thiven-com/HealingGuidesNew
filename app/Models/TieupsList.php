@@ -10,6 +10,7 @@ class TieupsList extends Model
 
     protected $fillable = [
         'hospital_id',
+        'hospital_tieups_id',
         'title',
         'image',
         'description',

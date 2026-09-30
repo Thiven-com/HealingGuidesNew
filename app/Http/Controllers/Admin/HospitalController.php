@@ -483,13 +483,17 @@ class HospitalController extends Controller
 
     public function tieupsDetails($id)
     {
-        $hospitalTieup = HospitalTieup::with('hospitalDetail')
-            ->where('id', $id)
-            ->first();
-        $tieup = Tieup::where('id', $hospitalTieup->tieup_id)->first();
+        $hospitalTieup = HospitalTieup::with([
+            'hospitalDetail',
+            'tieup'
+        ])->findOrFail($id);
+
+        $tieup = $hospitalTieup->tieup;
+
         $hospitalId = $hospitalTieup->hospital;
-        // Get TieupsList records for those hospitals
+
         $tieupsList = TieupsList::where('hospital_id', $hospitalId)
+            ->where('hospital_tieups_id', $id)
             ->latest()
             ->get();
 
