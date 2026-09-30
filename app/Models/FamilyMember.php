@@ -23,4 +23,11 @@ class FamilyMember extends Model
         'photo',
         'status',
     ];
+    public function customer()
+    {
+        return $this->belongsTo(
+            Customer::class,
+            'customer_id'
+        );
+    }
 }

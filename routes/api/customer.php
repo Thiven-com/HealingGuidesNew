@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
+use App\Http\Controllers\CustomerApp\FamilyMemberHealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
@@ -208,6 +209,16 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
 
     Route::get('/procedures', [ProcedureController::class, 'procedures']);
+
+    Route::any(
+        '/family-member-health-checkups',
+        [FamilyMemberHealthCheckupController::class, 'index']
+    );
+
+    Route::get(
+        '/family-member-health-checkups/{id}',
+        [FamilyMemberHealthCheckupController::class, 'show']
+    );
 
 });
 Route::any('/states', [LocationController::class, 'states']);

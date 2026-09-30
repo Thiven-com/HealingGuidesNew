@@ -25,4 +25,12 @@ class HealthCheckup extends Model
             'health_checkup_id'
         );
     }
+
+    public function familyMemberHealthCheckups()
+    {
+        return $this->hasMany(
+            FamilyMemberHealthCheckup::class,
+            'health_checkup_id'
+        );
+    }
 }
