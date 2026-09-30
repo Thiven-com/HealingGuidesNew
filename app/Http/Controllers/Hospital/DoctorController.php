@@ -459,6 +459,18 @@ class DoctorController extends Controller
 
             'preffered_language' => 'nullable|string|max:100',
 
+            'consultation_enabled' =>
+                'nullable|boolean',
+
+            'video_consultation_enabled' =>
+                'nullable|boolean',
+
+            'chat_consultation_enabled' =>
+                'nullable|boolean',
+
+            'home_visit_enabled' =>
+                'nullable|boolean',
+
             'email' =>
                 'nullable|email|max:255|unique:doctors,email,'
                 . $doctor->id,
@@ -618,8 +630,20 @@ class DoctorController extends Controller
 
         $doctor->actual_home_visit_fee = $request->actual_home_visit_fee ?? 0;
 
-        
+
         $doctor->preffered_language = $request->preffered_language;
+
+        $doctor->consultation_enabled =
+            $request->boolean('consultation_enabled');
+
+        $doctor->video_consultation_enabled =
+            $request->boolean('video_consultation_enabled');
+
+        $doctor->chat_consultation_enabled =
+            $request->boolean('chat_consultation_enabled');
+
+        $doctor->home_visit_enabled =
+            $request->boolean('home_visit_enabled');
 
         $doctor->email =
             $request->email;
