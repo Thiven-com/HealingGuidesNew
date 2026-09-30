@@ -17,4 +17,12 @@ class HealthCheckup extends Model
         'image',
         'description',
     ];
+
+    public function packages()
+    {
+        return $this->hasMany(
+            HealthCheckupPackage::class,
+            'health_checkup_id'
+        );
+    }
 }

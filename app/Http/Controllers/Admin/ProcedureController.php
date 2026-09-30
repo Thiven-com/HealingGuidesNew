@@ -197,6 +197,8 @@ class ProcedureController extends Controller
 
             'benefits.*.status' =>
                 'nullable|boolean',
+            'banner' => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4,mov,webm|max:51200',
+            'youtube_video' => 'nullable|url|max:500',
         ]);
 
 
@@ -310,6 +312,12 @@ class ProcedureController extends Controller
 
                 'status' =>
                     $validated['status'],
+
+                'banner' => $request->hasFile('banner')
+                    ? $request->file('banner')->store('procedures', 'public')
+                    : null,
+
+                'youtube_video' => $request->youtube_video,
             ]);
 
 
@@ -483,6 +491,8 @@ class ProcedureController extends Controller
 
             'benefits.*.status' =>
                 'nullable|boolean',
+            'banner' => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4,mov,webm|max:51200',
+            'youtube_video' => 'nullable|url|max:500',
         ]);
 
 
@@ -590,6 +600,11 @@ class ProcedureController extends Controller
 
                 'status' =>
                     $validated['status'],
+                'banner' => $request->hasFile('banner')
+                    ? $request->file('banner')->store('procedures', 'public')
+                    : null,
+
+                'youtube_video' => $request->youtube_video,
             ]);
 
 

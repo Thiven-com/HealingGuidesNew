@@ -35,6 +35,8 @@ class Procedure extends Model
         'display_order',
 
         'status',
+        'banner',
+        'youtube_video'
 
     ];
 

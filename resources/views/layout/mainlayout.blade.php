@@ -122,7 +122,7 @@
 @endcomponent
 @include('layout.partials.footer-scripts')
 @include('sweetalert::alert')
-
+@stack('scripts')
 </body>
 
 </html>

@@ -92,6 +92,17 @@
                                                         </a>
 
                                                 </li>
+                                                <li class="{{ request()->routeIs('admin.procedures.*') ? 'active' : '' }}">
+
+                                                        <a href="{{ route('admin.procedures.index') }}">
+
+                                                                <i class="ti ti-list fs-16 me-2"></i>
+
+                                                                <span>Procedures</span>
+
+                                                        </a>
+
+                                                </li>
                                                 <li
                                                         class="{{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}">
                                                         <a href="{{ route('admin.appointments.index') }}">
@@ -104,6 +115,13 @@
                                                         <a href="{{ route('admin.healthcheckups.index') }}">
                                                                 <i class="ti ti-heartbeat fs-16 me-2"></i>
                                                                 <span>Health Checkups</span>
+                                                        </a>
+                                                </li>
+                                                <li
+                                                        class="{{ request()->routeIs('admin.health-checkup-tests.*') ? 'active' : '' }}">
+                                                        <a href="{{ route('admin.healthcheckups.index') }}">
+                                                                <i class="ti ti-heartbeat fs-16 me-2"></i>
+                                                                <span>Health Checkup Tests</span>
                                                         </a>
                                                 </li>
                                                 <li

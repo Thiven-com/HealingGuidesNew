@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\HealthCheckupTestController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\HospitalFacilitiesListController;
 use App\Http\Controllers\Admin\LabTestController;
@@ -448,6 +449,36 @@ Route::group(['middleware' => 'admin'], function () {
     )->names('admin.procedures');
     Route::post('procedures/{id}/status', [CustomerPackageController::class, 'status'])
         ->name('admin.procedures.status');
+
+    Route::prefix('health-checkup-tests')
+        ->name('admin.health-checkup-tests.')
+        ->controller(HealthCheckupTestController::class)
+        ->group(function () {
+
+            Route::get('/', 'index')
+                ->name('index');
+
+            Route::get('/create', 'create')
+                ->name('create');
+
+            Route::post('/', 'store')
+                ->name('store');
+
+            Route::get('/{healthCheckupTest}', 'show')
+                ->name('show');
+
+            Route::get('/{healthCheckupTest}/edit', 'edit')
+                ->name('edit');
+
+            Route::put('/{healthCheckupTest}', 'update')
+                ->name('update');
+
+            Route::delete('/{healthCheckupTest}', 'destroy')
+                ->name('destroy');
+
+            Route::post('/{healthCheckupTest}/status', 'status')
+                ->name('status');
+        });
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

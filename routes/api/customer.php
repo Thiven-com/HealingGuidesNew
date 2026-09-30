@@ -18,6 +18,7 @@ use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
+use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -181,6 +182,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/address/{id}', [AddressController::class, 'address']);
     Route::post('/address/add', [AddressController::class, 'addAddress']);
     Route::post('/address/edit/{id}', [AddressController::class, 'editAddress']);
+
+
+    Route::get('/procedures',[ProcedureController::class, 'procedures']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

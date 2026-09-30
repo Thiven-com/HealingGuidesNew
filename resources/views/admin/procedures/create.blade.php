@@ -460,6 +460,44 @@
 
                     </div>
 
+                    <div class="row">
+
+    {{-- Banner --}}
+    <div class="col-md-6 mb-3">
+        <label class="form-label">
+            Banner
+        </label>
+
+        <input
+            type="file"
+            name="banner"
+            class="form-control"
+            accept="image/*,video/*"
+        >
+    </div>
+
+
+    {{-- YouTube Video --}}
+    <div class="col-md-6 mb-3">
+        <label class="form-label">
+            YouTube Video
+        </label>
+
+        <input
+            type="url"
+            name="youtube_video"
+            class="form-control"
+            value="{{ old('youtube_video') }}"
+            placeholder="https://www.youtube.com/watch?v=..."
+        >
+
+        <small class="text-muted">
+            Enter YouTube video URL
+        </small>
+    </div>
+
+</div>
+
                 </div>
 
             </div>

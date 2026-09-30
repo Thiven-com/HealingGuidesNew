@@ -69,21 +69,21 @@
 
                                 @if($procedure->image)
 
-                                    <img src="{{ asset($procedure->image) }}" alt="{{ $procedure->name }}"
-                                        class="rounded" style="
-                                                width:160px;
-                                                height:160px;
-                                                object-fit:cover;
-                                             ">
+                                    <img src="{{ asset($procedure->image) }}" alt="{{ $procedure->name }}" class="rounded"
+                                        style="
+                                                                width:160px;
+                                                                height:160px;
+                                                                object-fit:cover;
+                                                             ">
 
                                 @else
 
                                     <div class="d-inline-flex align-items-center justify-content-center bg-light-primary text-primary rounded"
                                         style="
-                                                width:160px;
-                                                height:160px;
-                                                font-size:60px;
-                                             ">
+                                                                width:160px;
+                                                                height:160px;
+                                                                font-size:60px;
+                                                             ">
 
                                         @if($procedure->icon)
 
@@ -386,6 +386,151 @@
 
                     </div>
 
+                    {{-- =================================================
+                    MEDIA
+                    ================================================== --}}
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                Media
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                {{-- BANNER --}}
+                                <div class="col-md-6 mb-3">
+
+                                    <small class="text-muted d-block mb-2">
+                                        Banner
+                                    </small>
+
+                                    @if($procedure->banner)
+
+                                            <a href="{{ asset($procedure->banner) }}" target="_blank">
+
+                                                <img src="{{ asset($procedure->banner) }}" alt="{{ $procedure->name }} Banner"
+                                                    class="img-fluid rounded" style="
+                                            width:100%;
+                                            max-height:250px;
+                                            object-fit:cover;
+                                        ">
+
+                                            </a>
+
+                                    @else
+
+                                                <div class="border rounded p-4 text-center">
+
+                                                    <i class="ti ti-photo-off" style="
+                                               font-size:40px;
+                                               color:#adb5bd;
+                                           ">
+                                                    </i>
+
+                                                    <p class="text-muted mb-0 mt-2">
+                                                        No banner uploaded.
+                                                    </p>
+
+                                                </div>
+
+                                    @endif
+
+                                </div>
+
+
+                                {{-- YOUTUBE VIDEO --}}
+                                <div class="col-md-6 mb-3">
+
+                                    <small class="text-muted d-block mb-2">
+                                        YouTube Video
+                                    </small>
+
+                                    @if($procedure->youtube_video)
+
+                                        @php
+                                            $youtubeId = null;
+
+                                            $url = $procedure->youtube_video;
+
+                                            if (
+                                                preg_match(
+                                                    '/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?\/]+)/',
+                                                    $url,
+                                                    $matches
+                                                )
+                                            ) {
+                                                $youtubeId = $matches[1];
+                                            }
+                                        @endphp
+
+
+                                        @if($youtubeId)
+
+                                            <div class="ratio ratio-16x9">
+
+                                                <iframe src="https://www.youtube.com/embed/{{ $youtubeId }}" title="YouTube Video"
+                                                    allowfullscreen>
+                                                </iframe>
+
+                                            </div>
+
+                                        @else
+
+                                                <div class="border rounded p-4 text-center">
+
+                                                    <i class="ti ti-brand-youtube" style="
+                                                   font-size:40px;
+                                                   color:#adb5bd;
+                                               ">
+                                                    </i>
+
+                                                    <p class="text-muted mb-2 mt-2">
+                                                        Invalid YouTube URL.
+                                                    </p>
+
+                                                    <a href="{{ $procedure->youtube_video }}" target="_blank"
+                                                        class="btn btn-sm btn-light">
+
+                                                        <i class="ti ti-external-link me-1"></i>
+                                                        Open Video
+
+                                                    </a>
+
+                                                </div>
+
+                                        @endif
+
+                                    @else
+
+                                                <div class="border rounded p-4 text-center">
+
+                                                    <i class="ti ti-brand-youtube" style="
+                                               font-size:40px;
+                                               color:#adb5bd;
+                                           ">
+                                                    </i>
+
+                                                    <p class="text-muted mb-0 mt-2">
+                                                        No YouTube video added.
+                                                    </p>
+
+                                                </div>
+
+                                    @endif
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
 
                     {{-- =================================================
                     PROCEDURE BENEFITS
@@ -509,9 +654,9 @@
                                 <div class="text-center py-4">
 
                                     <i class="ti ti-list-check" style="
-                                              font-size:45px;
-                                              color:#adb5bd;
-                                           ">
+                                                              font-size:45px;
+                                                              color:#adb5bd;
+                                                           ">
 
                                     </i>
 
@@ -582,12 +727,12 @@
 
                                         @if(!empty($doctor->image))
 
-                                            <img src="{{ asset($doctor->image) }}" alt="{{ $doctor->name }}"
-                                                class="rounded-circle" style="
-                                                            width:45px;
-                                                            height:45px;
-                                                            object-fit:cover;
-                                                         ">
+                                            <img src="{{ asset($doctor->image) }}" alt="{{ $doctor->name }}" class="rounded-circle"
+                                                style="
+                                                                                    width:45px;
+                                                                                    height:45px;
+                                                                                    object-fit:cover;
+                                                                                 ">
 
                                         @else
 
@@ -608,15 +753,15 @@
 
                                         <h6 class="mb-1">
 
-                                            {{ $doctor->name }}
+                                            {{ $doctor->doctor_name }}
 
                                         </h6>
 
-                                        @if(isset($doctor->specialization))
+                                        @if(isset($doctor->hospitalSpecialization))
 
                                             <small class="text-muted">
 
-                                                {{ optional($doctor->specialization)->name }}
+                                                {{ optional($doctor->hospitalSpecialization)->specialization->specialization_name ?? ''}}
 
                                             </small>
 
@@ -631,9 +776,9 @@
                                 <div class="text-center py-4">
 
                                     <i class="ti ti-user-off" style="
-                                              font-size:40px;
-                                              color:#adb5bd;
-                                           ">
+                                                              font-size:40px;
+                                                              color:#adb5bd;
+                                                           ">
 
                                     </i>
 

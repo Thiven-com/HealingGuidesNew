@@ -572,7 +572,9 @@ class DoctorController extends Controller
         }
 
         $doctor->save();
-
+        $doctor->procedures()->sync(
+            $request->input('procedure_ids', [])
+        );
         return redirect()
             ->route('admin.doctors.index')
             ->with(
