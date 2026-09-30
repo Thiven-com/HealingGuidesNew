@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\HealthCheckupPackageController;
+use App\Http\Controllers\Admin\HealthCheckupTestController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\HospitalFacilitiesListController;
 use App\Http\Controllers\Admin\LabTestController;
@@ -23,6 +25,7 @@ use App\Http\Controllers\Admin\MarketingStaffController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\ProcedureController;
 use App\Http\Controllers\Admin\SpecializationController;
 use App\Http\Controllers\Admin\AmbulanceBookingController;
 use App\Http\Controllers\Admin\AppointmentController;
@@ -466,6 +469,48 @@ Route::group(['middleware' => 'admin'], function () {
     )->name('customers.package.show');
 
     Route::post('customers/{customer}/package', [CustomerPackageController::class, 'update'])->name('customers.package.update');
+
+    Route::resource(
+        'procedures',
+        ProcedureController::class
+    )->names('admin.procedures');
+    Route::post('procedures/{id}/status', [CustomerPackageController::class, 'status'])
+        ->name('admin.procedures.status');
+
+    Route::prefix('health-checkup-tests')
+        ->name('admin.health-checkup-tests.')
+        ->controller(HealthCheckupTestController::class)
+        ->group(function () {
+
+            Route::get('/', 'index')
+                ->name('index');
+
+            Route::get('/create', 'create')
+                ->name('create');
+
+            Route::post('/', 'store')
+                ->name('store');
+
+            Route::get('/{healthCheckupTest}', 'show')
+                ->name('show');
+
+            Route::get('/{healthCheckupTest}/edit', 'edit')
+                ->name('edit');
+
+            Route::put('/{healthCheckupTest}', 'update')
+                ->name('update');
+
+            Route::delete('/{healthCheckupTest}', 'destroy')
+                ->name('destroy');
+
+            Route::post('/{healthCheckupTest}/status', 'status')
+                ->name('status');
+        });
+
+    Route::resource(
+        'health-checkup-packages',
+        HealthCheckupPackageController::class
+    )->names('admin.health-checkup-packages');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

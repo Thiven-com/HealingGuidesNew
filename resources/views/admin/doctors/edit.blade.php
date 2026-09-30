@@ -26,9 +26,7 @@
             <ul class="table-top-head">
 
                 <li>
-                    <a href="{{ route('admin.doctors.index') }}"
-                       data-bs-toggle="tooltip"
-                       title="Back">
+                    <a href="{{ route('admin.doctors.index') }}" data-bs-toggle="tooltip" title="Back">
 
                         <i data-feather="arrow-left"></i>
 
@@ -36,9 +34,7 @@
                 </li>
 
                 <li>
-                    <a id="collapse-header"
-                       data-bs-toggle="tooltip"
-                       title="Collapse">
+                    <a id="collapse-header" data-bs-toggle="tooltip" title="Collapse">
 
                         <i data-feather="chevron-up"></i>
 
@@ -54,33 +50,29 @@
         {{-- Validation Errors --}}
         @if($errors->any())
 
-            <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show">
 
-                <strong>Please fix the following errors:</strong>
+            <strong>Please fix the following errors:</strong>
 
-                <ul class="mb-0 mt-2">
+            <ul class="mb-0 mt-2">
 
-                    @foreach($errors->all() as $error)
+                @foreach($errors->all() as $error)
 
-                        <li>{{ $error }}</li>
+                <li>{{ $error }}</li>
 
-                    @endforeach
+                @endforeach
 
-                </ul>
+            </ul>
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert">
-                </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+            </button>
 
-            </div>
+        </div>
 
         @endif
 
 
-        <form action="{{ route('admin.doctors.update', $doctor->id) }}"
-              method="POST"
-              enctype="multipart/form-data">
+        <form action="{{ route('admin.doctors.update', $doctor->id) }}" method="POST" enctype="multipart/form-data">
 
             @csrf
 
@@ -114,9 +106,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select name="hospital_id"
-                                            class="form-select"
-                                            required>
+                                    <select name="hospital_id" class="form-select" required>
 
                                         <option value="">
                                             Select Hospital
@@ -124,12 +114,12 @@
 
                                         @foreach($hospitals as $hospital)
 
-                                            <option value="{{ $hospital->id }}"
-                                                {{ old('hospital_id', $doctor->hospital_id) == $hospital->id ? 'selected' : '' }}>
+                                        <option value="{{ $hospital->id }}" {{ old('hospital_id', $doctor->hospital_id)
+                                            == $hospital->id ? 'selected' : '' }}>
 
-                                                {{ $hospital->hospital_name }}
+                                            {{ $hospital->hospital_name }}
 
-                                            </option>
+                                        </option>
 
                                         @endforeach
 
@@ -146,9 +136,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select name="hospital_specialization_id"
-                                            class="form-select"
-                                            required>
+                                    <select name="hospital_specialization_id" class="form-select" required>
 
                                         <option value="">
                                             Select Specialization
@@ -156,16 +144,14 @@
 
                                         @foreach($specializations as $hospitalSpecialization)
 
-                                            <option value="{{ $hospitalSpecialization->id }}"
-                                                {{ old(
-                                                    'hospital_specialization_id',
-                                                    $doctor->hospital_specialization_id
-                                                ) == $hospitalSpecialization->id ? 'selected' : '' }}>
+                                        <option value="{{ $hospitalSpecialization->id }}" {{
+                                            old( 'hospital_specialization_id' , $doctor->hospital_specialization_id
+                                            ) == $hospitalSpecialization->id ? 'selected' : '' }}>
 
-                                                {{ optional($hospitalSpecialization->specialization)->specialization_name
-                                                    ?? 'Specialization #' . $hospitalSpecialization->id }}
+                                            {{ optional($hospitalSpecialization->specialization)->specialization_name
+                                            ?? 'Specialization #' . $hospitalSpecialization->id }}
 
-                                            </option>
+                                        </option>
 
                                         @endforeach
 
@@ -182,12 +168,9 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                           name="doctor_name"
-                                           class="form-control"
-                                           value="{{ old('doctor_name', $doctor->doctor_name) }}"
-                                           placeholder="Enter doctor name"
-                                           required>
+                                    <input type="text" name="doctor_name" class="form-control"
+                                        value="{{ old('doctor_name', $doctor->doctor_name) }}"
+                                        placeholder="Enter doctor name" required>
 
                                 </div>
 
@@ -199,10 +182,7 @@
                                         Doctor Code
                                     </label>
 
-                                    <input type="text"
-                                           class="form-control"
-                                           value="{{ $doctor->doctor_code }}"
-                                           readonly>
+                                    <input type="text" class="form-control" value="{{ $doctor->doctor_code }}" readonly>
 
                                 </div>
 
@@ -214,11 +194,9 @@
                                         Designation
                                     </label>
 
-                                    <input type="text"
-                                           name="designation"
-                                           class="form-control"
-                                           value="{{ old('designation', $doctor->designation) }}"
-                                           placeholder="Example: Senior Consultant">
+                                    <input type="text" name="designation" class="form-control"
+                                        value="{{ old('designation', $doctor->designation) }}"
+                                        placeholder="Example: Senior Consultant">
 
                                 </div>
 
@@ -230,28 +208,24 @@
                                         Qualification
                                     </label>
 
-                                    <input type="text"
-                                           name="qualification"
-                                           class="form-control"
-                                           value="{{ old('qualification', $doctor->qualification) }}"
-                                           placeholder="Example: MBBS, MD">
+                                    <input type="text" name="qualification" class="form-control"
+                                        value="{{ old('qualification', $doctor->qualification) }}"
+                                        placeholder="Example: MBBS, MD">
 
                                 </div>
 
                                 {{-- Preferred Language --}}
-<div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
 
-    <label class="form-label">
-        Preferred Language
-    </label>
+                                    <label class="form-label">
+                                        Preferred Language
+                                    </label>
 
-    <input type="text"
-           name="preffered_language"
-           class="form-control"
-           value="{{ old('preffered_language', $doctor->preffered_language) }}"
-           placeholder="Example: English, Telugu, Hindi">
+                                    <input type="text" name="preffered_language" class="form-control"
+                                        value="{{ old('preffered_language', $doctor->preffered_language) }}"
+                                        placeholder="Example: English, Telugu, Hindi">
 
-</div>
+                                </div>
 
 
                                 {{-- Experience --}}
@@ -263,13 +237,9 @@
 
                                     <div class="input-group">
 
-                                        <input type="number"
-                                               name="experience"
-                                               class="form-control"
-                                               value="{{ old('experience', $doctor->experience) }}"
-                                               min="0"
-                                               step="0.1"
-                                               placeholder="Years">
+                                        <input type="number" name="experience" class="form-control"
+                                            value="{{ old('experience', $doctor->experience) }}" min="0" step="0.1"
+                                            placeholder="Years">
 
                                         <span class="input-group-text">
                                             Years
@@ -287,11 +257,8 @@
                                         Email
                                     </label>
 
-                                    <input type="email"
-                                           name="email"
-                                           class="form-control"
-                                           value="{{ old('email', $doctor->email) }}"
-                                           placeholder="doctor@example.com">
+                                    <input type="email" name="email" class="form-control"
+                                        value="{{ old('email', $doctor->email) }}" placeholder="doctor@example.com">
 
                                 </div>
 
@@ -304,12 +271,9 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                           name="mobile"
-                                           class="form-control"
-                                           value="{{ old('mobile', $doctor->mobile) }}"
-                                           placeholder="Enter mobile number"
-                                           required>
+                                    <input type="text" name="mobile" class="form-control"
+                                        value="{{ old('mobile', $doctor->mobile) }}" placeholder="Enter mobile number"
+                                        required>
 
                                 </div>
 
@@ -321,10 +285,8 @@
                                         Date of Birth
                                     </label>
 
-                                    <input type="date"
-                                           name="dob"
-                                           class="form-control"
-                                           value="{{ old('dob', $doctor->dob ? \Carbon\Carbon::parse($doctor->dob)->format('Y-m-d') : '') }}">
+                                    <input type="date" name="dob" class="form-control"
+                                        value="{{ old('dob', $doctor->dob ? \Carbon\Carbon::parse($doctor->dob)->format('Y-m-d') : '') }}">
 
                                 </div>
 
@@ -336,25 +298,24 @@
                                         Gender
                                     </label>
 
-                                    <select name="gender"
-                                            class="form-select">
+                                    <select name="gender" class="form-select">
 
                                         <option value="">
                                             Select Gender
                                         </option>
 
-                                        <option value="male"
-                                            {{ old('gender', $doctor->gender) == 'male' ? 'selected' : '' }}>
+                                        <option value="male" {{ old('gender', $doctor->gender) == 'male' ? 'selected' :
+                                            '' }}>
                                             Male
                                         </option>
 
-                                        <option value="female"
-                                            {{ old('gender', $doctor->gender) == 'female' ? 'selected' : '' }}>
+                                        <option value="female" {{ old('gender', $doctor->gender) == 'female' ?
+                                            'selected' : '' }}>
                                             Female
                                         </option>
 
-                                        <option value="other"
-                                            {{ old('gender', $doctor->gender) == 'other' ? 'selected' : '' }}>
+                                        <option value="other" {{ old('gender', $doctor->gender) == 'other' ? 'selected'
+                                            : '' }}>
                                             Other
                                         </option>
 
@@ -370,30 +331,29 @@
                                         Blood Group
                                     </label>
 
-                                    <select name="blood_group"
-                                            class="form-select">
+                                    <select name="blood_group" class="form-select">
 
                                         <option value="">
                                             Select Blood Group
                                         </option>
 
                                         @foreach([
-                                            'A+',
-                                            'A-',
-                                            'B+',
-                                            'B-',
-                                            'AB+',
-                                            'AB-',
-                                            'O+',
-                                            'O-'
+                                        'A+',
+                                        'A-',
+                                        'B+',
+                                        'B-',
+                                        'AB+',
+                                        'AB-',
+                                        'O+',
+                                        'O-'
                                         ] as $bloodGroup)
 
-                                            <option value="{{ $bloodGroup }}"
-                                                {{ old('blood_group', $doctor->blood_group) == $bloodGroup ? 'selected' : '' }}>
+                                        <option value="{{ $bloodGroup }}" {{ old('blood_group', $doctor->blood_group) ==
+                                            $bloodGroup ? 'selected' : '' }}>
 
-                                                {{ $bloodGroup }}
+                                            {{ $bloodGroup }}
 
-                                            </option>
+                                        </option>
 
                                         @endforeach
 
@@ -409,10 +369,8 @@
                                         Address
                                     </label>
 
-                                    <textarea name="address"
-                                              class="form-control"
-                                              rows="3"
-                                              placeholder="Enter doctor address">{{ old('address', $doctor->address) }}</textarea>
+                                    <textarea name="address" class="form-control" rows="3"
+                                        placeholder="Enter doctor address">{{ old('address', $doctor->address) }}</textarea>
 
                                 </div>
 
@@ -424,40 +382,29 @@
                                         About Doctor
                                     </label>
 
-                                    <textarea name="about"
-                                              class="form-control"
-                                              rows="4"
-                                              placeholder="Enter doctor profile/about">{{ old('about', $doctor->about) }}</textarea>
+                                    <textarea name="about" class="form-control" rows="4"
+                                        placeholder="Enter doctor profile/about">{{ old('about', $doctor->about) }}</textarea>
 
                                 </div>
                                 <div class="col-md-6">
-    <div class="mb-3">
-        <label class="form-label">
-            Accept Free Package Booking
-        </label>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Accept Free Package Booking
+                                        </label>
 
-        <div class="form-check form-switch">
-            <input
-                type="checkbox"
-                name="accept_free_booking"
-                value="1"
-                class="form-check-input"
-                id="accept_free_booking"
-                {{ old(
-                    'accept_free_booking',
-                    $doctor->accept_free_booking
-                ) ? 'checked' : '' }}
-            >
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" name="accept_free_booking" value="1"
+                                                class="form-check-input" id="accept_free_booking" {{
+                                                old( 'accept_free_booking' , $doctor->accept_free_booking
+                                            ) ? 'checked' : '' }}
+                                            >
 
-            <label
-                class="form-check-label"
-                for="accept_free_booking"
-            >
-                Allow free package bookings
-            </label>
-        </div>
-    </div>
-</div>
+                                            <label class="form-check-label" for="accept_free_booking">
+                                                Allow free package bookings
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
 
@@ -495,66 +442,48 @@
                                             ₹
                                         </span>
 
-                                        <input type="number"
-                                               name="consultation_fee"
-                                               class="form-control"
-                                               value="{{ old('consultation_fee', $doctor->consultation_fee) }}"
-                                               min="0"
-                                               step="0.01"
-                                               required>
+                                        <input type="number" name="consultation_fee" class="form-control"
+                                            value="{{ old('consultation_fee', $doctor->consultation_fee) }}" min="0"
+                                            step="0.01" required>
 
                                     </div>
 
                                 </div>
                                 {{-- Actual Fee --}}
-<div class="col-md-4 mb-3">
+                                <div class="col-md-4 mb-3">
 
-    <label class="form-label">
-        Actual Fee
-    </label>
+                                    <label class="form-label">
+                                        Actual Fee
+                                    </label>
 
-    <div class="input-group">
+                                    <div class="input-group">
 
-        <span class="input-group-text">
-            ₹
-        </span>
+                                        <span class="input-group-text">
+                                            ₹
+                                        </span>
 
-        <input type="number"
-               name="actual_fee"
-               class="form-control"
-               value="{{ old('actual_fee', $doctor->actual_fee) }}"
-               min="0"
-               step="0.01"
-               placeholder="0.00">
+                                        <input type="number" name="actual_fee" class="form-control"
+                                            value="{{ old('actual_fee', $doctor->actual_fee) }}" min="0" step="0.01"
+                                            placeholder="0.00">
 
-    </div>
+                                    </div>
 
-</div>
+                                </div>
 
-{{-- Enable / Disable --}}
-                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+                                {{-- Enable / Disable --}}
+                                <div class="col-md-4 mb-3 form-check form-switch mt-2">
 
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="consultation_enabled"
-                        name="consultation_enabled"
-                        value="1"
-                        {{ old(
-                            'consultation_enabled',
-                            $doctor->consultation_enabled ?? 1
-                        ) ? 'checked' : '' }}
-                    >
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="consultation_enabled" name="consultation_enabled" value="1" {{
+                                        old( 'consultation_enabled' , $doctor->consultation_enabled ?? 1
+                                    ) ? 'checked' : '' }}
+                                    >
 
-                    <label
-                        class="form-check-label"
-                        for="consultation_enabled"
-                    >
-                        Enable Consultation
-                    </label>
+                                    <label class="form-check-label" for="consultation_enabled">
+                                        Enable Consultation
+                                    </label>
 
-                </div>
+                                </div>
 
 
                                 {{-- Video Consultation --}}
@@ -570,63 +499,46 @@
                                             ₹
                                         </span>
 
-                                        <input type="number"
-                                               name="video_consultation_fee"
-                                               class="form-control"
-                                               value="{{ old('video_consultation_fee', $doctor->video_consultation_fee) }}"
-                                               min="0"
-                                               step="0.01">
+                                        <input type="number" name="video_consultation_fee" class="form-control"
+                                            value="{{ old('video_consultation_fee', $doctor->video_consultation_fee) }}"
+                                            min="0" step="0.01">
 
                                     </div>
 
                                 </div>
                                 <div class="col-md-4 mb-3">
 
-    <label class="form-label">
-        Actual Video Consultation Fee
-    </label>
+                                    <label class="form-label">
+                                        Actual Video Consultation Fee
+                                    </label>
 
-    <div class="input-group">
+                                    <div class="input-group">
 
-        <span class="input-group-text">
-            ₹
-        </span>
+                                        <span class="input-group-text">
+                                            ₹
+                                        </span>
 
-        <input type="number"
-               name="actual_video_consultation_fee"
-               class="form-control"
-               value="{{ old('actual_video_consultation_fee', $doctor->actual_video_consultation_fee ?? 0) }}"
-               min="0"
-               step="0.01"
-               placeholder="0.00">
+                                        <input type="number" name="actual_video_consultation_fee" class="form-control"
+                                            value="{{ old('actual_video_consultation_fee', $doctor->actual_video_consultation_fee ?? 0) }}"
+                                            min="0" step="0.01" placeholder="0.00">
 
-    </div>
+                                    </div>
 
-</div>
-{{-- Enable / Disable --}}
-                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+                                </div>
+                                {{-- Enable / Disable --}}
+                                <div class="col-md-4 mb-3 form-check form-switch mt-2">
 
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="video_consultation_enabled"
-                        name="video_consultation_enabled"
-                        value="1"
-                        {{ old(
-                            'video_consultation_enabled',
-                            $doctor->video_consultation_enabled ?? 1
-                        ) ? 'checked' : '' }}
-                    >
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="video_consultation_enabled" name="video_consultation_enabled" value="1" {{
+                                        old( 'video_consultation_enabled' , $doctor->video_consultation_enabled ?? 1
+                                    ) ? 'checked' : '' }}
+                                    >
 
-                    <label
-                        class="form-check-label"
-                        for="video_consultation_enabled"
-                    >
-                        Enable Video Consultation
-                    </label>
+                                    <label class="form-check-label" for="video_consultation_enabled">
+                                        Enable Video Consultation
+                                    </label>
 
-                </div>
+                                </div>
 
 
                                 {{-- Chat Consultation --}}
@@ -642,64 +554,47 @@
                                             ₹
                                         </span>
 
-                                        <input type="number"
-                                               name="chat_consultation_fee"
-                                               class="form-control"
-                                               value="{{ old('chat_consultation_fee', $doctor->chat_consultation_fee) }}"
-                                               min="0"
-                                               step="0.01">
+                                        <input type="number" name="chat_consultation_fee" class="form-control"
+                                            value="{{ old('chat_consultation_fee', $doctor->chat_consultation_fee) }}"
+                                            min="0" step="0.01">
 
                                     </div>
 
                                 </div>
                                 <div class="col-md-4 mb-3">
 
-    <label class="form-label">
-        Actual Chat Consultation Fee
-    </label>
+                                    <label class="form-label">
+                                        Actual Chat Consultation Fee
+                                    </label>
 
-    <div class="input-group">
+                                    <div class="input-group">
 
-        <span class="input-group-text">
-            ₹
-        </span>
+                                        <span class="input-group-text">
+                                            ₹
+                                        </span>
 
-        <input type="number"
-               name="actual_chat_consultation_fee"
-               class="form-control"
-               value="{{ old('actual_chat_consultation_fee', $doctor->actual_chat_consultation_fee ?? 0) }}"
-               min="0"
-               step="0.01"
-               placeholder="0.00">
+                                        <input type="number" name="actual_chat_consultation_fee" class="form-control"
+                                            value="{{ old('actual_chat_consultation_fee', $doctor->actual_chat_consultation_fee ?? 0) }}"
+                                            min="0" step="0.01" placeholder="0.00">
 
-    </div>
+                                    </div>
 
-</div>
+                                </div>
 
- {{-- Enable / Disable --}}
-                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+                                {{-- Enable / Disable --}}
+                                <div class="col-md-4 mb-3 form-check form-switch mt-2">
 
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="chat_consultation_enabled"
-                        name="chat_consultation_enabled"
-                        value="1"
-                        {{ old(
-                            'chat_consultation_enabled',
-                            $doctor->chat_consultation_enabled ?? 1
-                        ) ? 'checked' : '' }}
-                    >
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="chat_consultation_enabled" name="chat_consultation_enabled" value="1" {{
+                                        old( 'chat_consultation_enabled' , $doctor->chat_consultation_enabled ?? 1
+                                    ) ? 'checked' : '' }}
+                                    >
 
-                    <label
-                        class="form-check-label"
-                        for="chat_consultation_enabled"
-                    >
-                        Enable Chat Consultation
-                    </label>
+                                    <label class="form-check-label" for="chat_consultation_enabled">
+                                        Enable Chat Consultation
+                                    </label>
 
-                </div>
+                                </div>
 
 
                                 {{-- Home Visit --}}
@@ -715,71 +610,200 @@
                                             ₹
                                         </span>
 
-                                        <input type="number"
-                                               name="home_visit_fee"
-                                               class="form-control"
-                                               value="{{ old('home_visit_fee', $doctor->home_visit_fee) }}"
-                                               min="0"
-                                               step="0.01">
+                                        <input type="number" name="home_visit_fee" class="form-control"
+                                            value="{{ old('home_visit_fee', $doctor->home_visit_fee) }}" min="0"
+                                            step="0.01">
 
                                     </div>
 
                                 </div>
                                 <div class="col-md-4 mb-3">
 
-    <label class="form-label">
-        Actual Home Visit Fee
-    </label>
+                                    <label class="form-label">
+                                        Actual Home Visit Fee
+                                    </label>
 
-    <div class="input-group">
+                                    <div class="input-group">
 
-        <span class="input-group-text">
-            ₹
-        </span>
+                                        <span class="input-group-text">
+                                            ₹
+                                        </span>
 
-        <input type="number"
-               name="actual_home_visit_fee"
-               class="form-control"
-               value="{{ old('actual_home_visit_fee', $doctor->actual_home_visit_fee ?? 0) }}"
-               min="0"
-               step="0.01"
-               placeholder="0.00">
+                                        <input type="number" name="actual_home_visit_fee" class="form-control"
+                                            value="{{ old('actual_home_visit_fee', $doctor->actual_home_visit_fee ?? 0) }}"
+                                            min="0" step="0.01" placeholder="0.00">
 
-    </div>
+                                    </div>
 
-</div>
+                                </div>
 
-{{-- Enable / Disable --}}
-                <div class="col-md-4 mb-3 form-check form-switch mt-2">
+                                {{-- Enable / Disable --}}
+                                <div class="col-md-4 mb-3 form-check form-switch mt-2">
 
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="home_visit_enabled"
-                        name="home_visit_enabled"
-                        value="1"
-                        {{ old(
-                            'home_visit_enabled',
-                            $doctor->home_visit_enabled ?? 1
-                        ) ? 'checked' : '' }}
-                    >
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="home_visit_enabled" name="home_visit_enabled" value="1" {{
+                                        old( 'home_visit_enabled' , $doctor->home_visit_enabled ?? 1
+                                    ) ? 'checked' : '' }}
+                                    >
 
-                    <label
-                        class="form-check-label"
-                        for="home_visit_enabled"
-                    >
-                        Enable Home Visit
-                    </label>
+                                    <label class="form-check-label" for="home_visit_enabled">
+                                        Enable Home Visit
+                                    </label>
 
-                </div>
+                                </div>
 
                             </div>
 
                         </div>
 
                     </div>
+<div class="card mt-3">
 
+    <div class="card-header">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+                <h5 class="card-title mb-1">
+                    Procedures
+                </h5>
+
+                <small class="text-muted">
+                    Select the procedures this doctor performs
+                </small>
+            </div>
+
+            <div>
+                <button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        id="selectAllProcedures">
+                    Select All
+                </button>
+
+                <button type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        id="clearAllProcedures">
+                    Clear All
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        @php
+            $selectedProcedureIds = old(
+                'procedure_ids',
+                $doctor->procedures->pluck('id')->toArray()
+            );
+        @endphp
+
+
+        <div class="row">
+
+            @forelse($procedures as $procedure)
+
+                <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+
+                    <label class="border rounded p-3 w-100"
+                           style="cursor:pointer;">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="form-check me-3">
+
+                                <input
+                                    type="checkbox"
+                                    name="procedure_ids[]"
+                                    value="{{ $procedure->id }}"
+                                    class="form-check-input procedure-checkbox"
+
+                                    @checked(
+                                        in_array(
+                                            $procedure->id,
+                                            $selectedProcedureIds
+                                        )
+                                    )
+                                >
+
+                            </div>
+
+
+                            <div class="me-3">
+
+                                <span class="
+                                    avatar
+                                    avatar-md
+                                    bg-light-primary
+                                    text-primary
+                                ">
+
+                                    @if($procedure->icon)
+
+                                        <i class="{{ $procedure->icon }}"></i>
+
+                                    @else
+
+                                        <i class="ti ti-stethoscope"></i>
+
+                                    @endif
+
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <h6 class="mb-1">
+
+                                    {{ $procedure->name }}
+
+                                </h6>
+
+                                @if($procedure->short_description)
+
+                                    <small class="text-muted">
+
+                                        {{ Str::limit(
+                                            $procedure->short_description,
+                                            50
+                                        ) }}
+
+                                    </small>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            @empty
+
+                <div class="col-12">
+
+                    <div class="alert alert-info">
+
+                        No procedures available.
+
+                    </div>
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</div>
 
                     <!-- Availability -->
                     <div class="card">
@@ -802,10 +826,8 @@
                                         Available From
                                     </label>
 
-                                    <input type="time"
-                                           name="available_from"
-                                           class="form-control"
-                                           value="{{ old('available_from', $doctor->available_from) }}">
+                                    <input type="time" name="available_from" class="form-control"
+                                        value="{{ old('available_from', $doctor->available_from) }}">
 
                                 </div>
 
@@ -816,10 +838,8 @@
                                         Available To
                                     </label>
 
-                                    <input type="time"
-                                           name="available_to"
-                                           class="form-control"
-                                           value="{{ old('available_to', $doctor->available_to) }}">
+                                    <input type="time" name="available_to" class="form-control"
+                                        value="{{ old('available_to', $doctor->available_to) }}">
 
                                 </div>
 
@@ -854,17 +874,14 @@
 
                                     @if($doctor->photo)
 
-                                        <img src="{{ asset($doctor->photo) }}"
-                                             class="img-fluid rounded"
-                                             style="width:180px;height:180px;object-fit:cover;"
-                                             alt="{{ $doctor->doctor_name }}">
+                                    <img src="{{ asset($doctor->photo) }}" class="img-fluid rounded"
+                                        style="width:180px;height:180px;object-fit:cover;"
+                                        alt="{{ $doctor->doctor_name }}">
 
                                     @else
 
-                                        <img src="{{ asset('assets/img/no-image.png') }}"
-                                             class="img-fluid rounded"
-                                             style="width:180px;height:180px;object-fit:cover;"
-                                             alt="Doctor Photo">
+                                    <img src="{{ asset('assets/img/no-image.png') }}" class="img-fluid rounded"
+                                        style="width:180px;height:180px;object-fit:cover;" alt="Doctor Photo">
 
                                     @endif
 
@@ -877,11 +894,8 @@
                                 Change Photo
                             </label>
 
-                            <input type="file"
-                                   name="photo"
-                                   id="photo"
-                                   class="form-control"
-                                   accept="image/jpeg,image/png,image/webp">
+                            <input type="file" name="photo" id="photo" class="form-control"
+                                accept="image/jpeg,image/png,image/webp">
 
                             <small class="text-muted">
                                 JPG, JPEG, PNG or WEBP. Maximum 5MB.
@@ -907,28 +921,26 @@
 
                             @if($doctor->certificate)
 
-                                <div class="mb-3">
+                            <div class="mb-3">
 
-                                    <label class="form-label">
-                                        Current Certificate
-                                    </label>
+                                <label class="form-label">
+                                    Current Certificate
+                                </label>
 
-                                    <div>
+                                <div>
 
-                                        <a href="{{ asset($doctor->certificate) }}"
-                                           target="_blank"
-                                           class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ asset($doctor->certificate) }}" target="_blank"
+                                        class="btn btn-outline-primary btn-sm">
 
-                                            <i data-feather="file-text"
-                                               class="me-1"></i>
+                                        <i data-feather="file-text" class="me-1"></i>
 
-                                            View Certificate
+                                        View Certificate
 
-                                        </a>
-
-                                    </div>
+                                    </a>
 
                                 </div>
+
+                            </div>
 
                             @endif
 
@@ -937,10 +949,7 @@
                                 {{ $doctor->certificate ? 'Change Certificate' : 'Upload Certificate' }}
                             </label>
 
-                            <input type="file"
-                                   name="certificate"
-                                   class="form-control"
-                                   accept=".jpg,.jpeg,.png,.pdf">
+                            <input type="file" name="certificate" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
 
                             <small class="text-muted">
                                 JPG, JPEG, PNG or PDF. Maximum 5MB.
@@ -966,15 +975,10 @@
 
                             <div class="form-check form-switch">
 
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       name="status"
-                                       value="1"
-                                       id="status"
-                                       {{ old('status', $doctor->status) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" name="status" value="1" id="status" {{
+                                    old('status', $doctor->status) ? 'checked' : '' }}>
 
-                                <label class="form-check-label"
-                                       for="status">
+                                <label class="form-check-label" for="status">
 
                                     Active
 
@@ -1035,8 +1039,8 @@
                                 <div class="fw-semibold">
 
                                     {{ $doctor->created_at
-                                        ? $doctor->created_at->format('d M Y h:i A')
-                                        : '-' }}
+                                    ? $doctor->created_at->format('d M Y h:i A')
+                                    : '-' }}
 
                                 </div>
 
@@ -1058,18 +1062,15 @@
 
                     <div class="text-end mb-4">
 
-                        <a href="{{ route('admin.doctors.index') }}"
-                           class="btn btn-light me-2">
+                        <a href="{{ route('admin.doctors.index') }}" class="btn btn-light me-2">
 
                             Cancel
 
                         </a>
 
-                        <button type="submit"
-                                class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
 
-                            <i data-feather="save"
-                               class="me-1"></i>
+                            <i data-feather="save" class="me-1"></i>
 
                             Update Doctor
 
@@ -1090,52 +1091,92 @@
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
 
-    if (typeof feather !== "undefined") {
-        feather.replace();
+        if (typeof feather !== "undefined") {
+            feather.replace();
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor Photo Preview
+        |--------------------------------------------------------------------------
+        */
+
+        const photoInput = document.getElementById('photo');
+
+        if (photoInput) {
+
+            photoInput.addEventListener('change', function (event) {
+
+                const file = event.target.files[0];
+
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+
+                    const preview =
+                        document.querySelector('#photoPreview img');
+
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+        }
+
+    });
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const selectAllButton =
+        document.getElementById('selectAllProcedures');
+
+    const clearAllButton =
+        document.getElementById('clearAllProcedures');
+
+    const checkboxes =
+        document.querySelectorAll('.procedure-checkbox');
+
+
+    if (selectAllButton) {
+
+        selectAllButton.addEventListener('click', function () {
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = true;
+            });
+
+        });
+
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Doctor Photo Preview
-    |--------------------------------------------------------------------------
-    */
+    if (clearAllButton) {
 
-    const photoInput = document.getElementById('photo');
+        clearAllButton.addEventListener('click', function () {
 
-    if (photoInput) {
-
-        photoInput.addEventListener('change', function (event) {
-
-            const file = event.target.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-
-                const preview =
-                    document.querySelector('#photoPreview img');
-
-                if (preview) {
-                    preview.src = e.target.result;
-                }
-
-            };
-
-            reader.readAsDataURL(file);
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
 
         });
 
     }
 
 });
-
 </script>
 
 @endsection

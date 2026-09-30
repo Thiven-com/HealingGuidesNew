@@ -681,7 +681,7 @@
 
                                 <div class="text-center mb-3">
 
-                                    <img src="{{ asset('storage/' . $package->image) }}"
+                                    <img src="{{ asset( $package->image) }}"
                                          class="img-fluid rounded"
                                          style="max-height:220px;"
                                          alt="{{ $package->name }}">

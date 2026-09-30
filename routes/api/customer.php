@@ -18,6 +18,7 @@ use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
+use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,7 +62,30 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/hospital-types', [HospitalTypeController::class, 'index']);
 
     //health checkups
-    Route::get('/health-checkups', [HealthCheckupController::class, 'index']);
+    Route::any('/health-checkups', [HealthCheckupController::class, 'index']);
+    // Health Checkup Details + Packages
+    Route::get(
+        '/health-checkups/{id}',
+        [HealthCheckupController::class, 'details']
+    );
+
+    // Health Checkup Packages
+    Route::any(
+        '/health-checkup-packages',
+        [HealthCheckupController::class, 'packages']
+    );
+
+    // Health Checkup Package Details + Tests
+    Route::get(
+        '/health-checkup-packages/{id}',
+        [HealthCheckupController::class, 'packageDetails']
+    );
+
+    // Package Tests
+    Route::get(
+        '/health-checkup-packages/{id}/tests',
+        [HealthCheckupController::class, 'packageTests']
+    );
 
     //Doctors
     Route::any('doctors', "DoctorController@doctors");
@@ -181,6 +205,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/address/{id}', [AddressController::class, 'address']);
     Route::post('/address/add', [AddressController::class, 'addAddress']);
     Route::post('/address/edit/{id}', [AddressController::class, 'editAddress']);
+
+
+    Route::get('/procedures', [ProcedureController::class, 'procedures']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

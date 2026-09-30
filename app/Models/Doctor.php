@@ -65,5 +65,14 @@ class Doctor extends Authenticatable
         return $this->hasMany(DoctorSchedule::class, 'doctor_id');
     }
 
+    public function procedures()
+    {
+        return $this->belongsToMany(
+            Procedure::class,
+            'doctor_procedures',
+            'doctor_id',
+            'procedure_id'
+        );
+    }
 
 }

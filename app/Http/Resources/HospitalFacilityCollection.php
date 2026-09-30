@@ -61,7 +61,7 @@ class HospitalFacilityCollection extends ResourceCollection
                                 'file_type' => $gallery->file_type,
 
                                 'file_path' => $gallery->file_path
-                                    ? asset('storage/' . $gallery->file_path)
+                                    ? asset($gallery->file_path)
                                     : null,
                             ];
                         })->values()->toArray(),

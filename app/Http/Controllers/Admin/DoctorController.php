@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\HospitalSpecialization;
+use App\Models\Procedure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -321,13 +322,17 @@ class DoctorController extends Controller
             'specialization'
         )
             ->get();
+        $procedures = Procedure::where('status', 1)
+            ->orderBy('name')
+            ->get();
 
         return view(
             'admin.doctors.edit',
             compact(
                 'doctor',
                 'hospitals',
-                'specializations'
+                'specializations',
+                'procedures'
             )
         );
     }
@@ -567,7 +572,9 @@ class DoctorController extends Controller
         }
 
         $doctor->save();
-
+        $doctor->procedures()->sync(
+            $request->input('procedure_ids', [])
+        );
         return redirect()
             ->route('admin.doctors.index')
             ->with(

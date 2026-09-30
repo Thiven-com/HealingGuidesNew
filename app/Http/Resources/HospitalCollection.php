@@ -76,7 +76,7 @@ class HospitalCollection extends ResourceCollection
                                         'title' => $list->title,
 
                                         'image' => $list->image
-                                            ? asset('storage/' . $list->image)
+                                            ? asset($list->image)
                                             : null,
 
                                         'description' => $list->description,

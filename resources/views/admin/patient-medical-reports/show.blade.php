@@ -331,7 +331,7 @@
                                     );
 
                                     $fileUrl = asset(
-                                        'storage/' . $report->report_file
+                                         $report->report_file
                                     );
 
                                 @endphp
