@@ -174,6 +174,13 @@
                             </a>
                         </li>
 
+                         <li class="{{ request()->routeIs('admin.family-member-health-checkups.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.family-member-health-checkups.index') }}">
+                                <i class="ti ti-users fs-16 me-2"></i>
+                                <span>Family Health Checkups</span>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 
