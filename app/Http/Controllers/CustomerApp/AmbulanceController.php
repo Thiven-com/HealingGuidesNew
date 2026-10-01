@@ -188,17 +188,20 @@ class AmbulanceController extends Controller
                     'lt.*'
                 )
                 ->distinct()
-                ->get();
+                ->get()->map(function ($test) {
+                    $test->image = asset($test->image);
+                    return $test;
+                });
 
             return response()->json([
-                'status' => 1,
+                'success' => 1,
                 'message' => 'Free ambulance lab tests fetched successfully.',
                 'data' => $data
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
-                'status' => false,
+                'success' => 0,
                 'message' => 'Something went wrong.',
                 'error' => $e->getMessage()
             ], 500);
@@ -225,10 +228,7 @@ class AmbulanceController extends Controller
 
         $labTestId = $request->lab_test_id;
 
-        $diagnosticIds = DiagnosticLabTest::where(
-            'lab_test_id',
-            $labTestId
-        )
+        $diagnosticIds = DiagnosticLabTest::where('lab_test_id', $labTestId)
             ->where('free_ambulances', 1)
             ->where('status', 1)
             ->pluck('diagnostic_id')
@@ -238,7 +238,7 @@ class AmbulanceController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'No diagnostics found for free ambulance'
-            ]);
+            ], 200);
         }
 
         $diagnostics = Diagnostic::whereIn('id', $diagnosticIds)
@@ -249,13 +249,81 @@ class AmbulanceController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => 'No diagnostics found for free ambulance'
-            ]);
+            ], 200);
         }
+
+        // Convert image paths to full asset URLs
+        $diagnostics->transform(function ($diagnostic) {
+            if ($diagnostic->logo) {
+                $diagnostic->logo = asset($diagnostic->logo);
+            }
+
+            if ($diagnostic->banner) {
+                $diagnostic->banner = asset($diagnostic->banner);
+            }
+
+            return $diagnostic;
+        });
 
         return response()->json([
             'success' => 1,
             'message' => 'Free Ambulance Diagnostics Fetched Successfully',
             'data' => $diagnostics
-        ]);
+        ], 200);
     }
+
+
+    // public function freeAmbulanceDiagnostics(Request $request)
+    // {
+    //     $user = auth('sanctum')->user();
+
+    //     if (!$user) {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'Please Login'
+    //         ], 401);
+    //     }
+
+    //     if (!$request->filled('lab_test_id')) {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'Lab Test ID is required'
+    //         ], 422);
+    //     }
+
+    //     $labTestId = $request->lab_test_id;
+
+    //     $diagnosticIds = DiagnosticLabTest::where(
+    //         'lab_test_id',
+    //         $labTestId
+    //     )
+    //         ->where('free_ambulances', 1)
+    //         ->where('status', 1)
+    //         ->pluck('diagnostic_id')
+    //         ->unique();
+
+    //     if ($diagnosticIds->isEmpty()) {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'No diagnostics found for free ambulance'
+    //         ]);
+    //     }
+
+    //     $diagnostics = Diagnostic::whereIn('id', $diagnosticIds)
+    //         ->where('status', 1)
+    //         ->get();
+
+    //     if ($diagnostics->isEmpty()) {
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'No diagnostics found for free ambulance'
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'success' => 1,
+    //         'message' => 'Free Ambulance Diagnostics Fetched Successfully',
+    //         'data' => $diagnostics
+    //     ]);
+    // }
 }
