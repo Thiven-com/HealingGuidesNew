@@ -28,6 +28,12 @@ class HealthCheckupPackageBookingController extends Controller
             ], 401);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Basic Validation
+        |--------------------------------------------------------------------------
+        */
+
         $request->validate([
             'health_checkup_package_id' => 'required|exists:health_checkup_packages,id',
             'family_member_id' => 'required|exists:family_members,id',
@@ -82,6 +88,30 @@ class HealthCheckupPackageBookingController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Home Collection Address
+        |--------------------------------------------------------------------------
+        */
+
+        $homeCollection = (bool) $package->home_collection;
+
+        if ($homeCollection) {
+
+            $request->validate([
+                'address' => 'required|string|max:1000',
+                'city' => 'required|string|max:255',
+                'state' => 'required|string|max:255',
+                'pincode' => 'required|string|max:20',
+
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
+
+                'contact_name' => 'required|string|max:255',
+                'contact_mobile' => 'required|string|max:20',
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
         | Only Razorpay
         |--------------------------------------------------------------------------
         */
@@ -127,7 +157,65 @@ class HealthCheckupPackageBookingController extends Controller
 
                 'booking_time' => $request->booking_time,
 
+                /*
+                |--------------------------------------------------------------------------
+                | Collection
+                |--------------------------------------------------------------------------
+                */
+
+                'home_collection' => $homeCollection,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Home Collection Address
+                |--------------------------------------------------------------------------
+                */
+
+                'address' => $homeCollection
+                    ? $request->address
+                    : null,
+
+                'city' => $homeCollection
+                    ? $request->city
+                    : null,
+
+                'state' => $homeCollection
+                    ? $request->state
+                    : null,
+
+                'pincode' => $homeCollection
+                    ? $request->pincode
+                    : null,
+
+                'latitude' => $homeCollection
+                    ? $request->latitude
+                    : null,
+
+                'longitude' => $homeCollection
+                    ? $request->longitude
+                    : null,
+
+                'contact_name' => $homeCollection
+                    ? $request->contact_name
+                    : null,
+
+                'contact_mobile' => $homeCollection
+                    ? $request->contact_mobile
+                    : null,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Amount
+                |--------------------------------------------------------------------------
+                */
+
                 'total_amount' => $amount,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Payment
+                |--------------------------------------------------------------------------
+                */
 
                 'payment_method' => 'razorpay',
 
@@ -142,11 +230,8 @@ class HealthCheckupPackageBookingController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Create Razorpay Order
+            | Razorpay
             |--------------------------------------------------------------------------
-            |
-            | Razorpay expects amount in paise.
-            |
             */
 
             $api = new Api(
@@ -156,19 +241,23 @@ class HealthCheckupPackageBookingController extends Controller
 
             $razorpayOrder = $api->order->create([
                 'amount' => (int) round($amount * 100),
+
                 'currency' => 'INR',
+
                 'receipt' => $bookingNo,
+
                 'notes' => [
                     'booking_id' => (string) $booking->id,
                     'booking_no' => $bookingNo,
                     'customer_id' => (string) $customer->id,
                     'package_id' => (string) $package->id,
+                    'home_collection' => $homeCollection ? '1' : '0',
                 ],
             ]);
 
             /*
             |--------------------------------------------------------------------------
-            | Create Payment Record
+            | Create Payment
             |--------------------------------------------------------------------------
             */
 
@@ -223,7 +312,7 @@ class HealthCheckupPackageBookingController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Link Payment To Booking
+            | Link Payment
             |--------------------------------------------------------------------------
             */
 
@@ -233,6 +322,12 @@ class HealthCheckupPackageBookingController extends Controller
 
             DB::commit();
 
+            /*
+            |--------------------------------------------------------------------------
+            | Load Relations
+            |--------------------------------------------------------------------------
+            */
+
             $booking->load([
                 'familyMember',
                 'healthCheckupPackage',
@@ -240,13 +335,16 @@ class HealthCheckupPackageBookingController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Razorpay Checkout Response
+            | Response
             |--------------------------------------------------------------------------
             */
 
             return response()->json([
                 'success' => 1,
-                'message' => 'Health checkup booking created. Proceed with Razorpay payment.',
+
+                'message' =>
+                    'Health checkup booking created. Proceed with Razorpay payment.',
+
                 'data' => [
 
                     'booking' => $this->bookingData(
@@ -256,17 +354,23 @@ class HealthCheckupPackageBookingController extends Controller
 
                     'razorpay' => [
 
-                        'key' => config('services.razorpay.key'),
+                        'key' =>
+                            config('services.razorpay.key'),
 
-                        'order_id' => $razorpayOrder['id'],
+                        'order_id' =>
+                            $razorpayOrder['id'],
 
-                        'amount' => (int) round($amount * 100),
+                        'amount' =>
+                            (int) round($amount * 100),
 
-                        'amount_rupees' => $amount,
+                        'amount_rupees' =>
+                            $amount,
 
-                        'currency' => 'INR',
+                        'currency' =>
+                            'INR',
 
-                        'name' => $familyMember->name,
+                        'name' =>
+                            $familyMember->name,
 
                         'description' =>
                             $package->name,
@@ -274,10 +378,14 @@ class HealthCheckupPackageBookingController extends Controller
                         'prefill' => [
 
                             'name' =>
-                                $familyMember->name,
+                                $homeCollection
+                                ? $request->contact_name
+                                : $familyMember->name,
 
                             'contact' =>
-                                $familyMember->mobile,
+                                $homeCollection
+                                ? $request->contact_mobile
+                                : $familyMember->mobile,
 
                             'email' =>
                                 $customer->email ?? null,
@@ -292,9 +400,12 @@ class HealthCheckupPackageBookingController extends Controller
 
             return response()->json([
                 'success' => 0,
+
                 'message' =>
                     'Unable to create health checkup booking.',
-                'error' => $e->getMessage(),
+
+                'error' =>
+                    $e->getMessage(),
             ], 500);
         }
     }
@@ -915,6 +1026,36 @@ class HealthCheckupPackageBookingController extends Controller
 
             'booking_time' =>
                 $booking->booking_time,
+            'home_collection' =>
+                (bool) $booking->home_collection,
+
+            'address' =>
+                $booking->address,
+
+            'city' =>
+                $booking->city,
+
+            'state' =>
+                $booking->state,
+
+            'pincode' =>
+                $booking->pincode,
+
+            'latitude' =>
+                $booking->latitude
+                ? (float) $booking->latitude
+                : null,
+
+            'longitude' =>
+                $booking->longitude
+                ? (float) $booking->longitude
+                : null,
+
+            'contact_name' =>
+                $booking->contact_name,
+
+            'contact_mobile' =>
+                $booking->contact_mobile,
 
             'total_amount' =>
                 (float) $booking->total_amount,
