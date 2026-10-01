@@ -164,12 +164,107 @@
                                 placeholder="Registration Number">
 
                         </div>
+                        <!-- Hospital -->
+
+<div class="col-lg-6 mb-3">
+
+    <label class="form-label">
+        Hospital
+        <span class="text-danger">*</span>
+    </label>
+
+    <select name="hospital_id" id="hospital_id" class="form-select">
+
+        <option value="">Select Hospital</option>
+
+        @foreach($hospitals as $hospital)
+
+            <option value="{{ $hospital->id }}"
+                @selected(old('hospital_id', $diagnostic->hospital_id) == $hospital->id)>
+                {{ $hospital->hospital_name }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+    @error('hospital_id')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+
+</div>
 
                     </div>
 
                 </div>
 
             </div>
+
+            <!-- Lab Tests -->
+
+<div class="card border-0 shadow-sm mt-4">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="ti ti-flask me-2"></i>
+            Lab Tests
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            @forelse($labTests as $labTest)
+
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+
+                    <div class="form-check">
+
+                        <input
+                            type="checkbox"
+                            class="form-check-input"
+                            name="lab_test_ids[]"
+                            value="{{ $labTest->id }}"
+                            id="lab_test_{{ $labTest->id }}"
+
+                            @checked(
+                                in_array(
+                                    (int) $labTest->id,
+                                    array_map(
+                                        'intval',
+                                        old('lab_test_ids', $selectedLabTests ?? [])
+                                    )
+                                )
+                            )
+                        >
+
+                        <label
+                            class="form-check-label fw-medium"
+                            for="lab_test_{{ $labTest->id }}"
+                        >
+                            {{ $labTest->test_name }}
+                        </label>
+
+                    </div>
+
+                </div>
+
+            @empty
+
+                <div class="col-12">
+                    <div class="alert alert-info mb-0">
+                        No lab tests available.
+                    </div>
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</div>
                         <!-- Contact Information -->
 
             <div class="card border-0 shadow-sm mt-4">

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerPackageController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DiagnosticController;
+use App\Http\Controllers\Admin\DiagnosticLabTestController;
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FeatureController;
@@ -57,6 +58,18 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    // Diagnostic Lab Test Update
+    Route::put(
+        'diagnostic-lab-tests/{id}',
+        [DiagnosticLabTestController::class, 'update']
+    )->name('admin.diagnostic-lab-tests.update');
+
+    Route::delete(
+        'diagnostic-lab-tests/{id}',
+        [DiagnosticLabTestController::class, 'destroy']
+    )->name('admin.diagnostic-lab-tests.destroy');
+
 
     Route::get(
         'hospitals/{hospital}/emergency-connect/{slug}',
