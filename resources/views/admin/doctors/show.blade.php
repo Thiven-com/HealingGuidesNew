@@ -688,8 +688,9 @@
 
                                     {{-- Add Schedule when empty --}}
                                     {{-- <a href="{{ route('hospital.doctor-schedules.create', [
-                                                                        'doctor_id' => $doctor->id
-                                                                    ]) }}" class="btn btn-primary btn-sm">
+                                                                                                        'doctor_id' => $doctor->id
+                                                                                                    ]) }}"
+                                        class="btn btn-primary btn-sm">
 
                                         <i class="ti ti-plus me-1"></i>
                                         Add Schedule
@@ -878,324 +879,347 @@
                         <div class="card-body">
                             {{-- Actual Fee --}}
 
-                            <div class="d-flex justify-content-between mb-3">
+                            @php
+                                $actualFee = (float) ($doctor->actual_fee ?? 0);
+                                $consultationFee = (float) ($doctor->consultation_fee ?? 0);
 
-                                <span>
-                                    Hospital Consultation
-                                </span>
-                                
+                                $discountPercentage = 0;
 
-                                @php
-    $actualFee = (float) ($doctor->actual_fee ?? 0);
-    $consultationFee = (float) ($doctor->consultation_fee ?? 0);
+                                if ($actualFee > 0 && $consultationFee < $actualFee) {
+                                    $discountPercentage = (($actualFee - $consultationFee) / $actualFee) * 100;
+                                }
 
-    $discountPercentage = 0;
+                                $consultationEnabled = (int) ($doctor->consultation_enabled ?? 0);
+                            @endphp
 
-    if ($actualFee > 0 && $consultationFee < $actualFee) {
-        $discountPercentage = (($actualFee - $consultationFee) / $actualFee) * 100;
-    }
-@endphp
+                            @if($consultationEnabled)
 
-<strong style="
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-">
+                                <div class="d-flex justify-content-between mb-3">
 
-    @if ($actualFee > $consultationFee)
+                                    <span>
+                                        Hospital Consultation
+                                    </span>
 
-        <span style="
-            color: #8a8f98;
-            text-decoration: line-through;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($actualFee, 2) }}
-        </span>
+                                    <strong style="
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 6px;
+                                            flex-wrap: nowrap;
+                                            white-space: nowrap;
+                                        ">
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($consultationFee, 2) }}
-        </span>
+                                        @if ($actualFee > $consultationFee)
 
-        <span style="
-            display: inline-block;
-            padding: 2px 6px;
-            background: #e8f7ee;
-            color: #198754;
-            border: 1px solid #b9e5c9;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1.2;
-            white-space: nowrap;
-        ">
-            {{ number_format($discountPercentage, 0) }}% OFF
-        </span>
+                                            <span style="
+                                                                            color: #8a8f98;
+                                                                            text-decoration: line-through;
+                                                                            font-size: 12px;
+                                                                            font-weight: 500;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($actualFee, 2) }}
+                                            </span>
 
-    @else
+                                            <span style="
+                                                                            color: #212529;
+                                                                            font-size: 14px;
+                                                                            font-weight: 700;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($consultationFee, 2) }}
+                                            </span>
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($consultationFee, 2) }}
-        </span>
+                                            <span style="
+                                                                            display: inline-block;
+                                                                            padding: 2px 6px;
+                                                                            background: #e8f7ee;
+                                                                            color: #198754;
+                                                                            border: 1px solid #b9e5c9;
+                                                                            border-radius: 4px;
+                                                                            font-size: 10px;
+                                                                            font-weight: 700;
+                                                                            line-height: 1.2;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                {{ number_format($discountPercentage, 0) }}% OFF
+                                            </span>
 
-    @endif
+                                        @else
 
-</strong>
+                                            <span style="
+                                                                            color: #212529;
+                                                                            font-size: 14px;
+                                                                            font-weight: 700;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($consultationFee, 2) }}
+                                            </span>
 
-                            </div>
+                                        @endif
 
+                                    </strong>
 
-                            <div class="d-flex justify-content-between mb-3">
+                                </div>
 
-                                <span>
-                                    Video Consultation
-                                </span>
-                                
-
-                                @php
-    $actualVideoFee = (float) ($doctor->actual_video_consultation_fee ?? 0);
-    $videoConsultationFee = (float) ($doctor->video_consultation_fee ?? 0);
-
-    $videoDiscountPercentage = 0;
-
-    if ($actualVideoFee > 0 && $videoConsultationFee < $actualVideoFee) {
-        $videoDiscountPercentage = (($actualVideoFee - $videoConsultationFee) / $actualVideoFee) * 100;
-    }
-@endphp
-
-<strong style="
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-">
-
-    @if ($actualVideoFee > $videoConsultationFee)
-
-        <span style="
-            color: #8a8f98;
-            text-decoration: line-through;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($actualVideoFee, 2) }}
-        </span>
-
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($videoConsultationFee, 2) }}
-        </span>
-
-        <span style="
-            display: inline-block;
-            padding: 2px 6px;
-            background: #e8f7ee;
-            color: #198754;
-            border: 1px solid #b9e5c9;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1.2;
-            white-space: nowrap;
-        ">
-            {{ number_format($videoDiscountPercentage, 0) }}% OFF
-        </span>
-
-    @else
-
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($videoConsultationFee, 2) }}
-        </span>
-
-    @endif
-
-</strong>
-
-                            </div>
+                            @endif
 
 
-                            <div class="d-flex justify-content-between mb-3">
+                            @php
+                                $actualVideoFee = (float) ($doctor->actual_video_consultation_fee ?? 0);
+                                $videoConsultationFee = (float) ($doctor->video_consultation_fee ?? 0);
 
-                                <span>
-                                    Chat Consultation
-                                </span>
-                                
+                                $videoDiscountPercentage = 0;
 
-                                @php
-    $actualChatFee = (float) ($doctor->actual_chat_consultation_fee ?? 0);
-    $chatConsultationFee = (float) ($doctor->chat_consultation_fee ?? 0);
+                                if ($actualVideoFee > 0 && $videoConsultationFee < $actualVideoFee) {
+                                    $videoDiscountPercentage =
+                                        (($actualVideoFee - $videoConsultationFee) / $actualVideoFee) * 100;
+                                }
 
-    $chatDiscountPercentage = 0;
+                                $videoConsultationEnabled = (int) ($doctor->video_consultation_enabled ?? 0);
+                            @endphp
 
-    if ($actualChatFee > 0 && $chatConsultationFee < $actualChatFee) {
-        $chatDiscountPercentage = (($actualChatFee - $chatConsultationFee) / $actualChatFee) * 100;
-    }
-@endphp
+                            @if($videoConsultationEnabled)
 
-<strong style="
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-">
+                                <div class="d-flex justify-content-between mb-3">
 
-    @if ($actualChatFee > $chatConsultationFee)
+                                    <span>
+                                        Video Consultation
+                                    </span>
 
-        <span style="
-            color: #8a8f98;
-            text-decoration: line-through;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($actualChatFee, 2) }}
-        </span>
+                                    <strong style="
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 6px;
+                                            flex-wrap: nowrap;
+                                            white-space: nowrap;
+                                        ">
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($chatConsultationFee, 2) }}
-        </span>
+                                        @if ($actualVideoFee > $videoConsultationFee)
 
-        <span style="
-            display: inline-block;
-            padding: 2px 6px;
-            background: #e8f7ee;
-            color: #198754;
-            border: 1px solid #b9e5c9;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1.2;
-            white-space: nowrap;
-        ">
-            {{ number_format($chatDiscountPercentage, 0) }}% OFF
-        </span>
+                                            <span style="
+                                                                            color: #8a8f98;
+                                                                            text-decoration: line-through;
+                                                                            font-size: 12px;
+                                                                            font-weight: 500;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($actualVideoFee, 2) }}
+                                            </span>
 
-    @else
+                                            <span style="
+                                                                            color: #212529;
+                                                                            font-size: 14px;
+                                                                            font-weight: 700;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($videoConsultationFee, 2) }}
+                                            </span>
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($chatConsultationFee, 2) }}
-        </span>
+                                            <span style="
+                                                                            display: inline-block;
+                                                                            padding: 2px 6px;
+                                                                            background: #e8f7ee;
+                                                                            color: #198754;
+                                                                            border: 1px solid #b9e5c9;
+                                                                            border-radius: 4px;
+                                                                            font-size: 10px;
+                                                                            font-weight: 700;
+                                                                            line-height: 1.2;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                {{ number_format($videoDiscountPercentage, 0) }}% OFF
+                                            </span>
 
-    @endif
+                                        @else
 
-</strong>
+                                            <span style="
+                                                                            color: #212529;
+                                                                            font-size: 14px;
+                                                                            font-weight: 700;
+                                                                            white-space: nowrap;
+                                                                        ">
+                                                ₹{{ number_format($videoConsultationFee, 2) }}
+                                            </span>
 
-                            </div>
+                                        @endif
 
+                                    </strong>
 
-                            <div class="d-flex justify-content-between">
+                                </div>
 
-                                <span>
-                                    Home Visit
-                                </span>
+                            @endif
 
 
-                               @php
+                            @php
+                                $actualChatFee = (float) ($doctor->actual_chat_consultation_fee ?? 0);
+                                $chatConsultationFee = (float) ($doctor->chat_consultation_fee ?? 0);
+
+                                $chatDiscountPercentage = 0;
+
+                                if ($actualChatFee > 0 && $chatConsultationFee < $actualChatFee) {
+                                    $chatDiscountPercentage =
+                                        (($actualChatFee - $chatConsultationFee) / $actualChatFee) * 100;
+                                }
+
+                                $chatConsultationEnabled = (int) ($doctor->chat_consultation_enabled ?? 0);
+                            @endphp
+
+                            @if($chatConsultationEnabled)
+
+                                                <div class="d-flex justify-content-between mb-3">
+
+                                                    <span>
+                                                        Chat Consultation
+                                                    </span>
+
+                                                    <strong style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                    flex-wrap: nowrap;
+                                    white-space: nowrap;
+                                ">
+
+                                                        @if ($actualChatFee > $chatConsultationFee)
+
+                                                                            <span style="
+                                                                color: #8a8f98;
+                                                                text-decoration: line-through;
+                                                                font-size: 12px;
+                                                                font-weight: 500;
+                                                                white-space: nowrap;
+                                                            ">
+                                                                                ₹{{ number_format($actualChatFee, 2) }}
+                                                                            </span>
+
+                                                                            <span style="
+                                                                color: #212529;
+                                                                font-size: 14px;
+                                                                font-weight: 700;
+                                                                white-space: nowrap;
+                                                            ">
+                                                                                ₹{{ number_format($chatConsultationFee, 2) }}
+                                                                            </span>
+
+                                                                            <span style="
+                                                                display: inline-block;
+                                                                padding: 2px 6px;
+                                                                background: #e8f7ee;
+                                                                color: #198754;
+                                                                border: 1px solid #b9e5c9;
+                                                                border-radius: 4px;
+                                                                font-size: 10px;
+                                                                font-weight: 700;
+                                                                line-height: 1.2;
+                                                                white-space: nowrap;
+                                                            ">
+                                                                                {{ number_format($chatDiscountPercentage, 0) }}% OFF
+                                                                            </span>
+
+                                                        @else
+
+                                                                            <span style="
+                                                                color: #212529;
+                                                                font-size: 14px;
+                                                                font-weight: 700;
+                                                                white-space: nowrap;
+                                                            ">
+                                                                                ₹{{ number_format($chatConsultationFee, 2) }}
+                                                                            </span>
+
+                                                        @endif
+
+                                                    </strong>
+
+                                                </div>
+
+                            @endif
+
+
+                            @php
     $actualHomeVisitFee = (float) ($doctor->actual_home_visit_fee ?? 0);
     $homeVisitFee = (float) ($doctor->home_visit_fee ?? 0);
 
     $homeVisitDiscountPercentage = 0;
 
     if ($actualHomeVisitFee > 0 && $homeVisitFee < $actualHomeVisitFee) {
-        $homeVisitDiscountPercentage = (($actualHomeVisitFee - $homeVisitFee) / $actualHomeVisitFee) * 100;
+        $homeVisitDiscountPercentage =
+            (($actualHomeVisitFee - $homeVisitFee) / $actualHomeVisitFee) * 100;
     }
+
+    $homeVisitEnabled = (int) ($doctor->home_visit_enabled ?? 0);
 @endphp
 
-<strong style="
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-">
+@if($homeVisitEnabled)
 
-    @if ($actualHomeVisitFee > $homeVisitFee)
+    <div class="d-flex justify-content-between">
 
-        <span style="
-            color: #8a8f98;
-            text-decoration: line-through;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($actualHomeVisitFee, 2) }}
+        <span>
+            Home Visit
         </span>
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
+        <strong style="
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
             white-space: nowrap;
         ">
-            ₹{{ number_format($homeVisitFee, 2) }}
-        </span>
 
-        <span style="
-            display: inline-block;
-            padding: 2px 6px;
-            background: #e8f7ee;
-            color: #198754;
-            border: 1px solid #b9e5c9;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1.2;
-            white-space: nowrap;
-        ">
-            {{ number_format($homeVisitDiscountPercentage, 0) }}% OFF
-        </span>
+            @if ($actualHomeVisitFee > $homeVisitFee)
 
-    @else
+                <span style="
+                    color: #8a8f98;
+                    text-decoration: line-through;
+                    font-size: 12px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                ">
+                    ₹{{ number_format($actualHomeVisitFee, 2) }}
+                </span>
 
-        <span style="
-            color: #212529;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-        ">
-            ₹{{ number_format($homeVisitFee, 2) }}
-        </span>
+                <span style="
+                    color: #212529;
+                    font-size: 14px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                ">
+                    ₹{{ number_format($homeVisitFee, 2) }}
+                </span>
 
-    @endif
+                <span style="
+                    display: inline-block;
+                    padding: 2px 6px;
+                    background: #e8f7ee;
+                    color: #198754;
+                    border: 1px solid #b9e5c9;
+                    border-radius: 4px;
+                    font-size: 10px;
+                    font-weight: 700;
+                    line-height: 1.2;
+                    white-space: nowrap;
+                ">
+                    {{ number_format($homeVisitDiscountPercentage, 0) }}% OFF
+                </span>
 
-</strong>
+            @else
 
-                            </div>
+                <span style="
+                    color: #212529;
+                    font-size: 14px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                ">
+                    ₹{{ number_format($homeVisitFee, 2) }}
+                </span>
+
+            @endif
+
+        </strong>
+
+    </div>
+
+@endif
 
                         </div>
 

@@ -240,17 +240,16 @@
                                         </option>
 
                                         @foreach($specializations as $hospitalSpecialization)
-
-                                        <option value="{{ $hospitalSpecialization->id }}" {{
-                                            old( 'hospital_specialization_id' , $doctor->hospital_specialization_id
-                                            ) == $hospitalSpecialization->id ? 'selected' : '' }}
-                                            >
-
-                                            {{ $hospitalSpecialization->specialization->specialization_name ?? '-' }}
-
-                                        </option>
-
-                                        @endforeach
+    <option
+        value="{{ $hospitalSpecialization->id }}"
+        {{ old(
+            'hospital_specialization_id',
+            $doctor->hospital_specialization_id
+        ) == $hospitalSpecialization->id ? 'selected' : '' }}
+    >
+        {{ $hospitalSpecialization->specialization->specialization_name ?? '-' }}
+    </option>
+@endforeach
 
                                     </select>
 
@@ -1023,19 +1022,10 @@
                             </div>
 
                         </div>
+                        
 
                     </div>
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                {{-- =====================================================
+                    {{-- =====================================================
                 AVAILABILITY
                 ====================================================== --}}
 
@@ -1118,9 +1108,7 @@
 
                 </div>
 
-
-
-                {{-- =====================================================
+                  {{-- =====================================================
                 ABOUT DOCTOR
                 ====================================================== --}}
 
@@ -1197,6 +1185,18 @@
 
         </div>
     </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
 
 
 
