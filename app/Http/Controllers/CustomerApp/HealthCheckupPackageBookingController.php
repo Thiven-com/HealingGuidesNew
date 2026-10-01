@@ -321,7 +321,7 @@ class HealthCheckupPackageBookingController extends Controller
 
             'razorpay_payment_id' => 'required|string',
 
-            'razorpay_signature' => 'required|string',
+            // 'razorpay_signature' => 'required|string',
         ]);
 
         /*
