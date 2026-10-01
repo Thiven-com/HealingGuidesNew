@@ -473,6 +473,14 @@
                                                         Edit
 
                                                     </a>
+                                                    <a class="dropdown-item"
+    href="{{ route('admin.ambulances.prices.index', $ambulance->id) }}">
+
+    <i class="ti ti-currency-rupee me-2"></i>
+
+    Manage Pricing
+
+</a>
 
                                                     <form action="{{ route('admin.ambulances.availability', $ambulance->id) }}"
                                                         method="POST">

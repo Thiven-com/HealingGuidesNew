@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AmbulanceController;
+use App\Http\Controllers\Admin\AmbulancePriceController;
 use App\Http\Controllers\Admin\AmbulanceTypeController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BrandController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\Admin\MedicineOrderController;
 use App\Http\Controllers\Admin\PatientMedicalReportController;
 use App\Http\Controllers\Admin\MembershipRegistrationController;
 use App\Http\Controllers\Admin\SpecializationCategoryController;
+use App\Http\Controllers\Admin\SurgeryController;
 use App\Http\Controllers\Admin\TieupController;
 use App\Http\Controllers\Admin\TieupsListController;
 use Illuminate\Support\Facades\Route;
@@ -340,7 +342,35 @@ Route::group(['middleware' => 'admin'], function () {
         'location'
     ])->name('admin.ambulance-bookings.location');
 
+    Route::prefix('ambulances/{ambulance}/prices')
+        ->name('admin.ambulances.prices.')
+        ->group(function () {
 
+            Route::get(
+                '/',
+                [AmbulancePriceController::class, 'index']
+            )->name('index');
+
+            Route::post(
+                '/',
+                [AmbulancePriceController::class, 'store']
+            )->name('store');
+
+            Route::put(
+                '/{price}',
+                [AmbulancePriceController::class, 'update']
+            )->name('update');
+
+            Route::delete(
+                '/{price}',
+                [AmbulancePriceController::class, 'destroy']
+            )->name('destroy');
+
+            Route::post(
+                '/{price}/status',
+                [AmbulancePriceController::class, 'status']
+            )->name('status');
+        });
     /*
            |--------------------------------------------------------------------------
            | Medicine Orders
@@ -554,6 +584,16 @@ Route::group(['middleware' => 'admin'], function () {
     )->name(
             'admin.health-insurance-providers.toggle-status'
         );
+
+    Route::resource(
+        'surgeries',
+        SurgeryController::class
+    )->names('admin.surgeries');
+
+    Route::post(
+        'surgeries/{id}/status',
+        [SurgeryController::class, 'status']
+    )->name('admin.surgeries.status');
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

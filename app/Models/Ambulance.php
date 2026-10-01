@@ -64,4 +64,11 @@ class Ambulance extends Authenticatable
     {
         return $this->belongsTo(Hospital::class);
     }
+    public function prices()
+    {
+        return $this->hasMany(
+            AmbulancePrice::class,
+            'ambulance_id'
+        );
+    }
 }

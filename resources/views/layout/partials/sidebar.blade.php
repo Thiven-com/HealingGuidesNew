@@ -110,8 +110,14 @@
 
                         <li class="{{ request()->routeIs('admin.procedures.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.procedures.index') }}">
-                                <i class="ti ti-list fs-16 me-2"></i>
+                                <i class="ti ti-clipboard-list fs-16 me-2"></i>
                                 <span>Procedures</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('admin.surgeries.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.surgeries.index') }}">
+                                <i class="ti ti-heart-rate-monitor fs-16 me-2"></i>
+                                <span>Surgeries</span>
                             </a>
                         </li>
 

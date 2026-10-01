@@ -23,6 +23,7 @@ use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
+use App\Http\Controllers\CustomerApp\SurgeryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -241,6 +242,16 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/health-checkup-package-bookings', [HealthCheckupPackageBookingController::class, 'store']);
     Route::post('/health-checkup-package-booking/payment/verify', [HealthCheckupPackageBookingController::class, 'verifyPayment']);
     Route::get('/health-checkup-package-bookings', [HealthCheckupPackageBookingController::class, 'index']);
+
+    Route::get(
+        '/surgeries',
+        [SurgeryController::class, 'index']
+    );
+
+    Route::get(
+        '/surgeries/{id}',
+        [SurgeryController::class, 'show']
+    );
 
 });
 Route::any('/states', [LocationController::class, 'states']);
