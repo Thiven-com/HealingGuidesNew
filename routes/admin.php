@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PatientMedicalReportController;
 use App\Http\Controllers\Admin\MembershipRegistrationController;
 use App\Http\Controllers\Admin\SpecializationCategoryController;
 use App\Http\Controllers\Admin\SurgeryController;
+use App\Http\Controllers\Admin\SurgeryQuotationController;
 use App\Http\Controllers\Admin\TieupController;
 use App\Http\Controllers\Admin\TieupsListController;
 use Illuminate\Support\Facades\Route;
@@ -594,6 +595,129 @@ Route::group(['middleware' => 'admin'], function () {
         'surgeries/{id}/status',
         [SurgeryController::class, 'status']
     )->name('admin.surgeries.status');
+
+
+    Route::name('admin.')
+        ->group(function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Surgery Quotation Requests
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/surgery-quotation-requests',
+                [SurgeryQuotationController::class, 'index']
+            )->name(
+                    'surgery-quotation-requests.index'
+                );
+
+            Route::get(
+                '/surgery-quotation-requests/{id}',
+                [SurgeryQuotationController::class, 'show']
+            )->name(
+                    'surgery-quotation-requests.show'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | All Quotations For Request
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/surgery-quotation-requests/{id}/quotations',
+                [SurgeryQuotationController::class, 'quotations']
+            )->name(
+                    'surgery-quotation-requests.quotations'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Main Request Approve / Reject
+            |--------------------------------------------------------------------------
+            */
+
+            Route::post(
+                '/surgery-quotation-requests/{id}/approve',
+                [SurgeryQuotationController::class, 'approveRequest']
+            )->name(
+                    'surgery-quotation-requests.approve'
+                );
+
+            Route::post(
+                '/surgery-quotation-requests/{id}/reject',
+                [SurgeryQuotationController::class, 'rejectRequest']
+            )->name(
+                    'surgery-quotation-requests.reject'
+                );
+            Route::delete(
+                '/surgery-quotation-requests/{id}',
+                [SurgeryQuotationController::class, 'destroyRequest']
+            )->name(
+                    'surgery-quotation-requests.destroy'
+                );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Add Hospital Quotation
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/surgery-quotation-requests/{requestId}/quotation/create',
+                [SurgeryQuotationController::class, 'create']
+            )->name(
+                    'surgery-quotation-requests.quotation.create'
+                );
+
+            Route::post(
+                '/surgery-quotation-requests/{requestId}/quotation',
+                [SurgeryQuotationController::class, 'store']
+            )->name(
+                    'surgery-quotation-requests.quotation.store'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Edit Hospital Quotation
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/surgery-quotation-requests/quotation/{id}/edit',
+                [SurgeryQuotationController::class, 'edit']
+            )->name(
+                    'surgery-quotation-requests.quotation.edit'
+                );
+
+            Route::put(
+                '/surgery-quotation-requests/quotation/{id}',
+                [SurgeryQuotationController::class, 'update']
+            )->name(
+                    'surgery-quotation-requests.quotation.update'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Delete Hospital Quotation
+            |--------------------------------------------------------------------------
+            */
+
+            Route::delete(
+                '/surgery-quotation-requests/quotation/{id}',
+                [SurgeryQuotationController::class, 'destroy']
+            )->name(
+                    'surgery-quotation-requests.quotation.destroy'
+                );
+
+        });
+
 });
 
 Route::get('forgot-password', [AuthController::class, 'showForgotForm'])

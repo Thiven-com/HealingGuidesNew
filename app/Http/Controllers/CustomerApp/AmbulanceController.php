@@ -95,31 +95,75 @@ class AmbulanceController extends Controller
 
         $query = Ambulance::with([
             'ambulanceType',
-            'hospital'
-        ])->where('status', 1)->where('is_available', 1);
+            'hospital',
+            'prices'
+        ])
+            ->where('status', 1)
+            ->where('is_available', 1);
 
         if ($request->filled('id')) {
-            $query->where('id', $request->id);
+
+            $query->where(
+                'id',
+                $request->id
+            );
         }
 
         if ($request->filled('ambulance_type_id')) {
-            $query->where('ambulance_type_id', $request->ambulance_type_id);
+
+            $query->where(
+                'ambulance_type_id',
+                $request->ambulance_type_id
+            );
         }
 
         if ($request->filled('hospital_id')) {
-            $query->where('hospital_id', $request->hospital_id);
+
+            $query->where(
+                'hospital_id',
+                $request->hospital_id
+            );
         }
+
         if ($request->filled('search')) {
+
             $query->where(function ($q) use ($request) {
-                $q->where('ambulance_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('ambulance_code', 'like', '%' . $request->search . '%')
-                    ->orWhere('vehicle_number', 'like', '%' . $request->search . '%')
-                    ->orWhere('driver_name', 'like', '%' . $request->search . '%');
+
+                $q->where(
+                    'ambulance_name',
+                    'like',
+                    '%' . $request->search . '%'
+                )
+
+                    ->orWhere(
+                        'ambulance_code',
+                        'like',
+                        '%' . $request->search . '%'
+                    )
+
+                    ->orWhere(
+                        'vehicle_number',
+                        'like',
+                        '%' . $request->search . '%'
+                    )
+
+                    ->orWhere(
+                        'driver_name',
+                        'like',
+                        '%' . $request->search . '%'
+                    );
+
             });
         }
+
         if ($request->filled('accept_free_booking')) {
-            $query->where('accept_free_booking', $request->accept_free_booking);
+
+            $query->where(
+                'accept_free_booking',
+                $request->accept_free_booking
+            );
         }
+
         $ambulances = $query
             ->orderBy('ambulance_name')
             ->paginate(10);

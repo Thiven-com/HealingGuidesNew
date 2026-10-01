@@ -7,11 +7,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class AmbulanceCollection extends ResourceCollection
 {
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @return array<int|string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($ambulance) {
@@ -20,52 +15,112 @@ class AmbulanceCollection extends ResourceCollection
 
                 'id' => $ambulance->id,
 
-                'ambulance_name' => $ambulance->ambulance_name,
+                'ambulance_name' =>
+                    $ambulance->ambulance_name,
 
-                'ambulance_code' => $ambulance->ambulance_code,
+                'ambulance_code' =>
+                    $ambulance->ambulance_code,
 
-                'vehicle_number' => $ambulance->vehicle_number,
-                'image' => $ambulance->image,
+                'vehicle_number' =>
+                    $ambulance->vehicle_number,
 
-                'registration_number' => $ambulance->registration_number,
+                'image' =>
+                    $ambulance->image,
 
-                'ambulance_type_id' => $ambulance->ambulance_type_id,
+                'registration_number' =>
+                    $ambulance->registration_number,
 
-                'ambulance_type_name' => optional($ambulance->ambulanceType)->ambulance_type_name,
+                'ambulance_type_id' =>
+                    $ambulance->ambulance_type_id,
 
-                'hospital_id' => $ambulance->hospital_id,
+                'ambulance_type_name' =>
+                    optional($ambulance->ambulanceType)
+                        ->ambulance_type_name,
 
-                'hospital_name' => optional($ambulance->hospital)->hospital_name,
+                'hospital_id' =>
+                    $ambulance->hospital_id,
 
-                'driver_name' => $ambulance->driver_name,
+                'hospital_name' =>
+                    optional($ambulance->hospital)
+                        ->hospital_name,
 
-                'driver_mobile' => $ambulance->driver_mobile,
+                'driver_name' =>
+                    $ambulance->driver_name,
 
-                'driver_license_number' => $ambulance->driver_license_number,
+                'driver_mobile' =>
+                    $ambulance->driver_mobile,
 
-                'driver_photo' => $ambulance->driver_photo
+                'driver_license_number' =>
+                    $ambulance->driver_license_number,
+
+                'driver_photo' =>
+                    $ambulance->driver_photo
                     ? asset($ambulance->driver_photo)
                     : null,
 
-                'model' => $ambulance->model,
+                'model' =>
+                    $ambulance->model,
 
-                'manufacturing_year' => $ambulance->manufacturing_year,
+                'manufacturing_year' =>
+                    $ambulance->manufacturing_year,
 
-                'current_location' => $ambulance->current_location,
+                'current_location' =>
+                    $ambulance->current_location,
 
-                'latitude' => $ambulance->latitude,
+                'latitude' =>
+                    $ambulance->latitude,
 
-                'longitude' => $ambulance->longitude,
+                'longitude' =>
+                    $ambulance->longitude,
 
-                'base_fare' => $ambulance->base_fare,
+                'base_fare' =>
+                    $ambulance->base_fare,
 
-                'price_per_km' => $ambulance->price_per_km,
+                'price_per_km' =>
+                    $ambulance->price_per_km,
 
-                'is_available' => (bool) $ambulance->is_available,
+                'is_available' =>
+                    (bool) $ambulance->is_available,
 
-                'status' => (bool) $ambulance->status,
-                'distance' => number_format(rand(5, 100) / 10, 1) . ' KM',
-                'eta' => rand(2, 20) . ' mins',
+                'status' =>
+                    (bool) $ambulance->status,
+
+                /*
+                |--------------------------------------------------------------------------
+                | Ambulance Prices
+                |--------------------------------------------------------------------------
+                */
+
+                'prices' => $ambulance->prices->map(function ($price) {
+
+                    return [
+                        'id' => $price->id,
+
+                        'trip_type' => $price->trip_type,
+
+                        'max_distance_km' => (float) $price->max_distance_km,
+
+                        'amount' => (float) $price->amount,
+
+                        'status' => (bool) $price->status,
+                    ];
+
+                })->values()->toArray(),
+
+                /*
+                |--------------------------------------------------------------------------
+                | Distance / ETA
+                |--------------------------------------------------------------------------
+                */
+
+                'distance' =>
+                    number_format(
+                        rand(5, 100) / 10,
+                        1
+                    ) . ' KM',
+
+                'eta' =>
+                    rand(2, 20) . ' mins',
 
             ];
 

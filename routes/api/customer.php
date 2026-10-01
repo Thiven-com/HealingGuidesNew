@@ -24,6 +24,7 @@ use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use App\Http\Controllers\CustomerApp\SurgeryController;
+use App\Http\Controllers\CustomerApp\SurgeryQuotationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -251,6 +252,35 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get(
         '/surgeries/{id}',
         [SurgeryController::class, 'show']
+    );
+
+    Route::post(
+        '/surgery-quotation-request',
+        [SurgeryQuotationController::class, 'store']
+    );
+
+    // My quotation requests
+    Route::get(
+        '/surgery-quotation-requests',
+        [SurgeryQuotationController::class, 'index']
+    );
+
+    // Single request with quotations
+    Route::get(
+        '/surgery-quotation-requests/{id}',
+        [SurgeryQuotationController::class, 'show']
+    );
+
+    // Accept quotation
+    Route::post(
+        '/surgery-quotations/{id}/accept',
+        [SurgeryQuotationController::class, 'acceptQuotation']
+    );
+
+    // Reject quotation
+    Route::post(
+        '/surgery-quotations/{id}/reject',
+        [SurgeryQuotationController::class, 'rejectQuotation']
     );
 
 });
