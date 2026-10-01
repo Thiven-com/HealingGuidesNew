@@ -8,6 +8,7 @@ class Diagnostic extends Model
 {
     //
     protected $fillable = [
+        'hospital_id',
         'diagnostic_name',
         'diagnostic_code',
         'slug',
@@ -28,5 +29,6 @@ class Diagnostic extends Model
         'logo',
         'banner',
         'status',
+        'lab_tests',
     ];
 }
