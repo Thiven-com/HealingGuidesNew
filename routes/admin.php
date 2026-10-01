@@ -61,6 +61,13 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    // Update Hospital tieup list
+    Route::post(
+        '/hospitals/tieups/{hospitalTieupId}/update',
+        [HospitalController::class, 'updateTieups']
+    )->name('admin.hospitals.tieups.update');
+
     // Book Admission
     Route::get(
         '/book-admissions',

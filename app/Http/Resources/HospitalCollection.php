@@ -73,6 +73,9 @@ class HospitalCollection extends ResourceCollection
                                 ->map(function ($list) {
                                     return [
                                         'id' => $list->id,
+
+                                        'health_insurance_providers_id' => $list->health_insurance_providers_id,
+                                        
                                         'title' => $list->title,
 
                                         'image' => $list->image

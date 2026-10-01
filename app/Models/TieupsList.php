@@ -14,6 +14,7 @@ class TieupsList extends Model
         'title',
         'image',
         'description',
+        'health_insurance_providers_id',
     ];
 
     public function hospital()

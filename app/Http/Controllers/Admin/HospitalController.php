@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
+use App\Models\HealthInsuranceProvider;
 use App\Models\Hospital;
 use App\Models\HospitalFacilitiesList;
 use App\Models\HospitalFacility;
@@ -15,6 +16,7 @@ use App\Models\SpecializationCategory;
 use App\Models\Tieup;
 use App\Models\TieupsList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -481,6 +483,38 @@ class HospitalController extends Controller
         ));
     }
 
+    // public function tieupsDetails($id)
+    // {
+    //     $hospitalTieup = HospitalTieup::with([
+    //         'hospitalDetail',
+    //         'tieup'
+    //     ])->findOrFail($id);
+
+    //     $tieup = $hospitalTieup->tieup;
+
+    //     $hospitalId = $hospitalTieup->hospital;
+
+    //     // Get ALL health insurance providers
+    //     $allTieups = HealthInsuranceProvider::orderBy('name', 'asc')->get();
+
+    //     // Get selected health insurance provider IDs for this hospital
+    //     $selectedTieupIds = TieupsList::where('hospital_id', $hospitalId)
+    //         ->pluck('health_insurance_providers_id')
+    //         ->toArray();
+
+    //     return view(
+    //         'admin.hospitals.tieups-details',
+    //         compact(
+    //             'tieup',
+    //             'hospitalTieup',
+    //             'allTieups',
+    //             'selectedTieupIds',
+    //             'hospitalId'
+    //         )
+    //     );
+    // }
+
+
     public function tieupsDetails($id)
     {
         $hospitalTieup = HospitalTieup::with([
@@ -492,20 +526,127 @@ class HospitalController extends Controller
 
         $hospitalId = $hospitalTieup->hospital;
 
-        $tieupsList = TieupsList::where('hospital_id', $hospitalId)
-            ->where('hospital_tieups_id', $id)
-            ->latest()
+        // All active health insurance providers
+        $allTieups = HealthInsuranceProvider::where('status', 1)
+            ->orderBy('display_order', 'asc')
+            ->orderBy('name', 'asc')
             ->get();
+
+        /*
+         * Get only the providers belonging to this
+         * particular hospital_tieups record.
+         *
+         * hospital_tieups_id = current hospital tieup ID
+         */
+        $selectedTieupIds = TieupsList::where('hospital_id', $hospitalId)
+            ->where('hospital_tieups_id', $hospitalTieup->id)
+            ->pluck('health_insurance_providers_id')
+            ->toArray();
 
         return view(
             'admin.hospitals.tieups-details',
             compact(
                 'tieup',
                 'hospitalTieup',
-                'tieupsList',
+                'allTieups',
+                'selectedTieupIds',
                 'hospitalId'
             )
         );
+    }
+
+    public function updateTieups(Request $request, $hospitalTieupId)
+    {
+        $request->validate([
+            'health_insurance_providers' => 'nullable|array',
+            'health_insurance_providers.*' => 'exists:health_insurance_providers,id',
+        ]);
+
+        // Get current hospital tieup
+        $hospitalTieup = HospitalTieup::findOrFail($hospitalTieupId);
+
+        $hospitalId = $hospitalTieup->hospital;
+
+        // Get selected provider IDs
+        $providerIds = $request->input('health_insurance_providers', []);
+
+        // Make sure IDs are integers
+        $providerIds = array_map('intval', $providerIds);
+
+        /*
+         * Get existing tieup records for this particular
+         * hospital + hospital_tieups record.
+         */
+        $existingTieups = TieupsList::where('hospital_id', $hospitalId)
+            ->where('hospital_tieups_id', $hospitalTieup->id)
+            ->get();
+
+        /*
+         * Delete providers that were previously selected
+         * but are now unchecked.
+         */
+        foreach ($existingTieups as $existingTieup) {
+
+            if (
+                !in_array(
+                    (int) $existingTieup->health_insurance_providers_id,
+                    $providerIds
+                )
+            ) {
+                $existingTieup->delete();
+            }
+        }
+
+        /*
+         * If nothing is selected, all previous selections
+         * have now been removed.
+         */
+        if (empty($providerIds)) {
+            return redirect()
+                ->back()
+                ->with('success', 'Hospital tie-ups updated successfully.');
+        }
+
+        // Fetch selected active providers
+        $providers = HealthInsuranceProvider::whereIn('id', $providerIds)
+            ->where('status', 1)
+            ->orderBy('display_order', 'asc')
+            ->get();
+
+        /*
+         * Update existing providers or create new providers.
+         */
+        foreach ($providers as $provider) {
+
+            $tieupList = TieupsList::where('hospital_id', $hospitalId)
+                ->where('hospital_tieups_id', $hospitalTieup->id)
+                ->where('health_insurance_providers_id', $provider->id)
+                ->first();
+
+            $data = [
+                'hospital_id' => $hospitalId,
+                'hospital_tieups_id' => $hospitalTieup->id,
+                'health_insurance_providers_id' => $provider->id,
+                'title' => $provider->name,
+                'image' => $provider->logo,
+                'description' => $provider->description,
+            ];
+
+            if ($tieupList) {
+
+                // Already exists → update
+                $tieupList->update($data);
+
+            } else {
+
+                // New selection → create
+                TieupsList::create($data);
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Hospital tie-ups updated successfully.');
     }
 
     public function deleteBanner(Request $request, Hospital $hospital)
