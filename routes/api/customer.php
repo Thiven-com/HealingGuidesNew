@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerApp\AddressController;
 use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
+use App\Http\Controllers\CustomerApp\BookAdmissionController;
 use App\Http\Controllers\CustomerApp\ChatbotController;
 use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
@@ -86,6 +87,22 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get(
         '/health-checkup-packages/{id}/tests',
         [HealthCheckupController::class, 'packageTests']
+    );
+
+    //BookAdmissionRequest
+    Route::get(
+        '/bookAdmissionRequest/alldata',
+        [BookAdmissionController::class, 'alldata']
+    );
+
+    Route::post(
+        '/bookAdmissionRequest',
+        [BookAdmissionController::class, 'store']
+    );
+
+    Route::get(
+        '/bookAdmissionRequest/list',
+        [BookAdmissionController::class, 'index']
     );
 
     //Doctors
