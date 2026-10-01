@@ -108,6 +108,14 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         [BookAdmissionController::class, 'index']
     );
 
+    //Free Ambulance
+    Route::get('/free-ambulance-labtest', [AmbulanceController::class, 'freeAmbulance']);
+
+    Route::get(
+        '/free-ambulance-diagnostics',
+        [AmbulanceController::class, 'freeAmbulanceDiagnostics']
+    );
+
     //Doctors
     Route::any('doctors', "DoctorController@doctors");
     Route::any('doctor-slots', [DoctorController::class, 'availableSlots']);

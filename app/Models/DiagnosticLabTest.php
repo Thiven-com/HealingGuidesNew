@@ -32,4 +32,6 @@ class DiagnosticLabTest extends Model
             'lab_test_id'
         );
     }
+
+    
 }

@@ -9,7 +9,10 @@ use App\Http\Resources\AmbulanceTypeCollection;
 use App\Http\Resources\AmbulanceTypeResource;
 use App\Models\Ambulance;
 use App\Models\AmbulanceType;
+use App\Models\Diagnostic;
+use App\Models\DiagnosticLabTest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AmbulanceController extends Controller
 {
@@ -172,6 +175,87 @@ class AmbulanceController extends Controller
             'success' => 1,
             'message' => 'Ambulances Fetched Successfully',
             'data' => new AmbulanceCollection($ambulances)
+        ]);
+    }
+
+    public function freeAmbulance(Request $request)
+    {
+        try {
+            $data = DB::table('diagnostic_lab_tests as dlt')
+                ->join('lab_tests as lt', 'lt.id', '=', 'dlt.lab_test_id')
+                ->where('dlt.free_ambulances', 1)
+                ->select(
+                    'lt.*'
+                )
+                ->distinct()
+                ->get();
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Free ambulance lab tests fetched successfully.',
+                'data' => $data
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function freeAmbulanceDiagnostics(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        if (!$request->filled('lab_test_id')) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Lab Test ID is required'
+            ], 422);
+        }
+
+        $labTestId = $request->lab_test_id;
+
+        $diagnosticIds = DiagnosticLabTest::where(
+            'lab_test_id',
+            $labTestId
+        )
+            ->where('free_ambulances', 1)
+            ->where('status', 1)
+            ->pluck('diagnostic_id')
+            ->unique();
+
+        if ($diagnosticIds->isEmpty()) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'No diagnostics found for free ambulance'
+            ]);
+        }
+
+        $diagnostics = Diagnostic::whereIn('id', $diagnosticIds)
+            ->where('status', 1)
+            ->get();
+
+        if ($diagnostics->isEmpty()) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'No diagnostics found for free ambulance'
+            ]);
+        }
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Free Ambulance Diagnostics Fetched Successfully',
+            'data' => $diagnostics
         ]);
     }
 }

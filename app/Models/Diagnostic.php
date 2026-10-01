@@ -31,4 +31,14 @@ class Diagnostic extends Model
         'status',
         'lab_tests',
     ];
+
+    public function diagnosticLabTests()
+    {
+        return $this->hasMany(DiagnosticLabTest::class, 'diagnostic_id');
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class, 'hospital_id');
+    }
 }

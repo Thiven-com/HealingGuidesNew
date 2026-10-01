@@ -75,7 +75,7 @@ class HospitalCollection extends ResourceCollection
                                         'id' => $list->id,
 
                                         'health_insurance_providers_id' => $list->health_insurance_providers_id,
-                                        
+
                                         'title' => $list->title,
 
                                         'image' => $list->image
@@ -90,6 +90,7 @@ class HospitalCollection extends ResourceCollection
                                 ->values(),
                         ];
                     })->values(),
+                    
 
                 /*
             |--------------------------------------------------------------------------

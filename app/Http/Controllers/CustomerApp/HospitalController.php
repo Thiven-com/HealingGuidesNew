@@ -24,8 +24,13 @@ class HospitalController extends Controller
             ], 401);
         }
 
-        $query = Hospital::with('hospitalSpecializations.specialization')
-            ->where('status', 1);
+        // $query = Hospital::with('hospitalSpecializations.specialization')
+        //     ->where('status', 1);
+        $query = Hospital::with([
+            'hospitalSpecializations.specialization',
+            'diagnostics.diagnosticLabTests.labTest',
+            'diagnostics.diagnosticLabTests.diagnostic'
+        ])->where('status', 1);
 
         if ($request->filled('search')) {
             $query->where('hospital_name', 'like', '%' . $request->search . '%');
