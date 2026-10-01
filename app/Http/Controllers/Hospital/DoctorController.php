@@ -364,10 +364,13 @@ class DoctorController extends Controller
             ->where('hospital_id', $hospital->id)
             ->where('id', $id)
             ->firstOrFail();
+        $specializations = HospitalSpecialization::with('specialization')
+            ->where('hospital_id', $hospital->id)
+            ->get();
 
         return view(
             'hospital.doctors.show',
-            compact('doctor')
+            compact('doctor', 'specializations')
         );
     }
 
@@ -428,8 +431,19 @@ class DoctorController extends Controller
             'doctor_name' =>
                 'required|string|max:255',
 
-            'hospital_specialization_id' =>
-                'nullable|exists:specializations,id',
+            'hospital_specialization_id' => [
+                'required',
+                'exists:hospital_specializations,id',
+                function ($attribute, $value, $fail) use ($hospital) {
+                    $exists = HospitalSpecialization::where('id', $value)
+                        ->where('hospital_id', $hospital->id)
+                        ->exists();
+
+                    if (!$exists) {
+                        $fail('The selected hospital specialization is invalid.');
+                    }
+                },
+            ],
 
             'qualification' =>
                 'required|string|max:255',

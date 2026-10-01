@@ -479,82 +479,46 @@
                                 {{-- Actions --}}
 
                                 <td class="text-end">
+    <div class="d-flex align-items-center justify-content-end gap-2">
 
-                                    <div class="dropdown">
+        {{-- View --}}
+        <a
+            href="{{ route('hospital.doctors.show', $doctor->id) }}"
+            class="btn btn-sm btn-light"
+            title="View"
+            data-bs-toggle="tooltip"
+        >
+            <i class="ti ti-eye"></i>
+        </a>
 
-                                        <a
-                                            href="javascript:void(0);"
-                                            class="btn btn-sm btn-light"
-                                            data-bs-toggle="dropdown"
-                                        >
+        {{-- Edit --}}
+        <a
+            href="{{ route('hospital.doctors.edit', $doctor->id) }}"
+            class="btn btn-sm btn-light"
+            title="Edit"
+            data-bs-toggle="tooltip"
+        >
+            <i class="ti ti-edit"></i>
+        </a>
 
-                                            <i class="ti ti-dots-vertical"></i>
+        {{-- Activate / Deactivate --}}
+        <button
+            type="button"
+            class="btn btn-sm btn-light doctor-status-btn"
+            data-id="{{ $doctor->id }}"
+            data-status="{{ $doctor->status ? 0 : 1 }}"
+            title="{{ $doctor->status ? 'Deactivate' : 'Activate' }}"
+            data-bs-toggle="tooltip"
+        >
+            @if($doctor->status)
+                <i class="ti ti-ban text-danger"></i>
+            @else
+                <i class="ti ti-circle-check text-success"></i>
+            @endif
+        </button>
 
-                                        </a>
-
-
-                                        <div class="dropdown-menu dropdown-menu-end">
-
-
-                                            <a
-                                                class="dropdown-item"
-                                                href="{{ route(
-                                                    'hospital.doctors.show',
-                                                    $doctor->id
-                                                ) }}"
-                                            >
-
-                                                <i class="ti ti-eye me-2"></i>
-
-                                                View
-
-                                            </a>
-
-
-                                            <a
-                                                class="dropdown-item"
-                                                href="{{ route(
-                                                    'hospital.doctors.edit',
-                                                    $doctor->id
-                                                ) }}"
-                                            >
-
-                                                <i class="ti ti-edit me-2"></i>
-
-                                                Edit
-
-                                            </a>
-
-
-                                            <button
-                                                type="button"
-                                                class="dropdown-item doctor-status-btn"
-                                                data-id="{{ $doctor->id }}"
-                                                data-status="{{ $doctor->status ? 0 : 1 }}"
-                                            >
-
-                                                @if($doctor->status)
-
-                                                    <i class="ti ti-ban me-2 text-danger"></i>
-
-                                                    Deactivate
-
-                                                @else
-
-                                                    <i class="ti ti-circle-check me-2 text-success"></i>
-
-                                                    Activate
-
-                                                @endif
-
-                                            </button>
-
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
+    </div>
+</td>
 
 
                             </tr>

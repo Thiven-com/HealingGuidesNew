@@ -54,6 +54,108 @@ class DoctorController extends Controller
             $query->where('experience', '>=', $request->experience);
         }
 
+        /*
+  |--------------------------------------------------------------------------
+  | Consultation Type Filter
+  |--------------------------------------------------------------------------
+  |
+  | type=consultation
+  | type=video
+  | type=chat
+  | type=home_visit
+  |
+  */
+
+        if ($request->filled('type')) {
+
+            switch ($request->type) {
+
+                case 'consultation':
+
+                    $query->where('consultation_enabled', 1);
+
+                    break;
+
+                case 'video':
+
+                    $query->where('video_consultation_enabled', 1);
+
+                    break;
+
+                case 'chat':
+
+                    $query->where('chat_consultation_enabled', 1);
+
+                    break;
+
+                case 'home_visit':
+
+                    $query->where('home_visit_enabled', 1);
+
+                    break;
+
+                default:
+
+                    return response()->json([
+                        'success' => 0,
+                        'message' => 'Invalid consultation type. Use consultation, video, chat or home_visit.'
+                    ], 422);
+            }
+        }
+
+        if ($request->filled('percentage')) {
+            $percentage = (float) $request->percentage;
+
+            if ($percentage < 0 || $percentage > 100) {
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'Percentage must be between 0 and 100.'
+                ], 422);
+            }
+
+            switch ($request->type) {
+
+                case 'consultation':
+                    $query->whereRaw("
+                actual_fee > 0
+                AND consultation_fee < actual_fee
+                AND ((actual_fee - consultation_fee) / actual_fee) * 100 >= ?
+            ", [$percentage]);
+                    break;
+
+                case 'video':
+                    $query->whereRaw("
+                actual_video_consultation_fee > 0
+                AND video_consultation_fee < actual_video_consultation_fee
+                AND ((actual_video_consultation_fee - video_consultation_fee) / actual_video_consultation_fee) * 100 >= ?
+            ", [$percentage]);
+                    break;
+
+                case 'chat':
+                    $query->whereRaw("
+                actual_chat_consultation_fee > 0
+                AND chat_consultation_fee < actual_chat_consultation_fee
+                AND ((actual_chat_consultation_fee - chat_consultation_fee) / actual_chat_consultation_fee) * 100 >= ?
+            ", [$percentage]);
+                    break;
+
+                case 'home_visit':
+                    $query->whereRaw("
+                actual_home_visit_fee > 0
+                AND home_visit_fee < actual_home_visit_fee
+                AND ((actual_home_visit_fee - home_visit_fee) / actual_home_visit_fee) * 100 >= ?
+            ", [$percentage]);
+                    break;
+
+                default:
+                    return response()->json([
+                        'success' => 0,
+                        'message' => 'Please provide a valid type when using percentage.'
+                    ], 422);
+            }
+        }
+
+
         $doctors = $query->latest()->paginate(20);
         if ($doctors->isEmpty()) {
             return response()->json([

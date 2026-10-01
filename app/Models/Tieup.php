@@ -12,6 +12,7 @@ class Tieup extends Model
         'slug',
         'description',
         'image',
+        
     ];
 
     protected static function boot()

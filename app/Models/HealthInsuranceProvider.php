@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class HealthInsuranceProvider extends Model
 {
     protected $fillable = [
+        'id',
         'name',
         'slug',
         'logo',
