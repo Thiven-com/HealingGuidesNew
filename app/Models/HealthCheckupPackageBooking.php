@@ -16,16 +16,32 @@ class HealthCheckupPackageBooking extends Model
         'customer_id',
         'family_member_id',
         'health_checkup_package_id',
+
         'booking_date',
         'booking_time',
+
+        'home_collection',
+        'address',
+        'city',
+        'state',
+        'pincode',
+        'latitude',
+        'longitude',
+        'contact_name',
+        'contact_mobile',
+
         'total_amount',
+
         'payment_method',
         'payment_id',
         'payment_status',
         'booking_status',
-        'notes',
-    ];
 
+        'notes',
+        'cancel_reason',
+        'cancelled_at',
+        'completed_at',
+    ];
     protected $casts = [
         'booking_date' => 'date',
         'booking_time' => 'datetime:H:i',

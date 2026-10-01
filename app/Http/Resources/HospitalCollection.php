@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Diagnostic;
 use App\Models\HospitalEmergencyConnect;
 use App\Models\TieupsList;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class HospitalCollection extends ResourceCollection
                     ];
                 })->values(),
                 'facilities' => new HospitalFacilityCollection($hospital->facilities),
+                'diagnostics' => new DiagnosticCollection(Diagnostic::where('hospital_id',$hospital->id)->get()),
                 'tieups' => $hospital->hospitalTieups
                     ->map(function ($item) use ($hospital) {
                         if (!$item->tieup) {

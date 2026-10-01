@@ -425,6 +425,44 @@
 
                     </div>
 
+                    <div class="row">
+
+    <div class="col-md-6">
+        <div class="form-check form-switch">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="home_collection"
+                value="1"
+                id="home_collection"
+                {{ old('home_collection', $healthCheckupPackage->home_collection ?? false) ? 'checked' : '' }}
+            >
+
+            <label class="form-check-label" for="home_collection">
+                Home Collection
+            </label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-check form-switch">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="centre_collection"
+                value="1"
+                id="centre_collection"
+                {{ old('centre_collection', $healthCheckupPackage->centre_collection ?? false) ? 'checked' : '' }}
+            >
+
+            <label class="form-check-label" for="centre_collection">
+                Centre Collection
+            </label>
+        </div>
+    </div>
+
+</div>
+
                 </div>
 
             </div>
