@@ -128,6 +128,18 @@
                                 <span>Tieups</span>
                             </a>
                         </li>
+                        <li class="{{ request()->routeIs('admin.book-admissions.index.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.book-admissions.index') }}">
+                                <i class="ti ti-clipboard-plus fs-16 me-2"></i>
+                                <span>Admission Requests</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('admin.health-insurance-providers.index*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.health-insurance-providers.index') }}">
+                                <i class="ti ti-shield-plus fs-16 me-2"></i>
+                                <span>Health Insurance Providers</span>
+                            </a>
+                        </li>
 
                         <li class="{{ request()->routeIs('admin.appointments.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.appointments.index') }}">

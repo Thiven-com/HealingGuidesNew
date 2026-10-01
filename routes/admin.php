@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\ProcedureController;
 use App\Http\Controllers\Admin\SpecializationController;
 use App\Http\Controllers\Admin\AmbulanceBookingController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\BookAdmissionController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\FacilityController;
@@ -60,6 +61,21 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+    // Book Admission
+    Route::get(
+        '/book-admissions',
+        [BookAdmissionController::class, 'index']
+    )->name('admin.book-admissions.index');
+
+    Route::get(
+        '/book-admissions/{id}',
+        [BookAdmissionController::class, 'show']
+    )->name('admin.book-admissions.show');
+
+    Route::post(
+        '/book-admissions/{id}/status',
+        [BookAdmissionController::class, 'updateStatus']
+    )->name('admin.book-admissions.update-status');
 
     // Diagnostic Lab Test Update
     Route::put(

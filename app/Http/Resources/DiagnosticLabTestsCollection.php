@@ -43,6 +43,8 @@ class DiagnosticLabTestsCollection extends ResourceCollection
 
                 'home_collection' => (bool) $item->home_collection,
 
+                'free_ambulances' => (int) ($item->free_ambulances ?? 0),
+
                 'status' => $item->status,
 
             ];
