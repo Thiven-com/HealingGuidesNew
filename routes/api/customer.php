@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
 use App\Http\Controllers\CustomerApp\FamilyMemberHealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupController;
+use App\Http\Controllers\CustomerApp\HealthCheckupPackageBookingController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
 use App\Http\Controllers\CustomerApp\HospitalController;
@@ -219,6 +220,10 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         '/family-member-health-checkups/{id}',
         [FamilyMemberHealthCheckupController::class, 'show']
     );
+
+    Route::post('/health-checkup-package-bookings', [HealthCheckupPackageBookingController::class, 'store']);
+    Route::post('/health-checkup-package-booking/payment/verify', [HealthCheckupPackageBookingController::class, 'verifyPayment']);
+    Route::get('/health-checkup-package-bookings', [HealthCheckupPackageBookingController::class, 'index']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

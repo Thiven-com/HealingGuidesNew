@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
         "orangehill/iseed": "^3.8",
+        "razorpay/razorpay": "^2.9",
         "realrashid/sweet-alert": "^7.3"
     },
     "require-dev": {
