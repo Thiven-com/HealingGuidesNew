@@ -458,18 +458,6 @@
                                                                             </a>
 
 
-                                                                            {{-- Quotations --}}
-                                                                            <a class="dropdown-item" href="{{ route(
-                                        'admin.surgery-quotation-requests.quotations',
-                                        $quotationRequest->id
-                                    ) }}">
-
-                                                                                <i class="ti ti-file-invoice me-2"></i>
-
-                                                                                View Quotations
-
-                                                                            </a>
-
 
                                                                             @if($status === 'pending')
 

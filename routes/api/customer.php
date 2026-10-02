@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomerApp\AddressController;
 use App\Http\Controllers\CustomerApp\AmbulanceBookingController;
 use App\Http\Controllers\CustomerApp\AmbulanceController;
 use App\Http\Controllers\CustomerApp\BookAdmissionController;
+use App\Http\Controllers\CustomerApp\CareServiceBookingController;
 use App\Http\Controllers\CustomerApp\ChatbotController;
 use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\CustomerApp\HealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupPackageBookingController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
+use App\Http\Controllers\CustomerApp\HomeVisitServiceCategoryController;
+use App\Http\Controllers\CustomerApp\HomeVisitServiceController;
 use App\Http\Controllers\CustomerApp\HospitalController;
 use App\Http\Controllers\CustomerApp\HospitalTypeController;
 use App\Http\Controllers\CustomerApp\LocationController;
@@ -109,6 +112,52 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         '/bookAdmissionRequest/list',
         [BookAdmissionController::class, 'index']
     );
+
+    //Home Visit Service Category
+
+    Route::get(
+        '/home-visit-service-categories',
+        [HomeVisitServiceCategoryController::class, 'index']
+    );
+
+    Route::get(
+        '/home-visit-service-categories/{id}',
+        [HomeVisitServiceCategoryController::class, 'show']
+    );
+
+    //HomeVisitService
+
+    Route::get(
+        '/home-visit-services',
+        [HomeVisitServiceController::class, 'index']
+    );
+
+    Route::get(
+        '/home-visit-services/{id}',
+        [HomeVisitServiceController::class, 'show']
+    );
+
+    //Care Service Booking
+
+    Route::post('/care-service-booking', [
+        CareServiceBookingController::class,
+        'store'
+    ]);
+
+    Route::get('/care-service-bookings', [
+        CareServiceBookingController::class,
+        'index'
+    ]);
+
+    Route::get('/care-service-booking/{id}', [
+        CareServiceBookingController::class,
+        'show'
+    ]);
+
+    Route::post('/care-service-booking/verify-payment', [
+    CareServiceBookingController::class,
+    'verifyPayment'
+    ]);
 
     //Free Ambulance
     Route::get('/free-ambulance-labtest', [AmbulanceController::class, 'freeAmbulance']);

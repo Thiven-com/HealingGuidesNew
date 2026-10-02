@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\HealthCheckupController;
+use App\Http\Controllers\Admin\HomeVisitServiceController;
 use App\Http\Controllers\Admin\HospitalEmergencyConnectController;
 use App\Http\Controllers\Admin\HospitalGalleryController;
 use App\Http\Controllers\Admin\InsuranceController;
@@ -53,6 +54,7 @@ use App\Http\Controllers\Admin\SurgeryController;
 use App\Http\Controllers\Admin\SurgeryQuotationController;
 use App\Http\Controllers\Admin\TieupController;
 use App\Http\Controllers\Admin\TieupsListController;
+use App\Http\Controllers\Admin\HomeVisitServiceCategoryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -66,6 +68,57 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+
+    // Home Visit Services
+    Route::get(
+        'home-visit-services',
+        [HomeVisitServiceController::class, 'index']
+    )->name('admin.home-visit-services.index');
+
+    // Store
+    Route::post(
+        'home-visit-services/store',
+        [HomeVisitServiceController::class, 'store']
+    )->name('admin.home-visit-services.store');
+
+    // Edit page
+    Route::get(
+        'home-visit-services/edit/{id}',
+        [HomeVisitServiceController::class, 'edit']
+    )->name('admin.home-visit-services.edit');
+
+    // Update
+    Route::put(
+        'home-visit-services/update/{id}',
+        [HomeVisitServiceController::class, 'update']
+    )->name('admin.home-visit-services.update');
+
+    // Delete
+    Route::delete(
+        'home-visit-services/delete/{id}',
+        [HomeVisitServiceController::class, 'destroy']
+    )->name('admin.home-visit-services.destroy');
+
+
+    // Home Visit Service Category
+
+    Route::get('home-visit-service-categories', [HomeVisitServiceCategoryController::class, 'index'])
+        ->name('admin.home-visit-service-categories.index');
+
+    Route::post('home-visit-service-categories/store', [HomeVisitServiceCategoryController::class, 'store'])
+        ->name('admin.home-visit-service-categories.store');
+
+    Route::get('home-visit-service-categories/edit/{id}', [HomeVisitServiceCategoryController::class, 'edit'])
+        ->name('admin.home-visit-service-categories.edit');
+
+    Route::put(
+        'home-visit-service-categories/update/{id}',
+        [HomeVisitServiceCategoryController::class, 'update']
+    )->name('admin.home-visit-service-categories.update');
+
+    Route::delete('home-visit-service-categories/destroy/{id}', [HomeVisitServiceCategoryController::class, 'destroy'])
+        ->name('admin.home-visit-service-categories.destroy');
 
     // Update Hospital tieup list
     Route::post(
