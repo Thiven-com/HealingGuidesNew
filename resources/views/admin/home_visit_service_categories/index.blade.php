@@ -437,15 +437,15 @@
 
                                 <option value="">Select Category Type</option>
 
-                                <option value="care_service" {{ $category->category_type == 'care_service' ? 'selected' : '' }}>
+                                <option value="care_service" >
                                     Care Service
                                 </option>
 
-                                <option value="physio" {{ $category->category_type == 'physio' ? 'selected' : '' }}>
+                                <option value="physio">
                                     Physio
                                 </option>
 
-                                <option value="sleep_test" {{ $category->category_type == 'sleep_test' ? 'selected' : '' }}>
+                                <option value="sleep_test">
                                     Sleep Test
                                 </option>
 
