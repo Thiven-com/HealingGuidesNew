@@ -30,6 +30,7 @@ class Diagnostic extends Model
         'banner',
         'status',
         'lab_tests',
+        'diagnostic_category_id',
     ];
 
     public function diagnosticLabTests()
