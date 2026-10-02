@@ -29,6 +29,8 @@ use App\Http\Controllers\Admin\MarketingStaffController;
 use App\Http\Controllers\Admin\MedicineCategoryController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\PrescriptionQuotationController;
+use App\Http\Controllers\Admin\PrescriptionRequestController;
 use App\Http\Controllers\Admin\ProcedureController;
 use App\Http\Controllers\Admin\SpecializationController;
 use App\Http\Controllers\Admin\AmbulanceBookingController;
@@ -724,6 +726,119 @@ Route::group(['middleware' => 'admin'], function () {
                 );
 
         });
+    Route::name('admin.')
+        ->group(function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Prescription Requests
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/prescription-requests',
+                [PrescriptionRequestController::class, 'index']
+            )->name('prescription-requests.index');
+
+            Route::get(
+                '/prescription-requests/{id}',
+                [PrescriptionRequestController::class, 'show']
+            )->name('prescription-requests.show');
+
+            Route::post(
+                '/prescription-requests/{id}/review',
+                [PrescriptionRequestController::class, 'review']
+            )->name('prescription-requests.review');
+
+            Route::post(
+                '/prescription-requests/{id}/reject',
+                [PrescriptionRequestController::class, 'reject']
+            )->name('prescription-requests.reject');
+
+            Route::post(
+                '/prescription-requests/{id}/cancel',
+                [PrescriptionRequestController::class, 'cancel']
+            )->name('prescription-requests.cancel');
+
+            Route::delete(
+                '/prescription-requests/{id}',
+                [PrescriptionRequestController::class, 'destroy']
+            )->name('prescription-requests.destroy');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create Prescription Quotation
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/prescription-requests/{requestId}/quotation/create',
+                [PrescriptionQuotationController::class, 'create']
+            )->name('prescription-requests.quotation.create');
+
+            Route::post(
+                '/prescription-requests/{requestId}/quotation',
+                [PrescriptionQuotationController::class, 'store']
+            )->name('prescription-requests.quotation.store');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Prescription Quotations
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/prescription-quotations/{id}',
+                [PrescriptionQuotationController::class, 'show']
+            )->name('prescription-quotations.show');
+
+            Route::get(
+                '/prescription-quotations/{id}/edit',
+                [PrescriptionQuotationController::class, 'edit']
+            )->name('prescription-quotations.edit');
+
+            Route::put(
+                '/prescription-quotations/{id}',
+                [PrescriptionQuotationController::class, 'update']
+            )->name('prescription-quotations.update');
+
+            Route::post(
+                '/prescription-quotations/{id}/send',
+                [PrescriptionQuotationController::class, 'send']
+            )->name('prescription-quotations.send');
+
+            Route::post(
+                '/prescription-quotations/{id}/reject',
+                [PrescriptionQuotationController::class, 'reject']
+            )->name('prescription-quotations.reject');
+
+            Route::delete(
+                '/prescription-quotations/{id}',
+                [PrescriptionQuotationController::class, 'destroy']
+            )->name('prescription-quotations.destroy');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Search
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/prescription-quotations/search/medicines',
+                [PrescriptionQuotationController::class, 'searchMedicines']
+            )->name('prescription-quotations.search.medicines');
+
+            Route::get(
+                '/prescription-quotations/search/lab-tests',
+                [PrescriptionQuotationController::class, 'searchLabTests']
+            )->name('prescription-quotations.search.lab-tests');
+
+        });
+
+
 
 });
 

@@ -21,6 +21,7 @@ use App\Http\Controllers\CustomerApp\LocationController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
+use App\Http\Controllers\CustomerApp\PrescriptionRequestController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use App\Http\Controllers\CustomerApp\SurgeryController;
@@ -294,7 +295,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     Route::post('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'store']);
     Route::post('/surgery-quotation-bookings/verify-payment', [SurgeryQuotationBookingController::class, 'verifyPayment']);
-    Route::get('/surgery-quotation-bookings',[SurgeryQuotationBookingController::class, 'bookings']);
+    Route::get('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'bookings']);
+
+    Route::post('/prescription-requests', [PrescriptionRequestController::class, 'store'])->name('customer.prescription-requests.store');
 
 });
 Route::any('/states', [LocationController::class, 'states']);

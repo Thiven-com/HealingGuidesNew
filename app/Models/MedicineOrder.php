@@ -43,6 +43,8 @@ class MedicineOrder extends Model
         'rejected_at',
         'cancelled_at',
         'delivered_at',
+        'prescription_request_id',
+        'prescription_quotation_id',
     ];
 
     protected $casts = [
@@ -87,6 +89,21 @@ class MedicineOrder extends Model
         return $this->hasMany(
             MedicineOrderItem::class,
             'medicine_order_id'
+        );
+    }
+    public function prescriptionRequest()
+    {
+        return $this->belongsTo(
+            PrescriptionRequest::class,
+            'prescription_request_id'
+        );
+    }
+
+    public function prescriptionQuotation()
+    {
+        return $this->belongsTo(
+            PrescriptionQuotation::class,
+            'prescription_quotation_id'
         );
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Diagnostic;
+use App\Models\DiagnosticLabTest;
 use App\Models\HospitalEmergencyConnect;
 use App\Models\TieupsList;
 use Illuminate\Http\Request;
@@ -52,7 +53,18 @@ class HospitalCollection extends ResourceCollection
                     ];
                 })->values(),
                 'facilities' => new HospitalFacilityCollection($hospital->facilities),
-                'diagnostics' => new DiagnosticCollection(Diagnostic::where('hospital_id',$hospital->id)->get()),
+                // 'diagnostics' => new DiagnosticCollection(Diagnostic::where('hospital_id', $hospital->id)->get()),
+                'lab_tests' => new DiagnosticLabTestsCollection(
+                    DiagnosticLabTest::with('labTest')
+                        ->whereHas('diagnostic', function ($query) use ($hospital) {
+                            $query->where('hospital_id', $hospital->id);
+                        })
+                        ->get()
+                        ->unique('lab_test_id')
+                        ->values()
+                ),
+
+
                 'tieups' => $hospital->hospitalTieups
                     ->map(function ($item) use ($hospital) {
                         if (!$item->tieup) {
@@ -92,7 +104,7 @@ class HospitalCollection extends ResourceCollection
                                 ->values(),
                         ];
                     })->values(),
-                    
+
 
                 /*
             |--------------------------------------------------------------------------

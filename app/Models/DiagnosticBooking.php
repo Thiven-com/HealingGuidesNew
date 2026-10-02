@@ -21,6 +21,8 @@ class DiagnosticBooking extends Model
         'booking_date',
 
         'booking_time',
+        'prescription_request_id',
+        'prescription_quotation_id',
 
         'subtotal',
 
@@ -157,5 +159,21 @@ class DiagnosticBooking extends Model
     public function getDiagnosticNameAttribute()
     {
         return $this->diagnostic?->name;
+    }
+
+    public function prescriptionRequest()
+    {
+        return $this->belongsTo(
+            PrescriptionRequest::class,
+            'prescription_request_id'
+        );
+    }
+
+    public function prescriptionQuotation()
+    {
+        return $this->belongsTo(
+            PrescriptionQuotation::class,
+            'prescription_quotation_id'
+        );
     }
 }
