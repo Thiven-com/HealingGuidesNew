@@ -88,4 +88,9 @@ class Hospital extends Authenticatable
     {
         return $this->hasMany(Diagnostic::class, 'hospital_id');
     }
+
+    public function tieupsList()
+    {
+        return $this->hasMany(TieupsList::class, 'hospital_id');
+    }
 }

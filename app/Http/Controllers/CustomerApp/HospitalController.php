@@ -33,8 +33,22 @@ class HospitalController extends Controller
         ])->where('status', 1);
 
         if ($request->filled('search')) {
-            $query->where('hospital_name', 'like', '%' . $request->search . '%');
+            $hospitalSearch = $request->search;
+
+            $query->where('hospital_name', 'like', '%' . $hospitalSearch . '%');
         }
+
+        if ($request->filled('insurance_search')) {
+            $insuranceSearch = $request->insurance_search;
+
+            $query->whereIn('id', function ($subQuery) use ($insuranceSearch) {
+                $subQuery->select('hospital_id')
+                    ->from('tieups_lists')
+                    ->where('title', 'like', '%' . $insuranceSearch . '%');
+            });
+        }
+
+
 
         if ($request->filled('city')) {
             $query->where('city', $request->city);

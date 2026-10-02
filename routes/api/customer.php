@@ -24,6 +24,7 @@ use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
 use App\Http\Controllers\CustomerApp\SurgeryController;
+use App\Http\Controllers\CustomerApp\SurgeryQuotationBookingController;
 use App\Http\Controllers\CustomerApp\SurgeryQuotationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -290,6 +291,10 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         '/surgery-quotations/{id}/reject',
         [SurgeryQuotationController::class, 'rejectQuotation']
     );
+
+    Route::post('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'store']);
+    Route::post('/surgery-quotation-bookings/verify-payment', [SurgeryQuotationBookingController::class, 'verifyPayment']);
+    Route::get('/surgery-quotation-bookings',[SurgeryQuotationBookingController::class, 'bookings']);
 
 });
 Route::any('/states', [LocationController::class, 'states']);

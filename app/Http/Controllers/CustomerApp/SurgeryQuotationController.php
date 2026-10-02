@@ -425,10 +425,10 @@ class SurgeryQuotationController extends Controller
         try {
 
             $quotation =
-                SurgeryQuotation::with('request')
+                SurgeryQuotation::with('quotationRequest')
                     ->where('id', $id)
                     ->whereHas(
-                        'request',
+                        'quotationRequest',
                         function ($query) use ($customer) {
 
                             $query->where(
@@ -533,7 +533,7 @@ class SurgeryQuotationController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            $quotation->request->update([
+            $quotation->quotationRequest->update([
                 'status' =>
                     'completed',
             ]);
@@ -542,8 +542,8 @@ class SurgeryQuotationController extends Controller
 
             $quotation->load([
                 'hospital',
-                'request.surgery',
-                'request.familyMember',
+                'quotationRequest.surgery',
+                'quotationRequest.familyMember',
             ]);
 
             return response()->json([
@@ -581,12 +581,12 @@ class SurgeryQuotationController extends Controller
 
                         'id' =>
                             optional(
-                                $quotation->request->surgery
+                                $quotation->quotationRequest->surgery
                             )->id,
 
                         'name' =>
                             optional(
-                                $quotation->request->surgery
+                                $quotation->quotationRequest->surgery
                             )->name,
 
                     ],
@@ -595,12 +595,12 @@ class SurgeryQuotationController extends Controller
 
                         'id' =>
                             optional(
-                                $quotation->request->familyMember
+                                $quotation->quotationRequest->familyMember
                             )->id,
 
                         'name' =>
                             optional(
-                                $quotation->request->familyMember
+                                $quotation->quotationRequest->familyMember
                             )->name,
 
                     ],

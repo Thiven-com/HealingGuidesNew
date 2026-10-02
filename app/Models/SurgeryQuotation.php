@@ -36,6 +36,9 @@ class SurgeryQuotation extends Model
         'discount' => 'decimal:2',
         'tax' => 'decimal:2',
         'total_amount' => 'decimal:2',
+        'valid_until' => 'datetime',
+        'accepted_at' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     public function quotationRequest()
