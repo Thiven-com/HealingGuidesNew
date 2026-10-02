@@ -94,12 +94,15 @@ class DoctorController extends Controller
 
                     break;
 
-                default:
+                // default:
 
-                    return response()->json([
-                        'success' => 0,
-                        'message' => 'Invalid consultation type. Use consultation, video, chat or home_visit.'
-                    ], 422);
+                //     return response()->json([
+                //         'success' => 0,
+                //         'message' => 'Invalid consultation type. Use consultation, video, chat or home_visit.'
+                //     ], 422);
+                default:
+                    $query->where('consultation_enabled', 1);
+                    break;
             }
         }
 
@@ -147,11 +150,23 @@ class DoctorController extends Controller
             ", [$percentage]);
                     break;
 
+                // default:
+
+                //     return response()->json([
+                //         'success' => 0,
+                //         'message' => 'Invalid consultation type. Use consultation, video, chat or home_visit.'
+                //     ], 422);
+
                 default:
-                    return response()->json([
-                        'success' => 0,
-                        'message' => 'Please provide a valid type when using percentage.'
-                    ], 422);
+
+                    // Default percentage filter = Consultation
+                    $query->whereRaw("
+                actual_fee > 0
+                AND consultation_fee < actual_fee
+                AND ((actual_fee - consultation_fee) / actual_fee) * 100 >= ?
+            ", [$percentage]);
+
+                    break;
             }
         }
 

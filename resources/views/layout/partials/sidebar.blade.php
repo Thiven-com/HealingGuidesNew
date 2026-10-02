@@ -3,12 +3,10 @@
 
     <!-- Logo -->
     <div class="sidebar-logo active">
-        <a href="{{ route('admin.dashboard') }}"
-           class="logo logo-normal d-flex align-items-center"
-           style="width:150px;height:50px;">
-            <img src="{{ asset($site->site_logo) }}"
-                 alt="Logo"
-                 style="max-width:100%;max-height:45px;width:auto;height:auto;object-fit:contain;">
+        <a href="{{ route('admin.dashboard') }}" class="logo logo-normal d-flex align-items-center"
+            style="width:150px;height:50px;">
+            <img src="{{ asset($site->site_logo) }}" alt="Logo"
+                style="max-width:100%;max-height:45px;width:auto;height:auto;object-fit:contain;">
         </a>
 
         <a href="{{ route('admin.dashboard') }}" class="logo logo-white">
@@ -192,12 +190,44 @@
                             </a>
                         </li>
 
-                         <li class="{{ request()->routeIs('admin.family-member-health-checkups.*') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs('admin.family-member-health-checkups.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.family-member-health-checkups.index') }}">
                                 <i class="ti ti-users fs-16 me-2"></i>
                                 <span>Family Health Checkups</span>
                             </a>
                         </li>
+
+                        @php
+    $isCategoryPage = request()->routeIs('admin.home-visit-service-categories.*');
+    $isServicePage = request()->routeIs('admin.home-visit-services.*');
+    $homeVisitOpen = $isCategoryPage || $isServicePage;
+@endphp
+
+<li class="submenu {{ $homeVisitOpen ? 'subdrop' : '' }}">
+
+    <a href="javascript:void(0);">
+        <i class="ti ti-home-heart fs-16 me-2"></i>
+        <span>Home Visit Services</span>
+        <span class="menu-arrow"></span>
+    </a>
+
+    <ul style="{{ $homeVisitOpen ? 'display: block;' : 'display: none;' }}">
+
+        <li class="{{ $isCategoryPage ? 'active' : '' }}">
+            <a href="{{ route('admin.home-visit-service-categories.index') }}">
+                Categories
+            </a>
+        </li>
+
+        <li class="{{ $isServicePage ? 'active' : '' }}">
+            <a href="{{ route('admin.home-visit-services.index') }}">
+                Services
+            </a>
+        </li>
+
+    </ul>
+
+</li>
 
                     </ul>
                 </li>
@@ -265,6 +295,20 @@
                             <a href="{{ route('admin.lab-tests-bookings.index') }}">
                                 <i class="ti ti-calendar-event fs-16 me-2"></i>
                                 <span>Lab Test Bookings</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                 <li class="submenu-open">
+                    <h6 class="submenu-hdr">Surgery Quotation</h6>
+
+                    <ul>
+
+                        <li class="{{ request()->routeIs('admin.surgery-quotation-requests.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.surgery-quotation-requests.index') }}">
+                                <i class="ti ti-receipt fs-16 me-2"></i>
+                                <span>Quotation Requests</span>
                             </a>
                         </li>
 
