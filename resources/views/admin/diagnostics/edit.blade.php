@@ -194,6 +194,44 @@
 
 </div>
 
+<div class="col-lg-6 mb-3">
+
+    <label class="form-label">
+        Diagnostic Category
+        <span class="text-danger">*</span>
+    </label>
+
+    <select name="diagnostic_category_id"
+            id="diagnostic_category_id"
+            class="form-select"
+            required>
+
+        <option value="">Select Diagnostic Category</option>
+
+        @foreach($diagnostic_categories as $diagnosticCategory)
+
+            <option value="{{ $diagnosticCategory->id }}"
+                @selected(
+                    old(
+                        'diagnostic_category_id',
+                        $diagnostic->diagnostic_category_id
+                    ) == $diagnosticCategory->id
+                )>
+
+                {{ $diagnosticCategory->name }}
+
+            </option>
+
+        @endforeach
+
+    </select>
+
+    @error('diagnostic_category_id')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+
+</div>
+
                     </div>
 
                 </div>

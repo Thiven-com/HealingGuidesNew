@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Diagnostic;
+use App\Models\DiagnosticCategory;
 use App\Models\DiagnosticLabTest;
 use App\Models\Hospital;
 use App\Models\LabTest;
@@ -70,6 +71,10 @@ class DiagnosticController extends Controller
 
         $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
         $labTests = LabTest::orderBy('test_name', 'asc')->get();
+        $diagnostic_categories = DiagnosticCategory::orderBy(
+            'name',
+            'asc'
+        )->get();
 
         // No diagnostic exists yet, so there are no selected lab tests
         $diagnosticLabTests = collect();
@@ -81,7 +86,8 @@ class DiagnosticController extends Controller
             'hospitals',
             'labTests',
             'selectedLabTests',
-            'diagnosticLabTests'
+            'diagnosticLabTests',
+            'diagnostic_categories',
         ));
     }
 
@@ -89,6 +95,10 @@ class DiagnosticController extends Controller
     {
         $request->validate([
             'hospital_id' => 'required|exists:hospitals,id',
+            'diagnostic_category_id' => [
+                'required',
+                'exists:diagnostic_categories,id',
+            ],
             'diagnostic_name' => 'required|max:255',
             'registration_number' => 'nullable|max:100',
             'email' => 'nullable|email',
@@ -139,6 +149,8 @@ class DiagnosticController extends Controller
         $diagnostic->hospital_id = $request->hospital_id;
 
         $diagnostic->diagnostic_name = $request->diagnostic_name;
+        $diagnostic->diagnostic_category_id =
+            $request->diagnostic_category_id;
 
         $diagnostic->slug = Str::slug($request->diagnostic_name);
 
@@ -172,6 +184,7 @@ class DiagnosticController extends Controller
         $diagnostic->home_collection = $request->home_collection;
 
         $diagnostic->status = $request->status ?? 1;
+
 
         /*
         |--------------------------------------------------------------------------
@@ -262,37 +275,38 @@ class DiagnosticController extends Controller
     }
 
     public function show($id)
-{
-    $diagnostic = Diagnostic::findOrFail($id);
+    {
+        $diagnostic = Diagnostic::findOrFail($id);
 
-    $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
+        $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
 
-    // Get all records directly from diagnostic_lab_tests
-    // for this diagnostic
-    $diagnosticLabTests = DiagnosticLabTest::where(
-        'diagnostic_id',
-        $diagnostic->id
-    )
-        ->with('labTest')
-        ->orderBy('id', 'desc')
-        ->get();
-
-    // Selected lab test IDs
-    $selectedLabTests = $diagnosticLabTests
-        ->pluck('lab_test_id')
-        ->map(fn ($id) => (int) $id)
-        ->toArray();
-
-    return view(
-        'admin.diagnostics.show',
-        compact(
-            'diagnostic',
-            'hospitals',
-            'diagnosticLabTests',
-            'selectedLabTests'
+        // Get all records directly from diagnostic_lab_tests
+        // for this diagnostic
+        $diagnosticLabTests = DiagnosticLabTest::where(
+            'diagnostic_id',
+            $diagnostic->id
         )
-    );
-}
+            ->with('labTest')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Selected lab test IDs
+        $selectedLabTests = $diagnosticLabTests
+            ->pluck('lab_test_id')
+            ->map(fn($id) => (int) $id)
+            ->toArray();
+
+
+        return view(
+            'admin.diagnostics.show',
+            compact(
+                'diagnostic',
+                'hospitals',
+                'diagnosticLabTests',
+                'selectedLabTests'
+            )
+        );
+    }
 
     public function edit($id)
     {
@@ -301,6 +315,12 @@ class DiagnosticController extends Controller
         $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
 
         $labTests = LabTest::orderBy('test_name', 'asc')->get();
+
+        $diagnostic_categories =
+            DiagnosticCategory::orderBy(
+                'name',
+                'asc'
+            )->get();
 
         $diagnosticLabTests = DiagnosticLabTest::where(
             'diagnostic_id',
@@ -324,7 +344,8 @@ class DiagnosticController extends Controller
             'diagnostic',
             'hospitals',
             'labTests',
-            'selectedLabTests'
+            'selectedLabTests',
+            'diagnostic_categories',
         ));
     }
 
@@ -335,6 +356,10 @@ class DiagnosticController extends Controller
         $request->validate([
             'hospital_id' => 'required|exists:hospitals,id',
             'diagnostic_name' => 'required|max:255',
+            'diagnostic_category_id' => [
+                'required',
+                'exists:diagnostic_categories,id',
+            ],
             'registration_number' => 'nullable|max:100',
             'email' => 'nullable|email',
             'mobile' => 'required|max:15',
@@ -363,6 +388,8 @@ class DiagnosticController extends Controller
         */
 
         $diagnostic->diagnostic_name = $request->diagnostic_name;
+        $diagnostic->diagnostic_category_id =
+            $request->diagnostic_category_id;
         $diagnostic->hospital_id = $request->hospital_id;
         $diagnostic->slug = Str::slug($request->diagnostic_name);
         $diagnostic->registration_number = $request->registration_number;
