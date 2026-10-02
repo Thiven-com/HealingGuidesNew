@@ -82,7 +82,9 @@ class MedicineOrderCollection extends ResourceCollection
 
                     'prescription_id' =>
                         $order->prescription_id,
-
+                    'prescription_file' => $order->prescription_file
+                        ? asset($order->prescription_file)
+                        : null,
                     /*
                     |--------------------------------------------------------------------------
                     | Items

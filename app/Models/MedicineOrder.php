@@ -15,6 +15,7 @@ class MedicineOrder extends Model
         'hospital_id',
 
         'prescription_id',
+        'prescription_file',
 
         'subtotal',
         'delivery_charge',

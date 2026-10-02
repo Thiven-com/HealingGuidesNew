@@ -80,7 +80,12 @@ class MedicineOrderController extends Controller
 
             'notes' =>
                 'nullable|string|max:1000',
-
+            'prescription_file' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,webp,pdf',
+                'max:10240',
+            ],
             /*
             |--------------------------------------------------------------------------
             | Coupon
@@ -648,7 +653,14 @@ class MedicineOrderController extends Controller
             | Create Medicine Order
             |--------------------------------------------------------------------------
             */
+            $prescriptionFile = null;
 
+            if ($request->hasFile('prescription_file')) {
+
+                $prescriptionFile = $request
+                    ->file('prescription_file')
+                    ->store('medicine-orders/prescriptions', 'public');
+            }
             $order = MedicineOrder::create([
 
                 'order_no' =>
@@ -667,6 +679,7 @@ class MedicineOrderController extends Controller
 
                 'prescription_id' =>
                     $request->prescription_id,
+                'prescription_file' => $prescriptionFile,
 
                 'subtotal' =>
                     $subtotal,
