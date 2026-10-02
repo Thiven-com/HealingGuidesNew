@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerPackageController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DiagnosticCategoryController;
 use App\Http\Controllers\Admin\DiagnosticController;
 use App\Http\Controllers\Admin\DiagnosticLabTestController;
 use App\Http\Controllers\Admin\DoctorController;
@@ -888,6 +889,19 @@ Route::group(['middleware' => 'admin'], function () {
                 '/prescription-quotations/search/lab-tests',
                 [PrescriptionQuotationController::class, 'searchLabTests']
             )->name('prescription-quotations.search.lab-tests');
+
+
+            Route::resource(
+                'diagnostic-categories',
+                DiagnosticCategoryController::class
+            );
+
+            Route::post(
+                'diagnostic-categories/{id}/status',
+                [DiagnosticCategoryController::class, 'status']
+            )->name(
+                    'diagnostic-categories.status'
+                );
 
         });
 
