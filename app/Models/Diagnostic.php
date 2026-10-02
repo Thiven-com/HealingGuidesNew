@@ -42,4 +42,12 @@ class Diagnostic extends Model
     {
         return $this->belongsTo(Hospital::class, 'hospital_id');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(
+            DiagnosticCategory::class,
+            'diagnostic_category_id'
+        );
+    }
 }
