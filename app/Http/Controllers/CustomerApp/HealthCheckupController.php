@@ -145,6 +145,16 @@ class HealthCheckupController extends Controller
             );
         }
 
+        if ($request->filled('home_collection') && $request->home_collection == 1) {
+            $query->where('home_collection', 1);
+        }
+
+
+        if ($request->filled('centre_collection') && $request->centre_collection == 1) {
+            $query->where('centre_collection', 1);
+        }
+
+
 
         $packages = $query
             ->orderBy('display_order')
@@ -359,6 +369,9 @@ class HealthCheckupController extends Controller
                     $package->mrp,
                     $package->price
                 ),
+            'home_collection' => (int) $package->home_collection,
+
+            'centre_collection' => (int) $package->centre_collection,
 
             'test_count' =>
                 $package->tests_count ?? 0,
