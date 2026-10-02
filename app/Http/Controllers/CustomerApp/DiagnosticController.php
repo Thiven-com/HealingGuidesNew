@@ -44,6 +44,13 @@ class DiagnosticController extends Controller
             $diagnostics->where('home_collection', $request->home_collection);
         }
 
+        if ($request->filled('diagnostic_category_id')) {
+            $diagnostics->where(
+                'diagnostic_category_id',
+                $request->diagnostic_category_id
+            );
+        }
+
         $diagnostics = $diagnostics->latest()->paginate(20);
 
         if ($diagnostics->isEmpty()) {

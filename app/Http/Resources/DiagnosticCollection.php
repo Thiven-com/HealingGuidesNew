@@ -22,6 +22,10 @@ class DiagnosticCollection extends ResourceCollection
 
                 'diagnostic_code' => $diagnostic->diagnostic_code,
 
+                'diagnostic_category_id' => $diagnostic->diagnostic_category_id,
+
+                'diagnostic_category_name' => $diagnostic->category->name ?? null,
+
                 'slug' => $diagnostic->slug,
 
                 'registration_number' => $diagnostic->registration_number,

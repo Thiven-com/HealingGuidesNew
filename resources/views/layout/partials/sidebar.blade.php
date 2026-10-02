@@ -198,36 +198,36 @@
                         </li>
 
                         @php
-    $isCategoryPage = request()->routeIs('admin.home-visit-service-categories.*');
-    $isServicePage = request()->routeIs('admin.home-visit-services.*');
-    $homeVisitOpen = $isCategoryPage || $isServicePage;
-@endphp
+                            $isCategoryPage = request()->routeIs('admin.home-visit-service-categories.*');
+                            $isServicePage = request()->routeIs('admin.home-visit-services.*');
+                            $homeVisitOpen = $isCategoryPage || $isServicePage;
+                        @endphp
 
-<li class="submenu {{ $homeVisitOpen ? 'subdrop' : '' }}">
+                        <li class="submenu {{ $homeVisitOpen ? 'subdrop' : '' }}">
 
-    <a href="javascript:void(0);">
-        <i class="ti ti-home-heart fs-16 me-2"></i>
-        <span>Home Visit Services</span>
-        <span class="menu-arrow"></span>
-    </a>
+                            <a href="javascript:void(0);">
+                                <i class="ti ti-home-heart fs-16 me-2"></i>
+                                <span>Home Visit Services</span>
+                                <span class="menu-arrow"></span>
+                            </a>
 
-    <ul style="{{ $homeVisitOpen ? 'display: block;' : 'display: none;' }}">
+                            <ul style="{{ $homeVisitOpen ? 'display: block;' : 'display: none;' }}">
 
-        <li class="{{ $isCategoryPage ? 'active' : '' }}">
-            <a href="{{ route('admin.home-visit-service-categories.index') }}">
-                Categories
-            </a>
-        </li>
+                                <li class="{{ $isCategoryPage ? 'active' : '' }}">
+                                    <a href="{{ route('admin.home-visit-service-categories.index') }}">
+                                        Categories
+                                    </a>
+                                </li>
 
-        <li class="{{ $isServicePage ? 'active' : '' }}">
-            <a href="{{ route('admin.home-visit-services.index') }}">
-                Services
-            </a>
-        </li>
+                                <li class="{{ $isServicePage ? 'active' : '' }}">
+                                    <a href="{{ route('admin.home-visit-services.index') }}">
+                                        Services
+                                    </a>
+                                </li>
 
-    </ul>
+                            </ul>
 
-</li>
+                        </li>
 
                     </ul>
                 </li>
@@ -284,6 +284,13 @@
                             </a>
                         </li>
 
+                        <li class="{{ request()->routeIs('admin.diagnostic-categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.diagnostic-categories.index') }}">
+                                <i class="ti ti-list-details fs-16 me-2"></i>
+                                <span>Diagnostic Categories</span>
+                            </a>
+                        </li>
+
                         <li class="{{ request()->routeIs('admin.lab-tests.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.lab-tests.index') }}">
                                 <i class="ti ti-test-pipe fs-16 me-2"></i>
@@ -300,7 +307,7 @@
 
                     </ul>
                 </li>
-                 <li class="submenu-open">
+                <li class="submenu-open">
                     <h6 class="submenu-hdr">Surgery Quotation</h6>
 
                     <ul>

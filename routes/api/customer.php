@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerApp\CareServiceBookingController;
 use App\Http\Controllers\CustomerApp\ChatbotController;
 use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
+use App\Http\Controllers\CustomerApp\DiagnosticCategoryController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
@@ -155,8 +156,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     ]);
 
     Route::post('/care-service-booking/verify-payment', [
-    CareServiceBookingController::class,
-    'verifyPayment'
+        CareServiceBookingController::class,
+        'verifyPayment'
     ]);
 
     //Free Ambulance
@@ -170,6 +171,13 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     //Doctors
     Route::any('doctors', "DoctorController@doctors");
     Route::any('doctor-slots', [DoctorController::class, 'availableSlots']);
+
+
+    //diagnostics category 
+    Route::get('/diagnostic-categories', [
+        DiagnosticCategoryController::class,
+        'index'
+    ]);
 
     //diagnostics
     Route::any('diagnostics', [DiagnosticController::class, 'diagnostics']);
