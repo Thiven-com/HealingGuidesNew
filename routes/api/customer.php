@@ -12,11 +12,13 @@ use App\Http\Controllers\CustomerApp\DiagnosticCategoryController;
 use App\Http\Controllers\CustomerApp\DiagnosticController;
 use App\Http\Controllers\CustomerApp\DoctorAppointmentController;
 use App\Http\Controllers\CustomerApp\DoctorController;
+use App\Http\Controllers\CustomerApp\EmergencyConnectController;
 use App\Http\Controllers\CustomerApp\FamilyMemberHealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupPackageBookingController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
+use App\Http\Controllers\CustomerApp\HomeVisitCategoryController;
 use App\Http\Controllers\CustomerApp\HomeVisitServiceCategoryController;
 use App\Http\Controllers\CustomerApp\HomeVisitServiceController;
 use App\Http\Controllers\CustomerApp\HospitalController;
@@ -72,6 +74,12 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     Route::get('/hospital-types', [HospitalTypeController::class, 'index']);
 
+    //Emergency Connect
+    Route::get(
+        '/emergency-connect',
+        [EmergencyConnectController::class, 'index']
+    )->name('api.emergency-connect.index');
+
     //health checkups
     Route::any('/health-checkups', [HealthCheckupController::class, 'index']);
     // Health Checkup Details + Packages
@@ -112,6 +120,12 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get(
         '/bookAdmissionRequest/list',
         [BookAdmissionController::class, 'index']
+    );
+
+    //Home Visit Category
+    Route::get(
+        '/home-visit-categories',
+        [HomeVisitCategoryController::class, 'index']
     );
 
     //Home Visit Service Category

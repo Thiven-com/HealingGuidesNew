@@ -481,6 +481,69 @@
                                 </div>
 
                             </div>
+                            {{-- ROOM SERVICE PRICES --}}
+                            @if(($facility->facility->slug ?? null) === 'room-services')
+
+                                <div class="facility-price-row">
+
+                                    <div class="facility-price-item">
+                                        <span class="facility-price-label">
+                                            Actual Price
+                                        </span>
+
+                                        <strong class="facility-actual-price">
+                                            ₹{{ number_format((float) ($hospitalFacility->actual_price ?? 0), 2) }}
+                                        </strong>
+                                    </div>
+
+                                    <div class="facility-price-item">
+                                        <span class="facility-price-label">
+                                            Offer Price
+                                        </span>
+
+                                        <strong class="facility-offer-price">
+                                            ₹{{ number_format((float) ($hospitalFacility->offer_price ?? 0), 2) }}
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+                            @endif
+                            <style>
+                                .facility-price-row {
+                                    display: flex;
+                                    gap: 12px;
+                                    margin-top: 12px;
+                                    margin-bottom: 10px;
+                                    flex-wrap: wrap;
+                                }
+
+                                .facility-price-item {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    padding: 7px 12px;
+                                    border-radius: 8px;
+                                    background: #f8f9fa;
+                                    border: 1px solid #e5e7eb;
+                                }
+
+                                .facility-price-label {
+                                    font-size: 12px;
+                                    color: #6b7280;
+                                    font-weight: 500;
+                                }
+
+                                .facility-actual-price {
+                                    font-size: 14px;
+                                    color: #374151;
+                                }
+
+                                .facility-offer-price {
+                                    font-size: 14px;
+                                    color: #198754;
+                                }
+                            </style>
 
 
                             {{-- ACTIONS --}}
@@ -653,6 +716,78 @@
                                                         placeholder="Enter facility description">{{ $hospitalFacility->description }}</textarea>
 
                                                 </div>
+                                                {{-- Room Service Prices --}}
+                                                @if(($facility->facility->slug ?? null) === 'room-services')
+
+                                                    <div class="row">
+
+                                                        {{-- Actual Price --}}
+                                                        <div class="col-md-6">
+
+                                                            <div class="facility-form-group">
+
+                                                                <label class="facility-form-label">
+                                                                    Actual Price
+                                                                    <span>*</span>
+                                                                </label>
+
+                                                                <div class="input-group">
+
+                                                                    <span class="input-group-text">₹</span>
+
+                                                                    <input type="number" name="actual_price"
+                                                                        class="form-control facility-form-control"
+                                                                        value="{{ old('actual_price', $hospitalFacility->actual_price ?? '') }}"
+                                                                        placeholder="Enter actual price" min="0" step="0.01"
+                                                                        required>
+
+                                                                </div>
+
+                                                                @error('actual_price')
+                                                                    <small class="text-danger">
+                                                                        {{ $message }}
+                                                                    </small>
+                                                                @enderror
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        {{-- Offer Price --}}
+                                                        <div class="col-md-6">
+
+                                                            <div class="facility-form-group">
+
+                                                                <label class="facility-form-label">
+                                                                    Offer Price
+                                                                    <span>*</span>
+                                                                </label>
+
+                                                                <div class="input-group">
+
+                                                                    <span class="input-group-text">₹</span>
+
+                                                                    <input type="number" name="offer_price"
+                                                                        class="form-control facility-form-control"
+                                                                        value="{{ old('offer_price', $hospitalFacility->offer_price ?? '') }}"
+                                                                        placeholder="Enter offer price" min="0" step="0.01"
+                                                                        required>
+
+                                                                </div>
+
+                                                                @error('offer_price')
+                                                                    <small class="text-danger">
+                                                                        {{ $message }}
+                                                                    </small>
+                                                                @enderror
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                @endif
 
                                             </div>
 
@@ -1076,6 +1211,76 @@
 
                         </div>
 
+                        {{-- Room Service Prices --}}
+                        {{-- Room Service Prices --}}
+                        @if(($facility->facility->slug ?? null) === 'room-services')
+
+                            <div class="row">
+
+                                {{-- Actual Price --}}
+                                <div class="col-md-6">
+
+                                    <div class="facility-form-group">
+
+                                        <label class="facility-form-label">
+                                            Actual Price
+                                            <span>*</span>
+                                        </label>
+
+                                        <div class="input-group">
+
+                                            <span class="input-group-text">₹</span>
+
+                                            <input type="number" name="actual_price" class="form-control facility-form-control"
+                                                value="{{ old('actual_price') }}" placeholder="Enter actual price" min="0"
+                                                step="0.01" required>
+
+                                        </div>
+
+                                        @error('actual_price')
+                                            <small class="text-danger">
+                                                {{ $message }}
+                                            </small>
+                                        @enderror
+
+                                    </div>
+
+                                </div>
+
+                                {{-- Offer Price --}}
+                                <div class="col-md-6">
+
+                                    <div class="facility-form-group">
+
+                                        <label class="facility-form-label">
+                                            Offer Price
+                                            <span>*</span>
+                                        </label>
+
+                                        <div class="input-group">
+
+                                            <span class="input-group-text">₹</span>
+
+                                            <input type="number" name="offer_price" class="form-control facility-form-control"
+                                                value="{{ old('offer_price') }}" placeholder="Enter offer price" min="0"
+                                                step="0.01" required>
+
+                                        </div>
+
+                                        @error('offer_price')
+                                            <small class="text-danger">
+                                                {{ $message }}
+                                            </small>
+                                        @enderror
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @endif
+
                     </div>
 
                     {{-- Footer --}}
@@ -1103,8 +1308,8 @@
     </div>
     <style>
         /* =========================================================
-                                                   EDIT FACILITY MODAL
-                                                ========================================================= */
+                                                               EDIT FACILITY MODAL
+                                                            ========================================================= */
 
         .facility-edit-modal {
             border: 0;
@@ -1289,8 +1494,8 @@
     </style>
     <style>
         /* =========================================================
-                                                                   HOSPITAL FACILITIES LIST
-                                                                ========================================================= */
+                                                                               HOSPITAL FACILITIES LIST
+                                                                            ========================================================= */
 
         .facility-list-body {
             padding: 18px 25px 25px;
@@ -1298,8 +1503,8 @@
 
 
         /* =========================================================
-                                                                   FACILITY ROW
-                                                                ========================================================= */
+                                                                               FACILITY ROW
+                                                                            ========================================================= */
 
         .facility-list-row {
             display: flex;
@@ -1332,8 +1537,8 @@
 
 
         /* =========================================================
-                                                                   IMAGE
-                                                                ========================================================= */
+                                                                               IMAGE
+                                                                            ========================================================= */
 
         .facility-list-image {
             width: 110px;
@@ -1374,8 +1579,8 @@
 
 
         /* =========================================================
-                                                                   IMAGE PLACEHOLDER
-                                                                ========================================================= */
+                                                                               IMAGE PLACEHOLDER
+                                                                            ========================================================= */
 
         .facility-list-placeholder {
             width: 100%;
@@ -1396,8 +1601,8 @@
 
 
         /* =========================================================
-                                                                   CONTENT
-                                                                ========================================================= */
+                                                                               CONTENT
+                                                                            ========================================================= */
 
         .facility-list-content {
             flex: 1;
@@ -1483,8 +1688,8 @@
 
 
         /* =========================================================
-                                                                   META
-                                                                ========================================================= */
+                                                                               META
+                                                                            ========================================================= */
 
         .facility-list-meta {
             display: flex;
@@ -1516,8 +1721,8 @@
 
 
         /* =========================================================
-                                                                   ACTIONS
-                                                                ========================================================= */
+                                                                               ACTIONS
+                                                                            ========================================================= */
 
         .facility-list-actions {
             display: flex;
@@ -1612,8 +1817,8 @@
 
 
         /* =========================================================
-                                                                   EMPTY
-                                                                ========================================================= */
+                                                                               EMPTY
+                                                                            ========================================================= */
 
         .facility-list-empty {
             text-align: center;
@@ -1662,8 +1867,8 @@
 
 
         /* =========================================================
-                                                                   RESPONSIVE
-                                                                ========================================================= */
+                                                                               RESPONSIVE
+                                                                            ========================================================= */
 
         @media (max-width: 991px) {
 
@@ -1937,8 +2142,8 @@
     </style>
     <style>
         /* =========================================================
-                                                                                                                                                                   HOSPITAL GALLERY
-                                                                                                                                                                ========================================================= */
+                                                                                                                                                                               HOSPITAL GALLERY
+                                                                                                                                                                            ========================================================= */
 
         .hospital-gallery-card {
             margin-top: 22px;
@@ -2241,8 +2446,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                   GALLERY RESPONSIVE
-                                                                                                                                                                ========================================================= */
+                                                                                                                                                                               GALLERY RESPONSIVE
+                                                                                                                                                                            ========================================================= */
 
         @media (max-width: 1199px) {
 
@@ -2286,8 +2491,8 @@
     </style>
     <style>
         /* =========================================================
-                                                                                                                                                                               ADD GALLERY MODAL
-                                                                                                                                                                            ========================================================= */
+                                                                                                                                                                                           ADD GALLERY MODAL
+                                                                                                                                                                                        ========================================================= */
 
         .gallery-modal-content {
             border: 0;
@@ -2765,8 +2970,8 @@
 
     <style>
         /* =========================================================
-                                                                                                                                                                                                       PAGE HEADER
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   PAGE HEADER
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-page-header {
             display: flex;
@@ -2842,8 +3047,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       MAIN FACILITY CARD
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   MAIN FACILITY CARD
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-details-card {
             background: #ffffff;
@@ -2863,8 +3068,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       FACILITY TOP
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   FACILITY TOP
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-top-section {
             display: flex;
@@ -2965,8 +3170,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       FACILITY INFORMATION
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   FACILITY INFORMATION
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-info-grid {
             display: grid;
@@ -3044,8 +3249,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       DESCRIPTION
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   DESCRIPTION
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-description-box {
             display: flex;
@@ -3103,8 +3308,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       HOSPITAL LIST CARD
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   HOSPITAL LIST CARD
+                                                                                                                                                                                                                ========================================================= */
 
         .hospital-list-card {
             background: #ffffff;
@@ -3192,8 +3397,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       HOSPITAL LIST BODY
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   HOSPITAL LIST BODY
+                                                                                                                                                                                                                ========================================================= */
 
         .hospital-list-body {
             padding: 18px 25px 25px;
@@ -3201,8 +3406,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       HOSPITAL ITEM
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   HOSPITAL ITEM
+                                                                                                                                                                                                                ========================================================= */
 
         .hospital-item {
             display: flex;
@@ -3324,8 +3529,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       HOSPITAL META
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   HOSPITAL META
+                                                                                                                                                                                                                ========================================================= */
 
         .hospital-item-meta {
             width: 225px;
@@ -3389,8 +3594,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       EMPTY STATE
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   EMPTY STATE
+                                                                                                                                                                                                                ========================================================= */
 
         .facility-empty-state {
             text-align: center;
@@ -3436,8 +3641,8 @@
 
 
         /* =========================================================
-                                                                                                                                                                                                       RESPONSIVE
-                                                                                                                                                                                                    ========================================================= */
+                                                                                                                                                                                                                   RESPONSIVE
+                                                                                                                                                                                                                ========================================================= */
 
         @media (max-width: 991px) {
 
@@ -3688,234 +3893,234 @@
 
         });
     </script>
-   <script>
-    const facilityGalleryData = @json($facilityGalleryData ?? []);
+    <script>
+        const facilityGalleryData = @json($facilityGalleryData ?? []);
 
-    function showFacilityGallery(facilityId) {
+        function showFacilityGallery(facilityId) {
 
-        const section = document.getElementById('facilityGallerySection');
-        const title = document.getElementById('facilityGalleryTitle');
-        const count = document.getElementById('facilityGalleryCount');
-        const body = document.getElementById('hospitalGalleryBody');
+            const section = document.getElementById('facilityGallerySection');
+            const title = document.getElementById('facilityGalleryTitle');
+            const count = document.getElementById('facilityGalleryCount');
+            const body = document.getElementById('hospitalGalleryBody');
 
-        if (!body) {
-            console.error('hospitalGalleryBody not found');
-            return;
-        }
+            if (!body) {
+                console.error('hospitalGalleryBody not found');
+                return;
+            }
 
-        const selectedFacilityId = String(facilityId);
-        const facility = facilityGalleryData[selectedFacilityId];
+            const selectedFacilityId = String(facilityId);
+            const facility = facilityGalleryData[selectedFacilityId];
 
-        if (!facility) {
+            if (!facility) {
+
+                if (title) {
+                    title.textContent = 'Gallery';
+                }
+
+                if (count) {
+                    count.textContent = '0 Files';
+                }
+
+                body.innerHTML = `
+                            <div class="hospital-gallery-empty">
+                                <div class="hospital-gallery-empty-icon">
+                                    <i class="ti ti-photo-off"></i>
+                                </div>
+
+                                <h5>No Gallery Files</h5>
+
+                                <p>
+                                    No images or videos have been uploaded for this facility yet.
+                                </p>
+                            </div>
+                        `;
+
+                return;
+            }
 
             if (title) {
-                title.textContent = 'Gallery';
+                title.textContent = 'Gallery - ' + facility.title;
             }
+
+            const galleries = Array.isArray(facility.galleries)
+                ? facility.galleries
+                : [];
 
             if (count) {
-                count.textContent = '0 Files';
+                count.textContent =
+                    galleries.length +
+                    (galleries.length === 1 ? ' File' : ' Files');
             }
 
-            body.innerHTML = `
-                <div class="hospital-gallery-empty">
-                    <div class="hospital-gallery-empty-icon">
-                        <i class="ti ti-photo-off"></i>
-                    </div>
+            body.innerHTML = '';
 
-                    <h5>No Gallery Files</h5>
+            if (galleries.length === 0) {
 
-                    <p>
-                        No images or videos have been uploaded for this facility yet.
-                    </p>
-                </div>
-            `;
+                body.innerHTML = `
+                            <div class="hospital-gallery-empty">
+                                <div class="hospital-gallery-empty-icon">
+                                    <i class="ti ti-photo-off"></i>
+                                </div>
 
-            return;
-        }
+                                <h5>No Gallery Files</h5>
 
-        if (title) {
-            title.textContent = 'Gallery - ' + facility.title;
-        }
+                                <p>
+                                    No images or videos have been uploaded for this facility yet.
+                                </p>
+                            </div>
+                        `;
 
-        const galleries = Array.isArray(facility.galleries)
-            ? facility.galleries
-            : [];
-
-        if (count) {
-            count.textContent =
-                galleries.length +
-                (galleries.length === 1 ? ' File' : ' Files');
-        }
-
-        body.innerHTML = '';
-
-        if (galleries.length === 0) {
-
-            body.innerHTML = `
-                <div class="hospital-gallery-empty">
-                    <div class="hospital-gallery-empty-icon">
-                        <i class="ti ti-photo-off"></i>
-                    </div>
-
-                    <h5>No Gallery Files</h5>
-
-                    <p>
-                        No images or videos have been uploaded for this facility yet.
-                    </p>
-                </div>
-            `;
-
-            return;
-        }
-
-        galleries.forEach(function (gallery) {
-
-            const item = document.createElement('div');
-
-            // KEEP EXISTING CLASS
-            item.className = 'hospital-gallery-item';
-
-            let mediaHtml = '';
-
-            // IMAGE
-            if (gallery.file_type === 'image') {
-
-                mediaHtml = `
-                    <div class="hospital-gallery-media">
-
-                        <a
-                            href="${gallery.file_path}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style="display: block; width: 100%; height: 100%;"
-                        >
-
-                            <img
-                                src="${gallery.file_path}"
-                                alt="${facility.title}"
-                                class="gallery-media-image"
-                                onclick="openGalleryPreview('${gallery.file_path}', 'image')"
-                            >
-
-                        </a>
-
-                        <div class="hospital-gallery-type">
-                            <i class="ti ti-photo"></i>
-                            Image
-                        </div>
-
-                    </div>
-                `;
+                return;
             }
 
-            // VIDEO
-            else if (gallery.file_type === 'video') {
+            galleries.forEach(function (gallery) {
 
-                mediaHtml = `
-                    <div class="hospital-gallery-media">
+                const item = document.createElement('div');
 
-                        <a
-                            href="${gallery.file_path}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style="display: block; width: 100%; height: 100%;"
-                        >
+                // KEEP EXISTING CLASS
+                item.className = 'hospital-gallery-item';
 
-                            <video
-                                class="gallery-media-video"
-                                autoplay
-                                muted
-                                loop
-                                playsinline
-                                preload="metadata"
+                let mediaHtml = '';
+
+                // IMAGE
+                if (gallery.file_type === 'image') {
+
+                    mediaHtml = `
+                                <div class="hospital-gallery-media">
+
+                                    <a
+                                        href="${gallery.file_path}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style="display: block; width: 100%; height: 100%;"
+                                    >
+
+                                        <img
+                                            src="${gallery.file_path}"
+                                            alt="${facility.title}"
+                                            class="gallery-media-image"
+                                            onclick="openGalleryPreview('${gallery.file_path}', 'image')"
+                                        >
+
+                                    </a>
+
+                                    <div class="hospital-gallery-type">
+                                        <i class="ti ti-photo"></i>
+                                        Image
+                                    </div>
+
+                                </div>
+                            `;
+                }
+
+                // VIDEO
+                else if (gallery.file_type === 'video') {
+
+                    mediaHtml = `
+                                <div class="hospital-gallery-media">
+
+                                    <a
+                                        href="${gallery.file_path}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style="display: block; width: 100%; height: 100%;"
+                                    >
+
+                                        <video
+                                            class="gallery-media-video"
+                                            autoplay
+                                            muted
+                                            loop
+                                            playsinline
+                                            preload="metadata"
+                                            style="
+                                                width: 100%;
+                                                height: 100%;
+                                                object-fit: cover;
+                                                cursor: pointer;
+                                            "
+                                        >
+                                            <source
+                                                src="${gallery.file_path}"
+                                                type="video/mp4"
+                                            >
+                                        </video>
+
+                                    </a>
+
+                                    <div class="hospital-gallery-type video-type">
+                                        <i class="ti ti-video"></i>
+                                        Video
+                                    </div>
+
+                                </div>
+                            `;
+                }
+
+                // DELETE FORM
+                const deleteHtml = `
+                            <form
+                                action="${gallery.delete_url}"
+                                method="POST"
+                                onsubmit="return confirm('Are you sure you want to remove this gallery file?');"
                                 style="
-                                    width: 100%;
-                                    height: 100%;
-                                    object-fit: cover;
-                                    cursor: pointer;
+                                    position: absolute;
+                                    top: 10px;
+                                    right: 10px;
+                                    z-index: 10;
                                 "
                             >
-                                <source
-                                    src="${gallery.file_path}"
-                                    type="video/mp4"
+
+                                <input
+                                    type="hidden"
+                                    name="_token"
+                                    value="{{ csrf_token() }}"
                                 >
-                            </video>
 
-                        </a>
+                                <input
+                                    type="hidden"
+                                    name="_method"
+                                    value="DELETE"
+                                >
 
-                        <div class="hospital-gallery-type video-type">
-                            <i class="ti ti-video"></i>
-                            Video
-                        </div>
+                                <button
+                                    type="submit"
+                                    title="Remove"
+                                    style="
+                                        width: 32px;
+                                        height: 32px;
+                                        padding: 0;
+                                        border: 0;
+                                        border-radius: 6px;
+                                        background: #dc3545;
+                                        color: #fff;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        cursor: pointer;
+                                    "
+                                >
+                                    <i
+                                        class="ti ti-trash"
+                                        style="font-size: 16px;"
+                                    ></i>
+                                </button>
 
-                    </div>
-                `;
-            }
+                            </form>
+                        `;
 
-            // DELETE FORM
-            const deleteHtml = `
-                <form
-                    action="${gallery.delete_url}"
-                    method="POST"
-                    onsubmit="return confirm('Are you sure you want to remove this gallery file?');"
-                    style="
-                        position: absolute;
-                        top: 10px;
-                        right: 10px;
-                        z-index: 10;
-                    "
-                >
+                item.innerHTML = deleteHtml + mediaHtml;
 
-                    <input
-                        type="hidden"
-                        name="_token"
-                        value="{{ csrf_token() }}"
-                    >
-
-                    <input
-                        type="hidden"
-                        name="_method"
-                        value="DELETE"
-                    >
-
-                    <button
-                        type="submit"
-                        title="Remove"
-                        style="
-                            width: 32px;
-                            height: 32px;
-                            padding: 0;
-                            border: 0;
-                            border-radius: 6px;
-                            background: #dc3545;
-                            color: #fff;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            cursor: pointer;
-                        "
-                    >
-                        <i
-                            class="ti ti-trash"
-                            style="font-size: 16px;"
-                        ></i>
-                    </button>
-
-                </form>
-            `;
-
-            item.innerHTML = deleteHtml + mediaHtml;
-
-            body.appendChild(item);
-        });
-
-        if (section) {
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+                body.appendChild(item);
             });
+
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
-    }
-</script>
+    </script>
 
 @endsection

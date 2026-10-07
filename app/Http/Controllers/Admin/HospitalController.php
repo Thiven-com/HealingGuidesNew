@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmergencyConnect;
 use App\Models\Facility;
 use App\Models\HealthInsuranceProvider;
 use App\Models\Hospital;
@@ -234,8 +235,12 @@ class HospitalController extends Controller
         $hospitalTieups = HospitalTieup::with('tieup')
             ->where('hospital', $hospital->id)
             ->get();
+        $emergencyConnects = EmergencyConnect::where('status', 1)
+            ->orderBy('id', 'asc')
+            ->get();
+            
 
-        return view('admin.hospitals.show', compact('hospital', 'hospitalTieups'));
+        return view('admin.hospitals.show', compact('hospital', 'hospitalTieups', 'emergencyConnects'));
     }
 
 

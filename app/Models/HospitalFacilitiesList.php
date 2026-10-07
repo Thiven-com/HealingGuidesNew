@@ -17,5 +17,7 @@ class HospitalFacilitiesList extends Model
         'description',
         'hospital_id',
         'hospital_facilities_id',
+        'offer_price',
+        'actual_price',
     ];
 }

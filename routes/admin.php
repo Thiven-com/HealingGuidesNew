@@ -39,8 +39,10 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\BookAdmissionController;
 use App\Http\Controllers\Admin\DoctorAppointmentController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
+use App\Http\Controllers\Admin\EmergencyConnectController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\HealthCheckupController;
+use App\Http\Controllers\Admin\HomeVisitCategoryController;
 use App\Http\Controllers\Admin\HomeVisitServiceController;
 use App\Http\Controllers\Admin\HospitalEmergencyConnectController;
 use App\Http\Controllers\Admin\HospitalGalleryController;
@@ -69,6 +71,67 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+
+    Route::get(
+        'emergencyconnect',
+        [EmergencyConnectController::class, 'index']
+    )->name('admin.emergencyconnect.index');
+
+    Route::get(
+        'emergencyconnect/create',
+        [EmergencyConnectController::class, 'create']
+    )->name('admin.emergencyconnect.create');
+
+    Route::post(
+        'emergencyconnect',
+        [EmergencyConnectController::class, 'store']
+    )->name('admin.emergencyconnect.store');
+
+    Route::get(
+        'emergencyconnect/{id}',
+        [EmergencyConnectController::class, 'show']
+    )->name('admin.emergencyconnect.show');
+
+    Route::get(
+        'emergencyconnect/{id}/edit',
+        [EmergencyConnectController::class, 'edit']
+    )->name('admin.emergencyconnect.edit');
+
+    Route::put(
+        'emergencyconnect/{id}',
+        [EmergencyConnectController::class, 'update']
+    )->name('admin.emergencyconnect.update');
+
+    Route::delete(
+        'emergencyconnect/{id}',
+        [EmergencyConnectController::class, 'destroy']
+    )->name('admin.emergencyconnect.destroy');
+
+    Route::post(
+        'emergencyconnect/{id}/toggle-status',
+        [EmergencyConnectController::class, 'toggleStatus']
+    )->name('admin.emergencyconnect.toggle-status');
+
+    Route::get(
+        'home-visit-categories',
+        [HomeVisitCategoryController::class, 'index']
+    )->name('admin.home-visit-categories.index');
+
+    Route::post(
+        'home-visit-categories/store',
+        [HomeVisitCategoryController::class, 'store']
+    )->name('admin.home-visit-categories.store');
+
+    Route::put(
+        'home-visit-categories/update/{id}',
+        [HomeVisitCategoryController::class, 'update']
+    )->name('admin.home-visit-categories.update');
+
+    Route::delete(
+        'home-visit-categories/delete/{id}',
+        [HomeVisitCategoryController::class, 'destroy']
+    )->name('admin.home-visit-categories.destroy');
 
 
     // Home Visit Services

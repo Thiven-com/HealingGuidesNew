@@ -42,6 +42,9 @@ class HospitalFacilitiesListController extends Controller
             // Current HospitalFacility record.
             'hospital_facility_id' => 'nullable|exists:hospital_facilities,id',
             'hospital_id' => 'nullable',
+
+            'actual_price' => 'nullable|numeric|min:0',
+            'offer_price' => 'nullable|numeric|min:0',
         ]);
 
         $hospitalFacilityList = new HospitalFacilitiesList();
@@ -50,6 +53,9 @@ class HospitalFacilitiesListController extends Controller
         $hospitalFacilityList->description = $validated['description'] ?? null;
         $hospitalFacilityList->hospital_id = $validated['hospital_id'] ?? null;
         $hospitalFacilityList->hospital_facilities_id = $validated['hospital_facility_id'] ?? null;
+        // Prices
+        $hospitalFacilityList->actual_price = $validated['actual_price'] ?? null;
+        $hospitalFacilityList->offer_price = $validated['offer_price'] ?? null;
 
 
         /*
@@ -117,10 +123,15 @@ class HospitalFacilitiesListController extends Controller
             'title' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'description' => 'nullable|string',
+            'actual_price' => 'nullable|numeric|min:0',
+            'offer_price' => 'nullable|numeric|min:0',
         ]);
 
         $hospitalFacility->title = $validated['title'];
         $hospitalFacility->description = $validated['description'] ?? null;
+        // Prices
+        $hospitalFacility->actual_price = $validated['actual_price'] ?? null;
+        $hospitalFacility->offer_price = $validated['offer_price'] ?? null;
 
         /*
         |--------------------------------------------------------------------------
