@@ -45,7 +45,7 @@
 
         <form method="POST"
               action="{{ route('admin.coupons.store') }}"
-              id="couponForm">
+              id="couponForm" enctype="multipart/form-data">
 
             @csrf
 
@@ -165,7 +165,23 @@
 
                                 </div>
 
+                                <div class="col-md-12">
+    <label class="form-label">
+        Coupon Banner / Image
+    </label>
+
+    <input type="file"
+           name="image"
+           class="form-control"
+           accept="image/jpeg,image/png,image/webp">
+
+    <small class="text-muted">
+        Recommended size: 1200 × 500 px. JPG, PNG or WebP. Maximum 5 MB.
+    </small>
+</div>
+
                             </div>
+                            
 
                         </div>
 

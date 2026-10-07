@@ -45,7 +45,7 @@
 
         <form method="POST"
               action="{{ route('admin.coupons.update', $coupon->id) }}"
-              id="couponForm">
+              id="couponForm" enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
@@ -149,6 +149,57 @@
                                               placeholder="Enter coupon description">{{ old('description', $coupon->description) }}</textarea>
 
                                 </div>
+                                {{-- Coupon Banner / Image --}}
+<div class="col-md-12">
+
+    <label class="form-label">
+        Coupon Banner / Image
+    </label>
+
+    <input type="file"
+           name="image"
+           id="couponImage"
+           class="form-control"
+           accept="image/jpeg,image/png,image/webp">
+
+    <small class="text-muted">
+        Recommended size: 1200 × 500 px.
+        Allowed formats: JPG, PNG, WebP. Maximum 5 MB.
+    </small>
+
+    {{-- Existing Image --}}
+    @if($coupon->image)
+        <div class="mt-3" id="existingImageWrapper">
+
+            <label class="form-label d-block">
+                Current Image
+            </label>
+
+            <img src="{{ asset($coupon->image) }}"
+                 id="existingCouponImage"
+                 class="img-fluid rounded border"
+                 style="max-height:220px; width:auto; object-fit:cover;"
+                 alt="Coupon Image">
+
+        </div>
+    @endif
+
+    {{-- New Image Preview --}}
+    <div class="mt-3 d-none" id="imagePreviewWrapper">
+
+        <label class="form-label d-block">
+            New Image Preview
+        </label>
+
+        <img src=""
+             id="imagePreview"
+             class="img-fluid rounded border"
+             style="max-height:220px; width:auto; object-fit:cover;"
+             alt="New Coupon Image">
+
+    </div>
+
+</div>
 
                             </div>
 
@@ -1071,6 +1122,74 @@ document.addEventListener('DOMContentLoaded', function () {
     updateDiscountFields();
 
     updatePreview();
+
+    const couponImage = document.getElementById('couponImage');
+const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
+const imagePreview = document.getElementById('imagePreview');
+const existingImageWrapper = document.getElementById('existingImageWrapper');
+
+if (couponImage) {
+
+    couponImage.addEventListener('change', function () {
+
+        const file = this.files[0];
+
+        if (!file) {
+
+            imagePreviewWrapper.classList.add('d-none');
+
+            imagePreview.src = '';
+
+            return;
+        }
+
+        const allowedTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+
+            this.value = '';
+
+            imagePreviewWrapper.classList.add('d-none');
+
+            alert('Please upload JPG, PNG or WebP image.');
+
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+
+            this.value = '';
+
+            imagePreviewWrapper.classList.add('d-none');
+
+            alert('Image size must not exceed 5 MB.');
+
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            imagePreview.src = e.target.result;
+
+            imagePreviewWrapper.classList.remove('d-none');
+
+            /*
+             * Hide old image when new image is selected
+             */
+            if (existingImageWrapper) {
+                existingImageWrapper.classList.add('d-none');
+            }
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
 
 });
 

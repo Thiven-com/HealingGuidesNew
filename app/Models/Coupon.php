@@ -95,6 +95,7 @@ class Coupon extends Model
         */
 
         'status',
+        'image'
     ];
 
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Customer;
 use App\Models\CustomerPackageBenefit;
 use App\Models\Package;
+use App\Models\PackageBenefitUsageHistory;
 use Illuminate\Support\Facades\DB;
 
 class CustomerPackageService
@@ -316,7 +317,7 @@ class CustomerPackageService
         Customer $customer,
         string $benefitType
     ) {
-
+      
         if (!$customer->package_id) {
 
             return [
@@ -339,7 +340,7 @@ class CustomerPackageService
             ];
         }
 
-
+        // dd( $customer->id ." - " .  $customer->package_id ." - " .  $benefitType);
         $benefit =
             CustomerPackageBenefit::where(
                 'customer_id',

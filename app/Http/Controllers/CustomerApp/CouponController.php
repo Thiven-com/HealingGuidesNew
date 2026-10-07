@@ -222,7 +222,9 @@ class CouponController extends Controller
                 }
             }
 
-
+            if ($coupon->image) {
+                $coupon->image = asset($coupon->image);
+            }
             /*
             |--------------------------------------------------------------------------
             | Available
@@ -744,6 +746,237 @@ class CouponController extends Controller
             'success' => 1,
             'message' => 'Coupon usage history fetched successfully.',
             'data' => $usages,
+        ]);
+    }
+
+
+    public function onGoingOffers(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Offers
+        |--------------------------------------------------------------------------
+        */
+
+        $coupons = Coupon::where('status', 1)
+            ->where('coupon_type', 'offer')
+            ->latest()
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Customer Usage Count
+        |--------------------------------------------------------------------------
+        */
+
+        $usageCounts = CouponUsage::where('customer_id', $user->id)
+            ->selectRaw('coupon_id, COUNT(*) as total')
+            ->groupBy('coupon_id')
+            ->pluck('total', 'coupon_id');
+
+        $availableCoupons = [];
+        $usedCoupons = [];
+        $expiredCoupons = [];
+        $upcomingCoupons = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check Previous Appointment Once
+        |--------------------------------------------------------------------------
+        */
+
+        $hasPreviousAppointment = DoctorAppointment::where(
+            'customer_id',
+            $user->id
+        )
+            ->whereNotIn('appointment_status', [
+                'cancelled',
+                'rejected',
+            ])
+            ->exists();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Process Offers
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($coupons as $coupon) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Upcoming
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->starts_at &&
+                now()->lessThan($coupon->starts_at)
+            ) {
+                $coupon->coupon_status = 'upcoming';
+                $coupon->status_label = 'Coming Soon';
+                $coupon->customer_usage_count = 0;
+
+                $upcomingCoupons[] = $coupon;
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Expired
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->expires_at &&
+                now()->greaterThan($coupon->expires_at)
+            ) {
+                $coupon->coupon_status = 'expired';
+                $coupon->status_label = 'Expired';
+
+                $coupon->customer_usage_count =
+                    $usageCounts[$coupon->id] ?? 0;
+
+                $expiredCoupons[] = $coupon;
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Overall Usage Limit
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->usage_limit !== null &&
+                $coupon->used_count >= $coupon->usage_limit
+            ) {
+                $coupon->coupon_status = 'expired';
+                $coupon->status_label = 'Usage Limit Reached';
+
+                $coupon->customer_usage_count =
+                    $usageCounts[$coupon->id] ?? 0;
+
+                $expiredCoupons[] = $coupon;
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Customer Usage
+            |--------------------------------------------------------------------------
+            */
+
+            $usageCount = $usageCounts[$coupon->id] ?? 0;
+
+            $coupon->customer_usage_count = $usageCount;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Customer Usage Limit
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->usage_per_customer !== null &&
+                $usageCount >= $coupon->usage_per_customer
+            ) {
+                $coupon->coupon_status = 'used';
+                $coupon->status_label = 'Used';
+
+                $usedCoupons[] = $coupon;
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | New Customer Only
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->new_customer_only &&
+                $hasPreviousAppointment
+            ) {
+                $coupon->coupon_status = 'not_eligible';
+                $coupon->status_label = 'Not Eligible';
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | First Appointment Only
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                $coupon->first_appointment_only &&
+                $hasPreviousAppointment
+            ) {
+                $coupon->coupon_status = 'not_eligible';
+                $coupon->status_label = 'Not Eligible';
+
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Image URL
+            |--------------------------------------------------------------------------
+            */
+
+            if ($coupon->image) {
+                $coupon->image = asset($coupon->image);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Available
+            |--------------------------------------------------------------------------
+            */
+
+            $coupon->coupon_status = 'available';
+            $coupon->status_label = 'Available';
+
+            $availableCoupons[] = $coupon;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Ongoing offers fetched successfully.',
+            'data' => [
+                'available' => $availableCoupons,
+                'upcoming' => $upcomingCoupons,
+                'used' => $usedCoupons,
+                'expired' => $expiredCoupons,
+
+                'counts' => [
+                    'available' => count($availableCoupons),
+                    'upcoming' => count($upcomingCoupons),
+                    'used' => count($usedCoupons),
+                    'expired' => count($expiredCoupons),
+                ],
+            ],
         ]);
     }
 }

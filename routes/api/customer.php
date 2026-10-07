@@ -22,6 +22,7 @@ use App\Http\Controllers\CustomerApp\HomeVisitServiceController;
 use App\Http\Controllers\CustomerApp\HospitalController;
 use App\Http\Controllers\CustomerApp\HospitalTypeController;
 use App\Http\Controllers\CustomerApp\LocationController;
+use App\Http\Controllers\CustomerApp\MedicalFinanceController;
 use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
@@ -263,6 +264,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     //Coupons
     Route::get('/coupons', [CouponController::class, 'myCoupons']);
+    Route::any('/onGoingOffers', [CouponController::class, 'onGoingOffers']);
 
     Route::post('/coupons/validate', [CouponController::class, 'validate']);
 
@@ -355,6 +357,39 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'bookings']);
 
     Route::post('/prescription-requests', [PrescriptionRequestController::class, 'store'])->name('customer.prescription-requests.store');
+    Route::prefix('medical-finance')
+        ->group(function () {
+
+            Route::any('/providers', [
+                MedicalFinanceController::class,
+                'providers'
+            ]);
+
+            Route::get('/providers/{id}', [
+                MedicalFinanceController::class,
+                'providerDetails'
+            ]);
+
+            Route::post('/request', [
+                MedicalFinanceController::class,
+                'store'
+            ]);
+
+            Route::any('/requests', [
+                MedicalFinanceController::class,
+                'index'
+            ]);
+
+            Route::get('/requests/{id}', [
+                MedicalFinanceController::class,
+                'show'
+            ]);
+
+            Route::post('/requests/{id}/cancel', [
+                MedicalFinanceController::class,
+                'cancel'
+            ]);
+        });
 
 });
 Route::any('/states', [LocationController::class, 'states']);

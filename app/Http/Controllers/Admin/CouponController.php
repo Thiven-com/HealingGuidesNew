@@ -127,7 +127,7 @@ class CouponController extends Controller
 
             'applicable_to' => [
                 'required',
-                'in:all,appointment,medicine',
+                'in:all,appointment,medicine,diagnostic,lab_test'
             ],
 
             'usage_limit' => [
@@ -172,6 +172,12 @@ class CouponController extends Controller
                 'nullable',
                 'boolean',
             ],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120',
+            ],
         ]);
 
 
@@ -208,7 +214,12 @@ class CouponController extends Controller
 
         }
 
+        $imagePath = null;
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')
+                ->store('coupons', 'public');
+        }
         /*
         |--------------------------------------------------------------------------
         | Create Coupon
@@ -226,7 +237,7 @@ class CouponController extends Controller
             'code' => $code,
 
             'title' => $validated['title'],
-
+            'image' => $imagePath,
             'description' =>
                 $validated['description'] ?? null,
 
@@ -435,6 +446,12 @@ class CouponController extends Controller
                 'nullable',
                 'boolean',
             ],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120',
+            ],
         ]);
 
 
@@ -453,6 +470,13 @@ class CouponController extends Controller
             $validated['applicable_to'] =
                 'appointment';
         }
+        $imagePath = $coupon->image;
+
+        if ($request->hasFile('image')) {
+
+            $imagePath = $request->file('image')
+                ->store('coupons', 'public');
+        }
 
 
         $coupon->update([
@@ -463,6 +487,7 @@ class CouponController extends Controller
 
             'title' =>
                 $validated['title'],
+            'image' => $imagePath,
 
             'description' =>
                 $validated['description'] ?? null,

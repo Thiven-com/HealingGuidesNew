@@ -519,7 +519,7 @@
                                                                             @else
 
                                                                                 <span class="badge bg-warning text-dark">
-                                                                                    Pending
+                                                                                    {{$quotation->status}}
                                                                                 </span>
 
                                                                             @endif
