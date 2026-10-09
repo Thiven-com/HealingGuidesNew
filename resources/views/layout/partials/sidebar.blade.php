@@ -196,6 +196,19 @@
                                 <span>Family Health Checkups</span>
                             </a>
                         </li>
+                        <li class="{{ request()->routeIs('admin.emergencyconnect.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.emergencyconnect.index') }}">
+                                <i class="ti ti-phone-call fs-16 me-2"></i>
+                                <span>Emergency Connect</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->routeIs('admin.home-visit-categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.home-visit-categories.index') }}">
+                                <i class="ti ti-stethoscope fs-16 me-2"></i>
+                                <span>Home Visit Categories</span>
+                            </a>
+                        </li>
 
                         @php
                             $isCategoryPage = request()->routeIs('admin.home-visit-service-categories.*');

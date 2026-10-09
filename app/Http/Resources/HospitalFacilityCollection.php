@@ -54,9 +54,16 @@ class HospitalFacilityCollection extends ResourceCollection
                             : null,
 
                         'description' => $item->description,
+                        'actual_price' => $item->actual_price !== null
+                            ? (float) $item->actual_price
+                            : null,
+
+                        'offer_price' => $item->offer_price !== null
+                            ? (float) $item->offer_price
+                            : null,
                         'gallery' => $galleries->map(function ($gallery) {
                             return [
-                                
+
 
                                 'file_type' => $gallery->file_type,
 

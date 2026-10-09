@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HomeVisitCategory;
 use App\Models\HomeVisitServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,45 +18,96 @@ class HomeVisitServiceCategoryController extends Controller
     {
         $categories = HomeVisitServiceCategory::latest()->paginate(20);
 
-        return view('admin.home_visit_service_categories.index', compact('categories'));
+        $homeVisitCategories = HomeVisitCategory::orderBy('name')
+            ->get();
+
+        return view('admin.home_visit_service_categories.index', compact('categories', 'homeVisitCategories'));
     }
 
     /**
      * Store a new Home Visit Service Category.
      */
-    public function store(Request $request)
+  public function store(Request $request)
     {
         $request->validate([
+            'home_visit_category_id' => [
+                'required',
+                'exists:home_visit_categories,id',
+            ],
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:home_visit_service_categories,slug',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'category_type' => [
-                'required',
-                'in:care_service,physio,sleep_test',
-            ],
         ]);
 
-        $category = new HomeVisitServiceCategory();
+        /*
+        |--------------------------------------------------------------------------
+        | Get Parent Home Visit Category
+        |--------------------------------------------------------------------------
+        */
+        $homeVisitCategory = HomeVisitCategory::findOrFail(
+            $request->home_visit_category_id
+        );
 
-        $category->name = $request->name;
-        $category->category_type = $request->category_type;
-
-        $category->slug = $request->filled('slug')
+        /*
+        |--------------------------------------------------------------------------
+        | Generate Service Category Slug
+        |--------------------------------------------------------------------------
+        */
+        $slug = $request->filled('slug')
             ? Str::slug($request->slug)
             : Str::slug($request->name);
 
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (
+            HomeVisitServiceCategory::where('slug', $slug)->exists()
+        ) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Category Type
+        |--------------------------------------------------------------------------
+        | Automatically store home_visit_categories.slug
+        */
+        $categoryType = $homeVisitCategory->slug;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Image
+        |--------------------------------------------------------------------------
+        */
+        $imagePath = null;
+
         if ($request->hasFile('image')) {
-            $category->image = $request->file('image')->store(
+            $imagePath = $request->file('image')->store(
                 'home_visit_service_categories',
                 'public'
             );
         }
 
-        $category->save();
+        /*
+        |--------------------------------------------------------------------------
+        | Create Service Category
+        |--------------------------------------------------------------------------
+        */
+        HomeVisitServiceCategory::create([
+            'home_visit_category_id' => $homeVisitCategory->id,
+            'name' => $request->name,
+            'slug' => $slug,
+            'category_type' => $categoryType,
+            'image' => $imagePath,
+        ]);
 
         return redirect()
             ->route('admin.home-visit-service-categories.index')
-            ->with('success', 'Home Visit Service Category added successfully.');
+            ->with(
+                'success',
+                'Home Visit Service Category added successfully.'
+            );
     }
 
     /**
@@ -74,45 +126,100 @@ class HomeVisitServiceCategoryController extends Controller
     /**
      * Update Home Visit Service Category.
      */
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
     {
         $category = HomeVisitServiceCategory::findOrFail($id);
 
         $request->validate([
+            'home_visit_category_id' => [
+                'required',
+                'exists:home_visit_categories,id',
+            ],
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:home_visit_service_categories,slug,' . $category->id,
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'category_type' => [
-                'required',
-                'in:care_service,physio,sleep_test',
-            ],
         ]);
 
-        $category->name = $request->name;
-        $category->category_type = $request->category_type;
-        $category->slug = $request->filled('slug')
+        /*
+        |--------------------------------------------------------------------------
+        | Get Parent Home Visit Category
+        |--------------------------------------------------------------------------
+        */
+        $homeVisitCategory = HomeVisitCategory::findOrFail(
+            $request->home_visit_category_id
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate Slug
+        |--------------------------------------------------------------------------
+        */
+        $slug = $request->filled('slug')
             ? Str::slug($request->slug)
             : Str::slug($request->name);
 
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (
+            HomeVisitServiceCategory::where('slug', $slug)
+                ->where('id', '!=', $category->id)
+                ->exists()
+        ) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Automatically get category_type from parent category
+        |--------------------------------------------------------------------------
+        */
+        $categoryType = $homeVisitCategory->slug;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Image
+        |--------------------------------------------------------------------------
+        */
+        $imagePath = $category->image;
+
         if ($request->hasFile('image')) {
 
-            // Delete old image
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
+            if (
+                $category->image &&
+                Storage::disk('public')->exists($category->image)
+            ) {
+                Storage::disk('public')->delete(
+                    $category->image
+                );
             }
 
-            // Upload new image
-            $category->image = $request->file('image')->store(
+            $imagePath = $request->file('image')->store(
                 'home_visit_service_categories',
                 'public'
             );
         }
 
-        $category->save();
+        /*
+        |--------------------------------------------------------------------------
+        | Update
+        |--------------------------------------------------------------------------
+        */
+        $category->update([
+            'home_visit_category_id' => $homeVisitCategory->id,
+            'name' => $request->name,
+            'slug' => $slug,
+            'category_type' => $categoryType,
+            'image' => $imagePath,
+        ]);
 
         return redirect()
             ->route('admin.home-visit-service-categories.index')
-            ->with('success', 'Home Visit Service Category updated successfully.');
+            ->with(
+                'success',
+                'Home Visit Service Category updated successfully.'
+            );
     }
 
     /**

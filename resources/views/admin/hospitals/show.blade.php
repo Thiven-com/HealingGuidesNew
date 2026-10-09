@@ -768,28 +768,48 @@
     {{-- Services --}}
     <div class="card-body px-4 pb-4">
 
-        <div class="emergency-connect-grid">
+    <div class="emergency-connect-grid">
 
-            {{-- Front Office --}}
+        @forelse($emergencyConnects as $emergencyConnect)
+
             <a
                 href="{{ route('admin.emergency-connect.show', [
                     'hospital' => $hospital->id,
-                    'slug' => 'front-office'
+                    'slug' => $emergencyConnect->slug
                 ]) }}"
                 class="emergency-connect-item"
             >
 
-                <div class="emergency-connect-box emergency-purple">
+                <div class="emergency-connect-box emergency-{{ $loop->index % 5 }}">
 
                     <div class="emergency-connect-icon">
 
-                        <i class="ti ti-building"></i>
+                        @if($emergencyConnect->image)
+
+                            <img
+                                src="{{ asset($emergencyConnect->image) }}"
+                                alt="{{ $emergencyConnect->title }}"
+                                style="
+                                    width: 45px;
+                                    height: 45px;
+                                    object-fit: cover;
+                                    border-radius: 8px;
+                                "
+                            >
+
+                        @else
+
+                            <i class="ti ti-phone-call"></i>
+
+                        @endif
 
                     </div>
 
+
                     <h5>
-                        Front Office
+                        {{ $emergencyConnect->title }}
                     </h5>
+
 
                     <span class="emergency-connect-arrow">
                         <i class="ti ti-arrow-up-right"></i>
@@ -799,99 +819,25 @@
 
             </a>
 
+        @empty
 
-            {{-- Diagnostics --}}
-            <a
-                href="{{ route('admin.emergency-connect.show', [
-                    'hospital' => $hospital->id,
-                    'slug' => 'diagnostics'
-                ]) }}"
-                class="emergency-connect-item"
-            >
+            <div class="col-12">
 
-                <div class="emergency-connect-box emergency-green">
+                <div class="alert alert-light text-center mb-0">
 
-                    <div class="emergency-connect-icon">
+                    <i class="ti ti-alert-circle me-2"></i>
 
-                        <i class="ti ti-flask"></i>
-
-                    </div>
-
-                    <h5>
-                        Diagnostics
-                    </h5>
-
-                    <span class="emergency-connect-arrow">
-                        <i class="ti ti-arrow-up-right"></i>
-                    </span>
+                    No Emergency Connect available.
 
                 </div>
 
-            </a>
+            </div>
 
-
-            {{-- Room Service --}}
-            <a
-                href="{{ route('admin.emergency-connect.show', [
-                    'hospital' => $hospital->id,
-                    'slug' => 'room-service'
-                ]) }}"
-                class="emergency-connect-item"
-            >
-
-                <div class="emergency-connect-box emergency-orange">
-
-                    <div class="emergency-connect-icon">
-
-                        <i class="ti ti-bell"></i>
-
-                    </div>
-
-                    <h5>
-                        Room Service
-                    </h5>
-
-                    <span class="emergency-connect-arrow">
-                        <i class="ti ti-arrow-up-right"></i>
-                    </span>
-
-                </div>
-
-            </a>
-
-
-            {{-- Ambulance --}}
-            <a
-                href="{{ route('admin.emergency-connect.show', [
-                    'hospital' => $hospital->id,
-                    'slug' => 'ambulance'
-                ]) }}"
-                class="emergency-connect-item"
-            >
-
-                <div class="emergency-connect-box emergency-pink">
-
-                    <div class="emergency-connect-icon">
-
-                        <i class="ti ti-ambulance"></i>
-
-                    </div>
-
-                    <h5>
-                        Ambulance
-                    </h5>
-
-                    <span class="emergency-connect-arrow">
-                        <i class="ti ti-arrow-up-right"></i>
-                    </span>
-
-                </div>
-
-            </a>
-
-        </div>
+        @endforelse
 
     </div>
+
+</div>
 
 </div>
 <style>

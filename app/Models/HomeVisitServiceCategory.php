@@ -13,8 +13,17 @@ class HomeVisitServiceCategory extends Model
 
     protected $fillable = [
         'name',
+        'home_visit_category_id',
         'slug',
         'image',
         'category_type',
     ];
+
+    public function homeVisitCategory()
+    {
+        return $this->belongsTo(
+            HomeVisitCategory::class,
+            'home_visit_category_id'
+        );
+    }
 }
