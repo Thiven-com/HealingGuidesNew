@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Surgery;
+use App\Models\SurgeryCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -64,9 +65,11 @@ class SurgeryController extends Controller
             ->paginate(20)
             ->withQueryString();
 
+        $categories = SurgeryCategory::orderBy('name', 'asc')->get();
+
         return view(
             'admin.surgeries.index',
-            compact('surgeries')
+            compact('surgeries', 'categories')
         );
     }
 
@@ -76,8 +79,10 @@ class SurgeryController extends Controller
      */
     public function create()
     {
+        $categories = SurgeryCategory::orderBy('name')->get();
         return view(
-            'admin.surgeries.create'
+            'admin.surgeries.create',
+            compact('categories')
         );
     }
 
@@ -94,6 +99,8 @@ class SurgeryController extends Controller
 
             'slug' =>
                 'nullable|string|max:255|unique:surgeries,slug',
+
+            'surgery_categories_id' => 'nullable|exists:surgery_categories,id',
 
             'image' =>
                 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -197,6 +204,9 @@ class SurgeryController extends Controller
             'slug' =>
                 $slug,
 
+            'surgery_categories_id' =>
+                $request->surgery_categories_id,
+
             'image' =>
                 $image,
 
@@ -223,8 +233,8 @@ class SurgeryController extends Controller
 
             'status' =>
                 $request->has('status')
-                    ? 1
-                    : 0,
+                ? 1
+                : 0,
         ]);
 
         return redirect()
@@ -256,10 +266,11 @@ class SurgeryController extends Controller
     public function edit($id)
     {
         $surgery = Surgery::findOrFail($id);
+        $categories = SurgeryCategory::orderBy('name')->get();
 
         return view(
             'admin.surgeries.edit',
-            compact('surgery')
+            compact('surgery', 'categories')
         );
     }
 
@@ -281,6 +292,8 @@ class SurgeryController extends Controller
             'slug' =>
                 'nullable|string|max:255|unique:surgeries,slug,' .
                 $surgery->id,
+
+            'surgery_categories_id' => 'nullable|exists:surgery_categories,id',
 
             'image' =>
                 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -384,6 +397,8 @@ class SurgeryController extends Controller
 
             'slug' =>
                 $slug,
+            'surgery_categories_id' =>
+                $request->surgery_categories_id,
 
             'image' =>
                 $image,
@@ -411,8 +426,8 @@ class SurgeryController extends Controller
 
             'status' =>
                 $request->has('status')
-                    ? 1
-                    : 0,
+                ? 1
+                : 0,
         ]);
 
         return redirect()

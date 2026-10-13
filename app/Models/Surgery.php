@@ -13,6 +13,7 @@ class Surgery extends Model
 
     protected $fillable = [
         'name',
+        'surgery_categories_id',
         'slug',
         'image',
         'short_description',
@@ -32,4 +33,12 @@ class Surgery extends Model
         'display_order' => 'integer',
         'status' => 'boolean',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(
+            SurgeryCategory::class,
+            'surgery_categories_id'
+        );
+    }
 }

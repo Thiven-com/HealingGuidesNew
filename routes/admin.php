@@ -58,6 +58,8 @@ use App\Http\Controllers\Admin\SurgeryQuotationController;
 use App\Http\Controllers\Admin\TieupController;
 use App\Http\Controllers\Admin\TieupsListController;
 use App\Http\Controllers\Admin\HomeVisitServiceCategoryController;
+use App\Http\Controllers\Admin\ProcedureCategoryController;
+use App\Http\Controllers\Admin\SurgeryCategoryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -71,6 +73,16 @@ Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::get('logout', [AuthController::class, 'logout']);
 
 Route::group(['middleware' => 'admin'], function () {
+
+    // Procedure Category
+    Route::resource(
+        'procedure-categories',
+        ProcedureCategoryController::class
+    )->except(['show'])
+        ->names('admin.procedure-categories');
+
+    Route::resource('surgery-categories', SurgeryCategoryController::class)
+        ->except(['show'])->names('admin.surgery-categories');
 
 
     Route::get(
@@ -666,6 +678,8 @@ Route::group(['middleware' => 'admin'], function () {
         ProcedureController::class
     )->names('admin.procedures');
     Route::post('procedures/{id}/status', [CustomerPackageController::class, 'status'])
+        ->name('admin.procedures.status');
+    Route::post('procedures/{id}/status', [ProcedureController::class, 'status'])
         ->name('admin.procedures.status');
 
     Route::prefix('health-checkup-tests')

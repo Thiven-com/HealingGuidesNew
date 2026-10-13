@@ -103,7 +103,7 @@
 
                         {{-- SPECIALIZATION --}}
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
                             <label class="form-label">
 
@@ -148,7 +148,7 @@
 
                         {{-- NAME --}}
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
                             <label class="form-label">
 
@@ -177,6 +177,22 @@
                             @enderror
 
                         </div>
+                        <div class="col-md-4">
+    <label for="specialization_id" class="form-label">
+        Procedure Category <span class="text-danger">*</span>
+    </label>
+
+    <select name="procedure_category_id" class="form-select" required>
+    <option value="">Select Procedure Category</option>
+
+    @foreach($procedureCategories as $category)
+        <option value="{{ $category->id }}"
+            {{ old('procedure_category_id') == $category->id ? 'selected' : '' }}>
+            {{ $category->name }}
+        </option>
+    @endforeach
+</select>
+</div>
 
 
                         {{-- SLUG --}}

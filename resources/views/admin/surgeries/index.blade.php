@@ -10,9 +10,9 @@
             overflow-y: visible !important;
         }
 
-        .table {
-            min-width: 1600px;
-        }
+        /* .table {
+                min-width: 1600px;
+            } */
 
         .surgery-image {
             width: 60px;
@@ -228,6 +228,10 @@
                                     <th>
                                         Surgery
                                     </th>
+
+                                    <th>
+                                        Category
+                                    </th>
                                     <th>
                                         Duration
                                     </th>
@@ -306,6 +310,16 @@
 
                                             </div>
 
+                                        </td>
+                                        {{-- Category --}}
+                                        <td>
+                                            @if ($surgery->surgery_categories_id && $surgery->category)
+                                                <span class="badge bg-info">
+                                                    {{ $surgery->category->name }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
                                         </td>
                                         {{-- Duration --}}
                                         <td>

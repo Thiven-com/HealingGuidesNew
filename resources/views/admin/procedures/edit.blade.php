@@ -131,7 +131,7 @@
 
                             {{-- SPECIALIZATION --}}
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <label class="form-label">
 
@@ -180,7 +180,7 @@
 
                             {{-- NAME --}}
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <label class="form-label">
 
@@ -205,6 +205,27 @@
 
                                 @enderror
 
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="procedure_category_id" class="form-label">
+                                    Procedure Category <span class="text-danger">*</span>
+                                </label>
+
+                                <select name="procedure_category_id" id="procedure_category_id"
+                                    class="form-select @error('procedure_category_id') is-invalid @enderror" required>
+                                    <option value="">Select Procedure Category</option>
+
+                                    @foreach($procedureCategories as $category)
+                                        <option value="{{ $category->id }}" {{ old('procedure_category_id', $procedure->procedure_category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('procedure_category_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
 
@@ -397,10 +418,10 @@
                                                                 <img src="{{ asset(
                                         $procedure->image
                                     ) }}" alt="{{ $procedure->name }}" style="
-                                                                            width:120px;
-                                                                            height:120px;
-                                                                            object-fit:cover;
-                                                                         " class="rounded border">
+                                                                                                            width:120px;
+                                                                                                            height:120px;
+                                                                                                            object-fit:cover;
+                                                                                                         " class="rounded border">
 
                                                             </div>
 
@@ -420,10 +441,10 @@
                                 <div id="imagePreviewWrapper" class="mt-3 d-none">
 
                                     <img id="imagePreview" src="" alt="Preview" style="
-                                            width:120px;
-                                            height:120px;
-                                            object-fit:cover;
-                                         " class="rounded border">
+                                                width:120px;
+                                                height:120px;
+                                                object-fit:cover;
+                                             " class="rounded border">
 
                                 </div>
 
@@ -864,10 +885,10 @@
                 document.getElementById('noBenefits');
 
             let benefitIndex =
-            {{ old('benefits')
+                {{ old('benefits')
         ? count(old('benefits'))
         : $procedure->benefits->count()
-            }};
+                }};
 
 
             /*
@@ -914,103 +935,103 @@
 
                         const html = `
 
-                        <div class="benefit-item border rounded p-3 mb-3">
+                            <div class="benefit-item border rounded p-3 mb-3">
 
-                            <div class="row g-3">
+                                <div class="row g-3">
 
-                                <div class="col-md-4">
+                                    <div class="col-md-4">
 
-                                    <label class="form-label">
+                                        <label class="form-label">
 
-                                        Benefit Title
+                                            Benefit Title
 
-                                        <span class="text-danger">*</span>
+                                            <span class="text-danger">*</span>
 
-                                    </label>
+                                        </label>
 
-                                    <input type="text"
-                                           name="benefits[${benefitIndex}][title]"
-                                           class="form-control"
-                                           placeholder="Enter benefit title"
-                                           required>
+                                        <input type="text"
+                                               name="benefits[${benefitIndex}][title]"
+                                               class="form-control"
+                                               placeholder="Enter benefit title"
+                                               required>
 
-                                </div>
+                                    </div>
 
-                                <div class="col-md-2">
+                                    <div class="col-md-2">
 
-                                    <label class="form-label">
+                                        <label class="form-label">
 
-                                        Display Order
+                                            Display Order
 
-                                    </label>
+                                        </label>
 
-                                    <input type="number"
-                                           name="benefits[${benefitIndex}][display_order]"
-                                           value="${benefitIndex}"
-                                           min="0"
-                                           class="form-control">
+                                        <input type="number"
+                                               name="benefits[${benefitIndex}][display_order]"
+                                               value="${benefitIndex}"
+                                               min="0"
+                                               class="form-control">
 
-                                </div>
-
-
-                                <div class="col-md-2">
-
-                                    <label class="form-label">
-
-                                        Status
-
-                                    </label>
-
-                                    <select name="benefits[${benefitIndex}][status]"
-                                            class="form-select">
-
-                                        <option value="1" selected>
-                                            Active
-                                        </option>
-
-                                        <option value="0">
-                                            Inactive
-                                        </option>
-
-                                    </select>
-
-                                </div>
+                                    </div>
 
 
-                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="col-md-2">
 
-                                    <button type="button"
-                                            class="btn btn-danger removeBenefit w-100">
+                                        <label class="form-label">
 
-                                        <i class="ti ti-trash me-1"></i>
+                                            Status
 
-                                        Remove
+                                        </label>
 
-                                    </button>
+                                        <select name="benefits[${benefitIndex}][status]"
+                                                class="form-select">
 
-                                </div>
+                                            <option value="1" selected>
+                                                Active
+                                            </option>
+
+                                            <option value="0">
+                                                Inactive
+                                            </option>
+
+                                        </select>
+
+                                    </div>
 
 
-                                <div class="col-md-12">
+                                    <div class="col-md-2 d-flex align-items-end">
 
-                                    <label class="form-label">
+                                        <button type="button"
+                                                class="btn btn-danger removeBenefit w-100">
 
-                                        Description
+                                            <i class="ti ti-trash me-1"></i>
 
-                                    </label>
+                                            Remove
 
-                                    <textarea name="benefits[${benefitIndex}][description]"
-                                              rows="2"
-                                              class="form-control"
-                                              placeholder="Enter benefit description"></textarea>
+                                        </button>
+
+                                    </div>
+
+
+                                    <div class="col-md-12">
+
+                                        <label class="form-label">
+
+                                            Description
+
+                                        </label>
+
+                                        <textarea name="benefits[${benefitIndex}][description]"
+                                                  rows="2"
+                                                  class="form-control"
+                                                  placeholder="Enter benefit description"></textarea>
+
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                        </div>
-
-                    `;
+                        `;
 
 
                         benefitsWrapper.insertAdjacentHTML(

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Procedure;
 use App\Models\ProcedureBenefit;
+use App\Models\ProcedureCategory;
 use App\Models\Specialization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -114,10 +115,11 @@ class ProcedureController extends Controller
         $specializations = Specialization::where('status', 1)
             ->orderBy('specialization_name')
             ->get();
+        $procedureCategories = ProcedureCategory::orderBy('name')->get();
 
         return view(
             'admin.procedures.create',
-            compact('specializations')
+            compact('specializations', 'procedureCategories')
         );
     }
 
@@ -134,6 +136,8 @@ class ProcedureController extends Controller
 
             'specialization_id' =>
                 'nullable|exists:specializations,id',
+
+            'procedure_category_id' => 'required|exists:procedure_categories,id',
 
             'name' =>
                 'required|string|max:255',
@@ -263,6 +267,10 @@ class ProcedureController extends Controller
 
                 'specialization_id' =>
                     $validated['specialization_id']
+                    ?? null,
+
+                'procedure_category_id' =>
+                    $validated['procedure_category_id']
                     ?? null,
 
                 'name' =>
@@ -395,12 +403,15 @@ class ProcedureController extends Controller
             ->orderBy('specialization_name')
             ->get();
 
+        $procedureCategories = ProcedureCategory::orderBy('name')->get();
+
 
         return view(
             'admin.procedures.edit',
             compact(
                 'procedure',
-                'specializations'
+                'specializations',
+                'procedureCategories'
             )
         );
     }
@@ -424,6 +435,8 @@ class ProcedureController extends Controller
 
             'specialization_id' =>
                 'nullable|exists:specializations,id',
+
+            'procedure_category_id' => 'required|exists:procedure_categories,id',
 
             'name' =>
                 'required|string|max:255',
@@ -551,6 +564,10 @@ class ProcedureController extends Controller
 
                 'specialization_id' =>
                     $validated['specialization_id']
+                    ?? null,
+
+                'procedure_category_id' =>
+                    $validated['procedure_category_id']
                     ?? null,
 
                 'name' =>
@@ -861,30 +878,32 @@ class ProcedureController extends Controller
 
     public function status($id)
     {
-        $procedure = Procedure::findOrFail($id);
+        try {
+            $procedure = Procedure::findOrFail($id);
 
-        $procedure->update([
-            'status' => !$procedure->status,
-        ]);
+            $procedure->status = $procedure->status ? 0 : 1;
+            $procedure->save();
 
-        if (request()->expectsJson()) {
             return response()->json([
-                'success' => 1,
+                'success' => true,
                 'message' => $procedure->status
                     ? 'Procedure activated successfully.'
                     : 'Procedure deactivated successfully.',
-                'status' => $procedure->status,
+                'status' => (int) $procedure->status,
             ]);
-        }
 
-        return redirect()
-            ->back()
-            ->with(
-                'success',
-                $procedure->status
-                ? 'Procedure activated successfully.'
-                : 'Procedure deactivated successfully.'
-            );
+        } catch (\Throwable $e) {
+
+            \Log::error('Procedure status update failed', [
+                'procedure_id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to update procedure status.',
+            ], 500);
+        }
     }
 
     /*

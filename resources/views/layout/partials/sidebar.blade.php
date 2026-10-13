@@ -105,11 +105,23 @@
                                 <span>Specializations</span>
                             </a>
                         </li>
+                        <li class="{{ request()->routeIs('admin.procedure-categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.procedure-categories.index') }}">
+                                <i class="ti ti-clipboard-list fs-16 me-2"></i>
+                                <span>Procedure Category</span>
+                            </a>
+                        </li>
 
                         <li class="{{ request()->routeIs('admin.procedures.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.procedures.index') }}">
                                 <i class="ti ti-clipboard-list fs-16 me-2"></i>
                                 <span>Procedures</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('admin.surgery-categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.surgery-categories.index') }}">
+                                <i class="ti ti-heart-rate-monitor fs-16 me-2"></i>
+                                <span>Surgery Categories</span>
                             </a>
                         </li>
                         <li class="{{ request()->routeIs('admin.surgeries.*') ? 'active' : '' }}">

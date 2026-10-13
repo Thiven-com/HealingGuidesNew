@@ -325,6 +325,11 @@
                                     Specialization
 
                                 </th>
+                                <th>
+
+                                    Category
+
+                                </th>
 
 
                                 <th>
@@ -490,6 +495,16 @@
                                     @endif
 
                                 </td>
+                                {{-- PROCEDURE CATEGORY --}}
+<td>
+    @if($procedure->category)
+        <span class="badge bg-light-info text-info">
+            {{ $procedure->category->name }}
+        </span>
+    @else
+        <span class="text-muted">—</span>
+    @endif
+</td>
 
 
                                 {{-- PRICE --}}
@@ -817,88 +832,74 @@ document.addEventListener(
         | Status Toggle
         |--------------------------------------------------------------------------
         */
+/*
+|--------------------------------------------------------------------------
+| Procedure Status Toggle
+|--------------------------------------------------------------------------
+*/
 
-        document
-            .querySelectorAll(
-                '.procedure-status-toggle'
-            )
-            .forEach(function (toggle) {
+document
+    .querySelectorAll('.procedure-status-toggle')
+    .forEach(function (toggle) {
 
-                toggle.addEventListener(
-                    'change',
-                    function () {
+        toggle.addEventListener('change', function () {
 
-                        const id =
-                            this.dataset.id;
+            const checkbox = this;
+            const id = checkbox.dataset.id;
+            const previousStatus = !checkbox.checked;
 
-                        const url =
-                            "{{ url('admin/procedures') }}"
-                            + "/"
-                            + id
-                            + "/status";
+            const url = "{{ route('admin.procedures.status', ['id' => '__ID__']) }}"
+                .replace('__ID__', id);
 
+            checkbox.disabled = true;
 
-                        fetch(url, {
+            fetch(url, {
+                method: 'POST',
 
-                            method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
 
-                            headers: {
+                body: JSON.stringify({})
+            })
+            .then(async function (response) {
 
-                                'X-CSRF-TOKEN':
-                                    '{{ csrf_token() }}',
+                const data = await response.json();
 
-                                'Accept':
-                                    'application/json',
+                if (!response.ok || data.success === false) {
+                    throw new Error(
+                        data.message || 'Unable to update procedure status.'
+                    );
+                }
 
-                                'Content-Type':
-                                    'application/json',
+                // Update the toggle using the status returned by Laravel.
+                if (data.status !== undefined) {
+                    checkbox.checked = Number(data.status) === 1;
+                }
 
-                            },
+            })
+            .catch(function (error) {
 
-                            body: JSON.stringify({})
+                console.error('Status update error:', error);
 
-                        })
-                        .then(function (response) {
+                checkbox.checked = previousStatus;
 
-                            if (!response.ok) {
-
-                                throw new Error(
-                                    'Unable to update status.'
-                                );
-
-                            }
-
-                            return response.json()
-                                .catch(function () {
-
-                                    return {};
-
-                                });
-
-                        })
-                        .catch(function (error) {
-
-                            console.error(error);
-
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Restore Toggle
-                            |--------------------------------------------------------------------------
-                            */
-
-                            toggle.checked =
-                                !toggle.checked;
-
-                            alert(
-                                'Unable to update procedure status.'
-                            );
-
-                        });
-
-                    }
+                alert(
+                    error.message || 'Unable to update procedure status.'
                 );
 
+            })
+            .finally(function () {
+
+                checkbox.disabled = false;
+
             });
+
+        });
+
+    });
 
     }
 );

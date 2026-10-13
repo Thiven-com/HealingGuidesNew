@@ -116,6 +116,25 @@
 
                                 </div>
 
+                                <div class="col-md-12">
+    <label class="form-label">Surgery Category</label>
+
+    <select name="surgery_categories_id" class="form-select">
+        <option value="">Select Surgery Category</option>
+
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}"
+                {{ old('surgery_categories_id', $surgery->surgery_categories_id) == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+
+    @error('surgery_categories_id')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+</div>
+
 
                                 {{-- Short Description --}}
                                 <div class="col-md-12">

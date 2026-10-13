@@ -66,6 +66,7 @@ class SurgeryController extends Controller
 
                     'id' =>
                         $surgery->id,
+                    'category' => $surgery->category->name ?? null,
 
                     'name' =>
                         $surgery->name,

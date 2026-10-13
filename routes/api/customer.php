@@ -29,8 +29,10 @@ use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\PrescriptionRequestController;
+use App\Http\Controllers\CustomerApp\ProcedureCategoryController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
+use App\Http\Controllers\CustomerApp\SurgeryCategoryController;
 use App\Http\Controllers\CustomerApp\SurgeryController;
 use App\Http\Controllers\CustomerApp\SurgeryQuotationBookingController;
 use App\Http\Controllers\CustomerApp\SurgeryQuotationController;
@@ -64,6 +66,17 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/family-member/store', [ProfileController::class, 'storeFamilyMember']);
     Route::post('/family-member/update', [ProfileController::class, 'updateFamilyMember']);
     Route::post('/delete-family-member', [ProfileController::class, 'deleteFamilyMember']);
+
+    //procedure-categories
+    Route::get(
+        '/procedure-categories',
+        [ProcedureCategoryController::class, 'index']
+    );
+    //Surgery Category
+    Route::get(
+        '/surgery-categories',
+        [SurgeryCategoryController::class, 'index']
+    );
 
     //hospitals
     Route::any('hospitals', "HospitalController@hospitals");

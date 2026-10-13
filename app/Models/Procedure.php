@@ -10,6 +10,8 @@ class Procedure extends Model
 
         'specialization_id',
 
+        'procedure_category_id',
+
         'name',
 
         'slug',
@@ -112,5 +114,14 @@ class Procedure extends Model
             'procedure_id',
             'doctor_id'
         )->withTimestamps();
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(
+            ProcedureCategory::class,
+            'procedure_category_id',
+            'id'
+        );
     }
 }

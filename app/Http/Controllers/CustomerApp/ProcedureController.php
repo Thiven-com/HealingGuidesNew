@@ -12,6 +12,7 @@ class ProcedureController extends Controller
     public function procedures(Request $request)
     {
         $procedures = Procedure::with([
+            'category',
             'specialization',
             'doctors.hospital',
             'doctors.hospitalSpecialization.specialization',
@@ -30,6 +31,7 @@ class ProcedureController extends Controller
 
                 return [
                     'id' => $procedure->id,
+                    'category' => $procedure->category->name ?? null,
                     'name' => $procedure->name,
                     'slug' => $procedure->slug,
 
