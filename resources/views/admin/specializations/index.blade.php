@@ -39,12 +39,24 @@
                     </li>
                 </ul>
 
-                <div class="page-btn">
+
+                <div class="page-btn d-flex gap-2">
+
+                    {{-- Import Excel Button --}}
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#importSpecializationsModal">
+                        <i class="ti ti-file-import me-1"></i>
+                        Import Excel
+                    </button>
+
+                    {{-- Add Specialization Button --}}
                     <a href="{{ route('admin.specializations.create') }}" class="btn btn-added">
                         <i data-feather="plus-circle" class="me-2"></i>
                         Add Specialization
                     </a>
+
                 </div>
+
             </div>
             <!-- /Page Header -->
 
@@ -412,6 +424,92 @@
             </div>
         </div>
     </div>
+
+
+    {{-- Import Specializations Modal --}}
+    <div class="modal fade" id="importSpecializationsModal" tabindex="-1" aria-labelledby="importSpecializationsLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <form action="{{ route('admin.specializations.import') }}" method="POST" enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importSpecializationsLabel">
+                            Import Specializations
+                        </h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                            <div>
+                                <h6 class="mb-1">Sample Excel Template</h6>
+                                <small class="text-muted">
+                                    Download the template with sample data and embedded images.
+                                </small>
+                            </div>
+
+                            <a href="{{ asset('samples/specializations_import_sample.xlsx') }}"
+                                class="btn btn-outline-success btn-sm flex-shrink-0" download>
+                                <i class="ti ti-download me-1"></i>
+                                Download
+                            </a>
+                        </div>
+                        <div class="alert alert-info">
+                            <strong>Excel columns</strong>
+
+                            <ul class="mb-0 mt-2">
+                                <li>specialization_name</li>
+                                <li>category_name</li>
+                                <li>description</li>
+                                <li>status</li>
+                                <li>icon</li>
+                                <li>image</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Excel File <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+
+                            <small class="text-muted">
+                                Upload an XLSX file with embedded images.
+                                Maximum size: 20 MB.
+                            </small>
+                        </div>
+
+                        <div class="alert alert-warning mb-0">
+                            Insert actual pictures in the Excel icon and image
+                            columns. Do not enter image paths or filenames.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="ti ti-upload me-1"></i>
+                            Import
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 
 @endsection
 

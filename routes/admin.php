@@ -609,12 +609,15 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::post('specializations/status/{id}', [SpecializationController::class, 'status'])->name('admin.specializations.status');
 
+    Route::post('/specializations/import', [SpecializationController::class, 'import'])->name('admin.specializations.import');
+
     Route::resource('diagnostics', DiagnosticController::class)->names('admin.diagnostics');
 
     Route::post('diagnostics/status/{id}', [DiagnosticController::class, 'status'])
         ->name('admin.diagnostics.status');
 
     Route::resource('lab-tests', LabTestController::class)->names('admin.lab-tests');
+    Route::post('/lab-tests/import', [LabTestController::class, 'import'])->name('admin.lab-tests.import');
 
     Route::post('lab-tests/status/{id}', [LabTestController::class, 'status'])->name('admin.lab-tests.status');
 
@@ -705,13 +708,8 @@ Route::group(['middleware' => 'admin'], function () {
         HealthInsuranceProviderController::class
     )->names('admin.health-insurance-providers');
 
-    Route::get(
-        'health-insurance-providers/{id}/toggle-status',
-        [HealthInsuranceProviderController::class, 'toggleStatus']
-    )->name(
-            'admin.health-insurance-providers.toggle-status'
-        );
-
+    Route::get('health-insurance-providers/{id}/toggle-status', [HealthInsuranceProviderController::class, 'toggleStatus'])->name('admin.health-insurance-providers.toggle-status');
+    Route::post('/health-insurance-providers/import', [HealthInsuranceProviderController::class, 'import'])->name('admin.health-insurance-providers.import');
     Route::resource(
         'surgeries',
         SurgeryController::class

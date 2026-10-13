@@ -7,7 +7,7 @@
 
             {{-- Page Header --}}
             <div class="page-header">
-                <div class="row align-items-center">
+                <div class="row align-items-center ">
                     <div class="col">
                         <h4 class="page-title">
                             Health Insurance Providers
@@ -26,12 +26,21 @@
                         </ul>
                     </div>
 
-                    <div class="col-auto">
-                        <a href="{{ route('admin.health-insurance-providers.create') }}" class="btn btn-primary">
-                            <i class="ti ti-plus me-1"></i>
-                            Add Provider
-                        </a>
-                    </div>
+                </div>
+
+                <div class="page-btn d-flex gap-2">
+
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#importProvidersModal">
+                        <i class="ti ti-file-import me-1"></i>
+                        Import Excel
+                    </button>
+
+                    <a href="{{ route('admin.health-insurance-providers.create') }}" class="btn btn-added">
+                        <i data-feather="plus-circle" class="me-2"></i>
+                        Add Provider
+                    </a>
+
                 </div>
             </div>
 
@@ -126,12 +135,12 @@
                                         {{-- Logo --}}
                                         <td>
                                             @if($provider->logo)
-                                                            <img src="{{ asset($provider->logo) }}" alt="{{ $provider->name }}"
-                                                                class="rounded border" style="
-                                                    width: 50px;
-                                                    height: 50px;
-                                                    object-fit: contain;
-                                                ">
+                                                <img src="{{ asset($provider->logo) }}" alt="{{ $provider->name }}"
+                                                    class="rounded border" style="
+                                                                            width: 50px;
+                                                                            height: 50px;
+                                                                            object-fit: contain;
+                                                                        ">
                                             @else
                                                 <div class="avatar avatar-md bg-light">
                                                     <span class="avatar-title">
@@ -273,5 +282,93 @@
 
         </div>
     </div>
+    <div class="modal fade" id="importProvidersModal" tabindex="-1" aria-labelledby="importProvidersLabel"
+        aria-hidden="true">
 
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <form action="{{ route('admin.health-insurance-providers.import') }}" method="POST"
+                    enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importProvidersLabel">
+                            Import Health Insurance Providers
+                        </h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="d-flex justify-content-between align-items-center
+                                    p-3 mb-3 border rounded">
+                            <div>
+                                <h6 class="mb-1">Sample Excel Template</h6>
+                                <small class="text-muted">
+                                    Includes sample data and embedded logos.
+                                </small>
+                            </div>
+
+                            <a href="{{ asset('samples/health_insurance_providers_import_sample.xlsx') }}"
+                                class="btn btn-outline-success btn-sm flex-shrink-0" download>
+                                <i class="ti ti-download me-1"></i>
+                                Download
+                            </a>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>Excel columns</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>name</li>
+                                <li>type</li>
+                                <li>slug</li>
+                                <li>logo</li>
+                                <li>description</li>
+                                <li>website_url</li>
+                                <li>support_email</li>
+                                <li>support_phone</li>
+                                <li>display_order</li>
+                                <li>status</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Excel File <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+
+                            <small class="text-muted">
+                                XLSX format only. Maximum size: 20 MB.
+                            </small>
+                        </div>
+
+                        <div class="alert alert-warning mb-0">
+                            Insert actual embedded pictures in the logo column.
+                            Do not enter image paths or filenames.
+                            Provider names and slugs must be unique.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="ti ti-upload me-1"></i>
+                            Import Providers
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
 @endsection

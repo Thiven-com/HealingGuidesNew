@@ -59,18 +59,20 @@
 
                 </ul>
 
-                <div class="page-btn">
+                <div class="page-btn d-flex gap-2">
+
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#importLabTestsModal">
+                        <i class="ti ti-file-import me-1"></i>
+                        Import Excel
+                    </button>
 
                     <a href="{{ route('admin.lab-tests.create') }}" class="btn btn-added">
-
                         <i data-feather="plus-circle" class="me-2"></i>
-
                         Add Lab Test
-
                     </a>
 
                 </div>
-
             </div>
             <!-- /Page Header -->
 
@@ -266,7 +268,7 @@
                                             @if($labTest->image)
 
                                                 <img src="{{ asset($labTest->image) }}" class="img-thumbnail"
-                                                    style="width:60px;height:60px;object-fit:cover;">
+                                                    style="width:60px;height:60px;object-fit:fill;">
 
                                             @else
 
@@ -549,6 +551,100 @@
         </div>
 
     </div>
+
+    ```blade
+    <div class="modal fade" id="importLabTestsModal" tabindex="-1" aria-labelledby="importLabTestsLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <form action="{{ route('admin.lab-tests.import') }}" method="POST" enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importLabTestsLabel">
+                            Import Lab Tests
+                        </h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="d-flex justify-content-between align-items-center
+                                    mb-3 p-3 border rounded">
+
+                            <div>
+                                <h6 class="mb-1">Sample Excel Template</h6>
+                                <small class="text-muted">
+                                    Includes sample data and embedded images.
+                                </small>
+                            </div>
+
+                            <a href="{{ asset('samples/lab_tests_import_sample.xlsx') }}"
+                                class="btn btn-outline-success btn-sm flex-shrink-0" download>
+                                <i class="ti ti-download me-1"></i>
+                                Download
+                            </a>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>Required Excel headings</strong>
+
+                            <ul class="mb-0 mt-2">
+                                <li>test_name</li>
+                                <li>test_code</li>
+                                <li>slug</li>
+                                <li>image</li>
+                                <li>description</li>
+                                <li>sample_type</li>
+                                <li>preparation</li>
+                                <li>report_time</li>
+                                <li>report_time_type</li>
+                                <li>fasting_required</li>
+                                <li>home_collection</li>
+                                <li>status</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Excel File <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+
+                            <small class="text-muted">
+                                XLSX format only. Maximum size: 20 MB.
+                            </small>
+                        </div>
+
+                        <div class="alert alert-warning mb-0">
+                            Insert actual embedded pictures in the image column.
+                            Use Hours or Days for report_time_type and yes/no or
+                            1/0 for the boolean fields.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="ti ti-upload me-1"></i>
+                            Import Lab Tests
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    ```
 
     <script>
 
