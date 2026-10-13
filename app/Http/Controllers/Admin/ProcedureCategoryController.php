@@ -14,9 +14,26 @@ class ProcedureCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $procedureCategories = ProcedureCategory::latest()->paginate(10);
+        $query = ProcedureCategory::query();
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('slug', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Paginated results
+        $procedureCategories = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view(
             'admin.procedure-categories.index',

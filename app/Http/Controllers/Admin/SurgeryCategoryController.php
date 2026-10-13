@@ -10,11 +10,30 @@ use Illuminate\Support\Str;
 
 class SurgeryCategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = SurgeryCategory::latest()->paginate(10);
+        $query = SurgeryCategory::query();
 
-        return view('admin.surgery-categories.index', compact('categories'));
+        // Search by category name, slug, or description
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'admin.surgery-categories.index',
+            compact('categories')
+        );
     }
 
     public function store(Request $request)

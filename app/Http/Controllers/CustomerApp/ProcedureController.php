@@ -22,6 +22,9 @@ class ProcedureController extends Controller
         if (!empty($request->id)) {
             $procedures = $procedures->where('id', $request->id);
         }
+        if ($request->filled('procedure_category_id')) {
+            $procedures->where('procedure_category_id', $request->procedure_category_id);
+        }
         $procedures = $procedures->get();
 
         return response()->json([
@@ -31,9 +34,13 @@ class ProcedureController extends Controller
 
                 return [
                     'id' => $procedure->id,
-                    'category' => $procedure->category->name ?? null,
+
                     'name' => $procedure->name,
                     'slug' => $procedure->slug,
+                    'category' => [
+                        'id' => $procedure->category->id ?? null,
+                        'name' => $procedure->category->name ?? null,
+                    ],
 
                     'short_description' =>
                         $procedure->short_description,

@@ -41,6 +41,18 @@ class SurgeryController extends Controller
 
             });
         }
+        /*
+    |--------------------------------------------------------------------------
+    | Filter by Surgery Category
+    |--------------------------------------------------------------------------
+    */
+        if ($request->filled('surgery_categories_id')) {
+            $query->where(
+                'surgery_categories_id',
+                $request->surgery_categories_id
+            );
+        }
+
 
         /*
         |--------------------------------------------------------------------------
@@ -66,13 +78,16 @@ class SurgeryController extends Controller
 
                     'id' =>
                         $surgery->id,
-                    'category' => $surgery->category->name ?? null,
 
                     'name' =>
                         $surgery->name,
 
                     'slug' =>
                         $surgery->slug,
+                    'category' => [
+                        'id' => $surgery->category->id ?? null,
+                        'name' => $surgery->category->name ?? null,
+                    ],
 
                     'image' =>
                         $surgery->image
