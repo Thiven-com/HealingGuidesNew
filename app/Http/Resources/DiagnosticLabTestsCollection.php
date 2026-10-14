@@ -20,6 +20,10 @@ class DiagnosticLabTestsCollection extends ResourceCollection
 
                 'test_code' => $item->labTest->test_code,
 
+                'diagnostic_category_id' => $item->diagnostic_category_id,
+
+                'diagnostic_category_name' => $item->category->name ?? null,
+
                 'slug' => $item->labTest->slug,
 
                 'image' => $item->labTest->image

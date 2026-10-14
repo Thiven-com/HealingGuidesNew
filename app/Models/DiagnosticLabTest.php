@@ -34,5 +34,13 @@ class DiagnosticLabTest extends Model
         );
     }
 
-    
+    public function diagnosticCategories()
+    {
+        return $this->belongsToMany(
+            DiagnosticCategory::class,
+            'diagnostic_category_id'
+        )->withTimestamps();
+    }
+
+
 }

@@ -44,7 +44,7 @@ class DiagnosticController extends Controller
             $diagnostics->where('home_collection', $request->home_collection);
         }
 
-        if ($request->filled('diagnostic_category_id')) {
+        if ($request->filled('category_id')) {
             $diagnostics->where(
                 'diagnostic_category_id',
                 $request->category_id
@@ -133,7 +133,7 @@ class DiagnosticController extends Controller
         if ($request->filled('home_collection')) {
             $diagnostics->where('home_collection', $request->home_collection);
         }
-        if ($request->filled('diagnostic_category_id')) {
+        if ($request->filled('category_id')) {
             $diagnostics->where(
                 'diagnostic_category_id',
                 $request->category_id
@@ -186,7 +186,7 @@ class DiagnosticController extends Controller
         if ($request->filled('home_collection')) {
             $labTests->where('home_collection', $request->home_collection);
         }
-        if ($request->filled('diagnostic_category_id')) {
+        if ($request->filled('category_id')) {
             $labTests->where(
                 'diagnostic_category_id',
                 $request->category_id

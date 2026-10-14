@@ -19,6 +19,9 @@ class DiagnosticLabTestCollection extends ResourceCollection
 
                 'diagnostic_name' => $item->diagnostic->diagnostic_name,
 
+                'diagnostic_category_id' => $item->diagnostic_category_id,
+
+                'diagnostic_category_name' => $item->category->name ?? null,
                 'logo' => $item->diagnostic->logo
                     ? asset($item->diagnostic->logo)
                     : null,
