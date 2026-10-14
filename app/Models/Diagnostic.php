@@ -43,11 +43,13 @@ class Diagnostic extends Model
         return $this->belongsTo(Hospital::class, 'hospital_id');
     }
 
-    public function category()
+    public function diagnosticCategories()
     {
-        return $this->belongsTo(
+        return $this->belongsToMany(
             DiagnosticCategory::class,
+            'diagnostic_center_category',
+            'diagnostic_id',
             'diagnostic_category_id'
-        );
+        )->withTimestamps();
     }
 }

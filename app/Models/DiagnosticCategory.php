@@ -70,9 +70,11 @@ class DiagnosticCategory extends Model
 
     public function diagnostics()
     {
-        return $this->hasMany(
+        return $this->belongsToMany(
             Diagnostic::class,
-            'diagnostic_category_id'
-        );
+            'diagnostic_center_category',
+            'diagnostic_category_id',
+            'diagnostic_id'
+        )->withTimestamps();
     }
 }

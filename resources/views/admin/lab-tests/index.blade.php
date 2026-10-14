@@ -237,6 +237,8 @@
 
                                     <th>Test Name</th>
 
+                                    <th>Diagnostic Category</th>
+
                                     <th>Test Code</th>
 
                                     <th>Sample Type</th>
@@ -295,6 +297,16 @@
 
                                             </div>
 
+                                        </td>
+
+                                        <td>
+                                            @if($labTest->diagnosticCategory)
+                                                <span class="badge bg-info text-light">
+                                                    {{ $labTest->diagnosticCategory->name }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">N/A</span>
+                                            @endif
                                         </td>
 
                                         <td>
@@ -573,7 +585,7 @@
                     <div class="modal-body">
 
                         <div class="d-flex justify-content-between align-items-center
-                                    mb-3 p-3 border rounded">
+                                        mb-3 p-3 border rounded">
 
                             <div>
                                 <h6 class="mb-1">Sample Excel Template</h6>

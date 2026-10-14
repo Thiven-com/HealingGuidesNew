@@ -194,7 +194,7 @@
 
 </div>
 
-<div class="col-lg-6 mb-3">
+{{-- <div class="col-lg-6 mb-3">
 
     <label class="form-label">
         Diagnostic Category
@@ -230,7 +230,7 @@
         <span class="text-danger">{{ $message }}</span>
     @enderror
 
-</div>
+</div> --}}
 
                     </div>
 
@@ -238,70 +238,86 @@
 
             </div>
 
-            <!-- Lab Tests -->
-
+       
+<!-- Diagnostic Categories -->
 <div class="card border-0 shadow-sm mt-4">
 
     <div class="card-header">
         <h5 class="mb-0">
-            <i class="ti ti-flask me-2"></i>
-            Lab Tests
+            <i class="ti ti-category me-2"></i>
+            Diagnostic Categories
+            <span class="text-danger">*</span>
         </h5>
     </div>
 
     <div class="card-body">
 
-        <div class="row">
+ @php
+    $selectedCategoryIds = old(
+        'diagnostic_category_ids',
+        isset($diagnostic)
+            ? $diagnostic->diagnosticCategories->pluck('id')->toArray()
+            : []
+    );
+@endphp
 
-            @forelse($labTests as $labTest)
+<div class="row">
+    @foreach ($diagnostic_categories as $diagnostic_category)
+        <div class="col-md-4 col-sm-6 mb-3">
+            <div class="form-check">
+                <input
+                    type="checkbox"
+                    class="form-check-input diagnostic-category-checkbox"
+                    name="diagnostic_category_ids[]"
+                    value="{{ $diagnostic_category->id }}"
+                    id="category_{{ $diagnostic_category->id }}"
+                    @checked(
+                        in_array(
+                            $diagnostic_category->id,
+                            $selectedCategoryIds
+                        )
+                    )
+                >
 
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-
-                    <div class="form-check">
-
-                        <input
-                            type="checkbox"
-                            class="form-check-input"
-                            name="lab_test_ids[]"
-                            value="{{ $labTest->id }}"
-                            id="lab_test_{{ $labTest->id }}"
-
-                            @checked(
-                                in_array(
-                                    (int) $labTest->id,
-                                    array_map(
-                                        'intval',
-                                        old('lab_test_ids', $selectedLabTests ?? [])
-                                    )
-                                )
-                            )
-                        >
-
-                        <label
-                            class="form-check-label fw-medium"
-                            for="lab_test_{{ $labTest->id }}"
-                        >
-                            {{ $labTest->test_name }}
-                        </label>
-
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="col-12">
-                    <div class="alert alert-info mb-0">
-                        No lab tests available.
-                    </div>
-                </div>
-
-            @endforelse
-
+                <label
+                    class="form-check-label"
+                    for="category_{{ $diagnostic_category->id }}"
+                >
+                    {{ $diagnostic_category->name }}
+                </label>
+            </div>
         </div>
+    @endforeach
+</div>
 
     </div>
 
+</div>
+
+            <!-- Lab Tests -->
+
+
+<!-- Lab Tests -->
+<div class="card border-0 shadow-sm mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Lab Tests</h5>
+    </div>
+
+    <div class="card-body">
+        <div id="lab-tests-container" class="row">
+            <div class="col-12 text-muted" id="lab-tests-message">
+                Select a diagnostic category to view its lab tests.
+            </div>
+        </div>
+
+        @error('lab_test_ids')
+            <div class="text-danger mt-2">{{ $message }}</div>
+        @enderror
+
+        @error('lab_test_ids.*')
+            <div class="text-danger mt-2">{{ $message }}</div>
+        @enderror
+    </div>
 </div>
                         <!-- Contact Information -->
 
@@ -917,6 +933,122 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryCheckboxes = document.querySelectorAll(
+        '.diagnostic-category-checkbox'
+    );
+
+    const container = document.getElementById('lab-tests-container');
+
+    // Keep previously selected lab tests checked on the edit page
+    const previouslySelectedLabTests = @json(
+        old('lab_test_ids', $selectedLabTests ?? [])
+    ).map(Number);
+
+    function loadLabTests() {
+        const categoryIds = Array.from(categoryCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        if (categoryIds.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 text-muted">
+                    Select a diagnostic category to view its lab tests.
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="col-12 text-muted">
+                Loading lab tests...
+            </div>
+        `;
+
+        const params = new URLSearchParams();
+
+        categoryIds.forEach(id => {
+            params.append('category_ids[]', id);
+        });
+
+        fetch(
+            `{{ route('admin.diagnostics.category-lab-tests') }}?${params.toString()}`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
+        )
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Unable to load lab tests.');
+            }
+
+            return response.json();
+        })
+        .then(labTests => {
+            container.innerHTML = '';
+
+            if (labTests.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-muted">
+                        No lab tests found for the selected categories.
+                    </div>
+                `;
+                return;
+            }
+
+            labTests.forEach(labTest => {
+                const column = document.createElement('div');
+                column.className =
+                    'col-xl-3 col-lg-4 col-md-6 col-12 mb-3';
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'form-check';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'form-check-input';
+                checkbox.name = 'lab_test_ids[]';
+                checkbox.value = labTest.id;
+                checkbox.id = `lab_test_${labTest.id}`;
+
+                checkbox.checked = previouslySelectedLabTests
+                    .includes(Number(labTest.id));
+
+                const label = document.createElement('label');
+                label.className = 'form-check-label';
+                label.htmlFor = checkbox.id;
+                label.textContent = labTest.test_name;
+
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(label);
+                column.appendChild(wrapper);
+                container.appendChild(column);
+            });
+        })
+        .catch(error => {
+            container.innerHTML = `
+                <div class="col-12 text-danger">
+                    Failed to load lab tests. Please try again.
+                </div>
+            `;
+
+            console.error(error);
+        });
+    }
+
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', loadLabTests);
+    });
+
+    // Load selected categories' lab tests automatically on edit
+    loadLabTests();
+});
 </script>
 
 @endsection

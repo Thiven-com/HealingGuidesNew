@@ -54,15 +54,49 @@ class HospitalCollection extends ResourceCollection
                 })->values(),
                 'facilities' => new HospitalFacilityCollection($hospital->facilities),
                 // 'diagnostics' => new DiagnosticCollection(Diagnostic::where('hospital_id', $hospital->id)->get()),
-                'lab_tests' => new DiagnosticLabTestsCollection(
-                    DiagnosticLabTest::with('labTest')
-                        ->whereHas('diagnostic', function ($query) use ($hospital) {
-                            $query->where('hospital_id', $hospital->id);
-                        })
-                        ->get()
-                        ->unique('lab_test_id')
-                        ->values()
-                ),
+                // 'lab_tests' => new DiagnosticLabTestsCollection(
+                //     DiagnosticLabTest::with('labTest')
+                //         ->whereHas('diagnostic', function ($query) use ($hospital) {
+                //             $query->where('hospital_id', $hospital->id);
+                //         })
+                //         ->get()
+                //         ->unique('lab_test_id')
+                //         ->values()
+                // ),
+                'diagnostics' => (function () use ($hospital) {
+                    $diagnostic = Diagnostic::with('diagnosticCategories')
+                        ->where('hospital_id', $hospital->id)
+                        ->first();
+
+                    if (!$diagnostic) {
+                        return null;
+                    }
+
+                    return [
+                        'id' => $diagnostic->id,
+                        'diagnostic_name' => $diagnostic->diagnostic_name,
+                        'diagnostic_code' => $diagnostic->diagnostic_code,
+
+                        'diagnostic_categories' => $diagnostic->diagnosticCategories
+                            ->map(function ($category) {
+                                return [
+                                    'id' => $category->id,
+                                    'category_name' => $category->name,
+                                    'slug' => $category->slug,
+                                    'image' => $category->image
+                                        ? asset($category->image)
+                                        : null,
+                                    'short_description' => $category->short_description,
+                                    'description' => $category->description,
+                                    'display_order' => $category->display_order,
+                                    'status' => $category->status,
+                                    'created_at' => $category->created_at,
+                                    'updated_at' => $category->updated_at,
+                                ];
+                            })
+                            ->values(),
+                    ];
+                })(),
 
 
                 'tieups' => $hospital->hospitalTieups

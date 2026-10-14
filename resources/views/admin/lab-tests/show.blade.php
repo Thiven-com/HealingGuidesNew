@@ -112,6 +112,12 @@
                                     <p>{{ $labTest->sample_type }}</p>
 
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Diagnostic Category</label>
+                                    <p class="form-control-plaintext">
+                                        {{ $labTest->diagnosticCategory?->name ?? 'N/A' }}
+                                    </p>
+                                </div>
 
                             </div>
 

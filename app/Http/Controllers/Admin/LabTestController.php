@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DiagnosticCategory;
 use App\Models\LabTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -82,7 +83,11 @@ class LabTestController extends Controller
      */
     public function create()
     {
-        return view('admin.lab-tests.create');
+        $diagnosticCategories = DiagnosticCategory::where('status', 1)
+            ->orderBy('display_order')
+            ->orderBy('name')
+            ->get();
+        return view('admin.lab-tests.create', compact('diagnosticCategories'));
     }
     /**
      * Store a newly created resource in storage.
@@ -91,6 +96,7 @@ class LabTestController extends Controller
     {
         $request->validate([
             'test_name' => 'required|string|max:255|unique:lab_tests,test_name',
+            'diagnostic_category_id' => 'required|integer|exists:diagnostic_categories,id',
             'description' => 'nullable|string',
             'sample_type' => 'required|string|max:255',
             'preparation' => 'nullable|string',
@@ -140,6 +146,8 @@ class LabTestController extends Controller
 
             'test_name' => $request->test_name,
 
+            'diagnostic_category_id' => $request->diagnostic_category_id,
+
             'test_code' => $testCode,
 
             'slug' => Str::slug($request->test_name),
@@ -184,7 +192,12 @@ class LabTestController extends Controller
     {
         $labTest = LabTest::findOrFail($id);
 
-        return view('admin.lab-tests.edit', compact('labTest'));
+        $diagnosticCategories = DiagnosticCategory::where('status', 1)
+            ->orderBy('display_order')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.lab-tests.edit', compact('labTest', 'diagnosticCategories'));
     }
 
     /**
@@ -196,6 +209,7 @@ class LabTestController extends Controller
 
         $request->validate([
             'test_name' => 'required|string|max:255|unique:lab_tests,test_name,' . $labTest->id,
+            'diagnostic_category_id' => 'required|integer|exists:diagnostic_categories,id',
             'description' => 'nullable|string',
             'sample_type' => 'required|string|max:255',
             'preparation' => 'nullable|string',
@@ -231,6 +245,8 @@ class LabTestController extends Controller
         $labTest->update([
 
             'test_name' => $request->test_name,
+
+            'diagnostic_category_id' => $request->diagnostic_category_id,
 
             'slug' => Str::slug($request->test_name),
 

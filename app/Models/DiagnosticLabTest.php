@@ -10,6 +10,7 @@ class DiagnosticLabTest extends Model
     protected $table = 'diagnostic_lab_tests';
     protected $fillable = [
         'diagnostic_id',
+        'diagnostic_category_id',
         'lab_test_id',
         'price',
         'offer_price',

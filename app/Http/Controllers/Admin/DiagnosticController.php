@@ -91,14 +91,20 @@ class DiagnosticController extends Controller
         ));
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
             'hospital_id' => 'required|exists:hospitals,id',
-            'diagnostic_category_id' => [
+
+            'diagnostic_category_ids' => ['required', 'array', 'min:1'],
+            'diagnostic_category_ids.*' => [
                 'required',
+                'integer',
+                'distinct',
                 'exists:diagnostic_categories,id',
             ],
+
             'diagnostic_name' => 'required|max:255',
             'registration_number' => 'nullable|max:100',
             'email' => 'nullable|email',
@@ -112,13 +118,17 @@ class DiagnosticController extends Controller
             'opening_time' => 'required',
             'closing_time' => 'required',
             'home_collection' => 'required',
+            'status' => 'nullable|in:0,1',
 
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
 
-            // Lab Tests
             'lab_test_ids' => 'nullable|array',
-            'lab_test_ids.*' => 'exists:lab_tests,id',
+            'lab_test_ids.*' => [
+                'integer',
+                'distinct',
+                'exists:lab_tests,id',
+            ],
         ]);
 
         /*
@@ -127,13 +137,11 @@ class DiagnosticController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $last = Diagnostic::latest()->first();
+        $last = Diagnostic::latest('id')->first();
 
-        if ($last) {
-            $number = (int) substr($last->diagnostic_code, 3) + 1;
-        } else {
-            $number = 1;
-        }
+        $number = $last
+            ? ((int) substr($last->diagnostic_code, 3)) + 1
+            : 1;
 
         /*
         |--------------------------------------------------------------------------
@@ -148,43 +156,26 @@ class DiagnosticController extends Controller
 
         $diagnostic->hospital_id = $request->hospital_id;
 
+        // Do not assign diagnostic_category_id here.
+        // Multiple categories are stored in the pivot table.
+
         $diagnostic->diagnostic_name = $request->diagnostic_name;
-        $diagnostic->diagnostic_category_id =
-            $request->diagnostic_category_id;
-
         $diagnostic->slug = Str::slug($request->diagnostic_name);
-
-        $diagnostic->registration_number =
-            $request->registration_number;
-
+        $diagnostic->registration_number = $request->registration_number;
         $diagnostic->email = $request->email;
-
         $diagnostic->mobile = $request->mobile;
-
         $diagnostic->phone = $request->phone;
-
         $diagnostic->address = $request->address;
-
         $diagnostic->country = $request->country;
-
         $diagnostic->state = $request->state;
-
         $diagnostic->city = $request->city;
-
         $diagnostic->pincode = $request->pincode;
-
         $diagnostic->latitude = $request->latitude;
-
         $diagnostic->longitude = $request->longitude;
-
         $diagnostic->opening_time = $request->opening_time;
-
         $diagnostic->closing_time = $request->closing_time;
-
         $diagnostic->home_collection = $request->home_collection;
-
         $diagnostic->status = $request->status ?? 1;
-
 
         /*
         |--------------------------------------------------------------------------
@@ -193,7 +184,6 @@ class DiagnosticController extends Controller
         */
 
         if ($request->hasFile('logo')) {
-
             $file = $request->file('logo');
 
             $name = time() . '_logo.' .
@@ -204,8 +194,7 @@ class DiagnosticController extends Controller
                 $name
             );
 
-            $diagnostic->logo =
-                'uploads/diagnostics/logo/' . $name;
+            $diagnostic->logo = 'uploads/diagnostics/logo/' . $name;
         }
 
         /*
@@ -215,7 +204,6 @@ class DiagnosticController extends Controller
         */
 
         if ($request->hasFile('banner')) {
-
             $file = $request->file('banner');
 
             $name = time() . '_banner.' .
@@ -226,13 +214,12 @@ class DiagnosticController extends Controller
                 $name
             );
 
-            $diagnostic->banner =
-                'uploads/diagnostics/banner/' . $name;
+            $diagnostic->banner = 'uploads/diagnostics/banner/' . $name;
         }
 
         /*
         |--------------------------------------------------------------------------
-        | Save Diagnostic
+        | Save Diagnostic First
         |--------------------------------------------------------------------------
         */
 
@@ -240,24 +227,53 @@ class DiagnosticController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Store Selected Lab Tests
-        | diagnostic_lab_tests table
+        | Attach Selected Diagnostic Categories
         |--------------------------------------------------------------------------
         */
 
+        $diagnostic->diagnosticCategories()->sync(
+            $request->input('diagnostic_category_ids', [])
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Store Selected Lab Tests
+        |--------------------------------------------------------------------------
+        */
+
+        /*
+ |--------------------------------------------------------------------------
+ | Store Selected Lab Tests with Diagnostic Category ID
+ |--------------------------------------------------------------------------
+ */
+
         $selectedLabTestIds = $request->input('lab_test_ids', []);
+        $selectedCategoryIds = $request->input('diagnostic_category_ids', []);
 
         foreach ($selectedLabTestIds as $labTestId) {
 
+            // Find the category associated with this lab test
+            $labTest = LabTest::find($labTestId);
+
+            if (!$labTest) {
+                continue;
+            }
+
+            $categoryId = $labTest->diagnostic_category_id;
+
+            // Ensure the test belongs to one of the selected categories
+            if (!in_array((int) $categoryId, array_map('intval', $selectedCategoryIds))) {
+                continue;
+            }
+
             DiagnosticLabTest::create([
                 'diagnostic_id' => $diagnostic->id,
+                'diagnostic_category_id' => $categoryId,
                 'lab_test_id' => $labTestId,
-
                 'price' => null,
                 'offer_price' => null,
                 'report_time' => null,
                 'report_time_type' => null,
-
                 'home_collection' => 1,
                 'status' => 1,
             ]);
@@ -273,6 +289,7 @@ class DiagnosticController extends Controller
             ->route('admin.diagnostics.index')
             ->with('success', 'Diagnostic Created Successfully');
     }
+
 
     public function show($id)
     {
@@ -310,7 +327,8 @@ class DiagnosticController extends Controller
 
     public function edit($id)
     {
-        $diagnostic = Diagnostic::findOrFail($id);
+        $diagnostic = Diagnostic::with('diagnosticCategories')
+            ->findOrFail($id);
 
         $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
 
@@ -330,8 +348,9 @@ class DiagnosticController extends Controller
             ->keyBy('lab_test_id');
 
         // Get selected lab test IDs
+        // Get selected lab test IDs
         $selectedLabTests = $diagnosticLabTests
-            ->keys()
+            ->pluck('lab_test_id')
             ->map(fn($id) => (int) $id)
             ->toArray();
 
@@ -356,8 +375,11 @@ class DiagnosticController extends Controller
         $request->validate([
             'hospital_id' => 'required|exists:hospitals,id',
             'diagnostic_name' => 'required|max:255',
-            'diagnostic_category_id' => [
+            'diagnostic_category_ids' => ['required', 'array', 'min:1'],
+            'diagnostic_category_ids.*' => [
                 'required',
+                'integer',
+                'distinct',
                 'exists:diagnostic_categories,id',
             ],
             'registration_number' => 'nullable|max:100',
@@ -388,8 +410,10 @@ class DiagnosticController extends Controller
         */
 
         $diagnostic->diagnostic_name = $request->diagnostic_name;
-        $diagnostic->diagnostic_category_id =
-            $request->diagnostic_category_id;
+        // Update selected diagnostic categories
+        $diagnostic->diagnosticCategories()->sync(
+            $request->input('diagnostic_category_ids', [])
+        );
         $diagnostic->hospital_id = $request->hospital_id;
         $diagnostic->slug = Str::slug($request->diagnostic_name);
         $diagnostic->registration_number = $request->registration_number;
@@ -480,26 +504,35 @@ class DiagnosticController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        /*
+ |--------------------------------------------------------------------------
+ | Update Diagnostic Lab Tests with Category ID
+ |--------------------------------------------------------------------------
+ */
+
         $selectedLabTestIds = $request->input('lab_test_ids', []);
+        $selectedCategoryIds = $request->input('diagnostic_category_ids', []);
 
-        /*
-        | Delete old lab test mappings
-        */
-        DiagnosticLabTest::where(
-            'diagnostic_id',
-            $diagnostic->id
-        )->delete();
+        DiagnosticLabTest::where('diagnostic_id', $diagnostic->id)->delete();
 
-        /*
-        | Insert currently selected lab tests
-        */
         foreach ($selectedLabTestIds as $labTestId) {
+
+            $labTest = LabTest::find($labTestId);
+
+            if (!$labTest) {
+                continue;
+            }
+
+            $categoryId = $labTest->diagnostic_category_id;
+
+            if (!in_array((int) $categoryId, array_map('intval', $selectedCategoryIds))) {
+                continue;
+            }
 
             DiagnosticLabTest::create([
                 'diagnostic_id' => $diagnostic->id,
+                'diagnostic_category_id' => $categoryId,
                 'lab_test_id' => $labTestId,
-
-                // Default values
                 'price' => null,
                 'offer_price' => null,
                 'report_time' => null,
@@ -552,5 +585,27 @@ class DiagnosticController extends Controller
         $diagnostic->save();
 
         return back()->with('success', 'Status Updated Successfully');
+    }
+
+    public function getLabTestsByCategories(Request $request)
+    {
+        $request->validate([
+            'category_ids' => ['required', 'array', 'min:1'],
+            'category_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+                'exists:diagnostic_categories,id',
+            ],
+        ]);
+
+        $categoryIds = $request->input('category_ids', []);
+
+        $labTests = LabTest::query()
+            ->whereIn('diagnostic_category_id', $categoryIds)
+            ->orderBy('test_name')
+            ->get(['id', 'test_name']);
+
+        return response()->json($labTests);
     }
 }

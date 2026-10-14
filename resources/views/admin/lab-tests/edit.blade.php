@@ -143,6 +143,37 @@
 
                         </div>
 
+
+<!-- Diagnostic Category -->
+<div class="col-lg-6 mb-3">
+    <label class="form-label">
+        Diagnostic Category
+        <span class="text-danger">*</span>
+    </label>
+
+    <select
+        name="diagnostic_category_id"
+        id="diagnostic_category_id"
+        class="form-select @error('diagnostic_category_id') is-invalid @enderror"
+        required
+    >
+        <option value="">Select Diagnostic Category</option>
+
+        @foreach ($diagnosticCategories as $category)
+            <option
+                value="{{ $category->id }}"
+                {{ old('diagnostic_category_id', $labTest->diagnostic_category_id) == $category->id ? 'selected' : '' }}
+            >
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+
+    @error('diagnostic_category_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
                         <!-- Sample Type -->
 
                         <div class="col-lg-6 mb-3">

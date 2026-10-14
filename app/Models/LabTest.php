@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LabTest extends Model
 {
@@ -19,6 +20,16 @@ class LabTest extends Model
         'fasting_required',
         'home_collection',
         'status',
-        'image'
+        'image',
+        'diagnostic_category_id',
     ];
+
+    public function diagnosticCategory(): BelongsTo
+    {
+        return $this->belongsTo(
+            DiagnosticCategory::class,
+            'diagnostic_category_id',
+            'id'
+        );
+    }
 }

@@ -84,6 +84,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::resource('surgery-categories', SurgeryCategoryController::class)
         ->except(['show'])->names('admin.surgery-categories');
 
+    Route::get(
+        'diagnostics/category-lab-tests',
+        [DiagnosticController::class, 'getLabTestsByCategories']
+    )->name('admin.diagnostics.category-lab-tests');
+
 
     Route::get(
         'emergencyconnect',
