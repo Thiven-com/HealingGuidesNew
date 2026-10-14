@@ -298,14 +298,44 @@
 
 
 <!-- Lab Tests -->
+
+<!-- Lab Tests -->
 <div class="card border-0 shadow-sm mt-4">
-    <div class="card-header">
-        <h5 class="mb-0">Lab Tests</h5>
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="mb-0">
+            <i class="ti ti-flask me-2"></i>
+            Lab Tests
+        </h5>
+
+        <div class="d-flex gap-2 align-items-center">
+            <!-- Search -->
+        <div class="mb-0">
+            <input type="text"
+                   id="labTestSearch"
+                   class="form-control"
+                   placeholder="Search lab tests by name...">
+        </div>
+            <button type="button"
+                    id="selectAllLabTests"
+                    class="btn btn-sm btn-outline-primary">
+                Select All
+            </button>
+
+            <button type="button"
+                    id="deselectAllLabTests"
+                    class="btn btn-sm btn-outline-secondary">
+                Deselect All
+            </button>
+        </div>
     </div>
 
     <div class="card-body">
+
+
+        <div class="text-muted small mb-3" id="labTestCount"></div>
+
         <div id="lab-tests-container" class="row">
-            <div class="col-12 text-muted" id="lab-tests-message">
+            <div class="col-12 text-muted">
                 Select a diagnostic category to view its lab tests.
             </div>
         </div>
@@ -319,6 +349,7 @@
         @enderror
     </div>
 </div>
+
                         <!-- Contact Information -->
 
             <div class="card border-0 shadow-sm mt-4">
@@ -935,6 +966,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const categoryCheckboxes = document.querySelectorAll(
@@ -942,35 +974,159 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     const container = document.getElementById('lab-tests-container');
+    const searchInput = document.getElementById('labTestSearch');
+    const selectAllButton = document.getElementById('selectAllLabTests');
+    const deselectAllButton = document.getElementById('deselectAllLabTests');
+    const countElement = document.getElementById('labTestCount');
 
-    // Keep previously selected lab tests checked on the edit page
-    const previouslySelectedLabTests = @json(
+    let allLabTests = [];
+
+    let previouslySelectedLabTests = @json(
         old('lab_test_ids', $selectedLabTests ?? [])
     ).map(Number);
 
+    // Display lab tests and filter by search without removing checkboxes
+    function renderLabTests() {
+        const searchValue = searchInput.value.trim().toLowerCase();
+
+        container.innerHTML = '';
+
+        if (allLabTests.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 text-muted">
+                    No lab tests found for the selected categories.
+                </div>
+            `;
+
+            countElement.textContent = '0 lab tests';
+            return;
+        }
+
+        let visibleCount = 0;
+
+        allLabTests.forEach(function (labTest) {
+            const testName = labTest.test_name || '';
+            const matchesSearch = testName.toLowerCase().includes(searchValue);
+
+            const column = document.createElement('div');
+            column.className = 'col-xl-3 col-lg-4 col-md-6 col-12 mb-3';
+
+            // Keep hidden checkboxes in the form so selected tests are submitted.
+            column.style.display = matchesSearch ? '' : 'none';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'form-check';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'form-check-input';
+            checkbox.name = 'lab_test_ids[]';
+            checkbox.value = labTest.id;
+            checkbox.id = `lab_test_${labTest.id}`;
+
+            checkbox.checked = previouslySelectedLabTests.includes(
+                Number(labTest.id)
+            );
+
+            checkbox.addEventListener('change', function () {
+                const id = Number(labTest.id);
+
+                if (this.checked) {
+                    if (!previouslySelectedLabTests.includes(id)) {
+                        previouslySelectedLabTests.push(id);
+                    }
+                } else {
+                    previouslySelectedLabTests =
+                        previouslySelectedLabTests.filter(item => item !== id);
+                }
+            });
+
+            const label = document.createElement('label');
+            label.className = 'form-check-label';
+            label.htmlFor = checkbox.id;
+            label.textContent = testName;
+
+            wrapper.appendChild(checkbox);
+            wrapper.appendChild(label);
+            column.appendChild(wrapper);
+            container.appendChild(column);
+
+            if (matchesSearch) {
+                visibleCount++;
+            }
+        });
+
+        countElement.textContent =
+            `${visibleCount} shown / ${allLabTests.length} total lab tests`;
+    }
+
+    // Search lab tests by name
+    searchInput.addEventListener('input', renderLabTests);
+
+    // Select all tests matching the search
+    selectAllButton.addEventListener('click', function () {
+        const searchValue = searchInput.value.trim().toLowerCase();
+
+        allLabTests.forEach(function (labTest) {
+            const testName = (labTest.test_name || '').toLowerCase();
+
+            if (testName.includes(searchValue)) {
+                const id = Number(labTest.id);
+
+                if (!previouslySelectedLabTests.includes(id)) {
+                    previouslySelectedLabTests.push(id);
+                }
+            }
+        });
+
+        renderLabTests();
+    });
+
+    // Deselect all tests matching the search
+    deselectAllButton.addEventListener('click', function () {
+        const searchValue = searchInput.value.trim().toLowerCase();
+
+        allLabTests.forEach(function (labTest) {
+            const testName = (labTest.test_name || '').toLowerCase();
+
+            if (testName.includes(searchValue)) {
+                const id = Number(labTest.id);
+
+                previouslySelectedLabTests =
+                    previouslySelectedLabTests.filter(item => item !== id);
+            }
+        });
+
+        renderLabTests();
+    });
+
+    // Load lab tests for selected categories
     function loadLabTests() {
         const categoryIds = Array.from(categoryCheckboxes)
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.value);
 
         if (categoryIds.length === 0) {
+            allLabTests = [];
+            previouslySelectedLabTests = [];
+
             container.innerHTML = `
                 <div class="col-12 text-muted">
                     Select a diagnostic category to view its lab tests.
                 </div>
             `;
+
+            countElement.textContent = 'No lab tests loaded';
             return;
         }
 
         container.innerHTML = `
-            <div class="col-12 text-muted">
-                Loading lab tests...
-            </div>
+            <div class="col-12 text-muted">Loading lab tests...</div>
         `;
 
         const params = new URLSearchParams();
 
-        categoryIds.forEach(id => {
+        categoryIds.forEach(function (id) {
             params.append('category_ids[]', id);
         });
 
@@ -983,70 +1139,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         )
-        .then(response => {
+        .then(function (response) {
             if (!response.ok) {
                 throw new Error('Unable to load lab tests.');
             }
 
             return response.json();
         })
-        .then(labTests => {
-            container.innerHTML = '';
+        .then(function (labTests) {
+            allLabTests = labTests;
 
-            if (labTests.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12 text-muted">
-                        No lab tests found for the selected categories.
-                    </div>
-                `;
-                return;
-            }
+            const availableIds = allLabTests.map(
+                labTest => Number(labTest.id)
+            );
 
-            labTests.forEach(labTest => {
-                const column = document.createElement('div');
-                column.className =
-                    'col-xl-3 col-lg-4 col-md-6 col-12 mb-3';
+            previouslySelectedLabTests =
+                previouslySelectedLabTests.filter(
+                    id => availableIds.includes(id)
+                );
 
-                const wrapper = document.createElement('div');
-                wrapper.className = 'form-check';
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'form-check-input';
-                checkbox.name = 'lab_test_ids[]';
-                checkbox.value = labTest.id;
-                checkbox.id = `lab_test_${labTest.id}`;
-
-                checkbox.checked = previouslySelectedLabTests
-                    .includes(Number(labTest.id));
-
-                const label = document.createElement('label');
-                label.className = 'form-check-label';
-                label.htmlFor = checkbox.id;
-                label.textContent = labTest.test_name;
-
-                wrapper.appendChild(checkbox);
-                wrapper.appendChild(label);
-                column.appendChild(wrapper);
-                container.appendChild(column);
-            });
+            renderLabTests();
         })
-        .catch(error => {
+        .catch(function (error) {
             container.innerHTML = `
                 <div class="col-12 text-danger">
                     Failed to load lab tests. Please try again.
                 </div>
             `;
 
+            countElement.textContent = '';
             console.error(error);
         });
     }
 
-    categoryCheckboxes.forEach(checkbox => {
+    categoryCheckboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', loadLabTests);
     });
 
-    // Load selected categories' lab tests automatically on edit
+    // Automatically load lab tests on the edit page
     loadLabTests();
 });
 </script>
