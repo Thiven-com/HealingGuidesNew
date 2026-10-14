@@ -170,6 +170,8 @@ class SurgeryQuotationController extends Controller
 
                     'notes' =>
                         $request->notes,
+                    'surgery_category' =>
+                        $request->surgery_category,
 
                     'status' =>
                         'pending',
@@ -209,11 +211,14 @@ class SurgeryQuotationController extends Controller
 
                     'prescription' =>
                         $quotationRequest->prescription
-                            ? asset($quotationRequest->prescription)
-                            : null,
+                        ? asset($quotationRequest->prescription)
+                        : null,
 
                     'notes' =>
                         $quotationRequest->notes,
+
+                    'surgery_category' =>
+                        $quotationRequest->surgery_category,
 
                     'family_member' => [
 
@@ -255,10 +260,10 @@ class SurgeryQuotationController extends Controller
                             optional(
                                 $quotationRequest->surgery
                             )->image
-                                ? asset(
-                                    $quotationRequest->surgery->image
-                                )
-                                : null,
+                            ? asset(
+                                $quotationRequest->surgery->image
+                            )
+                            : null,
 
                     ],
 
@@ -606,7 +611,7 @@ class SurgeryQuotationController extends Controller
                     ],
 
                     'total_amount' =>
-                        (float)
+                        (float) 
                         $quotation->total_amount,
 
                     'status' =>
@@ -759,11 +764,14 @@ class SurgeryQuotationController extends Controller
 
             'prescription' =>
                 $request->prescription
-                    ? asset($request->prescription)
-                    : null,
+                ? asset($request->prescription)
+                : null,
 
             'notes' =>
                 $request->notes,
+
+            'surgery_category' =>
+                $request->surgery_category,
 
             /*
             |--------------------------------------------------------------------------
@@ -817,10 +825,10 @@ class SurgeryQuotationController extends Controller
                     optional(
                         $request->familyMember
                     )->photo
-                        ? asset(
-                            $request->familyMember->photo
-                        )
-                        : null,
+                    ? asset(
+                        $request->familyMember->photo
+                    )
+                    : null,
 
             ],
 
@@ -851,10 +859,10 @@ class SurgeryQuotationController extends Controller
                     optional(
                         $request->surgery
                     )->image
-                        ? asset(
-                            $request->surgery->image
-                        )
-                        : null,
+                    ? asset(
+                        $request->surgery->image
+                    )
+                    : null,
 
                 'short_description' =>
                     optional(
@@ -898,19 +906,19 @@ class SurgeryQuotationController extends Controller
                             ],
 
                             'amount' =>
-                                (float)
+                                (float) 
                                 $quotation->amount,
 
                             'discount' =>
-                                (float)
+                                (float) 
                                 $quotation->discount,
 
                             'tax' =>
-                                (float)
+                                (float) 
                                 $quotation->tax,
 
                             'total_amount' =>
-                                (float)
+                                (float) 
                                 $quotation->total_amount,
 
                             'quotation_details' =>
@@ -924,8 +932,8 @@ class SurgeryQuotationController extends Controller
 
                             'valid_until' =>
                                 $quotation->valid_until
-                                    ? $quotation->valid_until
-                                    : null,
+                                ? $quotation->valid_until
+                                : null,
 
                             'status' =>
                                 $quotation->status,
