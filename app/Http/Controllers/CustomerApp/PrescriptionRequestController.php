@@ -35,8 +35,21 @@ class PrescriptionRequestController extends Controller
             'family_member_id' =>
                 'nullable|integer|exists:family_members,id',
 
-            'request_type' =>
-                'required|in:medicines,lab_tests,both',
+            'request_type' => 'required|in:medicines,lab_tests,surgery',
+
+            'diagnostic_id' => [
+                'nullable',
+                'required_if:request_type,lab_tests',
+                'integer',
+                'exists:diagnostics,id',
+            ],
+
+            'surgery_category_id' => [
+                'nullable',
+                'required_if:request_type,surgery',
+                'integer',
+                'exists:surgery_categories,id',
+            ],
 
             'prescription' =>
                 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
@@ -137,8 +150,15 @@ class PrescriptionRequestController extends Controller
                 'family_member_id' =>
                     $familyMember?->id,
 
-                'request_type' =>
-                    $request->request_type,
+                'request_type' => $request->request_type,
+
+                'diagnostic_id' => $request->request_type === 'lab_tests'
+                    ? $request->diagnostic_id
+                    : null,
+
+                'surgery_category_id' => $request->request_type === 'surgery'
+                    ? $request->surgery_category_id
+                    : null,
 
                 'prescription_image' =>
                     $prescriptionPath,

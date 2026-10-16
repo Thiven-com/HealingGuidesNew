@@ -16,6 +16,9 @@ class PrescriptionRequest extends Model
 
         'prescription_image',
 
+        'diagnostic_id',
+        'surgery_category_id',
+
         'notes',
 
         'address',
@@ -92,5 +95,15 @@ class PrescriptionRequest extends Model
             DiagnosticBooking::class,
             'prescription_request_id'
         );
+    }
+
+    public function diagnostic()
+    {
+        return $this->belongsTo(Diagnostic::class, 'diagnostic_id');
+    }
+
+    public function surgeryCategory()
+    {
+        return $this->belongsTo(SurgeryCategory::class, 'surgery_category_id');
     }
 }
