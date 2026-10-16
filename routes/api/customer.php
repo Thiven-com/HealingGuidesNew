@@ -16,6 +16,8 @@ use App\Http\Controllers\CustomerApp\EmergencyConnectController;
 use App\Http\Controllers\CustomerApp\FamilyMemberHealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupController;
 use App\Http\Controllers\CustomerApp\HealthCheckupPackageBookingController;
+use App\Http\Controllers\CustomerApp\HealthInsuranceBookingController;
+use App\Http\Controllers\CustomerApp\HealthMediaController;
 use App\Http\Controllers\CustomerApp\HealthRecordController;
 use App\Http\Controllers\CustomerApp\HomeController;
 use App\Http\Controllers\CustomerApp\HomeVisitCategoryController;
@@ -29,6 +31,7 @@ use App\Http\Controllers\CustomerApp\MedicineController;
 use App\Http\Controllers\CustomerApp\MedicineOrderController;
 use App\Http\Controllers\CustomerApp\PatientMedicalReportController;
 use App\Http\Controllers\CustomerApp\PrescriptionRequestController;
+use App\Http\Controllers\CustomerApp\ProcedureBookingController;
 use App\Http\Controllers\CustomerApp\ProcedureCategoryController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
@@ -66,6 +69,71 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/family-member/store', [ProfileController::class, 'storeFamilyMember']);
     Route::post('/family-member/update', [ProfileController::class, 'updateFamilyMember']);
     Route::post('/delete-family-member', [ProfileController::class, 'deleteFamilyMember']);
+
+    Route::get('/health-media', [
+        HealthMediaController::class,
+        'index'
+    ]);
+
+    Route::get('/health-media/{id}', [
+        HealthMediaController::class,
+        'show'
+    ])->whereNumber('id');
+
+    //Procedure Booking
+    Route::post('/book-procedure', [
+        ProcedureBookingController::class,
+        'bookProcedure'
+    ]);
+
+    Route::get('/procedure-bookings', [
+        ProcedureBookingController::class,
+        'myBookings'
+    ]);
+
+    Route::get('/procedure-booking-details/{id}', [
+        ProcedureBookingController::class,
+        'bookingDetails'
+    ]);
+
+    Route::post('/book-procedure/verify-procedure-payment', [
+        ProcedureBookingController::class,
+        'verifyPayment'
+    ]);
+
+    Route::post('/procedure-payment-failed', [
+        ProcedureBookingController::class,
+        'paymentFailed'
+    ]);
+
+    Route::post('/cancel-procedure-booking', [
+        ProcedureBookingController::class,
+        'cancelBooking'
+    ]);
+
+    //Health Insurance Booking
+    Route::get('health-insurance/providers', [HealthInsuranceBookingController::class, 'providers']);
+    Route::get('health-insurance/providers/{provider}/plans', [HealthInsuranceBookingController::class, 'providerPlans']);
+
+    //Health Insurance Booking
+    Route::post('health-insurance/plan/bookings', [HealthInsuranceBookingController::class,'store']);
+
+    Route::get('health-insurance/plan/bookings', [ HealthInsuranceBookingController::class,'myBookings']);
+
+    Route::get('health-insurance/plan/bookings/{booking}', [
+        HealthInsuranceBookingController::class,
+        'showBooking'
+    ]);
+
+    Route::post('health-insurance/plan/bookings/verify-payment', [
+        HealthInsuranceBookingController::class,
+        'verifyPayment'
+    ]);
+
+    Route::post('health-insurance/plan/bookings/cancel', [
+        HealthInsuranceBookingController::class,
+        'cancelBooking'
+    ]);
 
     //procedure-categories
     Route::get(

@@ -851,30 +851,6 @@ class CareServiceBookingController extends Controller
 
         try {
 
-            /*
-            |--------------------------------------------------------------------------
-            | Razorpay Signature Verification
-            |--------------------------------------------------------------------------
-            |
-            | Enable this when your app sends razorpay_signature.
-            |
-            */
-
-            // $api = new Api(
-            //     config('services.razorpay.key'),
-            //     config('services.razorpay.secret')
-            // );
-
-            // $api->utility->verifyPaymentSignature([
-            //     'razorpay_order_id' =>
-            //         $request->razorpay_order_id,
-            //
-            //     'razorpay_payment_id' =>
-            //         $request->razorpay_payment_id,
-            //
-            //     'razorpay_signature' =>
-            //         $request->razorpay_signature,
-            // ]);
 
             $payment->update([
 

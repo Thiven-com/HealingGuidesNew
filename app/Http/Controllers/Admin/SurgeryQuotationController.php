@@ -115,10 +115,17 @@ class SurgeryQuotationController extends Controller
             'surgery',
             'quotations.hospital',
         ])->findOrFail($id);
+        $hospitals = Hospital::orderBy('hospital_name', 'asc')->get();
+        $selectedHospitalIds = SurgeryQuotation::where(
+            'surgery_quotation_request_id',
+            $quotationRequest->id
+        )->pluck('hospital_id')
+            ->map(fn($id) => (int) $id)
+            ->toArray();
 
         return view(
             'admin.surgery_quotation_requests.show',
-            compact('quotationRequest')
+            compact('quotationRequest', 'hospitals', 'selectedHospitalIds')
         );
     }
 
@@ -381,13 +388,9 @@ class SurgeryQuotationController extends Controller
     */
 
 
-    public function store(
-        Request $request,
-        $requestId
-    ) {
-        $quotationRequest = SurgeryQuotationRequest::findOrFail(
-            $requestId
-        );
+    public function store(Request $request, $requestId)
+    {
+        $quotationRequest = SurgeryQuotationRequest::findOrFail($requestId);
 
         /*
         |--------------------------------------------------------------------------
@@ -396,129 +399,76 @@ class SurgeryQuotationController extends Controller
         */
 
         $validated = $request->validate([
-
-            'hospital_id' => [
+            'hospital_ids' => [
                 'required',
-                'exists:hospitals,id',
-                Rule::unique('surgery_quotations', 'hospital_id')
-                    ->where(function ($query) use ($requestId) {
-                        return $query->where(
-                            'surgery_quotation_request_id',
-                            $requestId
-                        );
-                    }),
+                'array',
+                'min:1',
             ],
 
-            'amount' =>
-                'required|numeric|min:0',
-
-            'discount' =>
-                'nullable|numeric|min:0',
-
-            'tax' =>
-                'nullable|numeric|min:0',
-
-            'quotation_details' =>
-                'nullable|string',
-
-            'included_services' =>
-                'nullable|string',
-
-            'excluded_services' =>
-                'nullable|string',
-
-            'valid_until' =>
-                'nullable|date|after_or_equal:today',
-
-            'admin_notes' =>
-                'nullable|string',
+            'hospital_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+                'exists:hospitals,id',
+            ],
         ]);
 
         /*
         |--------------------------------------------------------------------------
-        | Get Hospital
+        | Save Hospital Quotations
         |--------------------------------------------------------------------------
         */
 
-        $hospital = Hospital::findOrFail(
-            $validated['hospital_id']
-        );
+        DB::transaction(function () use ($validated, $quotationRequest) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Amount Calculation
-        |--------------------------------------------------------------------------
-        */
+            foreach ($validated['hospital_ids'] as $hospitalId) {
 
-        $amount = (float) $validated['amount'];
+                // Skip hospitals already associated with this request.
+                $exists = SurgeryQuotation::where(
+                    'surgery_quotation_request_id',
+                    $quotationRequest->id
+                )
+                    ->where('hospital_id', $hospitalId)
+                    ->exists();
 
-        $discount = (float) (
-            $validated['discount'] ?? 0
-        );
+                if ($exists) {
+                    continue;
+                }
 
-        $tax = (float) (
-            $validated['tax'] ?? 0
-        );
+                $hospital = Hospital::findOrFail($hospitalId);
 
-        $totalAmount =
-            $amount
-            - $discount
-            + $tax;
+                SurgeryQuotation::create([
+                    'surgery_quotation_request_id' => $quotationRequest->id,
 
-        if ($totalAmount < 0) {
-            $totalAmount = 0;
-        }
+                    'hospital_id' => $hospital->id,
 
-        /*
-        |--------------------------------------------------------------------------
-        | Create Quotation
-        |--------------------------------------------------------------------------
-        */
+                    'hospital_name' => $hospital->hospital_name,
 
-        SurgeryQuotation::create([
+                    // The hospital can provide its quotation later.
+                    'amount' => 0,
 
-            'surgery_quotation_request_id' =>
-                $quotationRequest->id,
+                    'discount' => 0,
 
-            'hospital_id' =>
-                $hospital->id,
+                    'tax' => 0,
 
-            'hospital_name' =>
-                $hospital->hospital_name,
+                    'total_amount' => 0,
 
-            'amount' =>
-                $amount,
+                    'quotation_details' => null,
 
-            'discount' =>
-                $discount,
+                    'included_services' => null,
 
-            'tax' =>
-                $tax,
+                    'excluded_services' => null,
 
-            'total_amount' =>
-                $totalAmount,
+                    'valid_until' => null,
 
-            'quotation_details' =>
-                $validated['quotation_details'] ?? null,
+                    'status' => 'sent',
 
-            'included_services' =>
-                $validated['included_services'] ?? null,
+                    'sent_at' => now(),
 
-            'excluded_services' =>
-                $validated['excluded_services'] ?? null,
-
-            'valid_until' =>
-                $validated['valid_until'] ?? null,
-
-            'status' =>
-                'sent',
-
-            'sent_at' =>
-                now(),
-
-            'admin_notes' =>
-                $validated['admin_notes'] ?? null,
-        ]);
+                    'admin_notes' => null,
+                ]);
+            }
+        });
 
         return redirect()
             ->route(
@@ -527,7 +477,7 @@ class SurgeryQuotationController extends Controller
             )
             ->with(
                 'success',
-                'Hospital quotation added successfully.'
+                'Selected hospitals have been added to the surgery quotation request.'
             );
     }
 

@@ -150,6 +150,19 @@
                                 <span>Admission Requests</span>
                             </a>
                         </li>
+                        <li class="{{ request()->routeIs('admin.health-insurance-bookings.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.health-insurance-bookings.index') }}">
+                                <i class="fas fa-file-medical fs-16 me-2"></i>
+                                <span>Insurance Plan Bookings</span>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('admin.health-insurance-bookings.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.health-insurance-bookings.*') ? 'active' : '' }}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                <span>Health Insurance Plan Bookings</span>
+                            </a>
+                        </li> --}}
                         <li class="{{ request()->routeIs('admin.health-insurance-providers.index*') ? 'active' : '' }}">
                             <a href="{{ route('admin.health-insurance-providers.index') }}">
                                 <i class="ti ti-shield-plus fs-16 me-2"></i>
@@ -161,6 +174,12 @@
                             <a href="{{ route('admin.appointments.index') }}">
                                 <i class="ti ti-calendar-check fs-16 me-2"></i>
                                 <span>Doctor Appointments</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->routeIs('admin.health-media.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.health-media.index') }}">
+                                <i class="ti ti-photo fs-16 me-2"></i>
+                                <span>Health Media</span>
                             </a>
                         </li>
 

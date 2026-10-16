@@ -9,6 +9,8 @@ class Procedure extends Model
     protected $fillable = [
 
         'specialization_id',
+        
+        'member_package_price',
 
         'procedure_category_id',
 

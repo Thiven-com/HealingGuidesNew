@@ -63,6 +63,8 @@ class ProcedureController extends Controller
                     'price' =>
                         $procedure->price,
 
+                    'member_package_price' => $procedure->member_package_price,
+
                     'image' => $procedure->image
                         ? asset($procedure->image)
                         : null,

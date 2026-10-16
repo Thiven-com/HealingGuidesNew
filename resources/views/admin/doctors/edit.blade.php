@@ -386,6 +386,29 @@
                                         placeholder="Enter doctor profile/about">{{ old('about', $doctor->about) }}</textarea>
 
                                 </div>
+
+
+{{-- Hospital Address --}}
+<div class="col-md-12 mb-3">
+    <label class="form-label">Hospital Address</label>
+    <textarea
+        name="hospital_address"
+        class="form-control"
+        rows="3"
+        placeholder="Enter hospital address"
+    >{{ old('hospital_address', $doctor->hospital_address) }}</textarea>
+</div>
+
+{{-- Clinic Address --}}
+<div class="col-md-12 mb-3">
+    <label class="form-label">Clinic Address</label>
+    <textarea
+        name="clinic_address"
+        class="form-control"
+        rows="3"
+        placeholder="Enter clinic address"
+    >{{ old('clinic_address', $doctor->clinic_address) }}</textarea>
+</div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">
@@ -1015,9 +1038,18 @@
                                 </div>
 
                             </div>
+                             {{-- Registration Number --}}
+        <div class="mb-3">
+            <small class="text-muted">
+                Registration Number
+            </small>
+            <div class="fw-semibold">
+                {{ $doctor->registration_number ?? '-' }}
+            </div>
+        </div>
 
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
 
                                 <small class="text-muted">
                                     Slug
@@ -1027,7 +1059,7 @@
                                     {{ $doctor->slug }}
                                 </div>
 
-                            </div>
+                            </div> --}}
 
 
                             <div>

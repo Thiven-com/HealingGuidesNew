@@ -338,6 +338,8 @@
 
                                 </th>
 
+                                <th>Member Package Price</th>
+
 
                                 <th>
 
@@ -518,6 +520,14 @@
                                     </strong>
 
                                 </td>
+
+                                {{-- MEMBER PACKAGE PRICE --}}
+
+<td>
+    <strong class="text-success">
+        ₹{{ number_format($procedure->member_package_price ?? 0, 2) }}
+    </strong>
+</td>
 
 
                                 {{-- BENEFITS --}}

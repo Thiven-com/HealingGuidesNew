@@ -407,6 +407,32 @@
                                               placeholder="Enter doctor profile/about">{{ old('about') }}</textarea>
 
                                 </div>
+                                {{-- Hospital Doctor --}}
+                                <div class="col-md-12 mb-3">
+
+                                    <label class="form-label">
+                                        Hospital Address
+                                    </label>
+
+                                    <textarea name="hospital_address"
+                                              class="form-control"
+                                              rows="3"
+                                              placeholder="Enter doctor hospital address">{{ old('hospital_address') }}</textarea>
+
+                                </div>
+                                {{-- clinic address --}}
+                                <div class="col-md-12 mb-3">
+
+                                    <label class="form-label">
+                                       Clinic Address
+                                    </label>
+
+                                    <textarea name="clinic_address"
+                                              class="form-control"
+                                              rows="3"
+                                              placeholder="Enter doctor clinic address">{{ old('clinic_address') }}</textarea>
+
+                                </div>
 
                             </div>
 
@@ -767,6 +793,30 @@
                         </div>
 
                     </div>
+
+
+<div class="card">
+
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            Registration Details
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <label class="form-label">
+            Registration Number
+        </label>
+
+        <input type="text"
+               name="registration_number"
+               class="form-control"
+               placeholder="Enter Registration Number">
+
+    </div>
+
+</div>
 
 
                     <!-- Status -->

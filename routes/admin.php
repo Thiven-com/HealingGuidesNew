@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HealthCheckupPackageController;
 use App\Http\Controllers\Admin\HealthCheckupTestController;
+use App\Http\Controllers\Admin\HealthInsurancePlanController;
 use App\Http\Controllers\Admin\HealthInsuranceProviderController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\HospitalFacilitiesListController;
@@ -42,6 +43,8 @@ use App\Http\Controllers\Admin\DoctorScheduleController;
 use App\Http\Controllers\Admin\EmergencyConnectController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\HealthCheckupController;
+use App\Http\Controllers\Admin\HealthInsuranceBookingController;
+use App\Http\Controllers\Admin\HealthMediaController;
 use App\Http\Controllers\Admin\HomeVisitCategoryController;
 use App\Http\Controllers\Admin\HomeVisitServiceController;
 use App\Http\Controllers\Admin\HospitalEmergencyConnectController;
@@ -88,6 +91,54 @@ Route::group(['middleware' => 'admin'], function () {
         'diagnostics/category-lab-tests',
         [DiagnosticController::class, 'getLabTestsByCategories']
     )->name('admin.diagnostics.category-lab-tests');
+
+    Route::get(
+        'health-insurance-bookings',
+        [HealthInsuranceBookingController::class, 'index']
+    )->name('admin.health-insurance-bookings.index');
+
+    Route::get(
+        'health-insurance-bookings/{id}',
+        [HealthInsuranceBookingController::class, 'show']
+    )->name('admin.health-insurance-bookings.show');
+
+    Route::get('health-media', [HealthMediaController::class, 'index'])
+        ->name('admin.health-media.index');
+
+    Route::get('health-media/create', [HealthMediaController::class, 'create'])
+        ->name('admin.health-media.create');
+
+    Route::post('health-media', [HealthMediaController::class, 'store'])
+        ->name('admin.health-media.store');
+
+    Route::get('health-media/{healthMedia}', [HealthMediaController::class, 'show'])
+        ->name('admin.health-media.show');
+
+    Route::get('health-media/{healthMedia}/edit', [HealthMediaController::class, 'edit'])
+        ->name('admin.health-media.edit');
+
+    Route::put('health-media/{healthMedia}', [HealthMediaController::class, 'update'])
+        ->name('admin.health-media.update');
+
+    Route::delete('health-media/{healthMedia}', [HealthMediaController::class, 'destroy'])
+        ->name('admin.health-media.destroy');
+
+    Route::post(
+        'health-insurance-providers/{provider}/plans',
+        [HealthInsurancePlanController::class, 'store']
+    )->name('admin.health-insurance-providers.plans.store');
+
+    // Update Health Insurance Plan
+    Route::put(
+        'health-insurance-providers/{provider}/plans/{plan}',
+        [HealthInsurancePlanController::class, 'updatePlan']
+    )->name('admin.health-insurance-providers.plans.update');
+
+    // Delete Health Insurance Plan
+    Route::delete(
+        'health-insurance-providers/{provider}/plans/{plan}',
+        [HealthInsurancePlanController::class, 'destroyPlan']
+    )->name('admin.health-insurance-providers.plans.destroy');
 
 
     Route::get(

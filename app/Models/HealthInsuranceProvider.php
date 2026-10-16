@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HealthInsuranceProvider extends Model
 {
@@ -43,5 +44,13 @@ class HealthInsuranceProvider extends Model
                 $provider->slug = Str::slug($provider->name);
             }
         });
+    }
+
+    public function plans(): HasMany
+    {
+        return $this->hasMany(
+            HealthInsurancePlan::class,
+            'health_insurance_provider_id'
+        );
     }
 }

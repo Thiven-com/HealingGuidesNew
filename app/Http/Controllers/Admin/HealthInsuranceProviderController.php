@@ -178,6 +178,7 @@ class HealthInsuranceProviderController extends Controller
     public function show($id)
     {
         $provider = HealthInsuranceProvider::findOrFail($id);
+        
 
         return view(
             'admin.health_insurance_providers.show',

@@ -231,7 +231,7 @@
 
                             {{-- SLUG --}}
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
 
                                 <label class="form-label">
 
@@ -268,8 +268,39 @@
                                         step="0.01" class="form-control">
 
                                 </div>
+                                
 
                             </div>
+                            {{-- MEMBER PACKAGE PRICE --}}
+
+<div class="col-md-3">
+
+    <label class="form-label">
+        Member Package Price
+    </label>
+
+    <div class="input-group">
+
+        <span class="input-group-text">₹</span>
+
+        <input type="number"
+               name="member_package_price"
+               value="{{ old('member_package_price', $procedure->member_package_price ?? 0) }}"
+               min="0"
+               step="0.01"
+               class="form-control @error('member_package_price') is-invalid @enderror"
+               placeholder="0.00">
+
+    </div>
+
+    @error('member_package_price')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+
+</div>
+                            
 
 
                             {{-- DISPLAY ORDER --}}

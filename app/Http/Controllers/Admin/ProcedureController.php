@@ -172,6 +172,8 @@ class ProcedureController extends Controller
             'price' =>
                 'nullable|numeric|min:0',
 
+            'member_package_price' => 'nullable|numeric|min:0',
+
             'display_order' =>
                 'nullable|integer|min:0',
 
@@ -313,6 +315,8 @@ class ProcedureController extends Controller
                 'price' =>
                     $validated['price']
                     ?? 0,
+
+                'member_package_price' => $validated['member_package_price'] ?? 0,
 
                 'display_order' =>
                     $validated['display_order']
@@ -472,6 +476,8 @@ class ProcedureController extends Controller
             'price' =>
                 'nullable|numeric|min:0',
 
+            'member_package_price' => 'nullable|numeric|min:0',
+
             'display_order' =>
                 'nullable|integer|min:0',
 
@@ -610,6 +616,8 @@ class ProcedureController extends Controller
                 'price' =>
                     $validated['price']
                     ?? 0,
+
+                'member_package_price' => $validated['member_package_price'] ?? 0,
 
                 'display_order' =>
                     $validated['display_order']

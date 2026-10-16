@@ -110,6 +110,10 @@ class DoctorController extends Controller
             'actual_fee' =>
                 'nullable|numeric|min:0',
 
+            'registration_number' => 'nullable|string|max:255',
+            'hospital_address' => 'nullable|string',
+            'clinic_address' => 'nullable|string',
+
             // Preferred Language
             'preffered_language' =>
                 'nullable|string|max:100',
@@ -207,6 +211,10 @@ class DoctorController extends Controller
         // Actual Fee
         $doctor->actual_fee =
             $request->actual_fee ?? 0;
+
+        $doctor->registration_number = $request->registration_number;
+        $doctor->hospital_address = $request->hospital_address;
+        $doctor->clinic_address = $request->clinic_address;
 
         // Preferred Language
         $doctor->preffered_language =
@@ -430,6 +438,9 @@ class DoctorController extends Controller
 
             'address' =>
                 'nullable|string|max:1000',
+            'registration_number' => 'nullable|string|max:255',
+            'hospital_address' => 'nullable|string',
+            'clinic_address' => 'nullable|string',
 
             'about' =>
                 'nullable|string',
@@ -526,6 +537,9 @@ class DoctorController extends Controller
 
         $doctor->address =
             $request->address;
+        $doctor->registration_number = $request->registration_number;
+        $doctor->hospital_address = $request->hospital_address;
+        $doctor->clinic_address = $request->clinic_address;
 
         $doctor->about =
             $request->about;

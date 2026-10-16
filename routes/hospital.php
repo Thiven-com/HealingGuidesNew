@@ -20,8 +20,7 @@ use App\Http\Controllers\Hospital\MedicineController;
 use App\Http\Controllers\Hospital\MedicineOrderController;
 use App\Http\Controllers\Hospital\PatientController;
 use App\Http\Controllers\Hospital\ProfileController;
-
-
+use App\Http\Controllers\Hospital\SurgeryQuotationController;
 
 Route::name('hospital.')
     ->group(function () {
@@ -58,6 +57,22 @@ Route::name('hospital.')
 
         Route::get('/hospital-profile', [HospitalController::class, 'details'])
             ->name('hospitalprofile.index');
+
+
+        Route::get(
+            '/surgery-quotation-requests',
+            [SurgeryQuotationController::class, 'index']
+        )->name('surgery-quotation-requests.index');
+
+        Route::get(
+            '/surgery-quotation-requests/{id}',
+            [SurgeryQuotationController::class, 'show']
+        )->name('surgery-quotation-requests.show');
+
+        Route::put(
+            '/surgery-quotation-requests/{id}',
+            [SurgeryQuotationController::class, 'update']
+        )->name('surgery-quotation-requests.update');
 
 
         /*
