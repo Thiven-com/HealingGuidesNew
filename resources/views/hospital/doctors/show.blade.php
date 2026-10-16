@@ -101,12 +101,12 @@
 
                                                             <div class="avatar avatar-xxl bg-primary-transparent rounded-circle mx-auto"
                                                                 style="
-                                                                                                                                                                                                                                                                                                                                                                                                                                        width:120px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                        height:120px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                        display:flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                        align-items:center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                        justify-content:center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width:120px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        height:120px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        display:flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        align-items:center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        justify-content:center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
 
                                                                 <span class="fs-32 fw-bold text-primary">
 
@@ -154,7 +154,6 @@
                                 {{ $doctor->doctor_code }}
 
                             </span>
-
 
 
                             {{-- Status --}}
@@ -393,9 +392,9 @@
                                             <img src="{{ asset($doctor->certificate) }}" alt="Doctor Certificate"
                                                 class="img-fluid rounded border mb-3"
                                                 style="
-                                                                                                                                                                                                max-height:250px;
-                                                                                                                                                                                                object-fit:contain;
-                                                                                                                                                                                            ">
+                                                                                                                                                                                                            max-height:250px;
+                                                                                                                                                                                                            object-fit:contain;
+                                                                                                                                                                                                        ">
 
                                         </a>
 
@@ -577,6 +576,19 @@
                                     </div>
 
                                 </div>
+                                {{-- Registration Number --}}
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <small class="text-muted d-block mb-1">
+                                            Registration Number
+                                        </small>
+
+                                        <h6 class="mb-0">
+                                            {{ $doctor->registration_number ?? '-' }}
+                                        </h6>
+                                    </div>
+                                </div>
+
 
 
 
@@ -846,6 +858,32 @@
 
                                 </div>
 
+                                {{-- Hospital Address --}}
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <small class="text-muted d-block mb-1">
+                                            Hospital Address
+                                        </small>
+
+                                        <h6 class="mb-0" style="white-space: pre-line;">
+                                            {{ $doctor->hospital_address ?: '-' }}
+                                        </h6>
+                                    </div>
+                                </div>
+
+                                {{-- Clinic Address --}}
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <small class="text-muted d-block mb-1">
+                                            Clinic Address
+                                        </small>
+
+                                        <h6 class="mb-0" style="white-space: pre-line;">
+                                            {{ $doctor->clinic_address ?: '-' }}
+                                        </h6>
+                                    </div>
+                                </div>
+
 
                             </div>
 
@@ -898,78 +936,78 @@
 
                                 @if($doctor->consultation_enabled)
 
-    <div class="col-xl-3 col-md-6">
+                                    <div class="col-xl-3 col-md-6">
 
-        <div class="border rounded p-3 h-100">
+                                        <div class="border rounded p-3 h-100">
 
-            <div class="d-flex align-items-center mb-2">
+                                            <div class="d-flex align-items-center mb-2">
 
-                <span class="avatar avatar-sm bg-primary-transparent me-2">
-                    <i class="ti ti-building-hospital text-primary"></i>
-                </span>
+                                                <span class="avatar avatar-sm bg-primary-transparent me-2">
+                                                    <i class="ti ti-building-hospital text-primary"></i>
+                                                </span>
 
-                <small class="text-muted">
-                    Consultation
-                </small>
+                                                <small class="text-muted">
+                                                    Consultation
+                                                </small>
 
-            </div>
+                                            </div>
 
-            @php
-                $actualFee = (float) ($doctor->actual_fee ?? 0);
-                $consultationFee = (float) ($doctor->consultation_fee ?? 0);
+                                            @php
+                                                $actualFee = (float) ($doctor->actual_fee ?? 0);
+                                                $consultationFee = (float) ($doctor->consultation_fee ?? 0);
 
-                $discountPercentage = 0;
+                                                $discountPercentage = 0;
 
-                if ($actualFee > 0 && $consultationFee < $actualFee) {
-                    $discountPercentage =
-                        (($actualFee - $consultationFee) / $actualFee) * 100;
-                }
-            @endphp
+                                                if ($actualFee > 0 && $consultationFee < $actualFee) {
+                                                    $discountPercentage =
+                                                        (($actualFee - $consultationFee) / $actualFee) * 100;
+                                                }
+                                            @endphp
 
-            @if($actualFee > $consultationFee)
+                                            @if($actualFee > $consultationFee)
 
-                <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center gap-2">
 
-                    <h6 class="mb-0 text-muted text-decoration-line-through">
-                        ₹{{ number_format($actualFee, 2) }}
-                    </h6>
+                                                                    <h6 class="mb-0 text-muted text-decoration-line-through">
+                                                                        ₹{{ number_format($actualFee, 2) }}
+                                                                    </h6>
 
-                    <span style="
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 2px 6px;
-                        background: #e8f7ee;
-                        color: #198754;
-                        border: 1px solid #b9e5c9;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        line-height: 1.2;
-                        white-space: nowrap;
-                    ">
-                        {{ number_format($discountPercentage, 0) }}% OFF
-                    </span>
+                                                                    <span style="
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    padding: 2px 6px;
+                                                    background: #e8f7ee;
+                                                    color: #198754;
+                                                    border: 1px solid #b9e5c9;
+                                                    border-radius: 4px;
+                                                    font-size: 10px;
+                                                    font-weight: 700;
+                                                    line-height: 1.2;
+                                                    white-space: nowrap;
+                                                ">
+                                                                        {{ number_format($discountPercentage, 0) }}% OFF
+                                                                    </span>
 
-                </div>
+                                                                </div>
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($consultationFee, 2) }}
-                </h4>
+                                                                <h4 class="mb-0">
+                                                                    ₹{{ number_format($consultationFee, 2) }}
+                                                                </h4>
 
-            @else
+                                            @else
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($consultationFee, 2) }}
-                </h4>
+                                                <h4 class="mb-0">
+                                                    ₹{{ number_format($consultationFee, 2) }}
+                                                </h4>
 
-            @endif
+                                            @endif
 
-        </div>
+                                        </div>
 
-    </div>
+                                    </div>
 
-@endif
+                                @endif
 
 
 
@@ -977,78 +1015,78 @@
 
                                 @if($doctor->video_consultation_enabled)
 
-    <div class="col-xl-3 col-md-6">
+                                    <div class="col-xl-3 col-md-6">
 
-        <div class="border rounded p-3 h-100">
+                                        <div class="border rounded p-3 h-100">
 
-            <div class="d-flex align-items-center mb-2">
+                                            <div class="d-flex align-items-center mb-2">
 
-                <span class="avatar avatar-sm bg-info-transparent me-2">
-                    <i class="ti ti-video text-info"></i>
-                </span>
+                                                <span class="avatar avatar-sm bg-info-transparent me-2">
+                                                    <i class="ti ti-video text-info"></i>
+                                                </span>
 
-                <small class="text-muted">
-                    Video
-                </small>
+                                                <small class="text-muted">
+                                                    Video
+                                                </small>
 
-            </div>
+                                            </div>
 
-            @php
-                $actualVideoFee = (float) ($doctor->actual_video_consultation_fee ?? 0);
-                $videoConsultationFee = (float) ($doctor->video_consultation_fee ?? 0);
+                                            @php
+                                                $actualVideoFee = (float) ($doctor->actual_video_consultation_fee ?? 0);
+                                                $videoConsultationFee = (float) ($doctor->video_consultation_fee ?? 0);
 
-                $videoDiscountPercentage = 0;
+                                                $videoDiscountPercentage = 0;
 
-                if ($actualVideoFee > 0 && $videoConsultationFee < $actualVideoFee) {
-                    $videoDiscountPercentage =
-                        (($actualVideoFee - $videoConsultationFee) / $actualVideoFee) * 100;
-                }
-            @endphp
+                                                if ($actualVideoFee > 0 && $videoConsultationFee < $actualVideoFee) {
+                                                    $videoDiscountPercentage =
+                                                        (($actualVideoFee - $videoConsultationFee) / $actualVideoFee) * 100;
+                                                }
+                                            @endphp
 
-            @if($actualVideoFee > $videoConsultationFee)
+                                            @if($actualVideoFee > $videoConsultationFee)
 
-                <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center gap-2">
 
-                    <h6 class="mb-0 text-muted text-decoration-line-through">
-                        ₹{{ number_format($actualVideoFee, 2) }}
-                    </h6>
+                                                                    <h6 class="mb-0 text-muted text-decoration-line-through">
+                                                                        ₹{{ number_format($actualVideoFee, 2) }}
+                                                                    </h6>
 
-                    <span style="
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 2px 6px;
-                        background: #e8f7ee;
-                        color: #198754;
-                        border: 1px solid #b9e5c9;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        line-height: 1.2;
-                        white-space: nowrap;
-                    ">
-                        {{ number_format($videoDiscountPercentage, 0) }}% OFF
-                    </span>
+                                                                    <span style="
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    padding: 2px 6px;
+                                                    background: #e8f7ee;
+                                                    color: #198754;
+                                                    border: 1px solid #b9e5c9;
+                                                    border-radius: 4px;
+                                                    font-size: 10px;
+                                                    font-weight: 700;
+                                                    line-height: 1.2;
+                                                    white-space: nowrap;
+                                                ">
+                                                                        {{ number_format($videoDiscountPercentage, 0) }}% OFF
+                                                                    </span>
 
-                </div>
+                                                                </div>
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($videoConsultationFee, 2) }}
-                </h4>
+                                                                <h4 class="mb-0">
+                                                                    ₹{{ number_format($videoConsultationFee, 2) }}
+                                                                </h4>
 
-            @else
+                                            @else
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($videoConsultationFee, 2) }}
-                </h4>
+                                                <h4 class="mb-0">
+                                                    ₹{{ number_format($videoConsultationFee, 2) }}
+                                                </h4>
 
-            @endif
+                                            @endif
 
-        </div>
+                                        </div>
 
-    </div>
+                                    </div>
 
-@endif
+                                @endif
 
 
 
@@ -1056,78 +1094,78 @@
 
                                 @if($doctor->chat_consultation_enabled)
 
-    <div class="col-xl-3 col-md-6">
+                                    <div class="col-xl-3 col-md-6">
 
-        <div class="border rounded p-3 h-100">
+                                        <div class="border rounded p-3 h-100">
 
-            <div class="d-flex align-items-center mb-2">
+                                            <div class="d-flex align-items-center mb-2">
 
-                <span class="avatar avatar-sm bg-success-transparent me-2">
-                    <i class="ti ti-message text-success"></i>
-                </span>
+                                                <span class="avatar avatar-sm bg-success-transparent me-2">
+                                                    <i class="ti ti-message text-success"></i>
+                                                </span>
 
-                <small class="text-muted">
-                    Chat
-                </small>
+                                                <small class="text-muted">
+                                                    Chat
+                                                </small>
 
-            </div>
+                                            </div>
 
-            @php
-                $actualChatFee = (float) ($doctor->actual_chat_consultation_fee ?? 0);
-                $chatConsultationFee = (float) ($doctor->chat_consultation_fee ?? 0);
+                                            @php
+                                                $actualChatFee = (float) ($doctor->actual_chat_consultation_fee ?? 0);
+                                                $chatConsultationFee = (float) ($doctor->chat_consultation_fee ?? 0);
 
-                $chatDiscountPercentage = 0;
+                                                $chatDiscountPercentage = 0;
 
-                if ($actualChatFee > 0 && $chatConsultationFee < $actualChatFee) {
-                    $chatDiscountPercentage =
-                        (($actualChatFee - $chatConsultationFee) / $actualChatFee) * 100;
-                }
-            @endphp
+                                                if ($actualChatFee > 0 && $chatConsultationFee < $actualChatFee) {
+                                                    $chatDiscountPercentage =
+                                                        (($actualChatFee - $chatConsultationFee) / $actualChatFee) * 100;
+                                                }
+                                            @endphp
 
-            @if($actualChatFee > $chatConsultationFee)
+                                            @if($actualChatFee > $chatConsultationFee)
 
-                <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center gap-2">
 
-                    <h6 class="mb-0 text-muted text-decoration-line-through">
-                        ₹{{ number_format($actualChatFee, 2) }}
-                    </h6>
+                                                                    <h6 class="mb-0 text-muted text-decoration-line-through">
+                                                                        ₹{{ number_format($actualChatFee, 2) }}
+                                                                    </h6>
 
-                    <span style="
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 2px 6px;
-                        background: #e8f7ee;
-                        color: #198754;
-                        border: 1px solid #b9e5c9;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        line-height: 1.2;
-                        white-space: nowrap;
-                    ">
-                        {{ number_format($chatDiscountPercentage, 0) }}% OFF
-                    </span>
+                                                                    <span style="
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    padding: 2px 6px;
+                                                    background: #e8f7ee;
+                                                    color: #198754;
+                                                    border: 1px solid #b9e5c9;
+                                                    border-radius: 4px;
+                                                    font-size: 10px;
+                                                    font-weight: 700;
+                                                    line-height: 1.2;
+                                                    white-space: nowrap;
+                                                ">
+                                                                        {{ number_format($chatDiscountPercentage, 0) }}% OFF
+                                                                    </span>
 
-                </div>
+                                                                </div>
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($chatConsultationFee, 2) }}
-                </h4>
+                                                                <h4 class="mb-0">
+                                                                    ₹{{ number_format($chatConsultationFee, 2) }}
+                                                                </h4>
 
-            @else
+                                            @else
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($chatConsultationFee, 2) }}
-                </h4>
+                                                <h4 class="mb-0">
+                                                    ₹{{ number_format($chatConsultationFee, 2) }}
+                                                </h4>
 
-            @endif
+                                            @endif
 
-        </div>
+                                        </div>
 
-    </div>
+                                    </div>
 
-@endif
+                                @endif
 
 
 
@@ -1135,78 +1173,78 @@
 
                                 @if($doctor->home_visit_enabled)
 
-    <div class="col-xl-3 col-md-6">
+                                    <div class="col-xl-3 col-md-6">
 
-        <div class="border rounded p-3 h-100">sw2
+                                        <div class="border rounded p-3 h-100">sw2
 
-            <div class="d-flex align-items-center mb-2">
+                                            <div class="d-flex align-items-center mb-2">
 
-                <span class="avatar avatar-sm bg-danger-transparent me-2">
-                    <i class="ti ti-home-heart text-danger"></i>
-                </span>
+                                                <span class="avatar avatar-sm bg-danger-transparent me-2">
+                                                    <i class="ti ti-home-heart text-danger"></i>
+                                                </span>
 
-                <small class="text-muted">
-                    Home Visit
-                </small>
+                                                <small class="text-muted">
+                                                    Home Visit
+                                                </small>
 
-            </div>
+                                            </div>
 
-            @php
-                $actualHomeVisitFee = (float) ($doctor->actual_home_visit_fee ?? 0);
-                $homeVisitFee = (float) ($doctor->home_visit_fee ?? 0);
+                                            @php
+                                                $actualHomeVisitFee = (float) ($doctor->actual_home_visit_fee ?? 0);
+                                                $homeVisitFee = (float) ($doctor->home_visit_fee ?? 0);
 
-                $homeVisitDiscountPercentage = 0;
+                                                $homeVisitDiscountPercentage = 0;
 
-                if ($actualHomeVisitFee > 0 && $homeVisitFee < $actualHomeVisitFee) {
-                    $homeVisitDiscountPercentage =
-                        (($actualHomeVisitFee - $homeVisitFee) / $actualHomeVisitFee) * 100;
-                }
-            @endphp
+                                                if ($actualHomeVisitFee > 0 && $homeVisitFee < $actualHomeVisitFee) {
+                                                    $homeVisitDiscountPercentage =
+                                                        (($actualHomeVisitFee - $homeVisitFee) / $actualHomeVisitFee) * 100;
+                                                }
+                                            @endphp
 
-            @if($actualHomeVisitFee > $homeVisitFee)
+                                            @if($actualHomeVisitFee > $homeVisitFee)
 
-                <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center gap-2">
 
-                    <h6 class="mb-0 text-muted text-decoration-line-through">
-                        ₹{{ number_format($actualHomeVisitFee, 2) }}
-                    </h6>
+                                                                    <h6 class="mb-0 text-muted text-decoration-line-through">
+                                                                        ₹{{ number_format($actualHomeVisitFee, 2) }}
+                                                                    </h6>
 
-                    <span style="
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 2px 6px;
-                        background: #e8f7ee;
-                        color: #198754;
-                        border: 1px solid #b9e5c9;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        line-height: 1.2;
-                        white-space: nowrap;
-                    ">
-                        {{ number_format($homeVisitDiscountPercentage, 0) }}% OFF
-                    </span>
+                                                                    <span style="
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    padding: 2px 6px;
+                                                    background: #e8f7ee;
+                                                    color: #198754;
+                                                    border: 1px solid #b9e5c9;
+                                                    border-radius: 4px;
+                                                    font-size: 10px;
+                                                    font-weight: 700;
+                                                    line-height: 1.2;
+                                                    white-space: nowrap;
+                                                ">
+                                                                        {{ number_format($homeVisitDiscountPercentage, 0) }}% OFF
+                                                                    </span>
 
-                </div>
+                                                                </div>
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($homeVisitFee, 2) }}
-                </h4>
+                                                                <h4 class="mb-0">
+                                                                    ₹{{ number_format($homeVisitFee, 2) }}
+                                                                </h4>
 
-            @else
+                                            @else
 
-                <h4 class="mb-0">
-                    ₹{{ number_format($homeVisitFee, 2) }}
-                </h4>
+                                                <h4 class="mb-0">
+                                                    ₹{{ number_format($homeVisitFee, 2) }}
+                                                </h4>
 
-            @endif
+                                            @endif
 
-        </div>
+                                        </div>
 
-    </div>
+                                    </div>
 
-@endif
+                                @endif
 
 
                             </div>
@@ -1760,8 +1798,8 @@
 
                                     {{-- Add Schedule when empty --}}
                                     {{-- <a href="{{ route('hospital.doctor-schedules.create', [
-                                                                            'doctor_id' => $doctor->id
-                                                                        ]) }}" class="btn btn-primary btn-sm">
+                                                                                    'doctor_id' => $doctor->id
+                                                                                ]) }}" class="btn btn-primary btn-sm">
 
                                         <i class="ti ti-plus me-1"></i>
                                         Add Schedule

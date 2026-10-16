@@ -79,6 +79,39 @@ class HealthInsuranceBookingController extends Controller
         ], 200);
     }
 
+    public function Plans()
+    {
+        $plans = HealthInsurancePlan::where('status', 1)
+            ->with([
+                'provider' => function ($query) {
+                    $query->where('status', 1)
+                        ->select('id', 'name', 'logo');
+                }
+            ])
+            ->get([
+                'id',
+                'health_insurance_provider_id',
+                'name',
+                'slug',
+                'image',
+                'description',
+                'policy_term_years',
+                'actual_price',
+                'price',
+                'discount_price',
+                'tax_price',
+                'minimum_entry_age',
+                'maximum_entry_age',
+                'key_benefits',
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Health insurance plans fetched successfully.',
+            'data' => $plans,
+        ], 200);
+    }
+
     /**
      * POST /api/health-insurance/bookings
      * Book a plan for the authenticated customer.

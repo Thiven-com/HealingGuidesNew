@@ -220,6 +220,29 @@
                                 </div>
                             </div>
 
+                            {{-- Registration Details --}}
+
+<div class="col-lg-4 col-md-6">
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+                                        Registration Number
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+               name="registration_number"
+               class="form-control @error('registration_number') is-invalid @enderror"
+               value="{{ old('registration_number') }}"
+               placeholder="Enter Registration Number">
+
+        @error('registration_number')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+
+                                </div>
+                            </div>
+
 
                             {{-- Designation --}}
                             <div class="col-lg-4 col-md-6">
@@ -461,6 +484,34 @@
 
                                 </div>
                             </div>
+
+                            {{-- Hospital Address --}}
+<div class="col-md-12 mb-3">
+    <label class="form-label">Hospital Address</label>
+
+    <textarea name="hospital_address"
+              class="form-control @error('hospital_address') is-invalid @enderror"
+              rows="3"
+              placeholder="Enter hospital address">{{ old('hospital_address') }}</textarea>
+
+    @error('hospital_address')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+{{-- Clinic Address --}}
+<div class="col-md-12 mb-3">
+    <label class="form-label">Clinic Address</label>
+
+    <textarea name="clinic_address"
+              class="form-control @error('clinic_address') is-invalid @enderror"
+              rows="3"
+              placeholder="Enter clinic address">{{ old('clinic_address') }}</textarea>
+
+    @error('clinic_address')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
                         </div>
 

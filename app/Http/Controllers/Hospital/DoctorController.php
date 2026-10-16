@@ -129,6 +129,10 @@ class DoctorController extends Controller
             'email' =>
                 'nullable|email|max:255|unique:doctors,email',
 
+            'registration_number' => 'nullable|string|max:255',
+            'hospital_address' => 'nullable|string',
+            'clinic_address' => 'nullable|string',
+
             'mobile' => [
                 'required',
                 'digits:10',
@@ -291,6 +295,10 @@ class DoctorController extends Controller
             $request->consultation_fee ?? 0;
 
         $doctor->actual_fee = $request->actual_fee ?? 0;
+
+        $doctor->registration_number = $request->registration_number;
+        $doctor->hospital_address = $request->hospital_address;
+        $doctor->clinic_address = $request->clinic_address;
 
         $doctor->video_consultation_fee =
             $request->video_consultation_fee ?? 0;
@@ -499,6 +507,10 @@ class DoctorController extends Controller
             'photo' =>
                 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
 
+            'registration_number' => 'nullable|string|max:255',
+            'hospital_address' => 'nullable|string',
+            'clinic_address' => 'nullable|string',
+
         ]);
 
 
@@ -659,6 +671,10 @@ class DoctorController extends Controller
         $doctor->home_visit_enabled =
             $request->boolean('home_visit_enabled');
 
+        $doctor->registration_number = $request->registration_number;
+        $doctor->hospital_address = $request->hospital_address;
+        $doctor->clinic_address = $request->clinic_address;
+        
         $doctor->email =
             $request->email;
 

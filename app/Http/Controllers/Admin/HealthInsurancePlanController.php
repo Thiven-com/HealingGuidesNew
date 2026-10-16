@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HealthInsurancePlan;
 use App\Models\HealthInsuranceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -16,11 +17,13 @@ class HealthInsurancePlanController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'description' => 'nullable|string',
 
             'policy_term_years' => 'nullable|integer|min:1',
 
             'price' => 'required|numeric|min:0',
+            'actual_price' => 'required|numeric|min:0',
             'discount_price' => 'required|numeric|min:0',
             'tax_price' => 'required|numeric|min:0',
 
@@ -38,6 +41,11 @@ class HealthInsurancePlanController extends Controller
             throw ValidationException::withMessages([
                 'maximum_entry_age' => 'Maximum entry age must be greater than or equal to minimum entry age.',
             ]);
+        }
+        // Upload plan image
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')
+                ->store('health-insurance/plans', 'public');
         }
 
         $validated['slug'] = !empty($validated['slug'])
@@ -63,9 +71,11 @@ class HealthInsurancePlanController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'description' => 'nullable|string',
             'policy_term_years' => 'nullable|integer|min:1',
             'price' => 'required|numeric|min:0',
+            'actual_price' => 'required|numeric|min:0',
             'discount_price' => 'required|numeric|min:0',
             'tax_price' => 'required|numeric|min:0',
             'minimum_entry_age' => 'nullable|integer|min:0',
@@ -87,6 +97,18 @@ class HealthInsurancePlanController extends Controller
         $validated['slug'] = !empty($validated['slug'])
             ? Str::slug($validated['slug'])
             : Str::slug($validated['name']);
+        // Upload new image only if one was selected
+        if ($request->hasFile('image')) {
+            $newImage = $request->file('image')
+                ->store('health-insurance/plans', 'public');
+
+            // Delete old image after successfully storing the new one
+            if ($plan->image) {
+                Storage::disk('public')->delete($plan->image);
+            }
+
+            $validated['image'] = $newImage;
+        }
 
         $plan->update($validated);
 

@@ -113,12 +113,16 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
 
     //Health Insurance Booking
     Route::get('health-insurance/providers', [HealthInsuranceBookingController::class, 'providers']);
+    Route::get('health-insurance/plan', [
+        HealthInsuranceBookingController::class,
+        'Plans'
+    ]);
     Route::get('health-insurance/providers/{provider}/plans', [HealthInsuranceBookingController::class, 'providerPlans']);
 
     //Health Insurance Booking
-    Route::post('health-insurance/plan/bookings', [HealthInsuranceBookingController::class,'store']);
+    Route::post('health-insurance/plan/bookings', [HealthInsuranceBookingController::class, 'store']);
 
-    Route::get('health-insurance/plan/bookings', [ HealthInsuranceBookingController::class,'myBookings']);
+    Route::get('health-insurance/plan/bookings', [HealthInsuranceBookingController::class, 'myBookings']);
 
     Route::get('health-insurance/plan/bookings/{booking}', [
         HealthInsuranceBookingController::class,

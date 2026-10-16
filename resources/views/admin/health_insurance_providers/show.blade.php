@@ -300,9 +300,11 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th>#</th>
+                                                <th>Image</th>
                                                 <th>Plan Name</th>
                                                 <th>Description</th>
                                                 <th>Policy Term</th>
+                                                <th>Actual Price</th>
                                                 <th>Price</th>
                                                 <th>Discount</th>
                                                 <th>Tax</th>
@@ -320,6 +322,15 @@
                                                                                 <td>{{ $loop->iteration }}</td>
 
                                                                                 <td>
+                                                                                    @if($plan->image)
+                                                                                        <img src="{{ asset($plan->image) }}" alt="{{ $plan->name }}" width="70"
+                                                                                            height="60" class="rounded border" style="object-fit: cover;">
+                                                                                    @else
+                                                                                        <span class="text-muted">No Image</span>
+                                                                                    @endif
+                                                                                </td>
+
+                                                                                <td>
                                                                                     <strong>{{ $plan->name }}</strong>
                                                                                 </td>
 
@@ -331,6 +342,9 @@
                                                                                     {{ $plan->policy_term_years
                                                     ? $plan->policy_term_years . ' year(s)'
                                                     : '-' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    ₹{{ number_format((float) $plan->actual_price, 2) }}
                                                                                 </td>
 
                                                                                 <td>
@@ -377,7 +391,8 @@
                                                                                             data-update-url="{{ route('admin.health-insurance-providers.plans.update', [
                                                     'provider' => $provider->id,
                                                     'plan' => $plan->id
-                                                ]) }}" data-name="{{ $plan->name }}" data-slug="{{ $plan->slug }}" data-description="{{ $plan->description }}"
+                                                ]) }}" data-name="{{ $plan->name }}" data-slug="{{ $plan->slug }}"
+                                                                                            data-description="{{ $plan->description }}"
                                                                                             data-policy-term-years="{{ $plan->policy_term_years }}"
                                                                                             data-price="{{ $plan->price }}"
                                                                                             data-discount-price="{{ $plan->discount_price }}"
@@ -446,7 +461,7 @@
                             <div class="modal-content" style="height: 85vh; max-height: 85vh;">
 
                                 <form action="{{ route('admin.health-insurance-providers.plans.store', $provider->id) }}"
-                                    method="POST"
+                                    method="POST" enctype="multipart/form-data"
                                     style="display: flex; flex-direction: column; height: 100%; min-height: 0;">
                                     @csrf
 
@@ -509,6 +524,25 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            {{-- Plan Image --}}
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Plan Image</label>
+
+                                                <input type="file" name="image"
+                                                    class="form-control @error('image') is-invalid @enderror"
+                                                    accept=".jpg,.jpeg,.png,.webp"
+                                                    onchange="previewPlanImage(this, 'addPlanImagePreview')">
+
+                                                @error('image')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+
+                                                <div class="mt-2">
+                                                    <img id="addPlanImagePreview" src="" alt="Plan Image Preview"
+                                                        class="rounded border d-none"
+                                                        style="width: 120px; height: 100px; object-fit: cover;">
+                                                </div>
+                                            </div>
 
                                             {{-- Description --}}
                                             <div class="col-md-12 mb-3">
@@ -534,6 +568,20 @@
                                                     value="{{ old('policy_term_years') }}" min="1" placeholder="e.g. 1">
 
                                                 @error('policy_term_years')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            {{-- Actual Price --}}
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">
+                                                    Actual Price (₹) <span class="text-danger">*</span>
+                                                </label>
+
+                                                <input type="number" name="actual_price"
+                                                    class="form-control @error('actual_price') is-invalid @enderror"
+                                                    value="{{ old('actual_price', '0.00') }}" min="0" step="0.01" required>
+
+                                                @error('actual_price')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -680,7 +728,7 @@
 
                             <div class="modal-content" style="height: 85vh; max-height: 85vh;">
 
-                                <form id="editPlanForm" method="POST"
+                                <form id="editPlanForm" method="POST" enctype="multipart/form-data"
                                     style="display: flex; flex-direction: column; height: 100%; min-height: 0;">
 
                                     @csrf
@@ -729,6 +777,22 @@
                                                 <input type="text" name="slug" id="edit_slug" class="form-control"
                                                     value="{{ old('slug') }}" placeholder="e.g. family-health-plan">
                                             </div>
+                                            {{-- Plan Image --}}
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Plan Image</label>
+
+                                                <input type="file" name="image" id="edit_image" class="form-control"
+                                                    accept="image/*"
+                                                    onchange="previewPlanImage(this, 'editPlanImagePreview')">
+
+                                                <div class="mt-2">
+                                                    <img id="editPlanImagePreview" src="" alt="Plan Image Preview"
+                                                        class="rounded border d-none"
+                                                        style="width: 120px; height: 100px; object-fit: cover;">
+                                                </div>
+
+                                                <small class="text-muted">Leave empty to keep the existing image.</small>
+                                            </div>
 
                                             {{-- Description --}}
                                             <div class="col-md-12 mb-3">
@@ -746,6 +810,15 @@
                                                 <input type="number" name="policy_term_years" id="edit_policy_term_years"
                                                     class="form-control" value="{{ old('policy_term_years') }}" min="1"
                                                     placeholder="e.g. 1">
+                                            </div>
+                                            {{-- Actual Price --}}
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">
+                                                    Actual Price (₹) <span class="text-danger">*</span>
+                                                </label>
+
+                                                <input type="number" name="actual_price" id="edit_actual_price"
+                                                    class="form-control" min="0" step="0.01" required>
                                             </div>
 
                                             {{-- Price --}}
@@ -868,21 +941,23 @@
                                 <a href="{{ asset($provider->logo) }}" target="_blank">
 
                                     <img src="{{ asset($provider->logo) }}" alt="{{ $provider->name }}"
-                                        class="img-fluid rounded border" style="
-                                                                                                                width: 220px;
-                                                                                                                height: 220px;
-                                                                                                                object-fit: contain;
-                                                                                                            ">
+                                        class="img-fluid rounded border"
+                                        style="
+                                                                                                                                                                        width: 220px;
+                                                                                                                                                                        height: 220px;
+                                                                                                                                                                        object-fit: contain;
+                                                                                                                                                                    ">
 
                                 </a>
 
                             @else
 
-                                <div class="d-flex align-items-center justify-content-center bg-light rounded border" style="
-                                                                                                            width: 220px;
-                                                                                                            height: 220px;
-                                                                                                            margin: auto;
-                                                                                                        ">
+                                <div class="d-flex align-items-center justify-content-center bg-light rounded border"
+                                    style="
+                                                                                                                                                                    width: 220px;
+                                                                                                                                                                    height: 220px;
+                                                                                                                                                                    margin: auto;
+                                                                                                                                                                ">
 
                                     <div class="text-muted">
 
@@ -1074,6 +1149,23 @@
             });
         });
 
+    </script>
+
+    <script>
+        function previewPlanImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 
 

@@ -12,9 +12,11 @@ class HealthInsurancePlan extends Model
     protected $fillable = [
         'health_insurance_provider_id',
         'name',
+        'image',
         'slug',
         'description',
         'policy_term_years',
+        'actual_price',
         'price',
         'discount_price',
         'tax_price',
