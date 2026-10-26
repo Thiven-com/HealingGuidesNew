@@ -35,6 +35,7 @@ class Customer extends Authenticatable
         'package_id',
         'package_start_date',
         'package_expiry_date',
+        'firebase_token'
     ];
     // Customer.php
 

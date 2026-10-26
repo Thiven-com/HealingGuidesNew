@@ -53,6 +53,8 @@ class Ambulance extends Authenticatable
         'status',
         'accept_free_booking',
 
+        'firebase_token',
+
     ];
 
     public function ambulanceType()

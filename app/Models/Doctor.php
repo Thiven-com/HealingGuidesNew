@@ -50,6 +50,7 @@ class Doctor extends Authenticatable
         'video_consultation_enabled',
         'chat_consultation_enabled',
         'home_visit_enabled',
+        'firebase_token',
 
     ];
 

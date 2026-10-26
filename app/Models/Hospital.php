@@ -57,7 +57,9 @@ class Hospital extends Authenticatable
 
         'status',
 
-        'gallery'
+        'gallery',
+
+        'firebase_token'
 
     ];
     public function hospitalSpecializations()
