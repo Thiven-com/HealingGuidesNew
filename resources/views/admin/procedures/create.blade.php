@@ -225,6 +225,31 @@
                         </div>
                         
 
+                        {{-- ACTUAL PRICE --}}
+
+<div class="col-md-4">
+    <label class="form-label">
+        Actual Price
+    </label>
+
+    <div class="input-group">
+        <span class="input-group-text">₹</span>
+
+        <input type="number"
+               name="actual_price"
+               value="{{ old('actual_price', 0) }}"
+               min="0"
+               step="0.01"
+               class="form-control @error('actual_price') is-invalid @enderror"
+               placeholder="0.00">
+    </div>
+
+    @error('actual_price')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
 
                         {{-- PRICE --}}
 

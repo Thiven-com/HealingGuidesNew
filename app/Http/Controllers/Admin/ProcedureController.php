@@ -169,6 +169,8 @@ class ProcedureController extends Controller
             'icon' =>
                 'nullable|string|max:255',
 
+            'actual_price' => 'nullable|numeric|min:0',
+
             'price' =>
                 'nullable|numeric|min:0',
 
@@ -311,6 +313,8 @@ class ProcedureController extends Controller
                 'icon' =>
                     $validated['icon']
                     ?? null,
+
+                'actual_price' => $validated['actual_price'] ?? 0,
 
                 'price' =>
                     $validated['price']
@@ -473,6 +477,8 @@ class ProcedureController extends Controller
             'icon' =>
                 'nullable|string|max:255',
 
+            'actual_price' => 'nullable|numeric|min:0',
+
             'price' =>
                 'nullable|numeric|min:0',
 
@@ -612,6 +618,8 @@ class ProcedureController extends Controller
                 'icon' =>
                     $validated['icon']
                     ?? null,
+
+                'actual_price' => $validated['actual_price'] ?? 0,
 
                 'price' =>
                     $validated['price']

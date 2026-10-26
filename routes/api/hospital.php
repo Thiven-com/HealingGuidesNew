@@ -10,7 +10,7 @@ use App\Http\Controllers\HospitalApp\AmbulanceBookingController;
 use App\Http\Controllers\HospitalApp\MedicineController;
 use App\Http\Controllers\HospitalApp\MedicinePrescriptionController;
 use App\Http\Controllers\HospitalApp\MedicineOrderController;
-
+use App\Http\Controllers\HospitalApp\SurgeryQuotationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -102,4 +102,26 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
 
     Route::get('appointment-details/{id}', [AppointmentController::class, 'appointmentDetails']);
     Route::get('appointment-summary', [AppointmentController::class, 'appointmentSummary']);
+
+    // Surgery Quotation Requests
+    Route::get(
+        'surgery-quotation-requests',
+        [SurgeryQuotationController::class, 'index']
+    );
+
+    Route::get(
+        'surgery-quotation-requests/{id}',
+        [SurgeryQuotationController::class, 'show']
+    );
+
+    Route::put(
+        'surgery-quotation-requests/{id}',
+        [SurgeryQuotationController::class, 'update']
+    );
+
+    Route::post(
+        'firebase-token',
+        [ProfileController::class, 'firebase_token']
+    );
 });
+

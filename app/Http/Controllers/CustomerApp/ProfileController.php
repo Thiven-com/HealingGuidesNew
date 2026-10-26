@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\CustomerApp;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Plugins\FireBaseController;
 use App\Http\Resources\ProfileCollection;
 use App\Models\AppNotification;
+use App\Models\Customer;
 use App\Models\FamilyMember;
 use App\Models\Insurance;
 use App\Services\WhatsAppService;
@@ -260,6 +262,125 @@ class ProfileController extends Controller
         return response()->json([
             'success' => 1,
             'message' => 'Family member deleted successfully'
+        ]);
+    }
+
+    public function testPushNotification(Request $request)
+    {
+
+        $fire_base['title'] = "Test FireBase";
+
+        $fire_base['body'] = 'Test';
+
+        $fire_base['message'] = 'Test Message';
+
+        $fire_base['user_type'] = 'user';
+
+        $fire_base['devicetoken'] = $request->input('device_token');
+
+        $fire_base['sound'] = 'ringtone';
+
+        try {
+
+            $send = (new FireBaseController)->sendUpdatedFCMNotification($fire_base);
+
+            Log::info($send);
+
+
+            if (isset($send['error'])) {
+
+                Log::error('FCM Notification Failed', [
+
+                    'error' => $send['error'],
+
+                ]);
+                // Handle the missing-token response too
+                if (is_array($send) && isset($send['success']) && $send['success'] === 0) {
+                    return response()->json($send, $send['error_code'] ?? 400);
+                }
+
+                return response()->json([
+
+                    'success' => 0,
+
+                    'message' => $send['error']['message'] ?? 'Notification failed',
+
+                    'error_code' => $send['error']['code'] ?? null,
+
+                    'fcm_error_code' => $send['error']['details'][0]['errorCode'] ?? null,
+
+                ], 500);
+
+            }
+
+            return response()->json([
+
+                'success' => 1,
+
+                'message' => 'Success',
+
+                'data' => $send,
+
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+
+                'success' => 0,
+
+                'message' => $e->getMessage(),
+
+            ]);
+
+        }
+
+    }
+
+    public function firebase_token(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login',
+            ], 401);
+        }
+
+        // Current user's OLD Firebase token
+        $oldFirebaseToken = $user->firebase_token;
+
+        // Remove old Firebase token from other customers
+        if (!empty($oldFirebaseToken)) {
+            Customer::where('firebase_token', $oldFirebaseToken)
+                ->where('id', '!=', $user->id)
+                ->update([
+                    'firebase_token' => null
+                ]);
+        }
+
+        // Current user's OLD iOS Firebase token
+        $oldIosFirebaseToken = $user->ios_firebase_token;
+
+        // Remove old iOS Firebase token from other customers
+        if (!empty($oldIosFirebaseToken)) {
+            Customer::where('ios_firebase_token', $oldIosFirebaseToken)
+                ->where('id', '!=', $user->id)
+                ->update([
+                    'ios_firebase_token' => null
+                ]);
+        }
+
+        // Update current user's new tokens
+        Customer::where('id', $user->id)->update([
+            'firebase_token' => $request->firebase_token,
+            'ios_firebase_token' => $request->ios_firebase_token,
+        ]);
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Updated Successfully...',
         ]);
     }
 

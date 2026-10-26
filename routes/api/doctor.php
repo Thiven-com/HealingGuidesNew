@@ -84,6 +84,11 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::post('update-prescription', [PrescriptionController::class, 'updatePrescription']);
     Route::get('prescription/{appointment_id}', [PrescriptionController::class, 'prescriptionDetails']);
 
+    Route::post(
+        'firebase-token',
+        [ProfileController::class, 'firebase_token']
+    );
+
 });
 
 Route::any('specializations', [ProfileController::class, 'specializations']);

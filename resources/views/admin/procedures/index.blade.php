@@ -514,8 +514,12 @@
                                 <td>
 
                                     <strong>
+                                         <span class="text-muted"
+          style="text-decoration: line-through;">
+        ₹{{ number_format($procedure->actual_price ?? 0, 2) }}
+    </span>
 
-                                        ₹{{ number_format($procedure->price, 2) }}
+                                        ₹{{ number_format($procedure->price ?? 0, 2) }}
 
                                     </strong>
 

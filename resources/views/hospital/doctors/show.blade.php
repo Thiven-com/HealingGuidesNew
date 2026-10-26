@@ -1175,7 +1175,7 @@
 
                                     <div class="col-xl-3 col-md-6">
 
-                                        <div class="border rounded p-3 h-100">sw2
+                                        <div class="border rounded p-3 h-100">
 
                                             <div class="d-flex align-items-center mb-2">
 

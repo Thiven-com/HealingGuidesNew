@@ -34,6 +34,8 @@ class Procedure extends Model
 
         'icon',
 
+        'actual_price',
+
         'price',
 
         'display_order',

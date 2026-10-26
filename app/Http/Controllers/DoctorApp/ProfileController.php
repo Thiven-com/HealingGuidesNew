@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DoctorApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DoctorCollection;
 use App\Http\Resources\SpecializationCollection;
+use App\Models\Doctor;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
 use App\Models\Specialization;
@@ -418,6 +419,62 @@ class ProfileController extends Controller
                 'chat_consultation_fee' => $doctor->chat_consultation_fee,
                 'home_visit_fee' => $doctor->home_visit_fee,
             ]
+        ]);
+    }
+
+    public function firebase_token(Request $request)
+    {
+        $doctor = auth('sanctum')->user();
+
+        if (!$doctor) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login',
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'firebase_token' => 'nullable|string',
+            'ios_firebase_token' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Remove duplicate Android token from other doctors
+        if ($request->filled('firebase_token')) {
+            Doctor::where(
+                'firebase_token',
+                $request->firebase_token
+            )
+                ->where('id', '!=', $doctor->id)
+                ->update(['firebase_token' => null]);
+        }
+
+        // Remove duplicate iOS token from other doctors
+        if ($request->filled('ios_firebase_token')) {
+            Doctor::where(
+                'ios_firebase_token',
+                $request->ios_firebase_token
+            )
+                ->where('id', '!=', $doctor->id)
+                ->update(['ios_firebase_token' => null]);
+        }
+
+        // Update the authenticated doctor's tokens
+        $doctor->firebase_token = $request->input('firebase_token');
+        $doctor->ios_firebase_token = $request->input('ios_firebase_token');
+
+        $doctor->save();
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Doctor Firebase tokens updated successfully.',
         ]);
     }
 }

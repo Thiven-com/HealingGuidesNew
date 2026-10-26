@@ -96,10 +96,23 @@
                             </a>
 
                         </li>
+
+                    </ul>
+
+                </li>
+                {{-- Surgery Quotation --}}
+                <li class="submenu-open">
+
+                    <h6 class="submenu-hdr">
+                        Surgery Quotation
+                    </h6>
+
+                    <ul>
+
                         <li class="{{ request()->routeIs('hospital.surgery-quotation-requests.*') ? 'active' : '' }}">
                             <a href="{{ route('hospital.surgery-quotation-requests.index') }}">
-                                <i class="ti ti-stethoscope fs-16 me-2"></i>
-                                <span>Surgery Quotation Requests</span>
+                                <i class="ti ti-receipt fs-16 me-2"></i>
+                                <span>Quotation Requests</span>
                             </a>
                         </li>
 

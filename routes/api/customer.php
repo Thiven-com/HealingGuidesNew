@@ -70,6 +70,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/family-member/update', [ProfileController::class, 'updateFamilyMember']);
     Route::post('/delete-family-member', [ProfileController::class, 'deleteFamilyMember']);
 
+
     Route::get('/health-media', [
         HealthMediaController::class,
         'index'
@@ -450,6 +451,9 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         '/surgery-quotations/{id}/reject',
         [SurgeryQuotationController::class, 'rejectQuotation']
     );
+
+
+    Route::any('testPushNotification', 'ProfileController@testPushNotification');
 
     Route::post('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'store']);
     Route::post('/surgery-quotation-bookings/verify-payment', [SurgeryQuotationBookingController::class, 'verifyPayment']);

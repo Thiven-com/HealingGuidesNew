@@ -60,6 +60,8 @@ class ProcedureController extends Controller
                     'recovery' =>
                         $procedure->recovery,
 
+                    'actual_price' => $procedure->actual_price,
+
                     'price' =>
                         $procedure->price,
 

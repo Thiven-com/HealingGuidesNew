@@ -411,42 +411,35 @@
 
                                 {{-- Availability --}}
 
-                                <td>
+                               <td>
 
-                                    @if(
-                                        $doctor->available_from &&
-                                        $doctor->available_to
-                                    )
+                                            @if($doctor->available_from || $doctor->available_to)
 
-                                        <small>
+                                                                        <span class="badge bg-info">
 
-                                            {{ date(
-                                                'h:i A',
-                                                strtotime(
-                                                    $doctor->available_from
-                                                )
-                                            ) }}
+                                                                            {{ $doctor->available_from
+                                                ? \Carbon\Carbon::parse($doctor->available_from)->format('h:i A')
+                                                : '-' }}
 
-                                            -
+                                                                            -
 
-                                            {{ date(
-                                                'h:i A',
-                                                strtotime(
-                                                    $doctor->available_to
-                                                )
-                                            ) }}
+                                                                            {{ $doctor->available_to
+                                                ? \Carbon\Carbon::parse($doctor->available_to)->format('h:i A')
+                                                : '-' }}
 
-                                        </small>
+                                                                        </span>
 
-                                    @else
+                                            @else
 
-                                        <span class="text-muted">
-                                            Not Set
-                                        </span>
+                                                <span class="text-muted">
 
-                                    @endif
+                                                    Not Set
 
-                                </td>
+                                                </span>
+
+                                            @endif
+
+                                        </td>
 
 
 

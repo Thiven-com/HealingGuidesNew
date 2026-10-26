@@ -42,7 +42,7 @@ Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard']);
 
 
-    Route::get('bookings', [BookingController::class,'bookings']);
+    Route::get('bookings', [BookingController::class, 'bookings']);
 
     Route::get('booking-details/{id}', [BookingController::class, 'bookingDetails']);
 
@@ -53,4 +53,9 @@ Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     Route::post('/verify-pickup-code', [BookingController::class, 'verifyPickupCode']);
 
     Route::get('earnings', [EarningController::class, 'earnings']);
+
+    Route::post(
+        'firebase-token',
+        [ProfileController::class, 'firebase_token']
+    );
 });

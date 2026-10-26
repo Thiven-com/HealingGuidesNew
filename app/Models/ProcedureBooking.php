@@ -16,6 +16,7 @@ class ProcedureBooking extends Model
         'booking_date',
         'booking_time',
         'price_type',
+        'actual_price',
         'price',
         'discount',
         'tax',

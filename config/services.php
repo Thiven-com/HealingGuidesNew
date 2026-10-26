@@ -38,5 +38,9 @@ return [
         'key' => env('RAZORPAY_KEY'),
         'secret' => env('RAZORPAY_SECRET'),
     ],
+    // Firebase configuration
+    'firebase' => [
+        'project_id' => env('FIREBASE_PROJECT_ID', 'thiven-ac8aa'),
+    ],
 
 ];

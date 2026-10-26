@@ -71,19 +71,19 @@
 
                                     <img src="{{ asset($procedure->image) }}" alt="{{ $procedure->name }}" class="rounded"
                                         style="
-                                                                width:160px;
-                                                                height:160px;
-                                                                object-fit:cover;
-                                                             ">
+                                                                        width:160px;
+                                                                        height:160px;
+                                                                        object-fit:cover;
+                                                                     ">
 
                                 @else
 
                                     <div class="d-inline-flex align-items-center justify-content-center bg-light-primary text-primary rounded"
                                         style="
-                                                                width:160px;
-                                                                height:160px;
-                                                                font-size:60px;
-                                                             ">
+                                                                        width:160px;
+                                                                        height:160px;
+                                                                        font-size:60px;
+                                                                     ">
 
                                         @if($procedure->icon)
 
@@ -152,6 +152,16 @@
                             {{-- PRICE --}}
 
                             <div class="mt-4">
+                                {{-- ACTUAL PRICE WITH STRIKETHROUGH --}}
+                                <div class="mb-1">
+
+                                    <span class="text-muted" style="font-size: 18px; text-decoration: line-through;">
+
+                                        ₹{{ number_format($procedure->actual_price ?? 0, 2) }}
+
+                                    </span>
+
+                                </div>
 
                                 <h3 class="text-primary mb-0">
 
@@ -411,32 +421,32 @@
 
                                     @if($procedure->banner)
 
-                                            <a href="{{ asset($procedure->banner) }}" target="_blank">
+                                        <a href="{{ asset($procedure->banner) }}" target="_blank">
 
-                                                <img src="{{ asset($procedure->banner) }}" alt="{{ $procedure->name }} Banner"
-                                                    class="img-fluid rounded" style="
-                                            width:100%;
-                                            max-height:250px;
-                                            object-fit:cover;
-                                        ">
+                                            <img src="{{ asset($procedure->banner) }}" alt="{{ $procedure->name }} Banner"
+                                                class="img-fluid rounded" style="
+                                                    width:100%;
+                                                    max-height:250px;
+                                                    object-fit:cover;
+                                                ">
 
-                                            </a>
+                                        </a>
 
                                     @else
 
-                                                <div class="border rounded p-4 text-center">
+                                        <div class="border rounded p-4 text-center">
 
-                                                    <i class="ti ti-photo-off" style="
-                                               font-size:40px;
-                                               color:#adb5bd;
-                                           ">
-                                                    </i>
+                                            <i class="ti ti-photo-off" style="
+                                                       font-size:40px;
+                                                       color:#adb5bd;
+                                                   ">
+                                            </i>
 
-                                                    <p class="text-muted mb-0 mt-2">
-                                                        No banner uploaded.
-                                                    </p>
+                                            <p class="text-muted mb-0 mt-2">
+                                                No banner uploaded.
+                                            </p>
 
-                                                </div>
+                                        </div>
 
                                     @endif
 
@@ -481,45 +491,45 @@
 
                                         @else
 
-                                                <div class="border rounded p-4 text-center">
+                                            <div class="border rounded p-4 text-center">
 
-                                                    <i class="ti ti-brand-youtube" style="
-                                                   font-size:40px;
-                                                   color:#adb5bd;
-                                               ">
-                                                    </i>
+                                                <i class="ti ti-brand-youtube" style="
+                                                               font-size:40px;
+                                                               color:#adb5bd;
+                                                           ">
+                                                </i>
 
-                                                    <p class="text-muted mb-2 mt-2">
-                                                        Invalid YouTube URL.
-                                                    </p>
+                                                <p class="text-muted mb-2 mt-2">
+                                                    Invalid YouTube URL.
+                                                </p>
 
-                                                    <a href="{{ $procedure->youtube_video }}" target="_blank"
-                                                        class="btn btn-sm btn-light">
+                                                <a href="{{ $procedure->youtube_video }}" target="_blank"
+                                                    class="btn btn-sm btn-light">
 
-                                                        <i class="ti ti-external-link me-1"></i>
-                                                        Open Video
+                                                    <i class="ti ti-external-link me-1"></i>
+                                                    Open Video
 
-                                                    </a>
+                                                </a>
 
-                                                </div>
+                                            </div>
 
                                         @endif
 
                                     @else
 
-                                                <div class="border rounded p-4 text-center">
+                                        <div class="border rounded p-4 text-center">
 
-                                                    <i class="ti ti-brand-youtube" style="
-                                               font-size:40px;
-                                               color:#adb5bd;
-                                           ">
-                                                    </i>
+                                            <i class="ti ti-brand-youtube" style="
+                                                       font-size:40px;
+                                                       color:#adb5bd;
+                                                   ">
+                                            </i>
 
-                                                    <p class="text-muted mb-0 mt-2">
-                                                        No YouTube video added.
-                                                    </p>
+                                            <p class="text-muted mb-0 mt-2">
+                                                No YouTube video added.
+                                            </p>
 
-                                                </div>
+                                        </div>
 
                                     @endif
 
@@ -654,9 +664,9 @@
                                 <div class="text-center py-4">
 
                                     <i class="ti ti-list-check" style="
-                                                              font-size:45px;
-                                                              color:#adb5bd;
-                                                           ">
+                                                                      font-size:45px;
+                                                                      color:#adb5bd;
+                                                                   ">
 
                                     </i>
 
@@ -729,10 +739,10 @@
 
                                             <img src="{{ asset($doctor->image) }}" alt="{{ $doctor->name }}" class="rounded-circle"
                                                 style="
-                                                                                    width:45px;
-                                                                                    height:45px;
-                                                                                    object-fit:cover;
-                                                                                 ">
+                                                                                                width:45px;
+                                                                                                height:45px;
+                                                                                                object-fit:cover;
+                                                                                             ">
 
                                         @else
 
@@ -776,9 +786,9 @@
                                 <div class="text-center py-4">
 
                                     <i class="ti ti-user-off" style="
-                                                              font-size:40px;
-                                                              color:#adb5bd;
-                                                           ">
+                                                                      font-size:40px;
+                                                                      color:#adb5bd;
+                                                                   ">
 
                                     </i>
 
