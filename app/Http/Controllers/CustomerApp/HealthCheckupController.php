@@ -12,32 +12,40 @@ class HealthCheckupController extends Controller
     /**
      * Get all health checkups
      */
-    public function index()
+    public function index(Request $request)
     {
-        $healthCheckups = HealthCheckup::latest()->get();
+        $query = HealthCheckup::query();
+
+        // Filter by is_feature when the parameter is provided
+        if ($request->query('is_feature') !== null && $request->query('is_feature') !== '') {
+            $request->validate([
+                'is_feature' => 'in:0,1',
+            ]);
+
+            $query->where('is_feature', (int) $request->query('is_feature'));
+        }
+
+        $healthCheckups = $query->latest()->get();
 
         return response()->json([
             'success' => 1,
             'message' => 'Health checkups fetched successfully.',
             'data' => $healthCheckups->map(function ($healthCheckup) {
-
                 return [
                     'id' => $healthCheckup->id,
                     'name' => $healthCheckup->name,
                     'slug' => $healthCheckup->slug,
-
                     'image' => $healthCheckup->image
                         ? asset($healthCheckup->image)
                         : null,
-
                     'description' => $healthCheckup->description,
-
+                    'is_feature' => (int) $healthCheckup->is_feature,
                     'created_at' => $healthCheckup->created_at,
                     'updated_at' => $healthCheckup->updated_at,
                 ];
-
             })->values(),
         ]);
+
     }
 
 
@@ -128,6 +136,18 @@ class HealthCheckupController extends Controller
                     );
 
             });
+        }
+        /*
+    |--------------------------------------------------------------------------
+    | Featured Package Filter
+    |--------------------------------------------------------------------------
+    */
+        if ($request->query('is_feature') !== null && $request->query('is_feature') !== '') {
+            $request->validate([
+                'is_feature' => 'in:0,1',
+            ]);
+
+            $query->where('is_feature', (int) $request->query('is_feature'));
         }
 
 
@@ -375,6 +395,8 @@ class HealthCheckupController extends Controller
 
             'test_count' =>
                 $package->tests_count ?? 0,
+
+            'is_feature' => (int) $package->is_feature,
 
             'health_checkup' => $package->healthCheckup
                 ? [

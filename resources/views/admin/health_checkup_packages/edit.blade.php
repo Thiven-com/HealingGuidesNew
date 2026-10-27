@@ -101,7 +101,7 @@
 
 
                         {{-- Health Checkup --}}
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
                             <label class="form-label">
 
@@ -181,7 +181,7 @@
 
 
                         {{-- Status --}}
-                        <div class="col-md-3">
+                        <div class="col-md-2">
 
                             <label class="form-label d-block">
                                 Status
@@ -211,6 +211,54 @@
                             </div>
 
                         </div>
+
+                        {{-- Is Feature --}}
+<div class="col-md-2">
+
+    <label class="form-label d-block">
+        Is Feature
+    </label>
+
+    <div class="form-check form-switch mt-2">
+
+        <input
+            type="hidden"
+            name="is_feature"
+            value="0">
+
+        <input
+            class="form-check-input"
+            type="checkbox"
+            name="is_feature"
+            value="1"
+            id="is_feature"
+            role="switch"
+            {{ old(
+                'is_feature',
+                $healthCheckupPackage->is_feature ?? 0
+            ) ? 'checked' : '' }}>
+
+        <label
+            class="form-check-label"
+            for="is_feature"
+            id="is_feature_label">
+
+            {{ old(
+                'is_feature',
+                $healthCheckupPackage->is_feature ?? 0
+            ) ? 'Yes' : 'No' }}
+
+        </label>
+
+    </div>
+
+    @error('is_feature')
+        <div class="text-danger small mt-1">
+            {{ $message }}
+        </div>
+    @enderror
+
+</div>
 
 
                         {{-- Package Name --}}
@@ -1251,6 +1299,20 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSelectedTests();
 
 });
+/*
+|--------------------------------------------------------------------------
+| Is Feature Toggle
+|--------------------------------------------------------------------------
+*/
+
+const isFeatureToggle = document.getElementById('is_feature');
+const isFeatureLabel = document.getElementById('is_feature_label');
+
+if (isFeatureToggle && isFeatureLabel) {
+    isFeatureToggle.addEventListener('change', function () {
+        isFeatureLabel.textContent = this.checked ? 'Yes' : 'No';
+    });
+}
 
 </script>
 

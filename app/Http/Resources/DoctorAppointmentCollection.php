@@ -30,6 +30,8 @@ class DoctorAppointmentCollection extends ResourceCollection
 
                 'consultation_fee' => $appointment->consultation_fee,
 
+                'registration_fee' => $appointment->registration_fee,
+
                 'discount' => $appointment->discount,
 
                 'tax' => $appointment->tax,

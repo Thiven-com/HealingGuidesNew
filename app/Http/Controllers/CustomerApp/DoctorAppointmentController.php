@@ -1061,9 +1061,9 @@ class DoctorAppointmentController extends Controller
         */
 
         $discount = 0;
-
+        $registration_fee = 100;
         $totalAmount =
-            $consultationFee;
+            $consultationFee + $registration_fee - $discount;
 
         $paymentMethod =
             $request->payment_method;
@@ -1188,6 +1188,8 @@ class DoctorAppointmentController extends Controller
 
                     'consultation_fee' =>
                         $consultationFee,
+
+                    'registration_fee' => $registration_fee,
 
                     'discount' =>
                         $discount,
@@ -1375,6 +1377,20 @@ class DoctorAppointmentController extends Controller
                 'familyMember',
 
             ]);
+            
+        $appointment->token_no =
+            DoctorAppointment::where(
+                'doctor_id',
+                $doctor->id
+            )
+                ->whereDate(
+                    'appointment_date',
+                    $request->appointment_date
+                )
+                ->count() + 1;
+
+
+        $appointment->save();
 
             /*
             |--------------------------------------------------------------------------

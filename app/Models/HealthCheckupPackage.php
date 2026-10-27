@@ -36,6 +36,7 @@ class HealthCheckupPackage extends Model
 
         'display_order',
         'status',
+        'is_feature',
     ];
 
     protected $casts = [

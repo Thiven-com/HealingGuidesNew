@@ -28,6 +28,7 @@ class HealthCheckupController extends Controller
             'slug' => 'nullable|string|max:255|unique:health_checkups,slug',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'description' => 'nullable|string',
+            'is_feature' => 'required|in:0,1',
         ]);
 
         $data = [
@@ -36,6 +37,7 @@ class HealthCheckupController extends Controller
                 ? Str::slug($validated['slug'])
                 : Str::slug($validated['name']),
             'description' => $validated['description'] ?? null,
+            'is_feature' => $validated['is_feature'],
         ];
 
         if ($request->hasFile('image')) {
@@ -61,6 +63,7 @@ class HealthCheckupController extends Controller
             'slug' => 'nullable|string|max:255|unique:health_checkups,slug,' . $id,
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'description' => 'nullable|string',
+            'is_feature' => 'required|in:0,1',
         ]);
 
         $healthCheckup->name = $validated['name'];
@@ -70,6 +73,7 @@ class HealthCheckupController extends Controller
             : Str::slug($validated['name']);
 
         $healthCheckup->description = $validated['description'] ?? null;
+        $healthCheckup->is_feature = $validated['is_feature'];
 
         if ($request->hasFile('image')) {
 

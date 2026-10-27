@@ -740,38 +740,39 @@
                                 {{-- Amount --}}
 
                                 <td>
+    {{-- <strong class="d-block">
+        Total: ₹{{ number_format((float) ($appointment->total_amount ?? 0), 2) }}
+    </strong> --}}
 
-                                    <strong>
+    <small class="d-block text-muted">
+        Consultation Fee:
+        ₹{{ number_format((float) ($appointment->consultation_fee ?? 0), 2) }}
+    </small>
 
-                                        ₹{{ number_format(
-                                            (float) (
-                                                $appointment->total_amount
-                                                ?? 0
-                                            ),
-                                            2
-                                        ) }}
+    @if(($appointment->registration_fee ?? 0) > 0)
+        <small class="d-block text-muted">
+            Registration Fee:
+            ₹{{ number_format((float) $appointment->registration_fee, 2) }}
+        </small>
+    @endif
 
-                                    </strong>
+    @if(($appointment->discount ?? 0) > 0)
+        <small class="d-block text-success">
+            Discount:
+            − ₹{{ number_format((float) $appointment->discount, 2) }}
+        </small>
+    @endif
 
-
-                                    @if(
-                                        $appointment->discount &&
-                                        $appointment->discount > 0
-                                    )
-
-                                        <small class="d-block text-success">
-
-                                            Discount:
-                                            ₹{{ number_format(
-                                                (float) $appointment->discount,
-                                                2
-                                            ) }}
-
-                                        </small>
-
-                                    @endif
-
-                                </td>
+    @if(($appointment->tax ?? 0) > 0)
+        <small class="d-block text-muted">
+            Tax:
+            ₹{{ number_format((float) $appointment->tax, 2) }}
+        </small>
+    @endif
+    <strong class="d-block">
+        Total: ₹{{ number_format((float) ($appointment->total_amount ?? 0), 2) }}
+    </strong>
+</td>
 
 
 

@@ -156,6 +156,10 @@ class HealthCheckupPackageController extends Controller
                 'nullable',
                 'boolean',
             ],
+            'is_feature' => [
+                'nullable',
+                'boolean',
+            ],
             'home_collection' => 'nullable|boolean',
             'centre_collection' => 'nullable|boolean',
             'tests' => [
@@ -280,6 +284,8 @@ class HealthCheckupPackageController extends Controller
 
                     'status' =>
                         $request->boolean('status'),
+
+                    'is_feature' => $request->boolean('is_feature'),
 
                     'home_collection' =>
                         $request->boolean('home_collection'),
@@ -473,6 +479,11 @@ class HealthCheckupPackageController extends Controller
                 'exists:health_checkup_tests,id',
             ],
 
+            'is_feature' => [
+                'nullable',
+                'boolean',
+            ],
+
         ]);
 
 
@@ -590,7 +601,9 @@ class HealthCheckupPackageController extends Controller
 
                 'status' =>
                     $request->boolean('status'),
-                    
+
+                'is_feature' => $request->boolean('is_feature'),
+
                 'home_collection' =>
                     $request->boolean('home_collection'),
 

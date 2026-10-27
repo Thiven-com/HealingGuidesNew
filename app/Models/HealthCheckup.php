@@ -16,6 +16,7 @@ class HealthCheckup extends Model
         'slug',
         'image',
         'description',
+        'is_feature',
     ];
 
     public function packages()

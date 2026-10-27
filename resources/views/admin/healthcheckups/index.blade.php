@@ -349,6 +349,33 @@
                                                                                         placeholder="Enter description">{{ $healthCheckup->description }}</textarea>
 
                                                                                 </div>
+                                                                                {{-- Is Feature --}}
+{{-- Is Feature --}}
+<div class="mb-3">
+    <label class="form-label d-block">Is Feature</label>
+
+    <div class="form-check form-switch">
+        <input type="hidden" name="is_feature" value="0">
+
+        <input
+            class="form-check-input"
+            type="checkbox"
+            name="is_feature"
+            id="edit_is_feature_{{ $healthCheckup->id }}"
+            value="1"
+            role="switch"
+            {{ $healthCheckup->is_feature == '1' ? 'checked' : '' }}
+        >
+
+        <label
+            class="form-check-label"
+            for="edit_is_feature_{{ $healthCheckup->id }}"
+            id="edit_is_feature_label_{{ $healthCheckup->id }}"
+        >
+            {{ $healthCheckup->is_feature == '1' ? 'Yes' : 'No' }}
+        </label>
+    </div>
+</div>
 
                                                                             </div>
 
@@ -573,6 +600,28 @@
                                 placeholder="Enter health checkup description">{{ old('description') }}</textarea>
 
                         </div>
+                        {{-- Is Feature --}}
+<div class="mb-3">
+    <label class="form-label d-block">Is Feature</label>
+
+    <div class="form-check form-switch">
+        <input type="hidden" name="is_feature" value="0">
+
+        <input
+            class="form-check-input"
+            type="checkbox"
+            name="is_feature"
+            id="add_is_feature"
+            value="1"
+            role="switch"
+            {{ old('is_feature', '0') == '1' ? 'checked' : '' }}
+        >
+
+        <label class="form-check-label" for="add_is_feature" id="add_is_feature_label">
+            {{ old('is_feature', '0') == '1' ? 'Yes' : 'No' }}
+        </label>
+    </div>
+</div>
 
                     </div>
 
@@ -654,5 +703,34 @@
 
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('add_is_feature');
+        const label = document.getElementById('add_is_feature_label');
+
+        if (toggle && label) {
+            toggle.addEventListener('change', function () {
+                label.textContent = this.checked ? 'Yes' : 'No';
+            });
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[id^="edit_is_feature_"]').forEach(function (toggle) {
+            if (toggle.type !== 'checkbox') return;
+
+            toggle.addEventListener('change', function () {
+                const label = document.getElementById(
+                    'edit_is_feature_label_' + this.id.replace('edit_is_feature_', '')
+                );
+
+                if (label) {
+                    label.textContent = this.checked ? 'Yes' : 'No';
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

@@ -76,6 +76,8 @@ class DoctorAppointment extends Model
 
         'visit_status',
 
+        'registration_fee',
+
 
     ];
 

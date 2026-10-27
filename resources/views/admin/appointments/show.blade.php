@@ -2058,9 +2058,26 @@
                                             </td>
 
                                         </tr>
+                                        {{-- Registration Fee: Hospital Visit Only --}}
+                                        @if(in_array(strtolower($appointment->consultation_type ?? ''), ['hospital_visit', 'hospital_vist']))
+
+                                                                            <tr>
+                                                                                <td>
+                                                                                    Registration Fee
+                                                                                </td>
+
+                                                                                <td class="text-end">
+                                                                                    ₹{{ number_format(
+                                                (float) ($appointment->registration_fee ?? 0),
+                                                2
+                                            ) }}
+                                                                                </td>
+                                                                            </tr>
+
+                                        @endif
 
 
-                                        <tr>
+                                        {{-- <tr>
 
                                             <td>
                                                 Tax
@@ -2078,7 +2095,7 @@
 
                                             </td>
 
-                                        </tr>
+                                        </tr> --}}
 
 
                                         <tr class="border-top">
