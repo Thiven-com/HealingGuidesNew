@@ -928,6 +928,8 @@ class DoctorAppointmentController extends Controller
 
             'doctor_id' =>
                 'required|exists:doctors,id',
+                
+            'doctor_schedule_id' => 'required|exists:doctor_schedules,id',
 
             'family_member_id' =>
                 'nullable|exists:family_members,id',
@@ -975,6 +977,56 @@ class DoctorAppointmentController extends Controller
         $freeType =
             ($request->free_type ?? 'free_consultation');
 
+
+             /*
+    //     |--------------------------------------------------------------------------
+    //     | Future Date / Time
+    //     |--------------------------------------------------------------------------
+    //     */
+
+        $appointmentDateTime = Carbon::parse(
+            $request->appointment_date . ' ' . $request->appointment_time
+        );
+
+        if ($appointmentDateTime->lte(now())) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please select a future date and time.'
+            ]);
+        }
+
+
+    //     /*
+    //     |--------------------------------------------------------------------------
+    //     | Check Slot Already Booked
+    //     |--------------------------------------------------------------------------
+    //     */
+
+        $alreadyBooked = DoctorAppointment::where(
+            'doctor_id',
+            $request->doctor_id
+        )
+            ->whereDate(
+                'appointment_date',
+                $request->appointment_date
+            )
+            ->whereTime(
+                'appointment_time',
+                $request->appointment_time
+            )
+            ->whereNotIn('appointment_status', [
+                'cancelled',
+                'rejected'
+            ])
+            ->exists();
+
+        if ($alreadyBooked) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Selected slot already booked.'
+            ]);
+        }
+
         /*
         |--------------------------------------------------------------------------
         | Get Doctor
@@ -995,6 +1047,32 @@ class DoctorAppointmentController extends Controller
                     'Doctor not found.',
 
             ], 404);
+        }
+         /*
+    //     |--------------------------------------------------------------------------
+    //     | Doctor Schedule
+    //     |--------------------------------------------------------------------------
+    //     */
+
+        $schedule = DoctorSchedule::where(
+            'id',
+            $request->doctor_schedule_id
+        )
+            ->where(
+                'doctor_id',
+                $request->doctor_id
+            )
+            ->where(
+                'status',
+                1
+            )
+            ->first();
+
+        if (!$schedule) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Doctor schedule not found.'
+            ]);
         }
 
         /*
@@ -1029,6 +1107,89 @@ class DoctorAppointmentController extends Controller
 
                 ], 404);
             }
+        }
+
+        /*
+    //     |--------------------------------------------------------------------------
+    //     | Doctor Schedule
+    //     |--------------------------------------------------------------------------
+    //     */
+
+        $schedule = DoctorSchedule::where(
+            'id',
+            $request->doctor_schedule_id
+        )
+            ->where(
+                'doctor_id',
+                $request->doctor_id
+            )
+            ->where(
+                'status',
+                1
+            )
+            ->first();
+
+        if (!$schedule) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Doctor schedule not found.'
+            ]);
+        }
+
+
+    //     /*
+    //     |--------------------------------------------------------------------------
+    //     | Validate Slot
+    //     |--------------------------------------------------------------------------
+    //     */
+
+        $requestedTime = Carbon::parse(
+            $request->appointment_time
+        )->format('H:i');
+
+        $start = Carbon::parse(
+            $schedule->available_from
+        );
+
+        $end = Carbon::parse(
+            $schedule->available_to
+        );
+
+        $isValidSlot = false;
+
+        while ($start < $end) {
+
+            // Skip lunch break
+            if (
+                $start->format('H:i') >= '13:00' &&
+                $start->format('H:i') < '14:00'
+            ) {
+                $start->addMinutes(
+                    $schedule->slot_duration
+                );
+
+                continue;
+            }
+
+            if (
+                $start->format('H:i') === $requestedTime
+            ) {
+                $isValidSlot = true;
+                break;
+            }
+
+            $start->addMinutes(
+                $schedule->slot_duration
+            );
+        }
+
+
+        if (!$isValidSlot) {
+            return response()->json([
+                'success' => 0,
+                'message' =>
+                    'Please select a valid available time slot.'
+            ]);
         }
 
         /*
@@ -1173,6 +1334,9 @@ class DoctorAppointmentController extends Controller
 
                     'doctor_id' =>
                         $doctor->id,
+
+    'hospital_id'          => $doctor->hospital_id,
+    'doctor_schedule_id'   => $request->doctor_schedule_id,
 
                     'family_member_id' =>
                         $familyMember?->id,
