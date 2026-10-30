@@ -502,30 +502,7 @@
                DATATABLE
             ============================================ */
 
-            let table = $('.datatable').DataTable({
-
-                responsive: true,
-
-                autoWidth: false,
-
-                ordering: true,
-
-                pageLength: 10,
-
-                lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-
-                language: {
-
-                    search: "",
-
-                    searchPlaceholder: "Search..."
-
-                }
-
-            });
+            
 
 
             /* ============================================
