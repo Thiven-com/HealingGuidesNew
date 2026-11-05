@@ -36,6 +36,7 @@ use App\Http\Controllers\CustomerApp\ProcedureBookingController;
 use App\Http\Controllers\CustomerApp\ProcedureCategoryController;
 use App\Http\Controllers\CustomerApp\ProcedureController;
 use App\Http\Controllers\CustomerApp\ProfileController;
+use App\Http\Controllers\CustomerApp\SiteSettingController;
 use App\Http\Controllers\CustomerApp\SurgeryCategoryController;
 use App\Http\Controllers\CustomerApp\SurgeryController;
 use App\Http\Controllers\CustomerApp\SurgeryQuotationBookingController;
@@ -70,6 +71,8 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('/family-member/store', [ProfileController::class, 'storeFamilyMember']);
     Route::post('/family-member/update', [ProfileController::class, 'updateFamilyMember']);
     Route::post('/delete-family-member', [ProfileController::class, 'deleteFamilyMember']);
+
+    Route::get('/site-settings', [SiteSettingController::class, 'index']);
 
 
     Route::get('/health-media', [

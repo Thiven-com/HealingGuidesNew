@@ -7,6 +7,7 @@ use App\Http\Controllers\DoctorApp\PatientMedicalReportController;
 use App\Http\Controllers\DoctorApp\PatientVitalController;
 use App\Http\Controllers\DoctorApp\PrescriptionController;
 use App\Http\Controllers\DoctorApp\ProfileController;
+use App\Http\Controllers\DoctorApp\SiteSettingController;
 use App\Http\Controllers\DoctorApp\VideoCallController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,8 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::get('dashboard', [ProfileController::class, 'dashboard']);
     Route::get('todaySummary', [ProfileController::class, 'todaySummary']);
     Route::get('statistics', [ProfileController::class, 'statistics']);
+
+    Route::get('site-settings', [SiteSettingController::class, 'index']);
 
     Route::any('doctor-slots', [ProfileController::class, 'availableSlots']);
     Route::post('updateFees', [ProfileController::class, 'updateFees']);

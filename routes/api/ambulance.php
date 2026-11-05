@@ -7,7 +7,7 @@ use App\Http\Controllers\AmbulanceApp\AccountController;
 use App\Http\Controllers\AmbulanceApp\ProfileController;
 use App\Http\Controllers\AmbulanceApp\DashboardController;
 use App\Http\Controllers\AmbulanceApp\BookingController;
-
+use App\Http\Controllers\AmbulanceApp\SiteSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +37,8 @@ Route::group(['middleware' => ['ambulancetokenCheck']], function () {
     Route::post('update-location', [ProfileController::class, 'updateLocation']);
 
     Route::post('update-availability', [ProfileController::class, 'updateAvailability']);
+
+    Route::get('site-settings', [SiteSettingController::class, 'index']);
 
 
     Route::get('dashboard', [DashboardController::class, 'dashboard']);

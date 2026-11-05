@@ -10,6 +10,7 @@ use App\Http\Controllers\HospitalApp\AmbulanceBookingController;
 use App\Http\Controllers\HospitalApp\MedicineController;
 use App\Http\Controllers\HospitalApp\MedicinePrescriptionController;
 use App\Http\Controllers\HospitalApp\MedicineOrderController;
+use App\Http\Controllers\HospitalApp\SiteSettingController;
 use App\Http\Controllers\HospitalApp\SurgeryQuotationController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
     //Profile
     Route::get('logout', 'AccountController@logout');
     Route::get('profile', [ProfileController::class, 'profile']);
+
+    Route::get('site-settings', [SiteSettingController::class, 'index']);
 
     Route::post('update-profile', [ProfileController::class, 'updateProfile']);
     //Dashboard
