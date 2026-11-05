@@ -1204,10 +1204,37 @@ class DoctorAppointmentController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        switch ($request->consultation_type) {
+
+            case 'video':
+
+                $fee = $doctor->video_consultation_fee;
+
+                break;
+
+            case 'chat':
+
+                $fee = $doctor->chat_consultation_fee;
+
+                break;
+
+            case 'home_visit':
+
+                $fee = $doctor->home_visit_fee;
+
+                break;
+
+            default:
+
+                $fee = $doctor->consultation_fee;
+
+                break;
+        }
+
+
+
         $consultationFee =
-            (float) (
-                $doctor->consultation_fee ?? 0
-            );
+            (float) ($fee ?? 0);
 
         if ($consultationFee <= 0) {
 
@@ -1285,7 +1312,7 @@ class DoctorAppointmentController extends Controller
             */
 
             $discount =
-                $consultationFee;
+                $consultationFee + $registration_fee;
 
             $totalAmount =
                 0;
