@@ -494,6 +494,11 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
             ]);
         });
 
+    Route::post(
+        'firebase-token',
+        [ProfileController::class, 'firebase_token']
+    );
+
 });
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);
