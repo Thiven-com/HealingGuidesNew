@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerApp\AmbulanceController;
 use App\Http\Controllers\CustomerApp\BookAdmissionController;
 use App\Http\Controllers\CustomerApp\CareServiceBookingController;
 use App\Http\Controllers\CustomerApp\ChatbotController;
+use App\Http\Controllers\CustomerApp\ChatConsultationController;
 use App\Http\Controllers\CustomerApp\CouponController;
 use App\Http\Controllers\CustomerApp\DiagnosticBookingController;
 use App\Http\Controllers\CustomerApp\DiagnosticCategoryController;
@@ -453,7 +454,6 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     );
 
 
-    Route::any('testPushNotification', 'ProfileController@testPushNotification');
 
     Route::post('/surgery-quotation-bookings', [SurgeryQuotationBookingController::class, 'store']);
     Route::post('/surgery-quotation-bookings/verify-payment', [SurgeryQuotationBookingController::class, 'verifyPayment']);
@@ -499,7 +499,20 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
         [ProfileController::class, 'firebase_token']
     );
 
+    Route::prefix('chat')->group(function () {
+        Route::post('/join', [ChatConsultationController::class, 'joinChat']);
+
+        Route::post('/send-message', [ChatConsultationController::class, 'sendMessage']);
+
+        Route::get('/messages', [ChatConsultationController::class, 'messages']);
+
+        Route::any('/end', [ChatConsultationController::class, 'endChat']);
+
+    });
+
 });
+Route::any('testPushNotification', 'ProfileController@testPushNotification');
+
 Route::any('/states', [LocationController::class, 'states']);
 Route::any('/postalDetails', [LocationController::class, 'postalDetails']);
 Route::get('/districts', [LocationController::class, 'districts']);

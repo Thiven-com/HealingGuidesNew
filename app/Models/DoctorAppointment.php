@@ -134,4 +134,12 @@ class DoctorAppointment extends Model
             'appointment_id'
         );
     }
+
+    public function chatMessages()
+    {
+        return $this->hasMany(
+            ChatMessage::class,
+            'appointment_id'
+        )->orderBy('created_at', 'asc');
+    }
 }

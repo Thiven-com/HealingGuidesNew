@@ -268,11 +268,11 @@ class ProfileController extends Controller
     public function testPushNotification(Request $request)
     {
 
-        $fire_base['title'] = "Test FireBase";
+        $fire_base['title'] = "Appointment Confirmed";
 
-        $fire_base['body'] = 'Test';
+        $fire_base['body'] = 'Your appointment has been confirmed successfully.';
 
-        $fire_base['message'] = 'Test Message';
+        $fire_base['message'] = 'Your appointment has been confirmed successfully.';
 
         $fire_base['user_type'] = 'user';
 

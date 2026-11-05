@@ -928,7 +928,7 @@ class DoctorAppointmentController extends Controller
 
             'doctor_id' =>
                 'required|exists:doctors,id',
-                
+
             'doctor_schedule_id' => 'required|exists:doctor_schedules,id',
 
             'family_member_id' =>
@@ -978,11 +978,11 @@ class DoctorAppointmentController extends Controller
             ($request->free_type ?? 'free_consultation');
 
 
-             /*
-    //     |--------------------------------------------------------------------------
-    //     | Future Date / Time
-    //     |--------------------------------------------------------------------------
-    //     */
+        /*
+//     |--------------------------------------------------------------------------
+//     | Future Date / Time
+//     |--------------------------------------------------------------------------
+//     */
 
         $appointmentDateTime = Carbon::parse(
             $request->appointment_date . ' ' . $request->appointment_time
@@ -996,11 +996,11 @@ class DoctorAppointmentController extends Controller
         }
 
 
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Check Slot Already Booked
-    //     |--------------------------------------------------------------------------
-    //     */
+        //     /*
+        //     |--------------------------------------------------------------------------
+        //     | Check Slot Already Booked
+        //     |--------------------------------------------------------------------------
+        //     */
 
         $alreadyBooked = DoctorAppointment::where(
             'doctor_id',
@@ -1048,11 +1048,11 @@ class DoctorAppointmentController extends Controller
 
             ], 404);
         }
-         /*
-    //     |--------------------------------------------------------------------------
-    //     | Doctor Schedule
-    //     |--------------------------------------------------------------------------
-    //     */
+        /*
+   //     |--------------------------------------------------------------------------
+   //     | Doctor Schedule
+   //     |--------------------------------------------------------------------------
+   //     */
 
         $schedule = DoctorSchedule::where(
             'id',
@@ -1137,11 +1137,11 @@ class DoctorAppointmentController extends Controller
         }
 
 
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Validate Slot
-    //     |--------------------------------------------------------------------------
-    //     */
+        //     /*
+        //     |--------------------------------------------------------------------------
+        //     | Validate Slot
+        //     |--------------------------------------------------------------------------
+        //     */
 
         $requestedTime = Carbon::parse(
             $request->appointment_time
@@ -1335,8 +1335,8 @@ class DoctorAppointmentController extends Controller
                     'doctor_id' =>
                         $doctor->id,
 
-    'hospital_id'          => $doctor->hospital_id,
-    'doctor_schedule_id'   => $request->doctor_schedule_id,
+                    'hospital_id' => $doctor->hospital_id,
+                    'doctor_schedule_id' => $request->doctor_schedule_id,
 
                     'family_member_id' =>
                         $familyMember?->id,
@@ -1541,20 +1541,20 @@ class DoctorAppointmentController extends Controller
                 'familyMember',
 
             ]);
-            
-        $appointment->token_no =
-            DoctorAppointment::where(
-                'doctor_id',
-                $doctor->id
-            )
-                ->whereDate(
-                    'appointment_date',
-                    $request->appointment_date
+
+            $appointment->token_no =
+                DoctorAppointment::where(
+                    'doctor_id',
+                    $doctor->id
                 )
-                ->count() + 1;
+                    ->whereDate(
+                        'appointment_date',
+                        $request->appointment_date
+                    )
+                    ->count() + 1;
 
 
-        $appointment->save();
+            $appointment->save();
 
             /*
             |--------------------------------------------------------------------------
@@ -2254,7 +2254,8 @@ class DoctorAppointmentController extends Controller
             case 'chat':
 
                 // Chat room creation will be implemented later
-
+                $appointment->chat_started_at = null;
+                $appointment->chat_ended_at = null;
                 break;
 
             case 'home_visit':
