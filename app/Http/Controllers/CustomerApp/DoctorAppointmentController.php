@@ -1570,47 +1570,57 @@ class DoctorAppointmentController extends Controller
 
             $appointment->load(['doctor', 'hospital', 'customer', 'familyMember']);
 
-            // Customer notification
-            NotificationService::send(
-                'customer',
-                $customer->id,
-                'appointment_booked',
-                'Appointment Booked',
-                'Your appointment with Dr. ' . $doctor->doctor_name . ' has been booked successfully.',
-                'doctor_appointment',
-                $appointment->id,
-                'appointment_details',
-                [
-                    'appointment_id' => $appointment->id,
-                    'appointment_no' => $appointment->appointment_no,
-                    'doctor_id' => $doctor->id,
-                    'doctor_name' => $doctor->doctor_name,
-                    'hospital_id' => $appointment->hospital_id,
-                    'appointment_date' => $appointment->appointment_date,
-                    'appointment_time' => $appointment->appointment_time,
-                    'consultation_type' => $appointment->consultation_type,
-                    'total_amount' => (float) $appointment->total_amount,
-                    'payment_status' => $appointment->payment_status,
-                    'appointment_status' => $appointment->appointment_status,
-                ]
-            );
 
-            // Hospital notification
-            if ($appointment->hospital_id) {
+
+            // // Hospital notification
+            // if ($appointment->hospital_id) {
+            //     NotificationService::send(
+            //         'hospital',
+            //         $appointment->hospital_id,
+            //         'new_doctor_appointment',
+            //         'New Doctor Appointment',
+            //         'A new appointment has been booked with Dr. ' . $doctor->doctor_name . '.',
+            //         'doctor_appointment',
+            //         $appointment->id,
+            //         'appointment_details',
+            //         [
+            //             'appointment_id' => $appointment->id,
+            //             'appointment_no' => $appointment->appointment_no,
+            //             'customer_id' => $customer->id,
+            //             'customer_name' => $customer->name,
+            //             'doctor_id' => $doctor->id,
+            //             'doctor_name' => $doctor->doctor_name,
+            //             'hospital_id' => $appointment->hospital_id,
+            //             'appointment_date' => $appointment->appointment_date,
+            //             'appointment_time' => $appointment->appointment_time,
+            //             'consultation_type' => $appointment->consultation_type,
+            //             'total_amount' => (float) $appointment->total_amount,
+            //             'payment_status' => $appointment->payment_status,
+            //             'appointment_status' => $appointment->appointment_status,
+            //         ]
+            //     );
+            // }
+
+            /*
+            |--------------------------------------------------------------------------
+            | FREE APPOINTMENT RESPONSE
+            |--------------------------------------------------------------------------
+            */
+
+            if ($freeAppointment === 1) {
+                // Customer notification
                 NotificationService::send(
-                    'hospital',
-                    $appointment->hospital_id,
-                    'new_doctor_appointment',
-                    'New Doctor Appointment',
-                    'A new appointment has been booked with Dr. ' . $doctor->doctor_name . '.',
+                    'customer',
+                    $customer->id,
+                    'appointment_booked',
+                    'Appointment Booked',
+                    'Your appointment with Dr. ' . $doctor->doctor_name . ' has been booked successfully.',
                     'doctor_appointment',
                     $appointment->id,
                     'appointment_details',
                     [
                         'appointment_id' => $appointment->id,
                         'appointment_no' => $appointment->appointment_no,
-                        'customer_id' => $customer->id,
-                        'customer_name' => $customer->name,
                         'doctor_id' => $doctor->id,
                         'doctor_name' => $doctor->doctor_name,
                         'hospital_id' => $appointment->hospital_id,
@@ -1622,16 +1632,6 @@ class DoctorAppointmentController extends Controller
                         'appointment_status' => $appointment->appointment_status,
                     ]
                 );
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | FREE APPOINTMENT RESPONSE
-            |--------------------------------------------------------------------------
-            */
-
-            if ($freeAppointment === 1) {
-
                 return response()->json([
 
                     'success' => 1,
@@ -1686,6 +1686,30 @@ class DoctorAppointmentController extends Controller
             | NORMAL PAYMENT RESPONSE
             |--------------------------------------------------------------------------
             */
+            // Customer notification
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'appointment_booked',
+                'Appointment Booked',
+                'Please complete the payment for your appointment with Dr. ' . $doctor->doctor_name . ' to confirm your booking.',
+                'doctor_appointment',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+                    'doctor_id' => $doctor->id,
+                    'doctor_name' => $doctor->doctor_name,
+                    'hospital_id' => $appointment->hospital_id,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+                    'consultation_type' => $appointment->consultation_type,
+                    'total_amount' => (float) $appointment->total_amount,
+                    'payment_status' => $appointment->payment_status,
+                    'appointment_status' => $appointment->appointment_status,
+                ]
+            );
 
             return response()->json([
 
