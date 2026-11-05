@@ -1822,7 +1822,8 @@ class DoctorAppointmentController extends Controller
         $appointments = DoctorAppointment::with([
             'doctor.hospitalSpecialization.specialization',
             'doctor.hospital',
-            'familyMember'
+            'familyMember',
+            'hospital',
         ])
             ->where('customer_id', $user->id);
 
