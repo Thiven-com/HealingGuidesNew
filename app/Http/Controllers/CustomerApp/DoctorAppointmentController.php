@@ -1618,19 +1618,7 @@ class DoctorAppointmentController extends Controller
                     'doctor_appointment',
                     $appointment->id,
                     'appointment_details',
-                    [
-                        'appointment_id' => $appointment->id,
-                        'appointment_no' => $appointment->appointment_no,
-                        'doctor_id' => $doctor->id,
-                        'doctor_name' => $doctor->doctor_name,
-                        'hospital_id' => $appointment->hospital_id,
-                        'appointment_date' => $appointment->appointment_date,
-                        'appointment_time' => $appointment->appointment_time,
-                        'consultation_type' => $appointment->consultation_type,
-                        'total_amount' => (float) $appointment->total_amount,
-                        'payment_status' => $appointment->payment_status,
-                        'appointment_status' => $appointment->appointment_status,
-                    ]
+                    
                 );
                 return response()->json([
 
