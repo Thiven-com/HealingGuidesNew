@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BookAdmission;
 use App\Models\Doctor;
 use App\Models\FamilyMember;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -118,7 +119,8 @@ class BookAdmissionController extends Controller
 
             'preferred_doctor_id' => [
                 'nullable',
-                'exists:doctors,id'
+                Rule::exists('doctors', 'id')
+                    ->where('status', 1),
             ],
 
             'additional_information' => [
@@ -178,6 +180,69 @@ class BookAdmissionController extends Controller
             'familyMember',
             'preferredDoctor'
         ]);
+        NotificationService::send(
+            'customer',
+            $user->id,
+            'admission_requested',
+            'Admission Request Submitted',
+            'Your ' .
+            ($bookAdmission->admission_type === 'general_admission'
+                ? 'General Admission'
+                : 'Surgery Admission') .
+            ' request has been submitted successfully.',
+            'book_admission',
+            $bookAdmission->id,
+            'admission_details',
+            [
+                'admission_id' => $bookAdmission->id,
+                'customer_id' => $user->id,
+                'family_member_id' => $bookAdmission->family_member_id,
+                'family_member_name' => $bookAdmission->familyMember->name ?? null,
+                'admission_type' => $bookAdmission->admission_type,
+                'preferred_admission_date' => $bookAdmission->preferred_admission_date,
+                'surgery_procedure' => $bookAdmission->surgery_procedure,
+                'preferred_doctor_id' => $bookAdmission->preferred_doctor_id,
+                'preferred_doctor_name' => $bookAdmission->preferredDoctor->doctor_name ?? null,
+                'additional_information' => $bookAdmission->additional_information,
+                'status' => $bookAdmission->status,
+                'created_at' => $bookAdmission->created_at,
+            ]
+        );
+
+
+        /*
+|--------------------------------------------------------------------------
+| Doctor Notification
+|--------------------------------------------------------------------------
+*/
+
+        if (
+            $bookAdmission->preferred_doctor_id &&
+            $bookAdmission->preferredDoctor
+        ) {
+            NotificationService::send(
+                'doctor',
+                $bookAdmission->preferred_doctor_id,
+                'admission_requested',
+                'New Admission Request',
+                'A customer has submitted an admission request with you as the preferred doctor.',
+                'book_admission',
+                $bookAdmission->id,
+                'admission_details',
+                [
+                    'admission_id' => $bookAdmission->id,
+                    'customer_id' => $user->id,
+                    'family_member_id' => $bookAdmission->family_member_id,
+                    'family_member_name' => $bookAdmission->familyMember->name ?? null,
+                    'doctor_id' => $bookAdmission->preferred_doctor_id,
+                    'doctor_name' => $bookAdmission->preferredDoctor->doctor_name,
+                    'admission_type' => $bookAdmission->admission_type,
+                    'preferred_admission_date' => $bookAdmission->preferred_admission_date,
+                    'surgery_procedure' => $bookAdmission->surgery_procedure,
+                    'status' => $bookAdmission->status,
+                ]
+            );
+        }
 
         /*
         |--------------------------------------------------------------------------

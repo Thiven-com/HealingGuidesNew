@@ -493,6 +493,20 @@ class DiagnosticBookingController extends Controller
 
                 $bookingItem->save();
             }
+
+            DB::commit();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Load Booking Details
+            |--------------------------------------------------------------------------
+            */
+
+            $booking->load([
+                'diagnostic',
+                'familyMember',
+                'items.labTest'
+            ]);
             NotificationService::send(
                 'customer',
                 $customer->id,
@@ -542,19 +556,40 @@ class DiagnosticBookingController extends Controller
                 ]
             );
 
-            DB::commit();
-
             /*
-            |--------------------------------------------------------------------------
-            | Load Booking Details
-            |--------------------------------------------------------------------------
-            */
+|--------------------------------------------------------------------------
+| Diagnostic Centre Notification
+|--------------------------------------------------------------------------
+*/
 
-            $booking->load([
+            NotificationService::send(
                 'diagnostic',
-                'familyMember',
-                'items.labTest'
-            ]);
+                $diagnostic->id,
+                'new_lab_booking',
+                'New Lab Test Booking',
+                'A new lab test booking has been received.',
+                'diagnostic_booking',
+                $booking->id,
+                'lab_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'diagnostic_id' => $diagnostic->id,
+                    'diagnostic_name' => $diagnostic->diagnostic_name,
+                    'family_member_id' => $booking->family_member_id,
+                    'collection_type' => $booking->collection_type,
+                    'booking_date' => $booking->booking_date,
+                    'booking_time' => $booking->booking_time,
+                    'address' => $booking->address,
+                    'city' => $booking->city,
+                    'state' => $booking->state,
+                    'pincode' => $booking->pincode,
+                    'total_amount' => $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
 
             return response()->json([
 
@@ -876,6 +911,63 @@ class DiagnosticBookingController extends Controller
 
         $booking->save();
 
+        /*
+|--------------------------------------------------------------------------
+| Customer Payment Success Notification
+|--------------------------------------------------------------------------
+*/
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'lab_payment_success',
+            'Lab Booking Payment Successful',
+            'Your payment for lab booking ' . $booking->booking_no . ' was successful.',
+            'diagnostic_booking',
+            $booking->id,
+            'lab_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'payment_method' => $booking->payment_method,
+                'payment_id' => $booking->payment_id,
+                'total_amount' => $booking->total_amount,
+                'payment_status' => $booking->payment_status,
+                'booking_status' => $booking->booking_status,
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Diagnostic Centre Payment Notification
+        |--------------------------------------------------------------------------
+        */
+
+        $diagnostic = Diagnostic::find($booking->diagnostic_id);
+
+        if ($diagnostic) {
+            NotificationService::send(
+                'diagnostic',
+                $diagnostic->id,
+                'lab_payment_success',
+                'Lab Booking Payment Received',
+                'Payment has been completed for lab booking ' . $booking->booking_no . '.',
+                'diagnostic_booking',
+                $booking->id,
+                'lab_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'diagnostic_id' => $diagnostic->id,
+                    'payment_method' => $booking->payment_method,
+                    'payment_id' => $booking->payment_id,
+                    'total_amount' => $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        }
+
         return response()->json([
             'success' => 1,
             'message' => 'Payment completed successfully.',
@@ -1037,6 +1129,57 @@ class DiagnosticBookingController extends Controller
         $booking->cancelled_at = now();
 
         $booking->save();
+
+        /*
+|--------------------------------------------------------------------------
+| Customer Cancellation Notification
+|--------------------------------------------------------------------------
+*/
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'lab_booking_cancelled',
+            'Lab Booking Cancelled',
+            'Your lab booking ' . $booking->booking_no . ' has been cancelled.',
+            'diagnostic_booking',
+            $booking->id,
+            'lab_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'cancel_reason' => $booking->cancel_reason,
+                'booking_status' => $booking->booking_status,
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Diagnostic Centre Cancellation Notification
+        |--------------------------------------------------------------------------
+        */
+
+        $diagnostic = Diagnostic::find($booking->diagnostic_id);
+
+        if ($diagnostic) {
+            NotificationService::send(
+                'diagnostic',
+                $diagnostic->id,
+                'lab_booking_cancelled',
+                'Lab Booking Cancelled',
+                'Lab booking ' . $booking->booking_no . ' has been cancelled by the customer.',
+                'diagnostic_booking',
+                $booking->id,
+                'lab_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'diagnostic_id' => $diagnostic->id,
+                    'cancel_reason' => $booking->cancel_reason,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        }
 
         return response()->json([
 

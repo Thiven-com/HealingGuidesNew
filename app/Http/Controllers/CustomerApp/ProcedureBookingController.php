@@ -7,6 +7,7 @@ use App\Models\FamilyMember;
 use App\Models\Payment;
 use App\Models\Procedure;
 use App\Models\ProcedureBooking;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -194,6 +195,60 @@ class ProcedureBookingController extends Controller
             ]);
 
             $payment = $result['payment'];
+
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'procedure_booking_created',
+                'Procedure Booking Created',
+                'Your procedure booking ' . $booking->booking_no . ' has been created successfully. Please complete your payment.',
+                'procedure_booking',
+                $booking->id,
+                'procedure_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'family_member_id' => $booking->family_member_id,
+                    'procedure_id' => $booking->procedure_id,
+                    'procedure_name' => $procedure->name ?? $procedure->procedure_name ?? null,
+                    'doctor_id' => $booking->doctor_id,
+                    'hospital_id' => $booking->hospital_id,
+                    'booking_date' => $booking->booking_date,
+                    'booking_time' => $booking->booking_time,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_method' => $booking->payment_method,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+
+            NotificationService::send(
+                'hospital',
+                $booking->hospital_id,
+                'procedure_booking_created',
+                'New Procedure Booking',
+                'You have received a new procedure booking ' . $booking->booking_no . '.',
+                'procedure_booking',
+                $booking->id,
+                'procedure_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'family_member_id' => $booking->family_member_id,
+                    'procedure_id' => $booking->procedure_id,
+                    'procedure_name' => $procedure->name ?? $procedure->procedure_name ?? null,
+                    'doctor_id' => $booking->doctor_id,
+                    'hospital_id' => $booking->hospital_id,
+                    'booking_date' => $booking->booking_date,
+                    'booking_time' => $booking->booking_time,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
 
             return response()->json([
                 'success' => 1,
@@ -419,6 +474,56 @@ class ProcedureBookingController extends Controller
 
         $booking->refresh();
 
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'procedure_booking_cancelled',
+            'Procedure Booking Cancelled',
+            'Your procedure booking ' . $booking->booking_no . ' has been cancelled successfully.',
+            'procedure_booking',
+            $booking->id,
+            'procedure_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'customer_id' => $customer->id,
+                'procedure_id' => $booking->procedure_id,
+                'doctor_id' => $booking->doctor_id,
+                'hospital_id' => $booking->hospital_id,
+                'booking_date' => $booking->booking_date,
+                'booking_time' => $booking->booking_time,
+                'total_amount' => (float) $booking->total_amount,
+                'cancel_reason' => $booking->cancel_reason,
+                'payment_status' => $booking->payment_status,
+                'booking_status' => $booking->booking_status,
+            ]
+        );
+        NotificationService::send(
+            'hospital',
+            $booking->hospital_id,
+            'procedure_booking_cancelled',
+            'Procedure Booking Cancelled',
+            'Procedure booking ' . $booking->booking_no . ' has been cancelled by the customer.',
+            'procedure_booking',
+            $booking->id,
+            'procedure_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'customer_id' => $customer->id,
+                'customer_name' => $customer->name ?? null,
+                'procedure_id' => $booking->procedure_id,
+                'doctor_id' => $booking->doctor_id,
+                'hospital_id' => $booking->hospital_id,
+                'booking_date' => $booking->booking_date,
+                'booking_time' => $booking->booking_time,
+                'total_amount' => (float) $booking->total_amount,
+                'cancel_reason' => $booking->cancel_reason,
+                'payment_status' => $booking->payment_status,
+                'booking_status' => $booking->booking_status,
+            ]
+        );
+
         return response()->json([
             'success' => 1,
             'message' => 'Procedure booking cancelled successfully.',
@@ -432,136 +537,186 @@ class ProcedureBookingController extends Controller
     /**
      * Verify Razorpay Payment
      */
- 
-public function verifyPayment(Request $request)
-{
-    $customer = auth('sanctum')->user();
 
-    if (!$customer) {
-        return response()->json([
-            'success' => 0,
-            'message' => 'Unauthenticated.',
-        ], 401);
-    }
+    public function verifyPayment(Request $request)
+    {
+        $customer = auth('sanctum')->user();
 
-    $request->validate([
-        'booking_id' => 'required|integer',
-        'razorpay_order_id' => 'required|string',
-        'razorpay_payment_id' => 'required|string',
-    ]);
+        if (!$customer) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
 
-    $booking = ProcedureBooking::where(
-        'id',
-        $request->booking_id
-    )
-        ->where('customer_id', $customer->id)
-        ->first();
-
-    if (!$booking) {
-        return response()->json([
-            'success' => 0,
-            'message' => 'Procedure booking not found.',
-        ], 404);
-    }
-
-    $payment = Payment::where(
-        'id',
-        $booking->payment_id
-    )
-        ->where('customer_id', $customer->id)
-        ->first();
-
-    if (!$payment) {
-        return response()->json([
-            'success' => 0,
-            'message' => 'Payment record not found.',
-        ], 404);
-    }
-
-    if ($payment->payment_status === 'success') {
-        return response()->json([
-            'success' => 1,
-            'message' => 'Payment already verified.',
-            'data' => $this->bookingData(
-                $booking,
-                $payment
-            ),
-        ]);
-    }
-
-    if ($booking->booking_status === 'cancelled') {
-        return response()->json([
-            'success' => 0,
-            'message' => 'This booking has been cancelled.',
-        ], 422);
-    }
-
-    if (
-        $payment->gateway_order_id !==
-        $request->razorpay_order_id
-    ) {
-        return response()->json([
-            'success' => 0,
-            'message' => 'Invalid Razorpay order ID.',
-        ], 422);
-    }
-
-    DB::beginTransaction();
-
-    try {
-        $payment->update([
-            'gateway_payment_id' =>
-                $request->razorpay_payment_id,
-
-            'transaction_id' =>
-                $request->razorpay_payment_id,
-
-            'paid_amount' => $payment->amount,
-            'balance_amount' => 0,
-            'payment_status' => 'success',
-            'paid_at' => now(),
-            'failure_reason' => null,
+        $request->validate([
+            'booking_id' => 'required|integer',
+            'razorpay_order_id' => 'required|string',
+            'razorpay_payment_id' => 'required|string',
         ]);
 
-        $booking->update([
-            'transaction_id' =>
-                $request->razorpay_payment_id,
+        $booking = ProcedureBooking::where(
+            'id',
+            $request->booking_id
+        )
+            ->where('customer_id', $customer->id)
+            ->first();
 
-            'payment_status' => 'paid',
-            'booking_status' => 'confirmed',
-        ]);
+        if (!$booking) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Procedure booking not found.',
+            ], 404);
+        }
 
-        DB::commit();
+        $payment = Payment::where(
+            'id',
+            $booking->payment_id
+        )
+            ->where('customer_id', $customer->id)
+            ->first();
 
-        $booking->load([
-            'procedure',
-            'familyMember',
-        ]);
+        if (!$payment) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Payment record not found.',
+            ], 404);
+        }
 
-        return response()->json([
-            'success' => 1,
-            'message' =>
-                'Payment verified and procedure booking confirmed successfully.',
-            'data' => $this->bookingData(
-                $booking,
-                $payment
-            ),
-        ]);
+        if ($payment->payment_status === 'success') {
+            return response()->json([
+                'success' => 1,
+                'message' => 'Payment already verified.',
+                'data' => $this->bookingData(
+                    $booking,
+                    $payment
+                ),
+            ]);
+        }
 
-    } catch (\Throwable $e) {
-        DB::rollBack();
+        if ($booking->booking_status === 'cancelled') {
+            return response()->json([
+                'success' => 0,
+                'message' => 'This booking has been cancelled.',
+            ], 422);
+        }
 
-        report($e);
+        if (
+            $payment->gateway_order_id !==
+            $request->razorpay_order_id
+        ) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Invalid Razorpay order ID.',
+            ], 422);
+        }
 
-        return response()->json([
-            'success' => 0,
-            'message' => 'Razorpay payment verification failed.',
-            'error' => config('app.debug')
-                ? $e->getMessage()
-                : null,
-        ], 422);
+        DB::beginTransaction();
+
+        try {
+            $payment->update([
+                'gateway_payment_id' =>
+                    $request->razorpay_payment_id,
+
+                'transaction_id' =>
+                    $request->razorpay_payment_id,
+
+                'paid_amount' => $payment->amount,
+                'balance_amount' => 0,
+                'payment_status' => 'success',
+                'paid_at' => now(),
+                'failure_reason' => null,
+            ]);
+
+            $booking->update([
+                'transaction_id' =>
+                    $request->razorpay_payment_id,
+
+                'payment_status' => 'paid',
+                'booking_status' => 'confirmed',
+            ]);
+
+            DB::commit();
+
+            $booking->load([
+                'procedure',
+                'familyMember',
+            ]);
+
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'procedure_payment_successful',
+                'Procedure Payment Successful',
+                'Your payment for procedure booking ' . $booking->booking_no . ' has been received successfully.',
+                'procedure_booking',
+                $booking->id,
+                'procedure_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'procedure_id' => $booking->procedure_id,
+                    'procedure_name' => $booking->procedure->name ?? $booking->procedure->procedure_name ?? null,
+                    'doctor_id' => $booking->doctor_id,
+                    'hospital_id' => $booking->hospital_id,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+            NotificationService::send(
+                'hospital',
+                $booking->hospital_id,
+                'procedure_payment_successful',
+                'Procedure Payment Received',
+                'Payment for procedure booking ' . $booking->booking_no . ' has been completed successfully.',
+                'procedure_booking',
+                $booking->id,
+                'procedure_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'procedure_id' => $booking->procedure_id,
+                    'procedure_name' => $booking->procedure->name ?? $booking->procedure->procedure_name ?? null,
+                    'doctor_id' => $booking->doctor_id,
+                    'hospital_id' => $booking->hospital_id,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+
+            return response()->json([
+                'success' => 1,
+                'message' =>
+                    'Payment verified and procedure booking confirmed successfully.',
+                'data' => $this->bookingData(
+                    $booking,
+                    $payment
+                ),
+            ]);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Razorpay payment verification failed.',
+                'error' => config('app.debug')
+                    ? $e->getMessage()
+                    : null,
+            ], 422);
+        }
     }
-}
 
 
     /**
