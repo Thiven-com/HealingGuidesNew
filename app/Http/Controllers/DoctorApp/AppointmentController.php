@@ -10,6 +10,7 @@ use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
 use App\Models\LabTest;
 use App\Models\VideoRoom;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -162,6 +163,29 @@ class AppointmentController extends Controller
         $appointment->appointment_status = 'confirmed';
         $appointment->save();
 
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'appointment_accepted',
+            'Appointment Accepted',
+            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been accepted.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'consultation_type' => $appointment->consultation_type,
+                'payment_status' => $appointment->payment_status,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
+
         return response()->json([
             'success' => 1,
             'message' => 'Appointment accepted successfully.'
@@ -205,6 +229,30 @@ class AppointmentController extends Controller
         $appointment->appointment_status = 'rejected';
         $appointment->remarks = $request->reason;
         $appointment->save();
+
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'appointment_rejected',
+            'Appointment Rejected',
+            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been rejected. Reason: ' . $request->reason,
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'consultation_type' => $appointment->consultation_type,
+                'remarks' => $appointment->remarks,
+                'payment_status' => $appointment->payment_status,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
 
         return response()->json([
             'success' => 1,
@@ -269,6 +317,27 @@ class AppointmentController extends Controller
 
         $appointment->save();
 
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'consultation_started',
+            'Consultation Started',
+            'Dr. ' . $doctor->doctor_name . ' has started your consultation.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'consultation_type' => $appointment->consultation_type,
+                'meeting_status' => $appointment->meeting_status,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
+
         return response()->json([
             'success' => 1,
             'message' => 'Consultation started successfully.'
@@ -324,6 +393,27 @@ class AppointmentController extends Controller
         }
 
         $appointment->save();
+
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'consultation_completed',
+            'Consultation Completed',
+            'Your consultation with Dr. ' . $doctor->doctor_name . ' has been completed successfully.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'consultation_type' => $appointment->consultation_type,
+                'meeting_status' => $appointment->meeting_status,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
 
         return response()->json([
             'success' => 1,
@@ -431,6 +521,29 @@ class AppointmentController extends Controller
             $appointment->meeting_status = 'cancelled';
             $appointment->save();
         }
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'appointment_cancelled',
+            'Appointment Cancelled',
+            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been cancelled. Reason: ' . $request->cancel_reason,
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'consultation_type' => $appointment->consultation_type,
+                'cancel_reason' => $appointment->cancel_reason,
+                'cancelled_at' => $appointment->cancelled_at,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
 
         return response()->json([
             'success' => 1,
@@ -778,6 +891,31 @@ class AppointmentController extends Controller
 
             $appointment->save();
         }
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'appointment_rescheduled',
+            'Appointment Rescheduled',
+            'Dr. ' . $doctor->doctor_name . ' has rescheduled your appointment.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->doctor_name,
+                'hospital_id' => $appointment->hospital_id,
+                'previous_appointment_date' => $oldDate,
+                'previous_appointment_time' => $oldTime,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'doctor_schedule_id' => $appointment->doctor_schedule_id,
+                'token_no' => $appointment->token_no,
+                'consultation_type' => $appointment->consultation_type,
+                'appointment_status' => $appointment->appointment_status,
+            ]
+        );
 
         return response()->json([
             'success' => 1,
@@ -798,7 +936,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-        public function labTests(Request $request)
+    public function labTests(Request $request)
     {
         $user = auth('sanctum')->user();
 

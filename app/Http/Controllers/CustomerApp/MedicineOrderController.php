@@ -851,6 +851,14 @@ class MedicineOrderController extends Controller
                 );
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | Commit
+            |--------------------------------------------------------------------------
+            */
+
+            DB::commit();
             NotificationService::send(
                 'customer',
                 $customer->id,
@@ -898,14 +906,36 @@ class MedicineOrderController extends Controller
             );
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Commit
-            |--------------------------------------------------------------------------
-            */
-
-            DB::commit();
-
+            NotificationService::send(
+                'hospital',
+                $order->hospital_id,
+                'medicine_order_created',
+                'New Medicine Order Received',
+                'You have received a new medicine order ' . $order->order_no . '.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'family_member_id' => $order->family_member_id,
+                    'hospital_id' => $order->hospital_id,
+                    'prescription_id' => $order->prescription_id,
+                    'subtotal' => (float) $order->subtotal,
+                    'delivery_charge' => (float) $order->delivery_charge,
+                    'discount' => (float) $order->discount,
+                    'tax' => (float) $order->tax,
+                    'total_amount' => (float) $order->total_amount,
+                    'payment_status' => $order->payment_status,
+                    'order_status' => $order->order_status,
+                    'delivery_address' => $order->delivery_address,
+                    'delivery_city' => $order->delivery_city,
+                    'delivery_state' => $order->delivery_state,
+                    'delivery_pincode' => $order->delivery_pincode,
+                ]
+            );
 
             /*
             |--------------------------------------------------------------------------
@@ -1626,6 +1656,50 @@ class MedicineOrderController extends Controller
 
             DB::commit();
 
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'medicine_order_cancelled',
+                'Medicine Order Cancelled',
+                'Your medicine order ' . $order->order_no . ' has been cancelled successfully.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'hospital_id' => $order->hospital_id,
+                    'total_amount' => (float) $order->total_amount,
+                    'payment_status' => $order->payment_status,
+                    'order_status' => $order->order_status,
+                    'cancel_reason' => $order->cancel_reason,
+                    'cancelled_at' => $order->cancelled_at,
+                ]
+            );
+
+            NotificationService::send(
+                'hospital',
+                $order->hospital_id,
+                'medicine_order_cancelled',
+                'Medicine Order Cancelled',
+                'Medicine order ' . $order->order_no . ' has been cancelled by the customer.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'hospital_id' => $order->hospital_id,
+                    'total_amount' => (float) $order->total_amount,
+                    'payment_status' => $order->payment_status,
+                    'order_status' => $order->order_status,
+                    'cancel_reason' => $order->cancel_reason,
+                    'cancelled_at' => $order->cancelled_at,
+                ]
+            );
+
             return response()->json([
                 'success' => 1,
                 'message' => 'Medicine order cancelled successfully.'
@@ -1807,6 +1881,52 @@ class MedicineOrderController extends Controller
 
 
             DB::commit();
+
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'medicine_order_payment_successful',
+                'Medicine Order Payment Successful',
+                'Payment for your medicine order ' . $order->order_no . ' has been completed successfully.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'hospital_id' => $order->hospital_id,
+                    'total_amount' => (float) $order->total_amount,
+                    'payment_method' => $order->payment_method,
+                    'transaction_id' => $order->transaction_id,
+                    'payment_id' => $order->payment_id,
+                    'payment_status' => $order->payment_status,
+                    'order_status' => $order->order_status,
+                ]
+            );
+
+            NotificationService::send(
+                'hospital',
+                $order->hospital_id,
+                'medicine_order_payment_successful',
+                'Medicine Order Payment Received',
+                'Payment for medicine order ' . $order->order_no . ' has been completed successfully.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'hospital_id' => $order->hospital_id,
+                    'total_amount' => (float) $order->total_amount,
+                    'payment_method' => $order->payment_method,
+                    'transaction_id' => $order->transaction_id,
+                    'payment_id' => $order->payment_id,
+                    'payment_status' => $order->payment_status,
+                    'order_status' => $order->order_status,
+                ]
+            );
 
 
             /*

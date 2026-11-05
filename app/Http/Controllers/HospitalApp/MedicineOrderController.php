@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\MedicineOrderCollection;
 use App\Models\Medicine;
 use App\Models\MedicineOrder;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -371,6 +372,24 @@ class MedicineOrderController extends Controller
 
             DB::commit();
 
+            NotificationService::send(
+                'customer',
+                $order->customer_id,
+                'medicine_order_accepted',
+                'Medicine Order Accepted',
+                'Your medicine order ' . $order->order_no . ' has been accepted by the hospital.',
+                'medicine_order',
+                $order->id,
+                'medicine_order_details',
+                [
+                    'medicine_order_id' => $order->id,
+                    'order_no' => $order->order_no,
+                    'hospital_id' => $order->hospital_id,
+                    'order_status' => $order->order_status,
+                    'accepted_at' => $order->accepted_at,
+                ]
+            );
+
             /*
             |--------------------------------------------------------------------------
             | Response
@@ -588,6 +607,23 @@ class MedicineOrderController extends Controller
 
         $order->save();
 
+        NotificationService::send(
+            'customer',
+            $order->customer_id,
+            'medicine_order_ready',
+            'Medicine Order Ready',
+            'Your medicine order ' . $order->order_no . ' is ready.',
+            'medicine_order',
+            $order->id,
+            'medicine_order_details',
+            [
+                'medicine_order_id' => $order->id,
+                'order_no' => $order->order_no,
+                'hospital_id' => $order->hospital_id,
+                'order_status' => $order->order_status,
+            ]
+        );
+
         return $this->orderResponse(
             $order,
             'Medicine Order Is Ready'
@@ -650,6 +686,22 @@ class MedicineOrderController extends Controller
         $order->order_status = 'dispatched';
 
         $order->save();
+        NotificationService::send(
+            'customer',
+            $order->customer_id,
+            'medicine_order_dispatched',
+            'Medicine Order Dispatched',
+            'Your medicine order ' . $order->order_no . ' has been dispatched.',
+            'medicine_order',
+            $order->id,
+            'medicine_order_details',
+            [
+                'medicine_order_id' => $order->id,
+                'order_no' => $order->order_no,
+                'hospital_id' => $order->hospital_id,
+                'order_status' => $order->order_status,
+            ]
+        );
 
         return $this->orderResponse(
             $order,
@@ -715,6 +767,24 @@ class MedicineOrderController extends Controller
         $order->delivered_at = now();
 
         $order->save();
+
+        NotificationService::send(
+            'customer',
+            $order->customer_id,
+            'medicine_order_delivered',
+            'Medicine Order Delivered',
+            'Your medicine order ' . $order->order_no . ' has been delivered successfully.',
+            'medicine_order',
+            $order->id,
+            'medicine_order_details',
+            [
+                'medicine_order_id' => $order->id,
+                'order_no' => $order->order_no,
+                'hospital_id' => $order->hospital_id,
+                'order_status' => $order->order_status,
+                'delivered_at' => $order->delivered_at,
+            ]
+        );
 
         return $this->orderResponse(
             $order,

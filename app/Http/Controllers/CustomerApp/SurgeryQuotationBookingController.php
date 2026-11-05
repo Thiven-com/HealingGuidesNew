@@ -8,6 +8,7 @@ use App\Models\FamilyMember;
 use App\Models\Payment;
 use App\Models\SurgeryQuotation;
 use App\Models\SurgeryQuotationBooking;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -457,6 +458,31 @@ class SurgeryQuotationBookingController extends Controller
                 'payment',
             ]);
 
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'surgery_quotation_payment_successful',
+                'Surgery Payment Successful',
+                'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'surgery_quotation_booking',
+                $booking->id,
+                'surgery_quotation_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'surgery_quotation_id' => $booking->surgery_quotation_id,
+                    'surgery_id' => $booking->surgery_id,
+                    'surgery_name' => $booking->surgery->name ?? null,
+                    'hospital_id' => $booking->hospital_id,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+
             return response()->json([
 
                 'success' => 1,
@@ -794,6 +820,59 @@ class SurgeryQuotationBookingController extends Controller
                 'surgery',
                 'payment',
             ]);
+
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'surgery_quotation_payment_successful',
+                'Surgery Payment Successful',
+                'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'surgery_quotation_booking',
+                $booking->id,
+                'surgery_quotation_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'surgery_quotation_id' => $booking->surgery_quotation_id,
+                    'surgery_id' => $booking->surgery_id,
+                    'surgery_name' => $booking->surgery->name ?? null,
+                    'hospital_id' => $booking->hospital_id,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+
+            // Hospital Payment Success Notification
+            NotificationService::send(
+                'hospital',
+                $booking->hospital_id,
+                'surgery_quotation_payment_successful',
+                'Surgery Payment Received',
+                'Payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'surgery_quotation_booking',
+                $booking->id,
+                'surgery_quotation_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name ?? null,
+                    'family_member_id' => $booking->family_member_id,
+                    'surgery_quotation_id' => $booking->surgery_quotation_id,
+                    'surgery_id' => $booking->surgery_id,
+                    'surgery_name' => $booking->surgery->name ?? null,
+                    'hospital_id' => $booking->hospital_id,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
 
             /*
             |--------------------------------------------------------------------------

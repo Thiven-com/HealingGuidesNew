@@ -7,6 +7,7 @@ use App\Models\HealthInsuranceBooking;
 use App\Models\HealthInsurancePlan;
 use App\Models\HealthInsuranceProvider;
 use App\Models\Payment;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -299,6 +300,30 @@ class HealthInsuranceBookingController extends Controller
             $booking = $result['booking']->load(['provider', 'plan']);
             $payment = $result['payment'];
 
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'health_insurance_booking_created',
+                'Health Insurance Booking Created',
+                'Your health insurance booking with ' . $provider->name . ' has been created successfully. Please complete your payment.',
+                'health_insurance_booking',
+                $booking->id,
+                'health_insurance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_reference' => $booking->booking_reference,
+                    'provider_id' => $provider->id,
+                    'provider_name' => $provider->name,
+                    'plan_id' => $plan->id,
+                    'plan_name' => $plan->name,
+                    'customer_name' => $booking->customer_name,
+                    'members_count' => $booking->members_count,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->status,
+                ]
+            );
+
             return response()->json([
                 'success' => 1,
                 'message' => 'Insurance booking created. Proceed with Razorpay payment.',
@@ -530,6 +555,30 @@ class HealthInsuranceBookingController extends Controller
 
             $payment->refresh();
 
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'health_insurance_payment_successful',
+                'Health Insurance Payment Successful',
+                'Your payment for health insurance booking ' . $booking->booking_reference . ' has been received successfully. Your booking is confirmed.',
+                'health_insurance_booking',
+                $booking->id,
+                'health_insurance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_reference' => $booking->booking_reference,
+                    'provider_id' => $booking->provider_id,
+                    'provider_name' => $booking->provider->name ?? null,
+                    'plan_id' => $booking->plan_id,
+                    'plan_name' => $booking->plan->name ?? null,
+                    'payment_id' => $payment->id,
+                    'transaction_id' => $payment->transaction_id,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->status,
+                ]
+            );
+
             return response()->json([
                 'success' => 1,
                 'message' =>
@@ -625,6 +674,29 @@ class HealthInsuranceBookingController extends Controller
         });
 
         $booking->refresh();
+
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'health_insurance_booking_cancelled',
+            'Health Insurance Booking Cancelled',
+            'Your health insurance booking ' . $booking->booking_reference . ' has been cancelled successfully.',
+            'health_insurance_booking',
+            $booking->id,
+            'health_insurance_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_reference' => $booking->booking_reference,
+                'provider_id' => $booking->provider_id,
+                'provider_name' => $booking->provider->name ?? null,
+                'plan_id' => $booking->plan_id,
+                'plan_name' => $booking->plan->name ?? null,
+                'total_amount' => (float) $booking->total_amount,
+                'cancel_reason' => $booking->cancel_reason,
+                'payment_status' => $booking->payment_status,
+                'booking_status' => $booking->status,
+            ]
+        );
 
         return response()->json([
             'success' => 1,

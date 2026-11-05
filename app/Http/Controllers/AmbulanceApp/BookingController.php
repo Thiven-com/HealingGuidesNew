@@ -7,6 +7,7 @@ use App\Http\Resources\AmbulanceBookingCollection;
 use App\Models\Ambulance;
 use App\Models\AmbulanceBooking;
 use App\Models\AmbulancePrice;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -302,6 +303,39 @@ class BookingController extends Controller
         $ambulance->is_available = 0;
 
         $ambulance->save();
+
+        NotificationService::send(
+            'customer',
+            $booking->customer_id,
+            'ambulance_trip_started',
+            'Ambulance On The Way',
+            'Your ambulance ' .
+            $booking->booking_no .
+            ' is on the way to your pickup location.',
+            'ambulance_booking',
+            $booking->id,
+            'ambulance_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+
+                'customer_id' => $booking->customer_id,
+                'family_member_id' => $booking->family_member_id,
+
+                'hospital_id' => $booking->hospital_id,
+
+                'ambulance_id' => $ambulance->id,
+                'ambulance_type_id' => $booking->ambulance_type_id,
+
+                'pickup_address' => $booking->pickup_address,
+                'destination_address' => $booking->destination_address,
+
+                'pickup_code' => $booking->pickup_code,
+
+                'booking_status' => $booking->booking_status,
+                'updated_at' => $booking->updated_at,
+            ]
+        );
 
         /*
         |--------------------------------------------------------------------------
@@ -680,6 +714,45 @@ class BookingController extends Controller
                 'ambulance'
             ]);
 
+            NotificationService::send(
+                'customer',
+                $booking->customer_id,
+                'ambulance_trip_completed',
+                'Ambulance Trip Completed',
+                'Your ambulance trip for booking ' .
+                $booking->booking_no .
+                ' has been completed successfully.',
+                'ambulance_booking',
+                $booking->id,
+                'ambulance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+
+                    'customer_id' => $booking->customer_id,
+                    'family_member_id' => $booking->family_member_id,
+
+                    'hospital_id' => $booking->hospital_id,
+
+                    'ambulance_id' => $ambulance->id,
+                    'ambulance_type_id' => $booking->ambulance_type_id,
+
+                    'distance_km' => $booking->distance_km,
+
+                    'base_amount' => $booking->base_amount,
+                    'distance_amount' => $booking->distance_amount,
+                    'extra_charge' => $booking->extra_charge,
+                    'discount' => $booking->discount,
+                    'tax' => $booking->tax,
+                    'total_amount' => $booking->total_amount,
+
+                    'booking_status' => $booking->booking_status,
+                    'completed_at' => $booking->completed_at,
+
+                    'payment_status' => $booking->payment_status,
+                ]
+            );
+
             return response()->json([
                 'success' => 1,
 
@@ -975,6 +1048,13 @@ class BookingController extends Controller
                 'message' => 'Ambulance Booking Not Found'
             ]);
         }
+
+        if ($booking->booking_status !== 'on_the_way') {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Patient pickup is not available for this booking.'
+            ]);
+        }
         /*
         |--------------------------------------------------------------------------
         | Verify Pickup Code
@@ -996,6 +1076,37 @@ class BookingController extends Controller
 
         $booking->booking_status = 'patient_picked';
         $booking->save();
+
+        NotificationService::send(
+            'customer',
+            $booking->customer_id,
+            'ambulance_patient_picked',
+            'Patient Picked Up',
+            'The ambulance has successfully picked up the patient for booking ' .
+            $booking->booking_no .
+            '. The trip is now in progress.',
+            'ambulance_booking',
+            $booking->id,
+            'ambulance_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+
+                'customer_id' => $booking->customer_id,
+                'family_member_id' => $booking->family_member_id,
+
+                'hospital_id' => $booking->hospital_id,
+
+                'ambulance_id' => $ambulance->id,
+                'ambulance_type_id' => $booking->ambulance_type_id,
+
+                'pickup_address' => $booking->pickup_address,
+                'destination_address' => $booking->destination_address,
+
+                'booking_status' => $booking->booking_status,
+                'updated_at' => $booking->updated_at,
+            ]
+        );
 
         /*
         |--------------------------------------------------------------------------
