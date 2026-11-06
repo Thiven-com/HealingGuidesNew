@@ -220,6 +220,7 @@ class ChatConsultationController extends Controller
 
         if (!$appointment->chat_ended_at) {
             $appointment->chat_ended_at = now();
+            $appointment->appointment_status = 'completed';
             $appointment->save();
         }
 

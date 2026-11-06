@@ -10,6 +10,9 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($appointment) {
+            $doctor = $appointment->doctor;
+
+            $specialization = $doctor?->hospitalSpecialization?->specialization;
 
             return [
 
@@ -84,11 +87,15 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
 
                     'photo' =>
                         $appointment->doctor->photo
-                            ? asset($appointment->doctor->photo)
-                            : null,
+                        ? asset($appointment->doctor->photo)
+                        : null,
 
                     'about' =>
                         $appointment->doctor->about,
+                    'specialization' => $specialization?->specialization_name,
+
+                    'hospital_name' =>
+                        $appointment->hospital->hospital_name ?? null,
 
                 ] : null,
 
@@ -112,6 +119,17 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
 
                     'mobile' =>
                         $appointment->hospital->mobile ?? null,
+                    'city' =>
+                        $appointment->hospital->city ?? null,
+                    'state' =>
+                        $appointment->hospital->state ?? null,
+                    'pincode' =>
+                        $appointment->hospital->pincode ?? null,
+                    'latitude' =>
+                        $appointment->hospital->latitude ?? null,
+                    'longitude' =>
+                        $appointment->hospital->longitude ?? null,
+                    'specialization' => $specialization?->specialization_name,
 
                 ] : null,
 
@@ -125,7 +143,7 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
                 'specialization' =>
                     $appointment->doctor
                         ?->hospitalSpecialization
-                        ?->specialization,
+                            ?->specialization,
 
 
                 /*
@@ -334,8 +352,8 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
 
                                             'image' =>
                                                 $recommended->labTest->image
-                                                    ? asset($recommended->labTest->image)
-                                                    : null,
+                                                ? asset($recommended->labTest->image)
+                                                : null,
 
                                             'sample_type' =>
                                                 $recommended->labTest->sample_type,
@@ -386,8 +404,8 @@ class CustomerAppointmentDetailCollection extends ResourceCollection
 
                                 'report_file' =>
                                     $report->report_file
-                                        ? asset($report->report_file)
-                                        : null,
+                                    ? asset($report->report_file)
+                                    : null,
 
                                 'report_date' =>
                                     $report->report_date,
