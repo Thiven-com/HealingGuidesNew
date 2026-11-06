@@ -510,7 +510,7 @@ class DiagnosticBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'lab_test_booked',
+                'diagnostic',
                 'Lab Test Booked',
                 'Your lab test booking ' .
                 $booking->booking_no .
@@ -565,7 +565,7 @@ class DiagnosticBookingController extends Controller
             NotificationService::send(
                 'diagnostic',
                 $diagnostic->id,
-                'new_lab_booking',
+                'diagnostic',
                 'New Lab Test Booking',
                 'A new lab test booking has been received.',
                 'diagnostic_booking',
@@ -920,7 +920,7 @@ class DiagnosticBookingController extends Controller
         NotificationService::send(
             'customer',
             $customer->id,
-            'lab_payment_success',
+            'diagnostic',
             'Lab Booking Payment Successful',
             'Your payment for lab booking ' . $booking->booking_no . ' was successful.',
             'diagnostic_booking',
@@ -949,7 +949,7 @@ class DiagnosticBookingController extends Controller
             NotificationService::send(
                 'diagnostic',
                 $diagnostic->id,
-                'lab_payment_success',
+                'diagnostic',
                 'Lab Booking Payment Received',
                 'Payment has been completed for lab booking ' . $booking->booking_no . '.',
                 'diagnostic_booking',
@@ -1139,7 +1139,7 @@ class DiagnosticBookingController extends Controller
         NotificationService::send(
             'customer',
             $customer->id,
-            'lab_booking_cancelled',
+            'diagnostic',
             'Lab Booking Cancelled',
             'Your lab booking ' . $booking->booking_no . ' has been cancelled.',
             'diagnostic_booking',
@@ -1165,7 +1165,7 @@ class DiagnosticBookingController extends Controller
             NotificationService::send(
                 'diagnostic',
                 $diagnostic->id,
-                'lab_booking_cancelled',
+                'diagnostic',
                 'Lab Booking Cancelled',
                 'Lab booking ' . $booking->booking_no . ' has been cancelled by the customer.',
                 'diagnostic_booking',

@@ -461,7 +461,7 @@ class SurgeryQuotationBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'surgery_quotation_payment_successful',
+                'surgery',
                 'Surgery Payment Successful',
                 'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
                 'surgery_quotation_booking',
@@ -824,7 +824,7 @@ class SurgeryQuotationBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'surgery_quotation_payment_successful',
+                'surgery',
                 'Surgery Payment Successful',
                 'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
                 'surgery_quotation_booking',
@@ -850,7 +850,7 @@ class SurgeryQuotationBookingController extends Controller
             NotificationService::send(
                 'hospital',
                 $booking->hospital_id,
-                'surgery_quotation_payment_successful',
+                'surgery',
                 'Surgery Payment Received',
                 'Payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
                 'surgery_quotation_booking',

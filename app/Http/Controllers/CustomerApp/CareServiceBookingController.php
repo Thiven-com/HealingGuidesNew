@@ -463,7 +463,7 @@ class CareServiceBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'care_service_booking_created',
+                'care_service',
                 'Care Service Booking Created',
                 'Your care service booking has been created successfully. Please complete your Razorpay payment.',
                 'care_service_booking',
@@ -495,7 +495,7 @@ class CareServiceBookingController extends Controller
                 NotificationService::send(
                     'hospital',
                     $booking->service->hospital_id,
-                    'new_care_service_booking',
+                    'care_service',
                     'New Care Service Booking',
                     'A new paid care service booking has been received.',
                     'care_service_booking',
@@ -542,7 +542,7 @@ class CareServiceBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'care_service_booking_confirmed',
+                'care_service',
                 'Care Service Booking Confirmed',
                 'Your care service booking has been confirmed successfully.',
                 'care_service_booking',
@@ -1002,7 +1002,7 @@ class CareServiceBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'care_service_booking_confirmed',
+                'care_service',
                 'Care Service Booking Confirmed',
                 'Your care service booking has been confirmed successfully.',
                 'care_service_booking',
@@ -1036,7 +1036,7 @@ class CareServiceBookingController extends Controller
                 NotificationService::send(
                     'hospital',
                     $hospitalId,
-                    'new_care_service_booking',
+                    'care_service',
                     'New Care Service Booking',
                     'A new paid care service booking has been received.',
                     'care_service_booking',
@@ -1187,7 +1187,7 @@ class CareServiceBookingController extends Controller
         NotificationService::send(
             'customer',
             $customer->id,
-            'care_service_payment_failed',
+            'care_service',
             'Care Service Payment Failed',
             'Your care service booking payment was unsuccessful. Please try again.',
             'care_service_booking',

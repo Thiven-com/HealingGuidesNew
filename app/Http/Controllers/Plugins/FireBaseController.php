@@ -66,6 +66,7 @@ class FireBaseController extends Controller
                                 'order_id' => (string) ($data['order_id'] ?? 'NA'),
                                 'user_id' => (string) ($data['user_id'] ?? 'NA'),
                                 'message_id' => (string) ($data['message_id'] ?? 'NA'),
+                                'data' => $this->toFCMString($data['data'] ?? []),
                             ],
                             'android' => [
                                 'priority' => 'high',
@@ -126,5 +127,27 @@ class FireBaseController extends Controller
             );
             return $e->getMessage();
         }
+    }
+
+    private function toFCMString($value): string
+    {
+        if (is_array($value) || is_object($value)) {
+            $json = json_encode(
+                $value,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+
+            return $json !== false ? $json : '{}';
+        }
+
+        if ($value === null) {
+            return 'NA';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        return (string) $value;
     }
 }

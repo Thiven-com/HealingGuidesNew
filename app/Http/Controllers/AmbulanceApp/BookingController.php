@@ -307,7 +307,7 @@ class BookingController extends Controller
         NotificationService::send(
             'customer',
             $booking->customer_id,
-            'ambulance_trip_started',
+            'ambulance',
             'Ambulance On The Way',
             'Your ambulance ' .
             $booking->booking_no .
@@ -717,7 +717,7 @@ class BookingController extends Controller
             NotificationService::send(
                 'customer',
                 $booking->customer_id,
-                'ambulance_trip_completed',
+                'ambulance',
                 'Ambulance Trip Completed',
                 'Your ambulance trip for booking ' .
                 $booking->booking_no .
@@ -1080,7 +1080,7 @@ class BookingController extends Controller
         NotificationService::send(
             'customer',
             $booking->customer_id,
-            'ambulance_patient_picked',
+            'ambulance',
             'Patient Picked Up',
             'The ambulance has successfully picked up the patient for booking ' .
             $booking->booking_no .

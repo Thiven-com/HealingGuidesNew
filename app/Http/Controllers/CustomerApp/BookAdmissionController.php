@@ -183,7 +183,7 @@ class BookAdmissionController extends Controller
         NotificationService::send(
             'customer',
             $user->id,
-            'admission_requested',
+            'admission',
             'Admission Request Submitted',
             'Your ' .
             ($bookAdmission->admission_type === 'general_admission'
@@ -223,7 +223,7 @@ class BookAdmissionController extends Controller
             NotificationService::send(
                 'doctor',
                 $bookAdmission->preferred_doctor_id,
-                'admission_requested',
+                'admission',
                 'New Admission Request',
                 'A customer has submitted an admission request with you as the preferred doctor.',
                 'book_admission',

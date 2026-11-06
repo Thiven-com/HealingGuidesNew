@@ -303,7 +303,7 @@ class HealthInsuranceBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'health_insurance_booking_created',
+                'health_insurance',
                 'Health Insurance Booking Created',
                 'Your health insurance booking with ' . $provider->name . ' has been created successfully. Please complete your payment.',
                 'health_insurance_booking',
@@ -558,7 +558,7 @@ class HealthInsuranceBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'health_insurance_payment_successful',
+                'health_insurance',
                 'Health Insurance Payment Successful',
                 'Your payment for health insurance booking ' . $booking->booking_reference . ' has been received successfully. Your booking is confirmed.',
                 'health_insurance_booking',
@@ -678,7 +678,7 @@ class HealthInsuranceBookingController extends Controller
         NotificationService::send(
             'customer',
             $customer->id,
-            'health_insurance_booking_cancelled',
+            'health_insurance',
             'Health Insurance Booking Cancelled',
             'Your health insurance booking ' . $booking->booking_reference . ' has been cancelled successfully.',
             'health_insurance_booking',

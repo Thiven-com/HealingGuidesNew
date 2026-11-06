@@ -199,7 +199,7 @@ class ProcedureBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'procedure_booking_created',
+                'procedure',
                 'Procedure Booking Created',
                 'Your procedure booking ' . $booking->booking_no . ' has been created successfully. Please complete your payment.',
                 'procedure_booking',
@@ -226,7 +226,7 @@ class ProcedureBookingController extends Controller
             NotificationService::send(
                 'hospital',
                 $booking->hospital_id,
-                'procedure_booking_created',
+                'procedure',
                 'New Procedure Booking',
                 'You have received a new procedure booking ' . $booking->booking_no . '.',
                 'procedure_booking',
@@ -477,7 +477,7 @@ class ProcedureBookingController extends Controller
         NotificationService::send(
             'customer',
             $customer->id,
-            'procedure_booking_cancelled',
+            'procedure',
             'Procedure Booking Cancelled',
             'Your procedure booking ' . $booking->booking_no . ' has been cancelled successfully.',
             'procedure_booking',
@@ -501,7 +501,7 @@ class ProcedureBookingController extends Controller
         NotificationService::send(
             'hospital',
             $booking->hospital_id,
-            'procedure_booking_cancelled',
+            'procedure',
             'Procedure Booking Cancelled',
             'Procedure booking ' . $booking->booking_no . ' has been cancelled by the customer.',
             'procedure_booking',
@@ -646,7 +646,7 @@ class ProcedureBookingController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'procedure_payment_successful',
+                'procedure',
                 'Procedure Payment Successful',
                 'Your payment for procedure booking ' . $booking->booking_no . ' has been received successfully.',
                 'procedure_booking',
@@ -670,7 +670,7 @@ class ProcedureBookingController extends Controller
             NotificationService::send(
                 'hospital',
                 $booking->hospital_id,
-                'procedure_payment_successful',
+                'procedure',
                 'Procedure Payment Received',
                 'Payment for procedure booking ' . $booking->booking_no . ' has been completed successfully.',
                 'procedure_booking',

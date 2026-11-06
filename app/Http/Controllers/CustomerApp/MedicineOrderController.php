@@ -862,7 +862,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'medicine_order_created',
+                'medicine',
                 'Medicine Order Placed',
                 'Your medicine order ' .
                 $order->order_no .
@@ -909,7 +909,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'hospital',
                 $order->hospital_id,
-                'medicine_order_created',
+                'medicine',
                 'New Medicine Order Received',
                 'You have received a new medicine order ' . $order->order_no . '.',
                 'medicine_order',
@@ -1659,7 +1659,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'medicine_order_cancelled',
+                'medicine',
                 'Medicine Order Cancelled',
                 'Your medicine order ' . $order->order_no . ' has been cancelled successfully.',
                 'medicine_order',
@@ -1680,7 +1680,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'hospital',
                 $order->hospital_id,
-                'medicine_order_cancelled',
+                'medicine',
                 'Medicine Order Cancelled',
                 'Medicine order ' . $order->order_no . ' has been cancelled by the customer.',
                 'medicine_order',
@@ -1885,7 +1885,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'customer',
                 $customer->id,
-                'medicine_order_payment_successful',
+                'medicine',
                 'Medicine Order Payment Successful',
                 'Payment for your medicine order ' . $order->order_no . ' has been completed successfully.',
                 'medicine_order',
@@ -1907,7 +1907,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'hospital',
                 $order->hospital_id,
-                'medicine_order_payment_successful',
+                'medicine',
                 'Medicine Order Payment Received',
                 'Payment for medicine order ' . $order->order_no . ' has been completed successfully.',
                 'medicine_order',

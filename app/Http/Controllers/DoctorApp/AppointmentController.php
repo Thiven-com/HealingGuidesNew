@@ -166,7 +166,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'appointment_accepted',
+            'appointment',
             'Appointment Accepted',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been accepted.',
             'doctor_appointment',
@@ -233,7 +233,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'appointment_rejected',
+            'appointment',
             'Appointment Rejected',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been rejected. Reason: ' . $request->reason,
             'doctor_appointment',
@@ -320,7 +320,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'consultation_started',
+            'appointment',
             'Consultation Started',
             'Dr. ' . $doctor->doctor_name . ' has started your consultation.',
             'doctor_appointment',
@@ -397,7 +397,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'consultation_completed',
+            'appointment',
             'Consultation Completed',
             'Your consultation with Dr. ' . $doctor->doctor_name . ' has been completed successfully.',
             'doctor_appointment',
@@ -524,7 +524,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'appointment_cancelled',
+            'appointment',
             'Appointment Cancelled',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been cancelled. Reason: ' . $request->cancel_reason,
             'doctor_appointment',
@@ -894,7 +894,7 @@ class AppointmentController extends Controller
         NotificationService::send(
             'customer',
             $appointment->customer_id,
-            'appointment_rescheduled',
+            'appointment',
             'Appointment Rescheduled',
             'Dr. ' . $doctor->doctor_name . ' has rescheduled your appointment.',
             'doctor_appointment',

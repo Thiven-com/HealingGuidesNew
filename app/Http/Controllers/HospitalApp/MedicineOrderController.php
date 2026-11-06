@@ -375,7 +375,7 @@ class MedicineOrderController extends Controller
             NotificationService::send(
                 'customer',
                 $order->customer_id,
-                'medicine_order_accepted',
+                'medicine',
                 'Medicine Order Accepted',
                 'Your medicine order ' . $order->order_no . ' has been accepted by the hospital.',
                 'medicine_order',
@@ -610,7 +610,7 @@ class MedicineOrderController extends Controller
         NotificationService::send(
             'customer',
             $order->customer_id,
-            'medicine_order_ready',
+            'medicine',
             'Medicine Order Ready',
             'Your medicine order ' . $order->order_no . ' is ready.',
             'medicine_order',
@@ -689,7 +689,7 @@ class MedicineOrderController extends Controller
         NotificationService::send(
             'customer',
             $order->customer_id,
-            'medicine_order_dispatched',
+            'medicine',
             'Medicine Order Dispatched',
             'Your medicine order ' . $order->order_no . ' has been dispatched.',
             'medicine_order',
@@ -771,7 +771,7 @@ class MedicineOrderController extends Controller
         NotificationService::send(
             'customer',
             $order->customer_id,
-            'medicine_order_delivered',
+            'medicine',
             'Medicine Order Delivered',
             'Your medicine order ' . $order->order_no . ' has been delivered successfully.',
             'medicine_order',
