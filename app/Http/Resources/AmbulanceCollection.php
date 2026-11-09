@@ -25,7 +25,9 @@ class AmbulanceCollection extends ResourceCollection
                     $ambulance->vehicle_number,
 
                 'image' =>
-                    $ambulance->image,
+                    ($ambulance->image)
+                        ? asset($ambulance->image)
+                        : null,
 
                 'registration_number' =>
                     $ambulance->registration_number,
@@ -54,7 +56,7 @@ class AmbulanceCollection extends ResourceCollection
                     $ambulance->driver_license_number,
 
                 'driver_photo' =>
-                    $ambulance->driver_photo
+                    ($ambulance->driver_photo)
                     ? asset($ambulance->driver_photo)
                     : null,
 

@@ -78,6 +78,13 @@ class DoctorAppointment extends Model
 
         'registration_fee',
 
+        'customer_chat_joined_at',
+        'doctor_chat_joined_at',
+        'customer_chat_ended_at',
+        'doctor_chat_ended_at',
+        'chat_duration_minutes',
+        'chat_expires_at',
+
 
     ];
 

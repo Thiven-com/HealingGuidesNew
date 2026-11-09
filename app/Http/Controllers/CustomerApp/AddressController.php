@@ -82,6 +82,8 @@ class AddressController extends Controller
 
         $validator = Validator::make($request->all(), [
             'address' => 'required|string',
+            'name' => 'required|string',
+            'mobile' => 'required|string',
             'landmark' => 'nullable|string',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
@@ -101,6 +103,10 @@ class AddressController extends Controller
 
         $address = Address::create([
             'customer_id' => $user->id,
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'house_no' => $request->house_no,
             'address' => $request->address,
             'landmark' => $request->landmark,
             'city' => $request->city,
@@ -145,6 +151,8 @@ class AddressController extends Controller
 
         $validator = Validator::make($request->all(), [
             'address' => 'required|string',
+            'name' => 'required|string',
+            'mobile' => 'required|string',
             'landmark' => 'nullable|string',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
@@ -163,6 +171,10 @@ class AddressController extends Controller
         }
 
         $address->update([
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'house_no' => $request->house_no,
             'address' => $request->address,
             'landmark' => $request->landmark,
             'city' => $request->city,
@@ -177,6 +189,34 @@ class AddressController extends Controller
             'success' => 1,
             'message' => 'Address updated successfully',
             'data' => $address->fresh()
+        ], 200);
+    }
+    public function deleteAddress(Request $request, $id)
+    {
+        $user = auth('sanctum')->user();
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $address = Address::where('id', $id)
+            ->where('customer_id', $user->id)
+            ->first();
+
+        if (!$address) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Address not found'
+            ], 404);
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Address deleted successfully'
         ], 200);
     }
 }

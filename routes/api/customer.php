@@ -399,6 +399,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::get('/address/{id}', [AddressController::class, 'address']);
     Route::post('/address/add', [AddressController::class, 'addAddress']);
     Route::post('/address/edit/{id}', [AddressController::class, 'editAddress']);
+    Route::delete('/address/{id}', [AddressController::class, 'deleteAddress']);
 
 
     Route::get('/procedures', [ProcedureController::class, 'procedures']);

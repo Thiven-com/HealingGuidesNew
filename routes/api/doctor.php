@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoctorApp\AccountController;
 use App\Http\Controllers\DoctorApp\AppointmentController;
+use App\Http\Controllers\DoctorApp\ChatConsultationController;
 use App\Http\Controllers\DoctorApp\DoctorScheduleController;
 use App\Http\Controllers\DoctorApp\PatientMedicalReportController;
 use App\Http\Controllers\DoctorApp\PatientVitalController;
@@ -91,6 +92,25 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
         'firebase-token',
         [ProfileController::class, 'firebase_token']
     );
+
+    Route::prefix('chat')->group(function () {
+        Route::post('/join', [
+            ChatConsultationController::class,
+            'joinChat'
+        ]);
+        Route::post('/send-message', [
+            ChatConsultationController::class,
+            'sendMessage'
+        ]);
+        Route::get('/messages', [
+            ChatConsultationController::class,
+            'messages'
+        ]);
+        Route::any('/end', [
+            ChatConsultationController::class,
+            'endChat'
+        ]);
+    });
 
 });
 

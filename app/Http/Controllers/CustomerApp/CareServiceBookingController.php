@@ -533,36 +533,6 @@ class CareServiceBookingController extends Controller
                 'category',
                 'service',
             ]);
-            /*
-|--------------------------------------------------------------------------
-| Customer Booking Confirmation Notification
-|--------------------------------------------------------------------------
-*/
-
-            NotificationService::send(
-                'customer',
-                $customer->id,
-                'care_service',
-                'Care Service Booking Confirmed',
-                'Your care service booking has been confirmed successfully.',
-                'care_service_booking',
-                $booking->id,
-                'care_service_booking_details',
-                [
-                    'booking_id' => $booking->id,
-                    'booking_no' => $booking->booking_no,
-                    'customer_id' => $customer->id,
-                    'service_id' => $booking->home_visit_services_id,
-                    'service_name' => $booking->service->name ?? null,
-                    'preferred_date' => $booking->preferred_date,
-                    'preferred_time' => $booking->preferred_time,
-                    'total_amount' => (float) $booking->total_amount,
-                    'payment_status' => $booking->payment_status,
-                    'booking_status' => $booking->booking_status,
-                ]
-            );
-
-
 
             return response()->json([
                 'success' => 1,
