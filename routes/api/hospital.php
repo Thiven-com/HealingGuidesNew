@@ -7,6 +7,7 @@ use App\Http\Controllers\HospitalApp\DoctorController;
 use App\Http\Controllers\HospitalApp\DiagnosticController;
 use App\Http\Controllers\HospitalApp\AmbulanceController;
 use App\Http\Controllers\HospitalApp\AmbulanceBookingController;
+use App\Http\Controllers\HospitalApp\DiagnosticBookingController;
 use App\Http\Controllers\HospitalApp\MedicineController;
 use App\Http\Controllers\HospitalApp\MedicinePrescriptionController;
 use App\Http\Controllers\HospitalApp\MedicineOrderController;
@@ -50,6 +51,11 @@ Route::group(['middleware' => ['hospitaltokenCheck']], function () {
     Route::get('lab-tests', [DiagnosticController::class, 'labTests']);
     Route::any('diagnostics', [DiagnosticController::class, 'diagnostics']);
     Route::get('diagnostics/{id}/lab-tests', [DiagnosticController::class, 'diagnosticLabTests']);
+
+    //Diagnostic Booking
+    Route::get('/diagnostic-bookings', [DiagnosticBookingController::class, 'index']);
+    Route::get('/diagnostic-bookings/{id}', [DiagnosticBookingController::class, 'show']);
+    Route::post('/diagnostic-bookings/update-status', [DiagnosticBookingController::class, 'updateStatus']);
 
     //Ambulances
     Route::any('ambulance-types', [AmbulanceController::class, 'ambulanceTypes']);
