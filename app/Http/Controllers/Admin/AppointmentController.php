@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -363,6 +364,66 @@ class AppointmentController extends Controller
 
         $appointment->save();
 
+        /*
+|--------------------------------------------------------------------------
+| Send Appointment Status Notification
+|--------------------------------------------------------------------------
+*/
+
+        try {
+
+            $notificationTitle = 'Appointment Status Updated';
+
+            $notificationMessage = 'Your appointment status has been updated to '
+                . ucfirst($appointment->appointment_status) . '.';
+
+            if ($appointment->appointment_status === 'confirmed') {
+
+                $notificationTitle = 'Appointment Confirmed';
+
+                $notificationMessage = 'Your doctor appointment has been confirmed successfully.';
+
+            } elseif ($appointment->appointment_status === 'cancelled') {
+
+                $notificationTitle = 'Appointment Cancelled';
+
+                $notificationMessage = 'Your doctor appointment has been cancelled. Reason: '
+                    . $appointment->cancel_reason;
+
+            } elseif ($appointment->appointment_status === 'completed') {
+
+                $notificationTitle = 'Appointment Completed';
+
+                $notificationMessage = 'Your doctor appointment has been completed successfully.';
+            }
+
+            NotificationService::send(
+                'customer',
+                $appointment->customer_id,
+                'doctor_appointment',
+                $notificationTitle,
+                $notificationMessage,
+                'doctor_appointment',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+                    'doctor_id' => $appointment->doctor_id,
+                    'appointment_status' => $appointment->appointment_status,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+                    'cancel_reason' => $appointment->cancel_reason,
+                ]
+            );
+
+        } catch (\Exception $e) {
+
+            \Log::error(
+                'Appointment status notification failed: ' . $e->getMessage()
+            );
+        }
+
 
         return response()->json([
             'success' => 1,
@@ -678,6 +739,40 @@ class AppointmentController extends Controller
                 $validated['doctor_schedule_id'] ?? null,
 
         ]);
+
+        /*
+|--------------------------------------------------------------------------
+| Send Reschedule Notification
+|--------------------------------------------------------------------------
+*/
+
+        try {
+
+            NotificationService::send(
+                'customer',
+                $appointment->customer_id,
+                'doctor_appointment',
+                'Appointment Rescheduled',
+                'Your doctor appointment has been rescheduled successfully.',
+                'doctor_appointment',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+                    'doctor_id' => $appointment->doctor_id,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+                    'appointment_status' => $appointment->appointment_status,
+                ]
+            );
+
+        } catch (\Exception $e) {
+
+            \Log::error(
+                'Appointment reschedule notification failed: ' . $e->getMessage()
+            );
+        }
 
 
         return redirect()

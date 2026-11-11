@@ -4,11 +4,12 @@ namespace App\Http\Controllers\HospitalApp;
 
 use App\Http\Controllers\Controller;
 use App\Models\SurgeryQuotation;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class SurgeryQuotationController extends Controller
 {
-   /**
+    /**
      * Get all surgery quotations for the authenticated hospital.
      */
     public function index(Request $request)
@@ -145,8 +146,50 @@ class SurgeryQuotationController extends Controller
                 $validated['included_services'] ?? null,
             'excluded_services' =>
                 $validated['excluded_services'] ?? null,
-            'valid_until' => $validated['valid_until'] ?? null,s
+            'valid_until' => $validated['valid_until'] ?? null,
         ]);
+
+        /*
+|--------------------------------------------------------------------------
+| Send Customer Notification
+|--------------------------------------------------------------------------
+*/
+
+        try {
+
+            $quotation->load('quotationRequest');
+
+            $customerId = $quotation->quotationRequest->customer_id ?? null;
+
+            if ($customerId) {
+
+                NotificationService::send(
+                    'customer',
+                    $customerId,
+                    'surgery_quotation',
+                    'Surgery Quotation Updated',
+                    'The hospital has submitted or updated your surgery quotation.',
+                    'surgery_quotation',
+                    $quotation->id,
+                    'quotation_details',
+                    [
+                        'quotation_id' => $quotation->id,
+                        'quotation_request_id' => $quotation->quotation_request_id,
+                        'amount' => $quotation->amount,
+                        'discount' => $quotation->discount,
+                        'tax' => $quotation->tax,
+                        'total_amount' => $quotation->total_amount,
+                        'valid_until' => $quotation->valid_until,
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+
+            \Log::error(
+                'Surgery quotation notification failed: ' . $e->getMessage()
+            );
+        }
 
         return response()->json([
             'success' => true,

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\CustomerApp;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ambulance;
 use App\Models\ChatbotConversation;
 use App\Models\ChatbotFaq;
 use App\Models\ChatbotIntent;
 use App\Models\ChatbotMessage;
 use App\Models\ChatbotMessageOption;
 use App\Models\ChatbotRecommendation;
+use App\Models\Diagnostic;
+use App\Models\Hospital;
+use App\Models\Medicine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

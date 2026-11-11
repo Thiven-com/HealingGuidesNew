@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AmbulanceBookingCollection;
 use App\Models\Ambulance;
 use App\Models\AmbulanceBooking;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -553,6 +554,28 @@ class AmbulanceBookingController extends Controller
                 'ambulance'
             ]);
 
+            try {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Assigned',
+                    'An ambulance has been assigned to your booking.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $booking->ambulance_id,
+                        'booking_status' => $booking->booking_status,
+                        'total_amount' => $booking->total_amount,
+                    ]
+                );
+            } catch (\Exception $e) {
+                \Log::error('Ambulance assignment notification failed: ' . $e->getMessage());
+            }
+
             return response()->json([
                 'success' => 1,
                 'message' => 'Ambulance Assigned Successfully',
@@ -657,6 +680,27 @@ class AmbulanceBookingController extends Controller
             Carbon::now();
 
         $booking->save();
+
+        try {
+            NotificationService::send(
+                'customer',
+                $booking->customer_id,
+                'ambulance',
+                'Ambulance Request Rejected',
+                'Your ambulance booking request has been rejected.',
+                'ambulance_booking',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'booking_status' => $booking->booking_status,
+                    'cancel_reason' => $booking->cancel_reason,
+                ]
+            );
+        } catch (\Exception $e) {
+            \Log::error('Ambulance rejection notification failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => 1,
@@ -763,6 +807,25 @@ class AmbulanceBookingController extends Controller
             'ambulanceType',
             'ambulance'
         ]);
+        try {
+            NotificationService::send(
+                'customer',
+                $booking->customer_id,
+                'ambulance',
+                'Ambulance On The Way',
+                'Your assigned ambulance is on the way.',
+                'ambulance_booking',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        } catch (\Exception $e) {
+            \Log::error('Ambulance trip start notification failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => 1,
@@ -944,6 +1007,28 @@ class AmbulanceBookingController extends Controller
                 'ambulanceType',
                 'ambulance'
             ]);
+
+            try {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Trip Completed',
+                    'Your ambulance trip has been completed successfully.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'booking_status' => $booking->booking_status,
+                        'total_amount' => $booking->total_amount,
+                        'completed_at' => $booking->completed_at,
+                    ]
+                );
+            } catch (\Exception $e) {
+                \Log::error('Ambulance trip completion notification failed: ' . $e->getMessage());
+            }
 
             return response()->json([
                 'success' => 1,

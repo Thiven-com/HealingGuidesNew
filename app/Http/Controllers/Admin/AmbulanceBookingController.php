@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AmbulanceBooking;
 use App\Models\Ambulance;
+use App\Services\NotificationService;
 
 class AmbulanceBookingController extends Controller
 {
@@ -17,91 +18,91 @@ class AmbulanceBookingController extends Controller
     */
 
     public function index(Request $request)
-{
-    $query = AmbulanceBooking::with([
-        'ambulance',
-    ]);
+    {
+        $query = AmbulanceBooking::with([
+            'ambulance',
+        ]);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Search
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | Search
+        |--------------------------------------------------------------------------
+        */
 
-    if ($request->filled('search')) {
+        if ($request->filled('search')) {
 
-        $search = $request->search;
+            $search = $request->search;
 
-        $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search) {
 
-            $q->where('booking_no', 'like', "%{$search}%")
-                ->orWhere('pickup_address', 'like', "%{$search}%")
-                ->orWhere(
-                    'destination_address',
-                    'like',
-                    "%{$search}%"
-                );
-        });
-    }
+                $q->where('booking_no', 'like', "%{$search}%")
+                    ->orWhere('pickup_address', 'like', "%{$search}%")
+                    ->orWhere(
+                        'destination_address',
+                        'like',
+                        "%{$search}%"
+                    );
+            });
+        }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Booking Status
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | Booking Status
+        |--------------------------------------------------------------------------
+        */
 
-    if ($request->filled('status')) {
+        if ($request->filled('status')) {
 
-        $query->where(
-            'booking_status',
-            $request->status
+            $query->where(
+                'booking_status',
+                $request->status
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment Status
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('payment_status')) {
+
+            $query->where(
+                'payment_status',
+                $request->payment_status
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('date')) {
+
+            $query->whereDate(
+                'created_at',
+                $request->date
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Bookings
+        |--------------------------------------------------------------------------
+        */
+
+        $bookings = $query
+            ->latest('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view(
+            'admin.ambulance-bookings.index',
+            compact('bookings')
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Status
-    |--------------------------------------------------------------------------
-    */
-
-    if ($request->filled('payment_status')) {
-
-        $query->where(
-            'payment_status',
-            $request->payment_status
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Date
-    |--------------------------------------------------------------------------
-    */
-
-    if ($request->filled('date')) {
-
-        $query->whereDate(
-            'created_at',
-            $request->date
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Get Bookings
-    |--------------------------------------------------------------------------
-    */
-
-    $bookings = $query
-        ->latest('id')
-        ->paginate(15)
-        ->withQueryString();
-
-    return view(
-        'admin.ambulance-bookings.index',
-        compact('bookings')
-    );
-}
 
 
     /*
@@ -112,12 +113,12 @@ class AmbulanceBookingController extends Controller
 
     public function show($id)
     {
-       
+
 
         $booking = AmbulanceBooking::with([
             'ambulance',
         ])
-            
+
             ->where('id', $id)
             ->firstOrFail();
 
@@ -129,9 +130,9 @@ class AmbulanceBookingController extends Controller
         */
 
         $ambulances = Ambulance::where(
-                'status',
-                'active'
-            )
+            'status',
+            'active'
+        )
             ->where(
                 'is_available',
                 1
@@ -261,6 +262,35 @@ class AmbulanceBookingController extends Controller
 
         $ambulance->save();
 
+        /*
+|--------------------------------------------------------------------------
+| Notify Customer
+|--------------------------------------------------------------------------
+*/
+
+        try {
+            if ($booking->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Assigned',
+                    'An ambulance has been assigned to your booking.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $ambulance->id,
+                        'booking_status' => $booking->booking_status,
+                    ]
+                );
+            }
+        } catch (\Exception $e) {
+            Log::error('Ambulance assignment notification failed: ' . $e->getMessage());
+        }
+
 
         return back()->with(
             'success',
@@ -343,6 +373,35 @@ class AmbulanceBookingController extends Controller
                 ]);
         }
 
+        /*
+|--------------------------------------------------------------------------
+| Notify Customer
+|--------------------------------------------------------------------------
+*/
+
+        try {
+            if ($booking->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Booking Rejected',
+                    'Your ambulance booking has been rejected.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'booking_status' => $booking->booking_status,
+                        'cancel_reason' => $booking->cancel_reason,
+                    ]
+                );
+            }
+        } catch (\Exception $e) {
+            Log::error('Ambulance rejection notification failed: ' . $e->getMessage());
+        }
+
 
         return back()->with(
             'success',
@@ -401,12 +460,47 @@ class AmbulanceBookingController extends Controller
                 $request->booking_id
             )
             ->firstOrFail();
+        $oldPaymentStatus = $booking->payment_status;
 
 
         $booking->payment_status =
             $request->payment_status;
 
         $booking->save();
+
+        /*
+|--------------------------------------------------------------------------
+| Notify Customer When Payment Status Changes
+|--------------------------------------------------------------------------
+*/
+
+        if ($oldPaymentStatus !== $booking->payment_status) {
+
+            try {
+                if ($booking->customer_id) {
+
+                    NotificationService::send(
+                        'customer',
+                        $booking->customer_id,
+                        'ambulance',
+                        'Ambulance Payment Status Updated',
+                        'Your ambulance booking payment status is now ' .
+                        ucfirst($booking->payment_status) . '.',
+                        'ambulance_booking',
+                        $booking->id,
+                        'booking_details',
+                        [
+                            'booking_id' => $booking->id,
+                            'booking_no' => $booking->booking_no,
+                            'payment_status' => $booking->payment_status,
+                            'total_amount' => $booking->total_amount,
+                        ]
+                    );
+                }
+            } catch (\Exception $e) {
+                Log::error('Ambulance payment notification failed: ' . $e->getMessage());
+            }
+        }
 
 
         return back()->with(

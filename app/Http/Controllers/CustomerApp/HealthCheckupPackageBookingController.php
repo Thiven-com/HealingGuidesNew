@@ -7,6 +7,7 @@ use App\Models\FamilyMember;
 use App\Models\HealthCheckupPackage;
 use App\Models\HealthCheckupPackageBooking;
 use App\Models\Payment;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -589,6 +590,35 @@ class HealthCheckupPackageBookingController extends Controller
 
             DB::commit();
 
+            try {
+                NotificationService::send(
+                    'customer',
+                    $customer->id,
+                    'health_checkup_package',
+                    'Health Checkup Booking Confirmed',
+                    'Your health checkup package booking ' . $booking->booking_no . ' has been confirmed successfully.',
+                    'health_checkup_package_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'customer_id' => $customer->id,
+                        'family_member_id' => $booking->family_member_id,
+                        'family_member_name' => optional($booking->familyMember)->name,
+                        'package_id' => $booking->health_checkup_package_id,
+                        'package_name' => optional($booking->healthCheckupPackage)->name,
+                        'booking_date' => $booking->booking_date,
+                        'booking_time' => $booking->booking_time,
+                        'total_amount' => $booking->total_amount,
+                        'payment_status' => $booking->payment_status,
+                        'booking_status' => $booking->booking_status,
+                    ]
+                );
+            } catch (\Throwable $notificationError) {
+                \Log::error('Health checkup booking notification failed: ' . $notificationError->getMessage());
+            }
+
             $booking->load([
                 'familyMember',
                 'healthCheckupPackage',
@@ -699,6 +729,28 @@ class HealthCheckupPackageBookingController extends Controller
             'payment_status' => 'failed',
             'booking_status' => 'pending',
         ]);
+        try {
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'health_checkup_package',
+                'Payment Failed',
+                'Payment for your health checkup package booking ' . $booking->booking_no . ' was unsuccessful. Please try again.',
+                'health_checkup_package_booking',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'package_id' => $booking->health_checkup_package_id,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        } catch (\Throwable $notificationError) {
+            \Log::error('Health checkup payment failure notification failed: ' . $notificationError->getMessage());
+        }
 
         return response()->json([
             'success' => 1,
@@ -882,6 +934,27 @@ class HealthCheckupPackageBookingController extends Controller
         $booking->update([
             'booking_status' => 'cancelled',
         ]);
+        try {
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'health_checkup_package',
+                'Health Checkup Booking Cancelled',
+                'Your health checkup package booking ' . $booking->booking_no . ' has been cancelled.',
+                'health_checkup_package_booking',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'family_member_id' => $booking->family_member_id,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        } catch (\Throwable $notificationError) {
+            \Log::error('Health checkup cancellation notification failed: ' . $notificationError->getMessage());
+        }
 
         $payment = null;
 
@@ -970,6 +1043,29 @@ class HealthCheckupPackageBookingController extends Controller
             'booking_date' => $request->booking_date,
             'booking_time' => $request->booking_time,
         ]);
+
+        try {
+            NotificationService::send(
+                'customer',
+                $customer->id,
+                'health_checkup_package',
+                'Health Checkup Booking Rescheduled',
+                'Your health checkup booking ' . $booking->booking_no . ' has been rescheduled to ' . $request->booking_date . ' at ' . $request->booking_time . '.',
+                'health_checkup_package_booking',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'booking_date' => $booking->booking_date,
+                    'booking_time' => $booking->booking_time,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        } catch (\Throwable $notificationError) {
+            \Log::error('Health checkup reschedule notification failed: ' . $notificationError->getMessage());
+        }
 
         $booking->load([
             'familyMember',

@@ -2642,7 +2642,37 @@ class DoctorAppointmentController extends Controller
             }
 
             $room->save();
+
+            /*
+|--------------------------------------------------------------------------
+| Doctor Notification - Customer Joined Video Consultation
+|--------------------------------------------------------------------------
+*/
+
+            NotificationService::send(
+                'doctor',
+                $appointment->doctor_id,
+                'video_consultation',
+                'Customer Joined Video Consultation',
+                'Customer ' . $customer->name . ' has joined the video consultation for appointment ' . $appointment->appointment_no . '.',
+                'doctor_appointment',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+                    'doctor_id' => $appointment->doctor_id,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'consultation_type' => $appointment->consultation_type,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+                    'room_id' => $room->room_id,
+                    'meeting_status' => $room->status,
+                ]
+            );
         }
+
 
         return response()->json([
 

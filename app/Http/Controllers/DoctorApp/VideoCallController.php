@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DoctorApp;
 use App\Http\Controllers\Controller;
 use App\Models\DoctorAppointment;
 use App\Models\VideoRoom;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,6 +72,31 @@ class VideoCallController extends Controller
         }
 
         $room->save();
+
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'video_consultation',
+            'Doctor Joined Video Consultation',
+            'Doctor ' . $doctor->name . ' has joined the video consultation for appointment ' . $appointment->appointment_no . '.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->name,
+                'customer_id' => $appointment->customer_id,
+                'consultation_type' => $appointment->consultation_type,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'room_id' => $room->room_id,
+                'meeting_status' => $room->status,
+            ]
+        );
+
+
 
         return response()->json([
             'success' => 1,
@@ -155,6 +181,26 @@ class VideoCallController extends Controller
 
         $room->save();
 
+        NotificationService::send(
+            'customer',
+            $room->customer_id,
+            'video_consultation',
+            'Doctor Left Video Consultation',
+            'Doctor ' . $doctor->name . ' has left the video consultation for appointment ' . $room->appointment->appointment_no . '.',
+            'doctor_appointment',
+            $room->appointment_id,
+            'appointment_details',
+            [
+                'appointment_id' => $room->appointment_id,
+                'appointment_no' => $room->appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->name,
+                'customer_id' => $room->customer_id,
+                'room_id' => $room->room_id,
+                'meeting_status' => $room->status,
+            ]
+        );
+
         return response()->json([
             'success' => 1,
             'message' => 'Doctor left video room.'
@@ -220,6 +266,30 @@ class VideoCallController extends Controller
         $appointment->meeting_status = 'completed';
         $appointment->meeting_ended_at = now();
         $appointment->save();
+
+        NotificationService::send(
+            'customer',
+            $appointment->customer_id,
+            'video_consultation',
+            'Video Consultation Completed',
+            'Doctor ' . $doctor->name . ' has completed the video consultation for appointment ' . $appointment->appointment_no . '.',
+            'doctor_appointment',
+            $appointment->id,
+            'appointment_details',
+            [
+                'appointment_id' => $appointment->id,
+                'appointment_no' => $appointment->appointment_no,
+                'doctor_id' => $doctor->id,
+                'doctor_name' => $doctor->name,
+                'customer_id' => $appointment->customer_id,
+                'consultation_type' => $appointment->consultation_type,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
+                'room_id' => $room->room_id,
+                'meeting_status' => $room->status,
+                'duration' => $room->duration,
+            ]
+        );
 
         return response()->json([
             'success' => 1,
