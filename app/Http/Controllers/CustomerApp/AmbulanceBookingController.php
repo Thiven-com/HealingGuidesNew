@@ -335,7 +335,7 @@ class AmbulanceBookingController extends Controller
             'Your ambulance request has been sent to ' .
             $hospital->hospital_name .
             '.',
-            'ambulance_booking',
+            'ambulance_booked',
             $booking->id,
             'ambulance_booking_details',
             [
@@ -363,7 +363,7 @@ class AmbulanceBookingController extends Controller
                 'ambulance',
                 'New Ambulance Request',
                 'A new ambulance request has been received.',
-                'ambulance_booking',
+                'ambulance_booked',
                 $booking->id,
                 'ambulance_booking_details',
                 [
@@ -392,7 +392,7 @@ class AmbulanceBookingController extends Controller
                 'ambulance',
                 'New Ambulance Booking',
                 'A new booking has been assigned to your ambulance.',
-                'ambulance_booking',
+                'ambulance_booked',
                 $booking->id,
                 'ambulance_booking_details',
                 [
@@ -786,7 +786,7 @@ class AmbulanceBookingController extends Controller
             'Your ambulance booking ' .
             $booking->booking_no .
             ' has been cancelled successfully.',
-            'ambulance_booking',
+            'ambulance_booking_cancelled',
             $booking->id,
             'ambulance_booking_details',
             [
@@ -968,7 +968,7 @@ class AmbulanceBookingController extends Controller
             'Your payment for ambulance booking ' .
             $booking->booking_no .
             ' has been completed successfully.',
-            'ambulance_booking',
+            'ambulance_booking_payment_successful',
             $booking->id,
             'ambulance_booking_details',
             [

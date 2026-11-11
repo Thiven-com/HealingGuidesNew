@@ -226,7 +226,7 @@ class BookAdmissionController extends Controller
                 'admission',
                 'New Admission Request',
                 'A customer has submitted an admission request with you as the preferred doctor.',
-                'book_admission',
+                'admission_request_created',
                 $bookAdmission->id,
                 'admission_details',
                 [

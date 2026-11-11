@@ -597,7 +597,7 @@ class HealthCheckupPackageBookingController extends Controller
                     'health_checkup_package',
                     'Health Checkup Booking Confirmed',
                     'Your health checkup package booking ' . $booking->booking_no . ' has been confirmed successfully.',
-                    'health_checkup_package_booking',
+                    'health_checkup_package_booked',
                     $booking->id,
                     'booking_details',
                     [
@@ -736,7 +736,7 @@ class HealthCheckupPackageBookingController extends Controller
                 'health_checkup_package',
                 'Payment Failed',
                 'Payment for your health checkup package booking ' . $booking->booking_no . ' was unsuccessful. Please try again.',
-                'health_checkup_package_booking',
+                'health_checkup_payment_failed',
                 $booking->id,
                 'booking_details',
                 [
@@ -941,7 +941,7 @@ class HealthCheckupPackageBookingController extends Controller
                 'health_checkup_package',
                 'Health Checkup Booking Cancelled',
                 'Your health checkup package booking ' . $booking->booking_no . ' has been cancelled.',
-                'health_checkup_package_booking',
+                'health_checkup_booking_cancelled',
                 $booking->id,
                 'booking_details',
                 [
@@ -1051,7 +1051,7 @@ class HealthCheckupPackageBookingController extends Controller
                 'health_checkup_package',
                 'Health Checkup Booking Rescheduled',
                 'Your health checkup booking ' . $booking->booking_no . ' has been rescheduled to ' . $request->booking_date . ' at ' . $request->booking_time . '.',
-                'health_checkup_package_booking',
+                'health_checkup_booking_rescheduled',
                 $booking->id,
                 'booking_details',
                 [

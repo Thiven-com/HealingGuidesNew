@@ -466,7 +466,7 @@ class CareServiceBookingController extends Controller
                 'care_service',
                 'Care Service Booking Created',
                 'Your care service booking has been created successfully. Please complete your Razorpay payment.',
-                'care_service_booking',
+                'care_service_booked',
                 $booking->id,
                 'care_service_booking_details',
                 [
@@ -498,7 +498,7 @@ class CareServiceBookingController extends Controller
                     'care_service',
                     'New Care Service Booking',
                     'A new paid care service booking has been received.',
-                    'care_service_booking',
+                    'care_service_booked',
                     $booking->id,
                     'care_service_booking_details',
                     [
@@ -799,6 +799,23 @@ class CareServiceBookingController extends Controller
             'booking_status' =>
                 'cancelled',
         ]);
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'care_service',
+            'Care Service Booking Cancelled',
+            'Your care service booking has been cancelled successfully.',
+            'care_service_booking_cancelled',
+            $booking->id,
+            'care_service_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'customer_id' => $customer->id,
+                'booking_status' => $booking->booking_status,
+                'payment_status' => $booking->payment_status,
+            ]
+        );
 
         $payment = null;
 
@@ -975,7 +992,7 @@ class CareServiceBookingController extends Controller
                 'care_service',
                 'Care Service Booking Confirmed',
                 'Your care service booking has been confirmed successfully.',
-                'care_service_booking',
+                'care_service_booking_confirmed',
                 $booking->id,
                 'care_service_booking_details',
                 [
@@ -1009,7 +1026,7 @@ class CareServiceBookingController extends Controller
                     'care_service',
                     'New Care Service Booking',
                     'A new paid care service booking has been received.',
-                    'care_service_booking',
+                    'care_service_booking_confirmed',
                     $booking->id,
                     'care_service_booking_details',
                     [
@@ -1160,7 +1177,7 @@ class CareServiceBookingController extends Controller
             'care_service',
             'Care Service Payment Failed',
             'Your care service booking payment was unsuccessful. Please try again.',
-            'care_service_booking',
+            'care_service_payment_failed',
             $booking->id,
             'care_service_booking_details',
             [

@@ -79,7 +79,7 @@ class VideoCallController extends Controller
             'video_consultation',
             'Doctor Joined Video Consultation',
             'Doctor ' . $doctor->name . ' has joined the video consultation for appointment ' . $appointment->appointment_no . '.',
-            'doctor_appointment',
+            'video_consultation_doctor_joined',
             $appointment->id,
             'appointment_details',
             [
@@ -187,7 +187,7 @@ class VideoCallController extends Controller
             'video_consultation',
             'Doctor Left Video Consultation',
             'Doctor ' . $doctor->name . ' has left the video consultation for appointment ' . $room->appointment->appointment_no . '.',
-            'doctor_appointment',
+            'video_consultation_doctor_left',
             $room->appointment_id,
             'appointment_details',
             [
@@ -273,7 +273,7 @@ class VideoCallController extends Controller
             'video_consultation',
             'Video Consultation Completed',
             'Doctor ' . $doctor->name . ' has completed the video consultation for appointment ' . $appointment->appointment_no . '.',
-            'doctor_appointment',
+            'video_consultation_completed',
             $appointment->id,
             'appointment_details',
             [

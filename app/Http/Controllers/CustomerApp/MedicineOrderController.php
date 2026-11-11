@@ -867,7 +867,7 @@ class MedicineOrderController extends Controller
                 'Your medicine order ' .
                 $order->order_no .
                 ' has been placed successfully.',
-                'medicine_order',
+                'medicine_order_created',
                 $order->id,
                 'medicine_order_details',
                 [
@@ -912,7 +912,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'New Medicine Order Received',
                 'You have received a new medicine order ' . $order->order_no . '.',
-                'medicine_order',
+                'medicine_order_created',
                 $order->id,
                 'medicine_order_details',
                 [
@@ -1662,7 +1662,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'Medicine Order Cancelled',
                 'Your medicine order ' . $order->order_no . ' has been cancelled successfully.',
-                'medicine_order',
+                'medicine_order_cancelled',
                 $order->id,
                 'medicine_order_details',
                 [
@@ -1683,7 +1683,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'Medicine Order Cancelled',
                 'Medicine order ' . $order->order_no . ' has been cancelled by the customer.',
-                'medicine_order',
+                'medicine_order_cancelled',
                 $order->id,
                 'medicine_order_details',
                 [
@@ -1888,7 +1888,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'Medicine Order Payment Successful',
                 'Payment for your medicine order ' . $order->order_no . ' has been completed successfully.',
-                'medicine_order',
+                'medicine_payment_successful',
                 $order->id,
                 'medicine_order_details',
                 [
@@ -1910,7 +1910,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'Medicine Order Payment Received',
                 'Payment for medicine order ' . $order->order_no . ' has been completed successfully.',
-                'medicine_order',
+                'medicine_payment_successful',
                 $order->id,
                 'medicine_order_details',
                 [

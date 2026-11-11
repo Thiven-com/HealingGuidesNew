@@ -169,7 +169,7 @@ class AppointmentController extends Controller
             'appointment',
             'Appointment Accepted',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been accepted.',
-            'doctor_appointment',
+            'doctor_appointment_accepted',
             $appointment->id,
             'appointment_details',
             [
@@ -236,7 +236,7 @@ class AppointmentController extends Controller
             'appointment',
             'Appointment Rejected',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been rejected. Reason: ' . $request->reason,
-            'doctor_appointment',
+            'doctor_appointment_rejected',
             $appointment->id,
             'appointment_details',
             [
@@ -323,7 +323,7 @@ class AppointmentController extends Controller
             'appointment',
             'Consultation Started',
             'Dr. ' . $doctor->doctor_name . ' has started your consultation.',
-            'doctor_appointment',
+            'doctor_consultation_started',
             $appointment->id,
             'appointment_details',
             [
@@ -400,7 +400,7 @@ class AppointmentController extends Controller
             'appointment',
             'Consultation Completed',
             'Your consultation with Dr. ' . $doctor->doctor_name . ' has been completed successfully.',
-            'doctor_appointment',
+            'doctor_consultation_completed',
             $appointment->id,
             'appointment_details',
             [
@@ -527,7 +527,7 @@ class AppointmentController extends Controller
             'appointment',
             'Appointment Cancelled',
             'Your appointment with Dr. ' . $doctor->doctor_name . ' has been cancelled. Reason: ' . $request->cancel_reason,
-            'doctor_appointment',
+            'doctor_appointment_cancelled',
             $appointment->id,
             'appointment_details',
             [
@@ -897,7 +897,7 @@ class AppointmentController extends Controller
             'appointment',
             'Appointment Rescheduled',
             'Dr. ' . $doctor->doctor_name . ' has rescheduled your appointment.',
-            'doctor_appointment',
+            'doctor_appointment_rescheduled',
             $appointment->id,
             'appointment_details',
             [

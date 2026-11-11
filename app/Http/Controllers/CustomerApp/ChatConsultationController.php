@@ -146,7 +146,7 @@ class ChatConsultationController extends Controller
                     'chat',
                     'Customer Waiting in Chat',
                     'A customer is waiting for you in the chat consultation.',
-                    'doctor_appointment',
+                    'chat_customer_waiting',
                     $appointment->id,
                     'chat_conversation',
                     [
@@ -274,7 +274,7 @@ class ChatConsultationController extends Controller
                     'New Chat Message',
                     'You have received a new message from ' .
                     ($customer->name ?? 'Customer') . '.',
-                    'doctor_appointment',
+                    'chat_new_message',
                     $appointment->id,
                     'chat_conversation',
                     [
@@ -439,6 +439,50 @@ class ChatConsultationController extends Controller
         }
 
         $appointment->refresh();
+        /*
+|--------------------------------------------------------------------------
+| Doctor Chat Ended Notification
+|--------------------------------------------------------------------------
+*/
+
+        try {
+            if ($appointment->chat_ended_at && $appointment->doctor) {
+                NotificationService::send(
+                    'doctor',
+                    $appointment->doctor_id,
+                    'chat',
+                    'Chat Consultation Ended',
+                    'The customer has ended the chat consultation.',
+                    'chat_consultation_ended',
+                    $appointment->id,
+                    'chat_conversation',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+
+                        'customer_id' => $appointment->customer_id,
+                        'customer_name' => $appointment->customer->name ?? null,
+
+                        'doctor_id' => $appointment->doctor_id,
+                        'doctor_name' => $appointment->doctor->doctor_name ?? null,
+
+                        'consultation_type' => $appointment->consultation_type,
+
+                        'customer_chat_ended_at' => $appointment->customer_chat_ended_at,
+                        'doctor_chat_ended_at' => $appointment->doctor_chat_ended_at,
+
+                        'chat_ended_at' => $appointment->chat_ended_at,
+                        'appointment_status' => $appointment->appointment_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Customer chat ended notification failed', [
+                'appointment_id' => $appointment->id,
+                'doctor_id' => $appointment->doctor_id,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return response()->json([
             'success' => 1,

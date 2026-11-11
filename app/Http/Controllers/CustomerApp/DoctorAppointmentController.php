@@ -1642,7 +1642,7 @@ class DoctorAppointmentController extends Controller
                     'appointment',
                     'Appointment Booked',
                     'Your appointment with Dr. ' . $doctor->doctor_name . ' has been booked successfully.',
-                    'doctor_appointment',
+                    'doctor_appointment_booked',
                     $appointment->id,
                     'appointment_details',
                     [
@@ -1721,7 +1721,7 @@ class DoctorAppointmentController extends Controller
                 'appointment',
                 'Appointment Booked',
                 'Please complete the payment for your appointment with Dr. ' . $doctor->doctor_name . ' to confirm your booking.',
-                'doctor_appointment',
+                'doctor_appointment_payment_pending',
                 $appointment->id,
                 'appointment_details',
                 [
@@ -2009,7 +2009,7 @@ class DoctorAppointmentController extends Controller
             'Your appointment with Dr. ' .
             ($appointment->doctor->doctor_name ?? 'Doctor') .
             ' has been cancelled successfully.',
-            'doctor_appointment',
+            'doctor_appointment_cancelled',
             $appointment->id,
             'appointment_details',
             [
@@ -2043,7 +2043,7 @@ class DoctorAppointmentController extends Controller
                 'appointment',
                 'Appointment Cancelled',
                 'Appointment ' . $appointment->appointment_no . ' has been cancelled by the customer.',
-                'doctor_appointment',
+                'doctor_appointment_cancelled',
                 $appointment->id,
                 'appointment_details',
                 [
@@ -2232,7 +2232,7 @@ class DoctorAppointmentController extends Controller
             ' at ' .
             Carbon::parse($appointment->appointment_time)->format('h:i A') .
             '.',
-            'doctor_appointment',
+            'doctor_appointment_rescheduled',
             $appointment->id,
             'appointment_details',
             [
@@ -2278,7 +2278,7 @@ class DoctorAppointmentController extends Controller
                 'appointment',
                 'Appointment Rescheduled',
                 'Appointment ' . $appointment->appointment_no . ' has been rescheduled by the customer.',
-                'doctor_appointment',
+                'doctor_appointment_rescheduled',
                 $appointment->id,
                 'appointment_details',
                 [
@@ -2468,7 +2468,7 @@ class DoctorAppointmentController extends Controller
             'appointment',
             'Appointment Payment Successful',
             'Payment completed successfully for appointment ' . $appointment->appointment_no . '.',
-            'doctor_appointment',
+            'doctor_appointment_payment_successful',
             $appointment->id,
             'appointment_details',
             [
@@ -2498,7 +2498,7 @@ class DoctorAppointmentController extends Controller
                 'appointment',
                 'Appointment Payment Received',
                 'Payment has been completed for appointment ' . $appointment->appointment_no . '.',
-                'doctor_appointment',
+                'doctor_appointment_payment_successful',
                 $appointment->id,
                 'appointment_details',
                 [
@@ -2653,9 +2653,9 @@ class DoctorAppointmentController extends Controller
                 'doctor',
                 $appointment->doctor_id,
                 'video_consultation',
-                'Customer Joined Video Consultation',
-                'Customer ' . $customer->name . ' has joined the video consultation for appointment ' . $appointment->appointment_no . '.',
-                'doctor_appointment',
+                'Customer Waiting for Video Consultation',
+                'Customer ' . $customer->name . ' is waiting for you to join the video consultation for appointment ' . $appointment->appointment_no . '. Please join the consultation.',
+                'video_consultation_customer_joined',
                 $appointment->id,
                 'appointment_details',
                 [

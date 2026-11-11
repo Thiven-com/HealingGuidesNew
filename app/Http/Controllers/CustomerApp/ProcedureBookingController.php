@@ -202,7 +202,7 @@ class ProcedureBookingController extends Controller
                 'procedure',
                 'Procedure Booking Created',
                 'Your procedure booking ' . $booking->booking_no . ' has been created successfully. Please complete your payment.',
-                'procedure_booking',
+                'procedure_booked',
                 $booking->id,
                 'procedure_booking_details',
                 [
@@ -229,7 +229,7 @@ class ProcedureBookingController extends Controller
                 'procedure',
                 'New Procedure Booking',
                 'You have received a new procedure booking ' . $booking->booking_no . '.',
-                'procedure_booking',
+                'procedure_booked',
                 $booking->id,
                 'procedure_booking_details',
                 [
@@ -480,7 +480,7 @@ class ProcedureBookingController extends Controller
             'procedure',
             'Procedure Booking Cancelled',
             'Your procedure booking ' . $booking->booking_no . ' has been cancelled successfully.',
-            'procedure_booking',
+            'procedure_booking_cancelled',
             $booking->id,
             'procedure_booking_details',
             [
@@ -504,7 +504,7 @@ class ProcedureBookingController extends Controller
             'procedure',
             'Procedure Booking Cancelled',
             'Procedure booking ' . $booking->booking_no . ' has been cancelled by the customer.',
-            'procedure_booking',
+            'procedure_booking_cancelled',
             $booking->id,
             'procedure_booking_details',
             [
@@ -649,7 +649,7 @@ class ProcedureBookingController extends Controller
                 'procedure',
                 'Procedure Payment Successful',
                 'Your payment for procedure booking ' . $booking->booking_no . ' has been received successfully.',
-                'procedure_booking',
+                'procedure_payment_successful',
                 $booking->id,
                 'procedure_booking_details',
                 [
@@ -673,7 +673,7 @@ class ProcedureBookingController extends Controller
                 'procedure',
                 'Procedure Payment Received',
                 'Payment for procedure booking ' . $booking->booking_no . ' has been completed successfully.',
-                'procedure_booking',
+                'procedure_payment_successful',
                 $booking->id,
                 'procedure_booking_details',
                 [
@@ -781,6 +781,30 @@ class ProcedureBookingController extends Controller
             ], 422);
         }
 
+        NotificationService::send(
+            'customer',
+            $customer->id,
+            'procedure',
+            'Procedure Payment Failed',
+            'Your payment for procedure booking ' . $booking->booking_no . ' has failed. Please try again.',
+            'procedure_payment_failed',
+            $booking->id,
+            'procedure_booking_details',
+            [
+                'booking_id' => $booking->id,
+                'booking_no' => $booking->booking_no,
+                'customer_id' => $customer->id,
+                'procedure_id' => $booking->procedure_id,
+                'doctor_id' => $booking->doctor_id,
+                'hospital_id' => $booking->hospital_id,
+                'payment_id' => $payment->id,
+                'gateway_order_id' => $payment->gateway_order_id,
+                'gateway_payment_id' => $validated['razorpay_payment_id'] ?? null,
+                'failure_reason' => $validated['failure_reason'] ?? null,
+                'payment_status' => 'failed',
+                'booking_status' => $booking->booking_status,
+            ]
+        );
         /*
          * Do not mark a payment failed solely because the client
          * reports a failure. The gateway may have captured it.

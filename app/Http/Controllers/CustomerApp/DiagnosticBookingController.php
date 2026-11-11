@@ -517,7 +517,7 @@ class DiagnosticBookingController extends Controller
                 ' has been booked successfully at ' .
                 $diagnostic->name .
                 '.',
-                'diagnostic_booking',
+                'diagnostic_booked',
                 $booking->id,
                 'lab_booking_details',
                 [
@@ -568,7 +568,7 @@ class DiagnosticBookingController extends Controller
                 'diagnostic',
                 'New Lab Test Booking',
                 'A new lab test booking has been received.',
-                'diagnostic_booking',
+                'diagnostic_booked',
                 $booking->id,
                 'lab_booking_details',
                 [
@@ -923,7 +923,7 @@ class DiagnosticBookingController extends Controller
             'diagnostic',
             'Lab Booking Payment Successful',
             'Your payment for lab booking ' . $booking->booking_no . ' was successful.',
-            'diagnostic_booking',
+            'diagnostic_payment_successful',
             $booking->id,
             'lab_booking_details',
             [
@@ -952,7 +952,7 @@ class DiagnosticBookingController extends Controller
                 'diagnostic',
                 'Lab Booking Payment Received',
                 'Payment has been completed for lab booking ' . $booking->booking_no . '.',
-                'diagnostic_booking',
+                'diagnostic_payment_received',
                 $booking->id,
                 'lab_booking_details',
                 [
@@ -1168,7 +1168,7 @@ class DiagnosticBookingController extends Controller
                 'diagnostic',
                 'Lab Booking Cancelled',
                 'Lab booking ' . $booking->booking_no . ' has been cancelled by the customer.',
-                'diagnostic_booking',
+                'diagnostic_booking_cancelled',
                 $booking->id,
                 'lab_booking_details',
                 [

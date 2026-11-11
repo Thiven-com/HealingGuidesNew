@@ -312,7 +312,7 @@ class BookingController extends Controller
             'Your ambulance ' .
             $booking->booking_no .
             ' is on the way to your pickup location.',
-            'ambulance_booking',
+            'ambulance_trip_started',
             $booking->id,
             'ambulance_booking_details',
             [
@@ -722,7 +722,7 @@ class BookingController extends Controller
                 'Your ambulance trip for booking ' .
                 $booking->booking_no .
                 ' has been completed successfully.',
-                'ambulance_booking',
+                'ambulance_trip_completed',
                 $booking->id,
                 'ambulance_booking_details',
                 [
@@ -1085,7 +1085,7 @@ class BookingController extends Controller
             'The ambulance has successfully picked up the patient for booking ' .
             $booking->booking_no .
             '. The trip is now in progress.',
-            'ambulance_booking',
+            'ambulance_patient_picked',
             $booking->id,
             'ambulance_booking_details',
             [

@@ -87,7 +87,7 @@ class ChatConsultationController extends Controller
                 'chat',
                 $title,
                 $message,
-                'doctor_appointment',
+                $notificationType,
                 $appointment->id,
                 'chat_conversation',
                 array_merge([
@@ -249,7 +249,7 @@ class ChatConsultationController extends Controller
                 ($appointment->doctor->doctor_name ?? 'Doctor') .
                 ' is waiting for you in the chat consultation.',
                 $appointment,
-                'doctor_waiting'
+                'chat_doctor_waiting'
             );
         }
 
@@ -364,7 +364,7 @@ class ChatConsultationController extends Controller
                 'You have received a new message from Dr. ' .
                 ($appointment->doctor->doctor_name ?? 'Doctor') . '.',
                 $appointment,
-                'new_message',
+                'chat_new_message',
                 [
                     'message_id' => $chatMessage->id,
                     'message' => $chatMessage->message,
@@ -497,6 +497,7 @@ class ChatConsultationController extends Controller
                 'message' => 'Doctor has not joined the chat.',
             ]);
         }
+        $wasChatEnded = (bool) $appointment->chat_ended_at;
 
         DB::transaction(function () use ($appointment) {
 
@@ -518,6 +519,27 @@ class ChatConsultationController extends Controller
         });
 
         $appointment->refresh();
+        // Notify customer when doctor ends the shared chat.
+        if (
+            !$wasChatEnded &&
+            $appointment->chat_ended_at &&
+            $appointment->customer
+        ) {
+            $this->sendChatNotification(
+                'customer',
+                $appointment->customer_id,
+                'Chat Consultation Ended',
+                'The doctor has ended the chat consultation.',
+                $appointment,
+                'chat_consultation_ended',
+                [
+                    'customer_chat_ended_at' => $appointment->customer_chat_ended_at,
+                    'doctor_chat_ended_at' => $appointment->doctor_chat_ended_at,
+                    'chat_ended_at' => $appointment->chat_ended_at,
+                    'appointment_status' => $appointment->appointment_status,
+                ]
+            );
+        }
 
         return response()->json([
             'success' => 1,
