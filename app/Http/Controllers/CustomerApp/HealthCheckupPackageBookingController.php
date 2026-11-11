@@ -323,6 +323,38 @@ class HealthCheckupPackageBookingController extends Controller
 
             DB::commit();
 
+            try {
+                NotificationService::send(
+                    'customer',
+                    $customer->id,
+                    'health_checkup_package',
+                    'Health Checkup Booking Created',
+                    'Your health checkup package booking ' . $booking->booking_no . ' has been created successfully. Please complete the Razorpay payment to confirm your booking.',
+                    'health_checkup_booked',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'customer_id' => $customer->id,
+                        'family_member_id' => $booking->family_member_id,
+                        'family_member_name' => optional($booking->familyMember)->name,
+                        'package_id' => $booking->health_checkup_package_id,
+                        'package_name' => optional($booking->healthCheckupPackage)->name,
+                        'booking_date' => $booking->booking_date,
+                        'booking_time' => $booking->booking_time,
+                        'total_amount' => $booking->total_amount,
+                        'payment_status' => $booking->payment_status,
+                        'booking_status' => $booking->booking_status,
+                    ]
+                );
+            } catch (\Throwable $notificationError) {
+                \Log::error(
+                    'Health checkup booking creation notification failed: ' .
+                    $notificationError->getMessage()
+                );
+            }
+
             /*
             |--------------------------------------------------------------------------
             | Load Relations

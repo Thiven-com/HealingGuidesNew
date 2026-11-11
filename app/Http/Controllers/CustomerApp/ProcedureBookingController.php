@@ -673,7 +673,7 @@ class ProcedureBookingController extends Controller
                 'procedure',
                 'Procedure Payment Received',
                 'Payment for procedure booking ' . $booking->booking_no . ' has been completed successfully.',
-                'procedure_payment_successful',
+                'procedure_payment_received',
                 $booking->id,
                 'procedure_booking_details',
                 [

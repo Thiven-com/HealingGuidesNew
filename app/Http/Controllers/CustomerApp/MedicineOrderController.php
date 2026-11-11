@@ -859,6 +859,7 @@ class MedicineOrderController extends Controller
             */
 
             DB::commit();
+
             NotificationService::send(
                 'customer',
                 $customer->id,
@@ -1910,7 +1911,7 @@ class MedicineOrderController extends Controller
                 'medicine',
                 'Medicine Order Payment Received',
                 'Payment for medicine order ' . $order->order_no . ' has been completed successfully.',
-                'medicine_payment_successful',
+                'medicine_payment_received',
                 $order->id,
                 'medicine_order_details',
                 [

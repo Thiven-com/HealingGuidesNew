@@ -2655,7 +2655,7 @@ class DoctorAppointmentController extends Controller
                 'video_consultation',
                 'Customer Waiting for Video Consultation',
                 'Customer ' . $customer->name . ' is waiting for you to join the video consultation for appointment ' . $appointment->appointment_no . '. Please join the consultation.',
-                'video_consultation_customer_joined',
+                'video_consultation_customer_waiting',
                 $appointment->id,
                 'appointment_details',
                 [
