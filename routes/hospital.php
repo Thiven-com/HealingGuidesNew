@@ -14,6 +14,7 @@ use App\Http\Controllers\Hospital\AppointmentController;
 use App\Http\Controllers\Hospital\DiagnosticController;
 use App\Http\Controllers\Hospital\AmbulanceController;
 use App\Http\Controllers\Hospital\AmbulanceBookingController;
+use App\Http\Controllers\Hospital\DiagnosticBookingController;
 use App\Http\Controllers\Hospital\DoctorScheduleController;
 use App\Http\Controllers\Hospital\HospitalController;
 use App\Http\Controllers\Hospital\MedicineController;
@@ -272,6 +273,16 @@ Route::name('hospital.')
             ])->name('appointments.reschedule.update');
 
 
+
+            // Diagnostic Bookings
+            Route::get('/diagnostic-bookings', [DiagnosticBookingController::class, 'index'])
+                ->name('diagnostic-bookings.index');
+
+            Route::get('/diagnostic-bookings/{id}/edit', [DiagnosticBookingController::class, 'edit'])
+                ->name('diagnostic-bookings.edit');
+
+            Route::put('/diagnostic-bookings/{id}', [DiagnosticBookingController::class, 'update'])
+                ->name('diagnostic-bookings.update');
             /*
             |--------------------------------------------------------------------------
             | Ambulances

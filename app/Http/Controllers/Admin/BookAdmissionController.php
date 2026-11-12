@@ -132,6 +132,7 @@ class BookAdmissionController extends Controller
             } catch (\Throwable $e) {
                 \Log::error('Admission notification failed: ' . $e->getMessage());
             }
+            
         }
 
         return redirect()

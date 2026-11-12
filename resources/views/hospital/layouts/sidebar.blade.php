@@ -96,6 +96,17 @@
                             </a>
 
                         </li>
+                        <li class="{{ request()->routeIs('hospital.diagnostic-bookings.*') ? 'active' : '' }}">
+
+                            <a href="{{ route('hospital.diagnostic-bookings.index') }}">
+
+                                <i class="ti ti-microscope fs-16 me-2"></i>
+
+                                <span>Diagnostic Bookings</span>
+
+                            </a>
+
+                        </li>
 
                     </ul>
 

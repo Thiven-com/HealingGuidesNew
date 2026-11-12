@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Hospital;
 use App\Http\Controllers\Controller;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -362,7 +363,7 @@ class AppointmentController extends Controller
         | Update
         |--------------------------------------------------------------------------
         */
-
+        $oldStatus = $appointment->appointment_status;
         $appointment->appointment_status =
             $request->appointment_status;
 
@@ -375,6 +376,82 @@ class AppointmentController extends Controller
 
 
         $appointment->save();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Customer App
+        |--------------------------------------------------------------------------
+        */
+
+        $statusText = ucfirst(str_replace('_', ' ', $appointment->appointment_status));
+
+        try {
+            if ($appointment->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $appointment->customer_id,
+                    'appointment',
+                    'Appointment Status Updated',
+                    'Your appointment ' . $appointment->appointment_no .
+                    ' status has been updated to ' . $statusText . '.',
+                    'doctor_appointment_status_updated',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'doctor_id' => $appointment->doctor_id,
+                        'appointment_status' => $appointment->appointment_status,
+                        'old_status' => $oldStatus,
+                        'new_status' => $appointment->appointment_status,
+                        'appointment_date' => $appointment->appointment_date,
+                        'appointment_time' => $appointment->appointment_time,
+                        'cancel_reason' => $appointment->cancel_reason,
+                        'remarks' => $appointment->remarks,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Appointment customer notification failed: ' . $e->getMessage());
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Doctor App
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+            if ($appointment->doctor_id) {
+                NotificationService::send(
+                    'doctor',
+                    $appointment->doctor_id,
+                    'appointment',
+                    'Appointment Status Updated',
+                    'Appointment ' . $appointment->appointment_no .
+                    ' status has been updated to ' . $statusText . '.',
+                    'doctor_appointment_status_updated',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'customer_id' => $appointment->customer_id,
+                        'doctor_id' => $appointment->doctor_id,
+                        'appointment_status' => $appointment->appointment_status,
+                        'old_status' => $oldStatus,
+                        'new_status' => $appointment->appointment_status,
+                        'appointment_date' => $appointment->appointment_date,
+                        'appointment_time' => $appointment->appointment_time,
+                        'cancel_reason' => $appointment->cancel_reason,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Appointment doctor notification failed: ' . $e->getMessage());
+        }
+
 
 
         return response()->json([
@@ -619,11 +696,84 @@ class AppointmentController extends Controller
             ],
         ]);
 
+        $oldDate = $appointment->appointment_date;
+        $oldTime = $appointment->appointment_time;
+
         $appointment->update([
             'appointment_date' => $validated['appointment_date'],
             'appointment_time' => $validated['appointment_time'],
             'doctor_schedule_id' => $validated['doctor_schedule_id'] ?? null,
         ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Customer App
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+            if ($appointment->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $appointment->customer_id,
+                    'appointment',
+                    'Appointment Rescheduled',
+                    'Your appointment ' . $appointment->appointment_no .
+                    ' has been rescheduled successfully.',
+                    'doctor_appointment_rescheduled',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'doctor_id' => $appointment->doctor_id,
+                        'old_date' => $oldDate,
+                        'old_time' => $oldTime,
+                        'new_date' => $appointment->appointment_date,
+                        'new_time' => $appointment->appointment_time,
+                        'appointment_status' => $appointment->appointment_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Appointment reschedule customer notification failed: ' . $e->getMessage());
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Doctor App
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+            if ($appointment->doctor_id) {
+                NotificationService::send(
+                    'doctor',
+                    $appointment->doctor_id,
+                    'appointment',
+                    'Appointment Rescheduled',
+                    'Appointment ' . $appointment->appointment_no .
+                    ' has been rescheduled to a new date and time.',
+                    'doctor_appointment_rescheduled',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'customer_id' => $appointment->customer_id,
+                        'doctor_id' => $appointment->doctor_id,
+                        'old_date' => $oldDate,
+                        'old_time' => $oldTime,
+                        'new_date' => $appointment->appointment_date,
+                        'new_time' => $appointment->appointment_time,
+                        'appointment_status' => $appointment->appointment_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Appointment reschedule doctor notification failed: ' . $e->getMessage());
+        }
+
 
         return redirect()
             ->route('hospital.appointments.show', $appointment->id)

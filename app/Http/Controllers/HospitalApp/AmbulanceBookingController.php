@@ -576,6 +576,36 @@ class AmbulanceBookingController extends Controller
                 \Log::error('Ambulance assignment notification failed: ' . $e->getMessage());
             }
 
+
+            try {
+                NotificationService::send(
+                    'ambulance',
+                    $ambulance->id,
+                    'ambulance',
+                    'New Booking Assigned',
+                    'A new ambulance booking has been assigned to you.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $ambulance->id,
+                        'booking_status' => $booking->booking_status,
+                        'pickup_address' => $booking->pickup_address,
+                        'destination_address' => $booking->destination_address,
+                        'total_amount' => $booking->total_amount,
+                    ]
+                );
+            } catch (\Throwable $e) {
+                \Log::error('Ambulance app assignment notification failed', [
+                    'booking_id' => $booking->id,
+                    'ambulance_id' => $ambulance->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
+
             return response()->json([
                 'success' => 1,
                 'message' => 'Ambulance Assigned Successfully',
@@ -827,6 +857,33 @@ class AmbulanceBookingController extends Controller
             \Log::error('Ambulance trip start notification failed: ' . $e->getMessage());
         }
 
+        if ($booking->ambulance_id) {
+            try {
+                NotificationService::send(
+                    'ambulance',
+                    $booking->ambulance_id,
+                    'ambulance',
+                    'Trip Started',
+                    'The ambulance trip has been started.',
+                    'ambulance_booking',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $booking->ambulance_id,
+                        'booking_status' => $booking->booking_status,
+                    ]
+                );
+            } catch (\Throwable $e) {
+                \Log::error('Ambulance app trip start notification failed', [
+                    'booking_id' => $booking->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+
         return response()->json([
             'success' => 1,
             'message' => 'Ambulance Trip Started Successfully',
@@ -1029,6 +1086,36 @@ class AmbulanceBookingController extends Controller
             } catch (\Exception $e) {
                 \Log::error('Ambulance trip completion notification failed: ' . $e->getMessage());
             }
+
+
+            if ($booking->ambulance_id) {
+                try {
+                    NotificationService::send(
+                        'ambulance',
+                        $booking->ambulance_id,
+                        'ambulance',
+                        'Trip Completed',
+                        'The ambulance trip has been completed successfully.',
+                        'ambulance_booking',
+                        $booking->id,
+                        'booking_details',
+                        [
+                            'booking_id' => $booking->id,
+                            'booking_no' => $booking->booking_no,
+                            'ambulance_id' => $booking->ambulance_id,
+                            'booking_status' => $booking->booking_status,
+                            'total_amount' => $booking->total_amount,
+                            'completed_at' => $booking->completed_at,
+                        ]
+                    );
+                } catch (\Throwable $e) {
+                    \Log::error('Ambulance app trip completion notification failed', [
+                        'booking_id' => $booking->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
 
             return response()->json([
                 'success' => 1,

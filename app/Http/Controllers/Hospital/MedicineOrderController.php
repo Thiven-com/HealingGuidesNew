@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\MedicineOrder;
 use App\Models\MedicineOrderItem;
 use App\Models\Medicine;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class MedicineOrderController extends Controller
@@ -168,6 +170,30 @@ class MedicineOrderController extends Controller
 
         ]);
 
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Accepted',
+                    'Your medicine order ' . $order->order_no .
+                    ' has been accepted by the hospital.',
+                    'medicine_order',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order accepted notification failed: ' . $e->getMessage());
+        }
 
         return back()->with(
             'success',
@@ -230,6 +256,31 @@ class MedicineOrderController extends Controller
             'rejected_at' => now(),
 
         ]);
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Rejected',
+                    'Your medicine order ' . $order->order_no .
+                    ' has been rejected. Reason: ' . $order->cancel_reason,
+                    'medicine_order_rejected',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                        'cancel_reason' => $order->cancel_reason,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order rejected notification failed: ' . $e->getMessage());
+        }
 
 
         return back()->with(
@@ -273,6 +324,31 @@ class MedicineOrderController extends Controller
 
         ]);
 
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Processing',
+                    'Your medicine order ' . $order->order_no .
+                    ' is now being processed.',
+                    'medicine_order_processing',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order processing notification failed: ' . $e->getMessage());
+        }
+
 
         return back()->with(
             'success',
@@ -315,6 +391,31 @@ class MedicineOrderController extends Controller
 
         ]);
 
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Ready',
+                    'Your medicine order ' . $order->order_no .
+                    ' is ready.',
+                    'medicine_order_ready',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order ready notification failed: ' . $e->getMessage());
+        }
+
 
         return back()->with(
             'success',
@@ -356,6 +457,30 @@ class MedicineOrderController extends Controller
             'order_status' => 'dispatched',
 
         ]);
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Dispatched',
+                    'Your medicine order ' . $order->order_no .
+                    ' has been dispatched.',
+                    'medicine_order_dispatched',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order dispatched notification failed: ' . $e->getMessage());
+        }
 
 
         return back()->with(
@@ -400,6 +525,30 @@ class MedicineOrderController extends Controller
             'delivered_at' => now(),
 
         ]);
+        try {
+            if ($order->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $order->customer_id,
+                    'medicine_order',
+                    'Medicine Order Delivered',
+                    'Your medicine order ' . $order->order_no .
+                    ' has been delivered successfully.',
+                    'medicine_order_delivered',
+                    $order->id,
+                    'medicine_order_details',
+                    [
+                        'order_id' => $order->id,
+                        'order_no' => $order->order_no,
+                        'customer_id' => $order->customer_id,
+                        'hospital_id' => $order->hospital_id,
+                        'order_status' => $order->order_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Medicine order delivered notification failed: ' . $e->getMessage());
+        }
 
 
         return back()->with(

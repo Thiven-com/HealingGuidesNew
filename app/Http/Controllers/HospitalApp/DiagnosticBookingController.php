@@ -191,6 +191,7 @@ class DiagnosticBookingController extends Controller
                 'payment_status' => $booking->payment_status,
             ]
         );
+        
 
         return response()->json([
             'status' => true,

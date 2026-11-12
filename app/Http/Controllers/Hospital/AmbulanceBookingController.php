@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AmbulanceBooking;
 use App\Models\Ambulance;
+use App\Services\NotificationService;
 
 class AmbulanceBookingController extends Controller
 {
@@ -268,6 +269,65 @@ class AmbulanceBookingController extends Controller
 
         $ambulance->save();
 
+        /*
+|--------------------------------------------------------------------------
+| Notify Customer App
+|--------------------------------------------------------------------------
+*/
+
+        try {
+            if ($booking->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Assigned',
+                    'An ambulance has been assigned to your booking.',
+                    'ambulance_booking_assigned',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $ambulance->id,
+                        'booking_status' => $booking->booking_status,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Ambulance customer notification failed: ' . $e->getMessage());
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Ambulance App
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+            NotificationService::send(
+                'ambulance',
+                $ambulance->id,
+                'ambulance',
+                'New Ambulance Booking Assigned',
+                'A new ambulance booking has been assigned to you.',
+                'ambulance_booking_assigned',
+                $booking->id,
+                'booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'ambulance_id' => $ambulance->id,
+                    'booking_status' => $booking->booking_status,
+                    'pickup_address' => $booking->pickup_address,
+                    'destination_address' => $booking->destination_address,
+                    'assigned_at' => now()->toDateTimeString(),
+                ]
+            );
+        } catch (\Throwable $e) {
+            Log::error('Ambulance app notification failed: ' . $e->getMessage());
+        }
+
 
         return back()->with(
             'success',
@@ -317,6 +377,7 @@ class AmbulanceBookingController extends Controller
         }
 
 
+        $ambulanceId = $booking->ambulance_id;
         $booking->booking_status =
             'rejected';
 
@@ -327,6 +388,65 @@ class AmbulanceBookingController extends Controller
             now();
 
         $booking->save();
+
+        /*
+|--------------------------------------------------------------------------
+| Notify Customer App
+|--------------------------------------------------------------------------
+*/
+
+        try {
+            if ($booking->customer_id) {
+                NotificationService::send(
+                    'customer',
+                    $booking->customer_id,
+                    'ambulance',
+                    'Ambulance Booking Rejected',
+                    'Your ambulance booking has been rejected.',
+                    'ambulance_booking_rejected',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'booking_status' => $booking->booking_status,
+                        'cancel_reason' => $booking->cancel_reason,
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('Ambulance rejection notification failed: ' . $e->getMessage());
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Notify Ambulance App
+        |--------------------------------------------------------------------------
+        */
+
+        if ($ambulanceId) {
+            try {
+                NotificationService::send(
+                    'ambulance',
+                    $ambulanceId,
+                    'ambulance',
+                    'Booking Rejected',
+                    'The ambulance booking assigned to you has been rejected.',
+                    'ambulance_booking_rejected',
+                    $booking->id,
+                    'booking_details',
+                    [
+                        'booking_id' => $booking->id,
+                        'booking_no' => $booking->booking_no,
+                        'ambulance_id' => $ambulanceId,
+                        'booking_status' => 'rejected',
+                        'cancel_reason' => $booking->cancel_reason,
+                    ]
+                );
+            } catch (\Throwable $e) {
+                Log::error('Ambulance app rejection notification failed: ' . $e->getMessage());
+            }
+        }
 
 
         /*
@@ -413,6 +533,7 @@ class AmbulanceBookingController extends Controller
                 $request->booking_id
             )
             ->firstOrFail();
+        $oldPaymentStatus = $booking->payment_status;
 
 
         $booking->payment_status =
@@ -420,6 +541,70 @@ class AmbulanceBookingController extends Controller
 
         $booking->save();
 
+        if ($oldPaymentStatus !== $booking->payment_status) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Notify Customer App
+            |--------------------------------------------------------------------------
+            */
+
+            try {
+                if ($booking->customer_id) {
+                    NotificationService::send(
+                        'customer',
+                        $booking->customer_id,
+                        'ambulance',
+                        'Ambulance Payment Status Updated',
+                        'Your ambulance booking payment status is now ' .
+                        ucfirst($booking->payment_status) . '.',
+                        'ambulance_payment_status_updated',
+                        $booking->id,
+                        'booking_details',
+                        [
+                            'booking_id' => $booking->id,
+                            'booking_no' => $booking->booking_no,
+                            'payment_status' => $booking->payment_status,
+                            'total_amount' => $booking->total_amount,
+                        ]
+                    );
+                }
+            } catch (\Throwable $e) {
+                Log::error('Ambulance customer payment notification failed: ' . $e->getMessage());
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Notify Ambulance App
+            |--------------------------------------------------------------------------
+            */
+
+            if ($booking->ambulance_id) {
+                try {
+                    NotificationService::send(
+                        'ambulance',
+                        $booking->ambulance_id,
+                        'ambulance',
+                        'Ambulance Payment Status Updated',
+                        'Payment status for booking ' . $booking->booking_no .
+                        ' is now ' . ucfirst($booking->payment_status) . '.',
+                        'ambulance_payment_status_updated',
+                        $booking->id,
+                        'booking_details',
+                        [
+                            'booking_id' => $booking->id,
+                            'booking_no' => $booking->booking_no,
+                            'ambulance_id' => $booking->ambulance_id,
+                            'old_payment_status' => $oldPaymentStatus,
+                            'payment_status' => $booking->payment_status,
+                            'total_amount' => $booking->total_amount,
+                        ]
+                    );
+                } catch (\Throwable $e) {
+                    Log::error('Ambulance app payment notification failed: ' . $e->getMessage());
+                }
+            }
+        }
 
         return back()->with(
             'success',
