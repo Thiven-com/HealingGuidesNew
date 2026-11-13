@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DoctorApp;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DoctorCollection;
 use App\Http\Resources\SpecializationCollection;
+use App\Models\AppNotification;
 use App\Models\Doctor;
 use App\Models\DoctorAppointment;
 use App\Models\DoctorSchedule;
@@ -200,6 +201,62 @@ class ProfileController extends Controller
             'success' => 1,
             'message' => 'Statistics fetched successfully.',
             'data' => $statistics
+        ]);
+    }
+
+    public function notifications(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please Login'
+            ], 401);
+        }
+
+        $notifications = AppNotification::where('notifiable_type', 'doctor')
+            ->where('notifiable_id', $user->id)
+            ->where('status', 1)
+            ->orderByDesc('created_at')
+            ->latest()->take(20)->get();
+
+        $data = $notifications->map(function ($notification) {
+
+            return [
+                'id' => $notification->id,
+
+                'type' => $notification->type,
+
+                'title' => $notification->title,
+
+                'message' => $notification->message,
+
+                'reference_type' => $notification->reference_type,
+
+                'reference_id' => $notification->reference_id,
+
+                'action' => $notification->action,
+
+                'data' => $notification->data,
+
+                'is_read' => (bool) $notification->is_read,
+
+                'read_at' => $notification->read_at,
+
+                'created_at' => $notification->created_at,
+            ];
+        });
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Notifications fetched successfully.',
+            'data' => $data,
+            'unread_count' => AppNotification::where('notifiable_type', 'doctor')
+                ->where('notifiable_id', $user->id)
+                ->where('status', 1)
+                ->where('is_read', 0)
+                ->count()
         ]);
     }
 

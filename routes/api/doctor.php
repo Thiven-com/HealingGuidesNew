@@ -35,6 +35,7 @@ Route::group(['middleware' => ['doctortokenCheck']], function () {
     Route::get('dashboard', [ProfileController::class, 'dashboard']);
     Route::get('todaySummary', [ProfileController::class, 'todaySummary']);
     Route::get('statistics', [ProfileController::class, 'statistics']);
+    Route::get('notifications', [ProfileController::class, 'notifications']);
 
     Route::get('site-settings', [SiteSettingController::class, 'index']);
 
