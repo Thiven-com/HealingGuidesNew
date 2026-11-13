@@ -61,6 +61,7 @@ class FireBaseController extends Controller
                                 'notify_type' => (string) ($data['notify_type'] ?? 'NA'),
                                 'user_type' => (string) ($data['user_type'] ?? 'NA'),
                                 'module_type' => (string) ($data['module_type'] ?? 'NA'),
+                                'reference_type' => (string) ($data['reference_type'] ?? 'NA'),
                                 'entity_id' => (string) ($data['entity_id'] ?? 'NA'),
                                 'message' => (string) ($data['message'] ?? 'NA'),
                                 'order_id' => (string) ($data['order_id'] ?? 'NA'),

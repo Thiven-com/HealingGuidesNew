@@ -107,6 +107,7 @@ class NotificationService
                 'devicetoken' => $deviceToken,
                 'user_id' => $notifiableId,
                 'user_type' => $notifiableType,
+                'reference_type' => $referenceType,
                 'module_type' => $type,
                 'entity_id' => $referenceId,
                 'sound' => 'ringtone',
