@@ -2456,9 +2456,10 @@ class DoctorAppointmentController extends Controller
         $appointment->save();
         $appointment->load(['doctor', 'hospital', 'customer']);
 
+
         /*
         |--------------------------------------------------------------------------
-        | Customer Payment Notification
+        | Customer Appointment Notification
         |--------------------------------------------------------------------------
         */
 
@@ -2466,14 +2467,19 @@ class DoctorAppointmentController extends Controller
             'customer',
             $customer->id,
             'appointment',
-            'Appointment Payment Successful',
-            'Payment completed successfully for appointment ' . $appointment->appointment_no . '.',
-            'doctor_appointment_payment_successful',
+            'Appointment Booked Successfully',
+            'Your appointment with Dr. ' . ($appointment->doctor->doctor_name ?? '') .
+            ' has been booked successfully on ' .
+            $appointment->appointment_date . ' at ' . $appointment->appointment_time .
+            '. Appointment No: ' . $appointment->appointment_no . '.',
+            'customer_appointment_booked',
             $appointment->id,
             'appointment_details',
             [
                 'appointment_id' => $appointment->id,
                 'appointment_no' => $appointment->appointment_no,
+                'appointment_date' => $appointment->appointment_date,
+                'appointment_time' => $appointment->appointment_time,
                 'doctor_id' => $appointment->doctor_id,
                 'doctor_name' => $appointment->doctor->doctor_name ?? null,
                 'hospital_id' => $appointment->hospital_id,
@@ -2487,7 +2493,7 @@ class DoctorAppointmentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Hospital Payment Notification
+        | Hospital New Appointment Notification
         |--------------------------------------------------------------------------
         */
 
@@ -2496,14 +2502,20 @@ class DoctorAppointmentController extends Controller
                 'hospital',
                 $appointment->hospital_id,
                 'appointment',
-                'Appointment Payment Received',
-                'Payment has been completed for appointment ' . $appointment->appointment_no . '.',
-                'doctor_appointment_payment_successful',
+                'New Appointment Booked',
+                'A new appointment has been booked by ' . $customer->name .
+                ' with Dr. ' . ($appointment->doctor->doctor_name ?? '') .
+                ' on ' . $appointment->appointment_date .
+                ' at ' . $appointment->appointment_time .
+                '. Appointment No: ' . $appointment->appointment_no . '.',
+                'hospital_new_appointment_booked',
                 $appointment->id,
                 'appointment_details',
                 [
                     'appointment_id' => $appointment->id,
                     'appointment_no' => $appointment->appointment_no,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
                     'customer_id' => $customer->id,
                     'customer_name' => $customer->name,
                     'doctor_id' => $appointment->doctor_id,
@@ -2513,22 +2525,35 @@ class DoctorAppointmentController extends Controller
                     'total_amount' => (float) $appointment->total_amount,
                     'payment_status' => $appointment->payment_status,
                     'appointment_status' => $appointment->appointment_status,
+                    'consultation_type' => $appointment->consultation_type,
                 ]
             );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor New Appointment Notification
+        |--------------------------------------------------------------------------
+        */
+
         if ($appointment->doctor_id) {
             NotificationService::send(
                 'doctor',
                 $appointment->doctor_id,
                 'appointment',
-                'Appointment Payment Received',
-                'Payment has been completed for appointment ' . $appointment->appointment_no . '.',
-                'doctor_appointment_payment_successful',
+                'New Appointment Booked',
+                'You have received a new appointment from ' . $customer->name .
+                ' on ' . $appointment->appointment_date .
+                ' at ' . $appointment->appointment_time .
+                '. Appointment No: ' . $appointment->appointment_no . '.',
+                'doctor_new_appointment_booked',
                 $appointment->id,
                 'appointment_details',
                 [
                     'appointment_id' => $appointment->id,
                     'appointment_no' => $appointment->appointment_no,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
                     'customer_id' => $customer->id,
                     'customer_name' => $customer->name,
                     'doctor_id' => $appointment->doctor_id,
@@ -2538,9 +2563,11 @@ class DoctorAppointmentController extends Controller
                     'total_amount' => (float) $appointment->total_amount,
                     'payment_status' => $appointment->payment_status,
                     'appointment_status' => $appointment->appointment_status,
+                    'consultation_type' => $appointment->consultation_type,
                 ]
             );
         }
+
 
         return response()->json([
 
