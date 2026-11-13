@@ -465,7 +465,13 @@ class CareServiceBookingController extends Controller
                 $customer->id,
                 'care_service',
                 'Care Service Booking Created',
-                'Your care service booking has been created successfully. Please complete your Razorpay payment.',
+                'Your booking for ' . $service->name .
+                ' has been created successfully. Booking No: ' .
+                $booking->booking_no .
+                '. Preferred Date: ' . $booking->preferred_date .
+                '. Preferred Time: ' . $booking->preferred_time .
+                '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Please complete your Razorpay payment to confirm your booking.',
                 'care_service_booked',
                 $booking->id,
                 'care_service_booking_details',
@@ -497,7 +503,18 @@ class CareServiceBookingController extends Controller
                     $booking->service->hospital_id,
                     'care_service',
                     'New Care Service Booking',
-                    'A new paid care service booking has been received.',
+                    'A new paid care service booking has been received from ' .
+                    $customer->name .
+                    '. Service: ' . ($booking->service->name ?? 'N/A') .
+                    '. Patient Name: ' .
+                    ($booking->familyMember->name ?? $customer->name) .
+                    '. Booking No: ' . $booking->booking_no .
+                    '. Preferred Date: ' . $booking->preferred_date .
+                    '. Preferred Time: ' . $booking->preferred_time .
+                    '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                    '. Contact Person: ' . $booking->contact_name .
+                    '. Contact Mobile: ' . $booking->contact_mobile .
+                    '. Please review the booking details and take the necessary action.',
                     'care_service_booked',
                     $booking->id,
                     'care_service_booking_details',
@@ -804,7 +821,14 @@ class CareServiceBookingController extends Controller
             $customer->id,
             'care_service',
             'Care Service Booking Cancelled',
-            'Your care service booking has been cancelled successfully.',
+            'Your care service booking for ' .
+            ($booking->service->name ?? 'the selected service') .
+            ' has been cancelled successfully. Booking No: ' .
+            $booking->booking_no .
+            '. Preferred Date: ' . $booking->preferred_date .
+            '. Preferred Time: ' . $booking->preferred_time .
+            '. Payment Status: ' . ucfirst($booking->payment_status) .
+            '. If you still require this service, you can create a new booking.',
             'care_service_booking_cancelled',
             $booking->id,
             'care_service_booking_details',
@@ -816,6 +840,48 @@ class CareServiceBookingController extends Controller
                 'payment_status' => $booking->payment_status,
             ]
         );
+
+        if ($booking->service && $booking->service->hospital_id) {
+
+            NotificationService::send(
+                'hospital',
+                $booking->service->hospital_id,
+                'care_service',
+                'Care Service Booking Cancelled',
+                'The care service booking for ' .
+                ($booking->service->name ?? 'the selected service') .
+                ' has been cancelled by ' . $customer->name .
+                '. Booking No: ' . $booking->booking_no .
+                '. Patient Name: ' .
+                ($booking->familyMember->name ?? $customer->name) .
+                '. Preferred Date: ' . $booking->preferred_date .
+                '. Preferred Time: ' . $booking->preferred_time .
+                '. Payment Status: ' . ucfirst($booking->payment_status) .
+                '. Please update your records accordingly.',
+                'care_service_booking_cancelled',
+                $booking->id,
+                'care_service_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'hospital_id' => $booking->service->hospital_id,
+                    'family_member_id' => $booking->family_member_id,
+                    'family_member_name' => $booking->familyMember->name ?? null,
+                    'service_id' => $booking->home_visit_services_id,
+                    'service_name' => $booking->service->name ?? null,
+                    'preferred_date' => $booking->preferred_date,
+                    'preferred_time' => $booking->preferred_time,
+                    'address' => $booking->address,
+                    'contact_name' => $booking->contact_name,
+                    'contact_mobile' => $booking->contact_mobile,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        }
 
         $payment = null;
 
@@ -991,7 +1057,16 @@ class CareServiceBookingController extends Controller
                 $customer->id,
                 'care_service',
                 'Care Service Booking Confirmed',
-                'Your care service booking has been confirmed successfully.',
+                'Great news! Your care service booking for ' .
+                ($booking->service->name ?? 'the selected service') .
+                ' has been confirmed successfully. Booking No: ' .
+                $booking->booking_no .
+                '. Patient Name: ' .
+                ($booking->familyMember->name ?? $customer->name) .
+                '. Scheduled Date: ' . $booking->preferred_date .
+                '. Scheduled Time: ' . $booking->preferred_time .
+                '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Please be available at the scheduled time. Thank you for choosing our care services.',
                 'care_service_booking_confirmed',
                 $booking->id,
                 'care_service_booking_details',
@@ -1176,7 +1251,13 @@ class CareServiceBookingController extends Controller
             $customer->id,
             'care_service',
             'Care Service Payment Failed',
-            'Your care service booking payment was unsuccessful. Please try again.',
+            'Your payment for the care service ' .
+            ($booking->service->name ?? 'booking') .
+            ' was unsuccessful. Booking No: ' .
+            $booking->booking_no .
+            '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+            '. Payment Status: ' . ucfirst($booking->payment_status) .
+            '. Please try making the payment again to complete your booking.',
             'care_service_payment_failed',
             $booking->id,
             'care_service_booking_details',

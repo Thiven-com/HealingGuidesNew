@@ -305,7 +305,14 @@ class HealthInsuranceBookingController extends Controller
                 $customer->id,
                 'health_insurance',
                 'Health Insurance Booking Created',
-                'Your health insurance booking with ' . $provider->name . ' has been created successfully. Please complete your payment.',
+                'Your health insurance booking has been created successfully. Provider: ' .
+                $provider->name .
+                '. Plan Name: ' . $plan->name .
+                '. Booking Reference: ' . $booking->booking_reference .
+                '. Number of Members: ' . $booking->members_count .
+                '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' . ucfirst($booking->payment_status) .
+                '. Please complete the payment to proceed with your health insurance booking. Your booking will be confirmed after successful payment verification.',
                 'health_insurance_booked',
                 $booking->id,
                 'health_insurance_booking_details',
@@ -560,7 +567,17 @@ class HealthInsuranceBookingController extends Controller
                 $customer->id,
                 'health_insurance',
                 'Health Insurance Payment Successful',
-                'Your payment for health insurance booking ' . $booking->booking_reference . ' has been received successfully. Your booking is confirmed.',
+                'Your payment for health insurance booking ' .
+                $booking->booking_reference .
+                ' has been received and verified successfully. Provider: ' .
+                ($booking->provider->name ?? 'Insurance Provider') .
+                '. Plan Name: ' .
+                ($booking->plan->name ?? 'Health Insurance Plan') .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?? 'N/A') .
+                '. Amount Paid: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Your health insurance booking is now confirmed. Please keep your booking reference for future communication.',
                 'health_insurance_payment_successful',
                 $booking->id,
                 'health_insurance_booking_details',
@@ -680,7 +697,19 @@ class HealthInsuranceBookingController extends Controller
             $customer->id,
             'health_insurance',
             'Health Insurance Booking Cancelled',
-            'Your health insurance booking ' . $booking->booking_reference . ' has been cancelled successfully.',
+           'Your health insurance booking ' .
+            $booking->booking_reference .
+            ' has been cancelled successfully. Provider: ' .
+            ($booking->provider->name ?? 'Insurance Provider') .
+            '. Plan Name: ' .
+            ($booking->plan->name ?? 'Health Insurance Plan') .
+            '. Cancellation Reason: ' .
+            ($booking->cancel_reason ?: 'No reason provided') .
+            '. Booking Status: ' .
+            ucfirst($booking->status) .
+            '. Payment Status: ' .
+            ucfirst($booking->payment_status) .
+            '. If you still require health insurance coverage, you can create a new booking through the app.',
             'health_insurance_booking_cancelled',
             $booking->id,
             'health_insurance_booking_details',

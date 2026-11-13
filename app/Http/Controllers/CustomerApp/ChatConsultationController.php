@@ -134,9 +134,11 @@ class ChatConsultationController extends Controller
 
         // Notify doctor that customer is waiting
         if (
+            $appointment->doctor_id &&
             $appointment->customer_chat_joined_at &&
             !$appointment->doctor_chat_joined_at &&
             !$appointment->chat_ended_at &&
+            !$appointment->customer_chat_ended_at &&
             !$appointment->chat_started_at
         ) {
             try {
@@ -145,7 +147,11 @@ class ChatConsultationController extends Controller
                     $appointment->doctor_id,
                     'chat',
                     'Customer Waiting in Chat',
-                    'A customer is waiting for you in the chat consultation.',
+                    'Your customer ' .
+                    ($appointment->customer->name ?? 'has joined') .
+                    ' is waiting for you in the chat consultation. Appointment No: ' .
+                    $appointment->appointment_no .
+                    '. Please join the chat and start the consultation.',
                     'chat_customer_waiting',
                     $appointment->id,
                     'chat_conversation',
@@ -174,6 +180,7 @@ class ChatConsultationController extends Controller
                 ]);
             }
         }
+
 
         return response()->json([
             'success' => 1,
@@ -272,8 +279,11 @@ class ChatConsultationController extends Controller
                     $appointment->doctor_id,
                     'chat',
                     'New Chat Message',
-                    'You have received a new message from ' .
-                    ($customer->name ?? 'Customer') . '.',
+                    'You have received a new chat message from ' .
+                    ($customer->name ?? 'Customer') .
+                    ' for Appointment No: ' .
+                    $appointment->appointment_no .
+                    '. Please open the chat consultation to view the message and respond to the customer.',
                     'chat_new_message',
                     $appointment->id,
                     'chat_conversation',
@@ -446,13 +456,21 @@ class ChatConsultationController extends Controller
 */
 
         try {
-            if ($appointment->chat_ended_at && $appointment->doctor) {
+            if (
+                $appointment->doctor_id &&
+                $appointment->doctor &&
+                $appointment->chat_ended_at
+            ) {
                 NotificationService::send(
                     'doctor',
                     $appointment->doctor_id,
                     'chat',
                     'Chat Consultation Ended',
-                    'The customer has ended the chat consultation.',
+                    'The customer ' .
+                    ($appointment->customer->name ?? 'Customer') .
+                    ' has ended the chat consultation for Appointment No: ' .
+                    $appointment->appointment_no .
+                    '. The consultation is now closed. You can review the chat conversation and its details.',
                     'chat_consultation_ended',
                     $appointment->id,
                     'chat_conversation',

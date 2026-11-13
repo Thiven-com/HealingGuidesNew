@@ -512,11 +512,15 @@ class DiagnosticBookingController extends Controller
                 $customer->id,
                 'diagnostic',
                 'Lab Test Booked',
-                'Your lab test booking ' .
-                $booking->booking_no .
-                ' has been booked successfully at ' .
-                $diagnostic->name .
-                '.',
+                'Your lab test booking has been successfully placed at ' .
+                ($diagnostic->diagnostic_name ?? 'the diagnostic centre') .
+                '. Booking No: ' . $booking->booking_no .
+                '. Collection Type: ' . ucfirst(str_replace('_', ' ', $booking->collection_type)) .
+                '. Booking Date: ' . $booking->booking_date .
+                '. Booking Time: ' . $booking->booking_time .
+                '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' . ucfirst($booking->payment_status) .
+                '. Please keep your booking details handy and follow the scheduled collection instructions.',
                 'diagnostic_booked',
                 $booking->id,
                 'lab_booking_details',
@@ -567,7 +571,15 @@ class DiagnosticBookingController extends Controller
                 $diagnostic->id,
                 'diagnostic',
                 'New Lab Test Booking',
-                'A new lab test booking has been received.',
+                'A new lab test booking has been received from ' .
+                ($customer->name ?? 'a customer') .
+                '. Booking No: ' . $booking->booking_no .
+                '. Collection Type: ' . ucfirst(str_replace('_', ' ', $booking->collection_type)) .
+                '. Booking Date: ' . $booking->booking_date .
+                '. Booking Time: ' . $booking->booking_time .
+                '. Total Amount: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' . ucfirst($booking->payment_status) .
+                '. Please review the booking details and take the necessary action to process the lab test.',
                 'diagnostic_booked',
                 $booking->id,
                 'lab_booking_details',
@@ -922,7 +934,13 @@ class DiagnosticBookingController extends Controller
             $customer->id,
             'diagnostic',
             'Lab Booking Payment Successful',
-            'Your payment for lab booking ' . $booking->booking_no . ' was successful.',
+            'Your payment for lab test booking ' .
+            $booking->booking_no .
+            ' has been completed successfully. Amount Paid: ₹' .
+            number_format((float) $booking->total_amount, 2) .
+            '. Payment Method: ' . ucfirst($booking->payment_method ?? 'Online') .
+            '. Payment ID: ' . ($booking->payment_id ?? 'N/A') .
+            '. Your payment is confirmed. Please check your booking details for the scheduled lab test information.',
             'diagnostic_payment_successful',
             $booking->id,
             'lab_booking_details',
@@ -951,7 +969,14 @@ class DiagnosticBookingController extends Controller
                 $diagnostic->id,
                 'diagnostic',
                 'Lab Booking Payment Received',
-                'Payment has been completed for lab booking ' . $booking->booking_no . '.',
+                'Payment has been received successfully for lab test booking ' .
+                $booking->booking_no .
+                '. Customer: ' . ($customer->name ?? 'Customer') .
+                '. Amount Received: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Payment Method: ' . ucfirst($booking->payment_method ?? 'Online') .
+                '. Payment ID: ' . ($booking->payment_id ?? 'N/A') .
+                '. The payment is confirmed. Please review the booking details and proceed with the scheduled lab test.',
                 'diagnostic_payment_received',
                 $booking->id,
                 'lab_booking_details',
@@ -1141,7 +1166,14 @@ class DiagnosticBookingController extends Controller
             $customer->id,
             'diagnostic',
             'Lab Booking Cancelled',
-            'Your lab booking ' . $booking->booking_no . ' has been cancelled.',
+            'Your lab test booking ' .
+            $booking->booking_no .
+            ' has been cancelled successfully. Diagnostic Centre: ' .
+            ($booking->diagnostic->diagnostic_name ?? 'N/A') .
+            '. Cancellation Reason: ' .
+            ($booking->cancel_reason ?: 'No reason provided') .
+            '. Booking Status: ' . ucfirst($booking->booking_status) .
+            '. If you still require the lab test, you can create a new booking through the app.',
             'diagnostic_booking',
             $booking->id,
             'lab_booking_details',
@@ -1167,7 +1199,18 @@ class DiagnosticBookingController extends Controller
                 $diagnostic->id,
                 'diagnostic',
                 'Lab Booking Cancelled',
-                'Lab booking ' . $booking->booking_no . ' has been cancelled by the customer.',
+                'The customer ' .
+                ($customer->name ?? 'Customer') .
+                ' has cancelled lab test booking ' .
+                $booking->booking_no .
+                '. Cancellation Reason: ' .
+                ($booking->cancel_reason ?: 'No reason provided') .
+                '. Booking Date: ' . $booking->booking_date .
+                '. Booking Time: ' . $booking->booking_time .
+                '. Collection Type: ' .
+                ucfirst(str_replace('_', ' ', $booking->collection_type)) .
+                '. Booking Status: ' . ucfirst($booking->booking_status) .
+                '. Please review the cancellation and update your records accordingly.',
                 'diagnostic_booking_cancelled',
                 $booking->id,
                 'lab_booking_details',

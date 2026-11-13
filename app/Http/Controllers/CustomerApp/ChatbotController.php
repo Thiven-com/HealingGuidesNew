@@ -11,6 +11,7 @@ use App\Models\ChatbotMessage;
 use App\Models\ChatbotMessageOption;
 use App\Models\ChatbotRecommendation;
 use App\Models\Diagnostic;
+use App\Models\Doctor;
 use App\Models\Hospital;
 use App\Models\Medicine;
 use Illuminate\Http\Request;

@@ -394,7 +394,15 @@ class AppointmentController extends Controller
                     'appointment',
                     'Appointment Status Updated',
                     'Your appointment ' . $appointment->appointment_no .
-                    ' status has been updated to ' . $statusText . '.',
+                    ' status has been changed from ' .
+                    ucfirst(str_replace('_', ' ', $oldStatus)) . ' to ' .
+                    ucfirst(str_replace('_', ' ', $appointment->appointment_status)) . '.' .
+                    ($appointment->cancel_reason
+                        ? ' Reason: ' . $appointment->cancel_reason
+                        : '') .
+                    ($appointment->remarks
+                        ? ' Remarks: ' . $appointment->remarks
+                        : ''),
                     'doctor_appointment_status_updated',
                     $appointment->id,
                     'appointment_details',
@@ -430,7 +438,15 @@ class AppointmentController extends Controller
                     'appointment',
                     'Appointment Status Updated',
                     'Appointment ' . $appointment->appointment_no .
-                    ' status has been updated to ' . $statusText . '.',
+                    ' status has been changed from ' .
+                    ucfirst(str_replace('_', ' ', $oldStatus)) . ' to ' .
+                    ucfirst(str_replace('_', ' ', $appointment->appointment_status)) . '.' .
+                    ($appointment->cancel_reason
+                        ? ' Reason: ' . $appointment->cancel_reason
+                        : '') .
+                    ($appointment->remarks
+                        ? ' Remarks: ' . $appointment->remarks
+                        : ''),
                     'doctor_appointment_status_updated',
                     $appointment->id,
                     'appointment_details',
@@ -719,7 +735,12 @@ class AppointmentController extends Controller
                     'appointment',
                     'Appointment Rescheduled',
                     'Your appointment ' . $appointment->appointment_no .
-                    ' has been rescheduled successfully.',
+                    ' has been successfully rescheduled from ' .
+                    \Carbon\Carbon::parse($oldDate)->format('d M Y') .
+                    ' at ' . $oldTime . ' to ' .
+                    \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+                    ' at ' . $appointment->appointment_time .
+                    '. Please check your appointment details for the latest information.',
                     'doctor_appointment_rescheduled',
                     $appointment->id,
                     'appointment_details',
@@ -753,7 +774,12 @@ class AppointmentController extends Controller
                     'appointment',
                     'Appointment Rescheduled',
                     'Appointment ' . $appointment->appointment_no .
-                    ' has been rescheduled to a new date and time.',
+                    ' has been rescheduled from ' .
+                    \Carbon\Carbon::parse($oldDate)->format('d M Y') .
+                    ' at ' . $oldTime . ' to ' .
+                    \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+                    ' at ' . $appointment->appointment_time .
+                    '. Please check your updated appointment schedule.',
                     'doctor_appointment_rescheduled',
                     $appointment->id,
                     'appointment_details',

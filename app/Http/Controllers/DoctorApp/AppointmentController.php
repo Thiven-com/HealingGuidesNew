@@ -168,7 +168,19 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Appointment Accepted',
-            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been accepted.',
+            'Good news! Your appointment ' .
+            $appointment->appointment_no .
+            ' with Dr. ' .
+            ($doctor->doctor_name ?? 'Doctor') .
+            ' has been accepted. Appointment Date: ' .
+            \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+            '. Appointment Time: ' .
+            $appointment->appointment_time .
+            '. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Payment Status: ' .
+            ucfirst(str_replace('_', ' ', $appointment->payment_status)) .
+            '. Please check your appointment details in the app.',
             'doctor_appointment_accepted',
             $appointment->id,
             'appointment_details',
@@ -235,7 +247,21 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Appointment Rejected',
-            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been rejected. Reason: ' . $request->reason,
+            'Your appointment ' .
+            $appointment->appointment_no .
+            ' with Dr. ' .
+            ($doctor->doctor_name ?? 'Doctor') .
+            ' has been rejected. Appointment Date: ' .
+            \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+            '. Appointment Time: ' .
+            $appointment->appointment_time .
+            '. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Rejection Reason: ' .
+            ($request->reason ?? 'Not specified') .
+            '. Payment Status: ' .
+            ucfirst(str_replace('_', ' ', $appointment->payment_status)) .
+            '. Please check your appointment details or book another appointment.',
             'doctor_appointment_rejected',
             $appointment->id,
             'appointment_details',
@@ -322,7 +348,14 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Consultation Started',
-            'Dr. ' . $doctor->doctor_name . ' has started your consultation.',
+            'Dr. ' .
+            ($doctor->doctor_name ?? 'Your doctor') .
+            ' has started your consultation for appointment ' .
+            $appointment->appointment_no .
+            '. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Please join your consultation now and follow the instructions in the app.',
+
             'doctor_consultation_started',
             $appointment->id,
             'appointment_details',
@@ -399,7 +432,13 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Consultation Completed',
-            'Your consultation with Dr. ' . $doctor->doctor_name . ' has been completed successfully.',
+            'Your consultation with Dr. ' .
+            ($doctor->doctor_name ?? 'Doctor') .
+            ' for appointment ' .
+            $appointment->appointment_no .
+            ' has been completed successfully. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Please check your appointment details in the app for any follow-up instructions or updates.',
             'doctor_consultation_completed',
             $appointment->id,
             'appointment_details',
@@ -526,7 +565,19 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Appointment Cancelled',
-            'Your appointment with Dr. ' . $doctor->doctor_name . ' has been cancelled. Reason: ' . $request->cancel_reason,
+            'Your appointment ' .
+            $appointment->appointment_no .
+            ' with Dr. ' .
+            ($doctor->doctor_name ?? 'Doctor') .
+            ' has been cancelled. Appointment Date: ' .
+            \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+            '. Appointment Time: ' .
+            $appointment->appointment_time .
+            '. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Cancellation Reason: ' .
+            ($appointment->cancel_reason ?? 'Not specified') .
+            '. Please check your appointment details in the app to book another appointment if needed.',
             'doctor_appointment_cancelled',
             $appointment->id,
             'appointment_details',
@@ -896,7 +947,21 @@ class AppointmentController extends Controller
             $appointment->customer_id,
             'appointment',
             'Appointment Rescheduled',
-            'Dr. ' . $doctor->doctor_name . ' has rescheduled your appointment.',
+            'Dr. ' .
+            ($doctor->doctor_name ?? 'Doctor') .
+            ' has rescheduled your appointment ' .
+            $appointment->appointment_no .
+            '. Previous Date: ' .
+            \Carbon\Carbon::parse($oldDate)->format('d M Y') .
+            '. Previous Time: ' .
+            $oldTime .
+            '. New Appointment Date: ' .
+            \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+            '. New Appointment Time: ' .
+            $appointment->appointment_time .
+            '. Consultation Type: ' .
+            ucfirst(str_replace('_', ' ', $appointment->consultation_type)) .
+            '. Please follow the updated schedule and check your appointment details in the app.',
             'doctor_appointment_rescheduled',
             $appointment->id,
             'appointment_details',

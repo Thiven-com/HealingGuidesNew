@@ -201,7 +201,19 @@ class ProcedureBookingController extends Controller
                 $customer->id,
                 'procedure',
                 'Procedure Booking Created',
-                'Your procedure booking ' . $booking->booking_no . ' has been created successfully. Please complete your payment.',
+                'Your procedure booking ' .
+                $booking->booking_no .
+                ' has been created successfully. Procedure: ' .
+                ($procedure->name ?? $procedure->procedure_name ?? 'Procedure') .
+                '. Booking Date: ' .
+                \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') .
+                '. Booking Time: ' .
+                \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') .
+                '. Total Amount: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' .
+                ucfirst($booking->payment_status) .
+                '. Please complete your payment to proceed with the booking. Your booking will be confirmed after successful payment verification.',
                 'procedure_booked',
                 $booking->id,
                 'procedure_booking_details',
@@ -228,7 +240,21 @@ class ProcedureBookingController extends Controller
                 $booking->hospital_id,
                 'procedure',
                 'New Procedure Booking',
-                'You have received a new procedure booking ' . $booking->booking_no . '.',
+                'A new procedure booking has been received. Booking No: ' .
+                $booking->booking_no .
+                '. Customer Name: ' .
+                ($customer->name ?? 'Customer') .
+                '. Procedure: ' .
+                ($procedure->name ?? $procedure->procedure_name ?? 'Procedure') .
+                '. Booking Date: ' .
+                \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') .
+                '. Booking Time: ' .
+                \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') .
+                '. Total Amount: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' .
+                ucfirst($booking->payment_status) .
+                '. Please review the booking details and take the necessary action.',
                 'procedure_booked',
                 $booking->id,
                 'procedure_booking_details',
@@ -479,7 +505,23 @@ class ProcedureBookingController extends Controller
             $customer->id,
             'procedure',
             'Procedure Booking Cancelled',
-            'Your procedure booking ' . $booking->booking_no . ' has been cancelled successfully.',
+            'Your procedure booking ' .
+            $booking->booking_no .
+            ' has been cancelled successfully. Procedure ID: ' .
+            $booking->procedure_id .
+            '. Scheduled Date: ' .
+            \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') .
+            '. Scheduled Time: ' .
+            \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') .
+            '. Total Amount: ₹' .
+            number_format((float) $booking->total_amount, 2) .
+            '. Cancellation Reason: ' .
+            ($booking->cancel_reason ?: 'No reason provided') .
+            '. Payment Status: ' .
+            ucfirst($booking->payment_status) .
+            '. Booking Status: ' .
+            ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+            '. If you still require this procedure, please contact the hospital or create a new booking.',
             'procedure_booking_cancelled',
             $booking->id,
             'procedure_booking_details',
@@ -503,7 +545,23 @@ class ProcedureBookingController extends Controller
             $booking->hospital_id,
             'procedure',
             'Procedure Booking Cancelled',
-            'Procedure booking ' . $booking->booking_no . ' has been cancelled by the customer.',
+            'The customer ' .
+            ($customer->name ?? 'Customer') .
+            ' has cancelled procedure booking ' .
+            $booking->booking_no .
+            '. Procedure ID: ' .
+            $booking->procedure_id .
+            '. Scheduled Date: ' .
+            \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') .
+            '. Scheduled Time: ' .
+            \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') .
+            '. Total Amount: ₹' .
+            number_format((float) $booking->total_amount, 2) .
+            '. Cancellation Reason: ' .
+            ($booking->cancel_reason ?: 'No reason provided') .
+            '. Payment Status: ' .
+            ucfirst($booking->payment_status) .
+            '. Please review the cancellation and update your hospital schedule accordingly.',
             'procedure_booking_cancelled',
             $booking->id,
             'procedure_booking_details',
@@ -648,7 +706,17 @@ class ProcedureBookingController extends Controller
                 $customer->id,
                 'procedure',
                 'Procedure Payment Successful',
-                'Your payment for procedure booking ' . $booking->booking_no . ' has been received successfully.',
+                'Your payment for procedure booking ' .
+                $booking->booking_no .
+                ' has been received and verified successfully. Procedure: ' .
+                ($booking->procedure->name ?? $booking->procedure->procedure_name ?? 'Procedure') .
+                '. Amount Paid: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?: 'N/A') .
+                '. Payment Status: ' .
+                ucfirst($booking->payment_status) .
+                '. Your procedure booking payment is complete. Please keep your booking details for future reference.',
                 'procedure_payment_successful',
                 $booking->id,
                 'procedure_booking_details',
@@ -672,7 +740,21 @@ class ProcedureBookingController extends Controller
                 $booking->hospital_id,
                 'procedure',
                 'Procedure Payment Received',
-                'Payment for procedure booking ' . $booking->booking_no . ' has been completed successfully.',
+                'Payment has been successfully received and verified for procedure booking ' .
+                $booking->booking_no .
+                '. Customer Name: ' .
+                ($customer->name ?? 'Customer') .
+                '. Procedure: ' .
+                ($booking->procedure->name ?? $booking->procedure->procedure_name ?? 'Procedure') .
+                '. Amount Received: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?: 'N/A') .
+                '. Payment Status: ' .
+                ucfirst($booking->payment_status) .
+                '. Booking Status: ' .
+                ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+                '. Please review the payment and proceed with the necessary booking arrangements.',
                 'procedure_payment_received',
                 $booking->id,
                 'procedure_booking_details',
@@ -786,7 +868,15 @@ class ProcedureBookingController extends Controller
             $customer->id,
             'procedure',
             'Procedure Payment Failed',
-            'Your payment for procedure booking ' . $booking->booking_no . ' has failed. Please try again.',
+            'Unfortunately, your payment for procedure booking ' .
+            $booking->booking_no .
+            ' could not be completed. Procedure: ' .
+            ($booking->procedure->name ?? $booking->procedure->procedure_name ?? 'Procedure') .
+            '. Amount: ₹' .
+            number_format((float) $booking->total_amount, 2) .
+            '. Failure Reason: ' .
+            ($validated['failure_reason'] ?? 'Payment could not be processed') .
+            '. Your payment status is Failed. Your procedure booking has not been confirmed through this payment. Please try again using the app or choose another payment method.',
             'procedure_payment_failed',
             $booking->id,
             'procedure_booking_details',

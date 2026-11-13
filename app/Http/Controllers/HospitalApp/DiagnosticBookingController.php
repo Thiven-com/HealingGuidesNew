@@ -105,32 +105,43 @@ class DiagnosticBookingController extends Controller
         $statusMessages = [
             'confirmed' => [
                 'title' => 'Lab Booking Confirmed',
-                'message' => 'Your lab booking ' . $booking->booking_no . ' has been confirmed by the diagnostic centre.',
+                'message' => 'Good news! Your lab booking ' . $booking->booking_no .
+                    ' has been confirmed by the diagnostic centre. Please check your booking details for further information.',
                 'event' => 'diagnostic_booking_confirmed',
             ],
+
             'rejected' => [
                 'title' => 'Lab Booking Rejected',
-                'message' => 'Your lab booking ' . $booking->booking_no . ' has been rejected by the diagnostic centre.',
+                'message' => 'Unfortunately, your lab booking ' . $booking->booking_no .
+                    ' has been rejected by the diagnostic centre. Please contact the diagnostic centre for further assistance.',
                 'event' => 'diagnostic_booking_rejected',
             ],
+
             'sample_collected' => [
                 'title' => 'Sample Collected',
-                'message' => 'Your sample has been collected for lab booking ' . $booking->booking_no . '.',
+                'message' => 'Your sample has been successfully collected for lab booking ' .
+                    $booking->booking_no . '. Your test will be processed shortly.',
                 'event' => 'diagnostic_sample_collected',
             ],
+
             'processing' => [
                 'title' => 'Lab Test Processing',
-                'message' => 'Your lab test for booking ' . $booking->booking_no . ' is now being processed.',
+                'message' => 'Your lab test for booking ' . $booking->booking_no .
+                    ' is now being processed. You will be notified when your report is ready.',
                 'event' => 'diagnostic_processing',
             ],
+
             'report_ready' => [
                 'title' => 'Lab Report Ready',
-                'message' => 'Your lab report for booking ' . $booking->booking_no . ' is ready.',
+                'message' => 'Your lab report for booking ' . $booking->booking_no .
+                    ' is now ready. Please open the app to view your report.',
                 'event' => 'diagnostic_report_ready',
             ],
+
             'completed' => [
                 'title' => 'Lab Booking Completed',
-                'message' => 'Your lab booking ' . $booking->booking_no . ' has been completed successfully.',
+                'message' => 'Your lab booking ' . $booking->booking_no .
+                    ' has been completed successfully. Thank you for using our diagnostic services.',
                 'event' => 'diagnostic_booking_completed',
             ],
         ];
@@ -191,7 +202,7 @@ class DiagnosticBookingController extends Controller
                 'payment_status' => $booking->payment_status,
             ]
         );
-        
+
 
         return response()->json([
             'status' => true,

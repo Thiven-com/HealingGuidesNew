@@ -275,7 +275,9 @@ class AmbulanceBookingController extends Controller
                     $booking->customer_id,
                     'ambulance',
                     'Ambulance Assigned',
-                    'An ambulance has been assigned to your booking.',
+                    'Good news! An ambulance has been assigned to your booking ' .
+                    $booking->booking_no .
+                    '. Please be ready at your pickup location and check the app for booking updates.',
                     'ambulance_booked',
                     $booking->id,
                     'booking_details',
@@ -303,7 +305,12 @@ class AmbulanceBookingController extends Controller
                 $ambulance->id,
                 'ambulance',
                 'New Ambulance Booking Assigned',
-                'A new ambulance booking has been assigned to you.',
+                'A new booking ' . $booking->booking_no .
+                ' has been assigned to you. Pickup: ' .
+                $booking->pickup_address .
+                '. Destination: ' .
+                $booking->destination_address .
+                '. Please review the booking details and proceed accordingly.',
                 'ambulance_booked',
                 $booking->id,
                 'booking_details',
@@ -420,7 +427,10 @@ class AmbulanceBookingController extends Controller
                     $booking->customer_id,
                     'ambulance',
                     'Ambulance Booking Rejected',
-                    'Your ambulance booking has been rejected.',
+                    'Your ambulance booking ' . $booking->booking_no .
+                    ' has been rejected. Reason: ' .
+                    ($booking->cancel_reason ?: 'No reason provided') .
+                    '. You may try booking another ambulance or contact support for assistance.',
                     'ambulance_booking_rejected',
                     $booking->id,
                     'booking_details',
@@ -449,7 +459,10 @@ class AmbulanceBookingController extends Controller
                     $ambulanceId,
                     'ambulance',
                     'Booking Rejected',
-                    'The ambulance booking assigned to you has been rejected.',
+                    'The ambulance booking ' . $booking->booking_no .
+                    ' assigned to you has been rejected. Reason: ' .
+                    ($booking->cancel_reason ?: 'No reason provided') .
+                    '. Please check the booking details.',
                     'ambulance_booking_rejected',
                     $booking->id,
                     'booking_details',
@@ -559,8 +572,13 @@ class AmbulanceBookingController extends Controller
                         $booking->customer_id,
                         'ambulance',
                         'Ambulance Payment Status Updated',
-                        'Your ambulance booking payment status is now ' .
-                        ucfirst($booking->payment_status) . '.',
+                        'The payment status for your ambulance booking ' .
+                        $booking->booking_no . ' has been updated from ' .
+                        ucfirst($oldPaymentStatus) . ' to ' .
+                        ucfirst($booking->payment_status) .
+                        '. Booking Amount: ₹' .
+                        number_format((float) $booking->total_amount, 2) .
+                        '. Please check your booking details for the latest update.',
                         'ambulance_payment_status_updated',
                         $booking->id,
                         'booking_details',
@@ -591,9 +609,13 @@ class AmbulanceBookingController extends Controller
                     $booking->ambulance_id,
                     'ambulance',
                     'Ambulance Payment Status Updated',
-                    'Payment status for booking ' .
-                    $booking->booking_no . ' is now ' .
-                    ucfirst($booking->payment_status) . '.',
+                    'The payment status for booking ' .
+                    $booking->booking_no . ' has changed from ' .
+                    ucfirst($oldPaymentStatus) . ' to ' .
+                    ucfirst($booking->payment_status) .
+                    '. Booking Amount: ₹' .
+                    number_format((float) $booking->total_amount, 2) .
+                    '. Please check the booking details.',
                     'ambulance_payment_status_updated',
                     $booking->id,
                     'booking_details',

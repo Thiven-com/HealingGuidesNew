@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SurgeryQuotation;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SurgeryQuotationController extends Controller
 {
@@ -168,7 +169,19 @@ class SurgeryQuotationController extends Controller
                     $customerId,
                     'surgery_quotation',
                     'Surgery Quotation Updated',
-                    'The hospital has submitted or updated your surgery quotation.',
+                    'The hospital has submitted or updated your surgery quotation. Quotation Amount: ₹' .
+                    number_format((float) $quotation->amount, 2) .
+                    ', Discount: ₹' .
+                    number_format((float) $quotation->discount, 2) .
+                    ', Tax: ₹' .
+                    number_format((float) $quotation->tax, 2) .
+                    ', Total Amount: ₹' .
+                    number_format((float) $quotation->total_amount, 2) .
+                    '. Valid Until: ' .
+                    ($quotation->valid_until
+                        ? \Carbon\Carbon::parse($quotation->valid_until)->format('d M Y')
+                        : 'Not specified') .
+                    '. Please review the quotation in the app and proceed with the next step.',
                     'surgery_quotation',
                     $quotation->id,
                     'quotation_details',
@@ -186,7 +199,7 @@ class SurgeryQuotationController extends Controller
 
         } catch (\Exception $e) {
 
-            \Log::error(
+            Log::error(
                 'Surgery quotation notification failed: ' . $e->getMessage()
             );
         }
