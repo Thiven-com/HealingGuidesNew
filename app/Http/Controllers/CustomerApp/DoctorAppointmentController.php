@@ -2516,6 +2516,31 @@ class DoctorAppointmentController extends Controller
                 ]
             );
         }
+        if ($appointment->doctor_id) {
+            NotificationService::send(
+                'doctor',
+                $appointment->doctor_id,
+                'appointment',
+                'Appointment Payment Received',
+                'Payment has been completed for appointment ' . $appointment->appointment_no . '.',
+                'doctor_appointment_payment_successful',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'doctor_id' => $appointment->doctor_id,
+                    'doctor_name' => $appointment->doctor->doctor_name ?? null,
+                    'hospital_id' => $appointment->hospital_id,
+                    'payment_method' => $appointment->payment_method,
+                    'total_amount' => (float) $appointment->total_amount,
+                    'payment_status' => $appointment->payment_status,
+                    'appointment_status' => $appointment->appointment_status,
+                ]
+            );
+        }
 
         return response()->json([
 
