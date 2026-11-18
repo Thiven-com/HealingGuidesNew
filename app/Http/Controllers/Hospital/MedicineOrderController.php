@@ -177,8 +177,9 @@ class MedicineOrderController extends Controller
                     $order->customer_id,
                     'medicine_order',
                     'Medicine Order Accepted',
-                    'Your medicine order ' . $order->order_no .
-                    ' has been accepted by the hospital.',
+                    'Good news! Your medicine order ' . $order->order_no .
+                    ' has been accepted by the hospital and will proceed for processing. ' .
+                    'Please check the app for further order updates.',
                     'medicine_order',
                     $order->id,
                     'medicine_order_details',
@@ -264,7 +265,9 @@ class MedicineOrderController extends Controller
                     'medicine_order',
                     'Medicine Order Rejected',
                     'Your medicine order ' . $order->order_no .
-                    ' has been rejected. Reason: ' . $order->cancel_reason,
+                    ' has been rejected by the hospital. Reason: ' .
+                    ($order->cancel_reason ?: 'No reason provided') .
+                    '. Please contact the hospital or support team if you need assistance.',
                     'medicine_order_rejected',
                     $order->id,
                     'medicine_order_details',
@@ -332,7 +335,8 @@ class MedicineOrderController extends Controller
                     'medicine_order',
                     'Medicine Order Processing',
                     'Your medicine order ' . $order->order_no .
-                    ' is now being processed.',
+                    ' has been accepted and is now being prepared by the hospital. ' .
+                    'We will notify you when your order is ready.',
                     'medicine_order_processing',
                     $order->id,
                     'medicine_order_details',
@@ -399,7 +403,7 @@ class MedicineOrderController extends Controller
                     'medicine_order',
                     'Medicine Order Ready',
                     'Your medicine order ' . $order->order_no .
-                    ' is ready.',
+                    ' is now ready. Please check your order details for pickup or delivery information.',
                     'medicine_order_ready',
                     $order->id,
                     'medicine_order_details',
@@ -465,7 +469,7 @@ class MedicineOrderController extends Controller
                     'medicine_order',
                     'Medicine Order Dispatched',
                     'Your medicine order ' . $order->order_no .
-                    ' has been dispatched.',
+                    ' has been dispatched and is on its way. Please check your order details for updates.',
                     'medicine_order_dispatched',
                     $order->id,
                     'medicine_order_details',
@@ -533,7 +537,7 @@ class MedicineOrderController extends Controller
                     'medicine_order',
                     'Medicine Order Delivered',
                     'Your medicine order ' . $order->order_no .
-                    ' has been delivered successfully.',
+                    ' has been delivered successfully. Thank you for choosing our services.',
                     'medicine_order_delivered',
                     $order->id,
                     'medicine_order_details',

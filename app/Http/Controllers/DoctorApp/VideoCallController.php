@@ -78,7 +78,10 @@ class VideoCallController extends Controller
             $appointment->customer_id,
             'video_consultation',
             'Doctor Joined Video Consultation',
-            'Doctor ' . $doctor->name . ' has joined the video consultation for appointment ' . $appointment->appointment_no . '.',
+            'Dr. ' . ($doctor->name ?? 'Your doctor') .
+            ' has joined the video consultation for appointment ' .
+            $appointment->appointment_no .
+            '. Your consultation is ready. Please join the video call now.',
             'video_consultation_doctor_joined',
             $appointment->id,
             'appointment_details',
@@ -186,7 +189,10 @@ class VideoCallController extends Controller
             $room->customer_id,
             'video_consultation',
             'Doctor Left Video Consultation',
-            'Doctor ' . $doctor->name . ' has left the video consultation for appointment ' . $room->appointment->appointment_no . '.',
+            'Dr. ' . ($doctor->name ?? 'Your doctor') .
+            ' has left the video consultation for appointment ' .
+            ($room->appointment->appointment_no ?? 'N/A') .
+            '. Please wait for the doctor to rejoin or check your appointment details for further updates.',
             'video_consultation_doctor_left',
             $room->appointment_id,
             'appointment_details',
@@ -272,7 +278,12 @@ class VideoCallController extends Controller
             $appointment->customer_id,
             'video_consultation',
             'Video Consultation Completed',
-            'Doctor ' . $doctor->name . ' has completed the video consultation for appointment ' . $appointment->appointment_no . '.',
+            'Dr. ' . ($doctor->name ?? 'Your doctor') .
+            ' has successfully completed the video consultation for appointment ' .
+            $appointment->appointment_no .
+            '. Consultation Duration: ' .
+            ($room->duration !== null ? $room->duration . ' minutes' : 'Not available') .
+            '. You can check your appointment details in the app.',
             'video_consultation_completed',
             $appointment->id,
             'appointment_details',

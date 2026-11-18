@@ -753,7 +753,11 @@ class AppointmentController extends Controller
                 $appointment->customer_id,
                 'doctor_appointment',
                 'Appointment Rescheduled',
-                'Your doctor appointment has been rescheduled successfully.',
+                'Your doctor appointment ' . $appointment->appointment_no .
+                ' has been successfully rescheduled to ' .
+                \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') .
+                ' at ' . $appointment->appointment_time .
+                '. Please check your appointment details for the latest information.',
                 'doctor_appointment',
                 $appointment->id,
                 'appointment_details',

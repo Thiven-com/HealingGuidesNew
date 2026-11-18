@@ -377,7 +377,9 @@ class MedicineOrderController extends Controller
                 $order->customer_id,
                 'medicine',
                 'Medicine Order Accepted',
-                'Your medicine order ' . $order->order_no . ' has been accepted by the hospital.',
+                'Good news! Your medicine order ' .
+                $order->order_no .
+                ' has been accepted by the hospital. Your order will now proceed for processing. Please check your order details in the app for further updates.',
                 'medicine_order',
                 $order->id,
                 'medicine_order_details',
@@ -612,7 +614,9 @@ class MedicineOrderController extends Controller
             $order->customer_id,
             'medicine',
             'Medicine Order Ready',
-            'Your medicine order ' . $order->order_no . ' is ready.',
+            'Your medicine order ' .
+            $order->order_no .
+            ' is now ready. Please check your order details in the app for pickup or delivery information.',
             'medicine_order',
             $order->id,
             'medicine_order_details',
@@ -691,7 +695,9 @@ class MedicineOrderController extends Controller
             $order->customer_id,
             'medicine',
             'Medicine Order Dispatched',
-            'Your medicine order ' . $order->order_no . ' has been dispatched.',
+            'Your medicine order ' .
+            $order->order_no .
+            ' has been dispatched successfully and is on its way. Please check your order details in the app for delivery updates.',
             'medicine_order',
             $order->id,
             'medicine_order_details',
@@ -773,7 +779,9 @@ class MedicineOrderController extends Controller
             $order->customer_id,
             'medicine',
             'Medicine Order Delivered',
-            'Your medicine order ' . $order->order_no . ' has been delivered successfully.',
+            'Your medicine order ' .
+            $order->order_no .
+            ' has been delivered successfully. Thank you for choosing our service. We hope you have a great experience!',
             'medicine_order',
             $order->id,
             'medicine_order_details',

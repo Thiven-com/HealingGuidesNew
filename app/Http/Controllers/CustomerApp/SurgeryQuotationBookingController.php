@@ -463,7 +463,17 @@ class SurgeryQuotationBookingController extends Controller
                 $customer->id,
                 'surgery',
                 'Surgery Payment Successful',
-                'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'Your payment for surgery booking ' .
+                $booking->booking_no .
+                ' has been received and verified successfully. Surgery: ' .
+                ($booking->surgery->name ?? 'Surgery') .
+                '. Amount Paid: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?? 'N/A') .
+                '. Payment Status: Successful. Booking Status: ' .
+                ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+                '. Please check your booking details in the app for further updates.',
                 'surgery_quotation_booked',
                 $booking->id,
                 'surgery_quotation_booking_details',
@@ -482,6 +492,61 @@ class SurgeryQuotationBookingController extends Controller
                     'booking_status' => $booking->booking_status,
                 ]
             );
+            if ($booking->hospital_id) {
+                try {
+                    NotificationService::send(
+                        'hospital',
+                        $booking->hospital_id,
+                        'surgery',
+                        'Surgery Payment Received',
+                        'Payment has been successfully received and verified for surgery booking ' .
+                        $booking->booking_no .
+                        '. Customer: ' .
+                        ($customer->name ?? 'Customer') .
+                        '. Surgery: ' .
+                        ($booking->surgery->name ?? 'Surgery') .
+                        '. Amount Received: ₹' .
+                        number_format((float) $booking->total_amount, 2) .
+                        '. Transaction ID: ' .
+                        ($payment->transaction_id ?? 'N/A') .
+                        '. Payment Status: Successful. Booking Status: ' .
+                        ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+                        '. Please review the booking and proceed with the necessary arrangements.',
+                        'surgery_quotation_booked',
+                        $booking->id,
+                        'surgery_quotation_booking_details',
+                        [
+                            'booking_id' => $booking->id,
+                            'booking_no' => $booking->booking_no,
+
+                            'customer_id' => $customer->id,
+                            'customer_name' => $customer->name ?? null,
+
+                            'surgery_quotation_id' => $booking->surgery_quotation_id,
+                            'surgery_id' => $booking->surgery_id,
+                            'surgery_name' => $booking->surgery->name ?? null,
+
+                            'hospital_id' => $booking->hospital_id,
+
+                            'payment_id' => $payment->id,
+                            'transaction_id' => $payment->transaction_id ?? null,
+
+                            'total_amount' => (float) $booking->total_amount,
+
+                            'payment_status' => $booking->payment_status,
+                            'booking_status' => $booking->booking_status,
+                        ]
+                    );
+                } catch (\Throwable $notificationError) {
+                    \Log::error('Hospital surgery payment received notification error', [
+                        'booking_id' => $booking->id,
+                        'hospital_id' => $booking->hospital_id,
+                        'customer_id' => $customer->id,
+                        'payment_id' => $payment->id,
+                        'error' => $notificationError->getMessage(),
+                    ]);
+                }
+            }
 
             return response()->json([
 
@@ -827,7 +892,17 @@ class SurgeryQuotationBookingController extends Controller
                 $customer->id,
                 'surgery',
                 'Surgery Payment Successful',
-                'Your payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'Your payment for surgery booking ' .
+                $booking->booking_no .
+                ' has been received and verified successfully. Surgery: ' .
+                ($booking->surgery->name ?? 'Surgery') .
+                '. Amount Paid: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?? 'N/A') .
+                '. Payment Status: Successful. Booking Status: ' .
+                ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+                '. Please check your booking details in the app for further updates.',
                 'surgery_payment_successful',
                 $booking->id,
                 'surgery_quotation_booking_details',
@@ -853,7 +928,19 @@ class SurgeryQuotationBookingController extends Controller
                 $booking->hospital_id,
                 'surgery',
                 'Surgery Payment Received',
-                'Payment for surgery booking ' . $booking->booking_no . ' has been received successfully.',
+                'Payment has been successfully received and verified for surgery booking ' .
+                $booking->booking_no .
+                '. Customer: ' .
+                ($customer->name ?? 'Customer') .
+                '. Surgery: ' .
+                ($booking->surgery->name ?? 'Surgery') .
+                '. Amount Received: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Transaction ID: ' .
+                ($payment->transaction_id ?? 'N/A') .
+                '. Payment Status: Successful. Booking Status: ' .
+                ucfirst(str_replace('_', ' ', $booking->booking_status)) .
+                '. Please review the booking and proceed with the necessary arrangements.',
                 'surgery_payment_successful',
                 $booking->id,
                 'surgery_quotation_booking_details',

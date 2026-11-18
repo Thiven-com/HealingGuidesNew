@@ -187,9 +187,16 @@ class BookAdmissionController extends Controller
             'Admission Request Submitted',
             'Your ' .
             ($bookAdmission->admission_type === 'general_admission'
-                ? 'General Admission'
-                : 'Surgery Admission') .
-            ' request has been submitted successfully.',
+                ? 'general admission'
+                : 'surgery admission') .
+            ' request has been submitted successfully. ' .
+            'Patient Name: ' .
+            ($bookAdmission->familyMember->name ?? $user->name) .
+            '. Preferred Admission Date: ' .
+            ($bookAdmission->preferred_admission_date ?: 'Not specified') .
+            '. Preferred Doctor: ' .
+            ($bookAdmission->preferredDoctor->doctor_name ?? 'Not specified') .
+            '. Our hospital team will review your request and contact you shortly.',
             'book_admission',
             $bookAdmission->id,
             'admission_details',
@@ -225,7 +232,18 @@ class BookAdmissionController extends Controller
                 $bookAdmission->preferred_doctor_id,
                 'admission',
                 'New Admission Request',
-                'A customer has submitted an admission request with you as the preferred doctor.',
+                'A new ' .
+                ($bookAdmission->admission_type === 'general_admission'
+                    ? 'general admission'
+                    : 'surgery admission') .
+                ' request has been submitted by ' . $user->name .
+                '. Patient Name: ' .
+                ($bookAdmission->familyMember->name ?? $user->name) .
+                '. Preferred Admission Date: ' .
+                ($bookAdmission->preferred_admission_date ?: 'Not specified') .
+                '. Surgery Procedure: ' .
+                ($bookAdmission->surgery_procedure ?: 'Not applicable') .
+                '. Please review the admission request and take the necessary action.',
                 'admission_request_created',
                 $bookAdmission->id,
                 'admission_details',

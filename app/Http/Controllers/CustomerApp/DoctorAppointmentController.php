@@ -1628,7 +1628,7 @@ class DoctorAppointmentController extends Controller
             //     );
             // }
 
-          
+
 
 
             /*
@@ -2093,6 +2093,47 @@ class DoctorAppointmentController extends Controller
             );
         }
 
+        if ($appointment->doctor_id && $appointment->doctor) {
+            NotificationService::send(
+                'doctor',
+                $appointment->doctor_id,
+                'appointment',
+                'Appointment Cancelled by Customer',
+                'The customer ' .
+                ($customer->name ?? 'Customer') .
+                ' has cancelled the appointment (Appointment No: ' .
+                $appointment->appointment_no .
+                ') scheduled for ' .
+                $appointment->appointment_date .
+                ' at ' .
+                $appointment->appointment_time .
+                '. Cancellation Reason: ' .
+                ($appointment->cancel_reason ?: 'No reason provided') .
+                '. Please review the cancellation and update your schedule accordingly.',
+                'doctor_appointment_cancelled',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+
+                    'doctor_id' => $appointment->doctor_id,
+                    'doctor_name' => $appointment->doctor->doctor_name ?? null,
+
+                    'hospital_id' => $appointment->hospital_id,
+
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+
+                    'cancel_reason' => $appointment->cancel_reason,
+                    'cancelled_at' => $appointment->cancelled_at,
+                ]
+            );
+        }
+
         return response()->json([
             'success' => 1,
             'message' => 'Appointment cancelled successfully.'
@@ -2324,6 +2365,53 @@ class DoctorAppointmentController extends Controller
                     'new_appointment_date' => $appointment->appointment_date,
                     'new_appointment_time' => $appointment->appointment_time,
                     'appointment_status' => $appointment->appointment_status,
+                    'rescheduled_at' => now(),
+                ]
+            );
+        }
+
+        if ($appointment->doctor_id && $appointment->doctor) {
+            NotificationService::send(
+                'doctor',
+                $appointment->doctor_id,
+                'appointment',
+                'Appointment Rescheduled by Customer',
+                'The customer ' .
+                ($customer->name ?? 'Customer') .
+                ' has rescheduled the appointment (Appointment No: ' .
+                $appointment->appointment_no .
+                '). Previous Schedule: ' .
+                Carbon::parse($oldDate)->format('d M Y') .
+                ' at ' .
+                Carbon::parse($oldTime)->format('h:i A') .
+                '. New Schedule: ' .
+                Carbon::parse($appointment->appointment_date)->format('d M Y') .
+                ' at ' .
+                Carbon::parse($appointment->appointment_time)->format('h:i A') .
+                '. Please review the updated appointment schedule.',
+                'doctor_appointment_rescheduled',
+                $appointment->id,
+                'appointment_details',
+                [
+                    'appointment_id' => $appointment->id,
+                    'appointment_no' => $appointment->appointment_no,
+
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+
+                    'doctor_id' => $appointment->doctor_id,
+                    'doctor_name' => $appointment->doctor->doctor_name ?? null,
+
+                    'hospital_id' => $appointment->hospital_id,
+
+                    'old_appointment_date' => $oldDate,
+                    'old_appointment_time' => $oldTime,
+
+                    'new_appointment_date' => $appointment->appointment_date,
+                    'new_appointment_time' => $appointment->appointment_time,
+
+                    'appointment_status' => $appointment->appointment_status,
+
                     'rescheduled_at' => now(),
                 ]
             );
@@ -2725,25 +2813,23 @@ class DoctorAppointmentController extends Controller
 
             $room->save();
 
-            /*
-|--------------------------------------------------------------------------
-| Doctor Notification - Customer Joined Video Consultation
-|--------------------------------------------------------------------------
-*/
-
             NotificationService::send(
-                'doctor',
-                $appointment->doctor_id,
+                'customer',
+                $customer->id,
                 'video_consultation',
-                'Customer Waiting for Video Consultation',
-                'Customer ' . $customer->name . ' is waiting for you to join the video consultation for appointment ' . $appointment->appointment_no . '. Please join the consultation.',
-                'video_consultation_customer_waiting',
+                'Waiting for Doctor to Join',
+                'You have successfully joined the video consultation waiting room for Appointment No: ' .
+                $appointment->appointment_no .
+                '. Dr. ' . ($appointment->doctor->doctor_name ?? 'Doctor') .
+                ' has been notified. Please stay on the waiting screen until the doctor joins.',
+                'video_consultation_waiting',
                 $appointment->id,
                 'appointment_details',
                 [
                     'appointment_id' => $appointment->id,
                     'appointment_no' => $appointment->appointment_no,
                     'doctor_id' => $appointment->doctor_id,
+                    'doctor_name' => $appointment->doctor->doctor_name ?? null,
                     'customer_id' => $customer->id,
                     'customer_name' => $customer->name,
                     'consultation_type' => $appointment->consultation_type,
@@ -2753,6 +2839,40 @@ class DoctorAppointmentController extends Controller
                     'meeting_status' => $room->status,
                 ]
             );
+
+            /*
+|--------------------------------------------------------------------------
+| Doctor Notification - Customer Joined Video Consultation
+|--------------------------------------------------------------------------
+*/
+
+            if ($appointment->doctor_id && $appointment->doctor) {
+                NotificationService::send(
+                    'doctor',
+                    $appointment->doctor_id,
+                    'video_consultation',
+                    'Customer Waiting for Video Consultation',
+                    'Your customer ' . ($customer->name ?? 'Customer') .
+                    ' is waiting for you to join the video consultation. Appointment No: ' .
+                    $appointment->appointment_no .
+                    '. Please join the consultation to start the session.',
+                    'video_consultation_customer_waiting',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'doctor_id' => $appointment->doctor_id,
+                        'customer_id' => $customer->id,
+                        'customer_name' => $customer->name,
+                        'consultation_type' => $appointment->consultation_type,
+                        'appointment_date' => $appointment->appointment_date,
+                        'appointment_time' => $appointment->appointment_time,
+                        'room_id' => $room->room_id,
+                        'meeting_status' => $room->status,
+                    ]
+                );
+            }
         }
 
 

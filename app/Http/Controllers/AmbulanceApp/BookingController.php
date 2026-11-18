@@ -309,9 +309,15 @@ class BookingController extends Controller
             $booking->customer_id,
             'ambulance',
             'Ambulance On The Way',
-            'Your ambulance ' .
+            'Your ambulance for booking ' .
             $booking->booking_no .
-            ' is on the way to your pickup location.',
+            ' is on the way to your pickup location. Ambulance Type: ' .
+            ($ambulance->ambulanceType->name ?? 'Ambulance') .
+            '. Pickup Location: ' .
+            ($booking->pickup_address ?? 'Not available') .
+            '. Destination: ' .
+            ($booking->destination_address ?? 'Not available') .
+            '. Please be ready at your pickup location and share the pickup code with the ambulance driver when requested.',
             'ambulance_trip_started',
             $booking->id,
             'ambulance_booking_details',
@@ -721,7 +727,13 @@ class BookingController extends Controller
                 'Ambulance Trip Completed',
                 'Your ambulance trip for booking ' .
                 $booking->booking_no .
-                ' has been completed successfully.',
+                ' has been completed successfully. Distance Travelled: ' .
+                number_format((float) $booking->distance_km, 2) .
+                ' km. Total Amount: ₹' .
+                number_format((float) $booking->total_amount, 2) .
+                '. Payment Status: ' .
+                ucfirst(str_replace('_', ' ', $booking->payment_status)) .
+                '. Thank you for using our ambulance service.',
                 'ambulance_trip_completed',
                 $booking->id,
                 'ambulance_booking_details',
@@ -1084,7 +1096,11 @@ class BookingController extends Controller
             'Patient Picked Up',
             'The ambulance has successfully picked up the patient for booking ' .
             $booking->booking_no .
-            '. The trip is now in progress.',
+            '. Pickup Location: ' .
+            ($booking->pickup_address ?? 'Not available') .
+            '. Destination: ' .
+            ($booking->destination_address ?? 'Not available') .
+            '. The trip is now in progress. Please check your booking details for further updates.',
             'ambulance_patient_picked',
             $booking->id,
             'ambulance_booking_details',

@@ -170,7 +170,13 @@ class DiagnosticBookingController extends Controller
                         'diagnostic',
                         'Diagnostic Booking Status Updated',
                         'Your diagnostic booking ' . $booking->booking_no .
-                        ' status is now ' . ucfirst($booking->booking_status) . '.',
+                        ' status has been changed from ' .
+                        ucfirst(str_replace('_', ' ', $oldStatus)) . ' to ' .
+                        ucfirst(str_replace('_', ' ', $booking->booking_status)) . '.' .
+                        ($booking->cancel_reason
+                            ? ' Reason: ' . $booking->cancel_reason
+                            : '') .
+                        ' Please check your lab booking details for the latest updates.',
                         'diagnostic_booking',
                         $booking->id,
                         'lab_booking_details',
@@ -197,8 +203,13 @@ class DiagnosticBookingController extends Controller
                         $booking->customer_id,
                         'diagnostic',
                         'Diagnostic Payment Status Updated',
-                        'Your diagnostic booking payment status is now ' .
-                        ucfirst($booking->payment_status) . '.',
+                        'The payment status for your diagnostic booking ' .
+                        $booking->booking_no . ' has been changed from ' .
+                        ucfirst(str_replace('_', ' ', $oldPaymentStatus)) . ' to ' .
+                        ucfirst(str_replace('_', ' ', $booking->payment_status)) .
+                        '. Amount: ₹' .
+                        number_format((float) $booking->total_amount, 2) .
+                        '. Please check your booking details for the latest payment information.',
                         'diagnostic_booking',
                         $booking->id,
                         'lab_booking_details',

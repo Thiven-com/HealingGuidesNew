@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AmbulanceBookingController extends Controller
 {
@@ -560,7 +561,13 @@ class AmbulanceBookingController extends Controller
                     $booking->customer_id,
                     'ambulance',
                     'Ambulance Assigned',
-                    'An ambulance has been assigned to your booking.',
+                    'A new ambulance booking ' .
+                    $booking->booking_no .
+                    ' has been assigned to you. Pickup Location: ' .
+                    ($booking->pickup_address ?? 'Not available') .
+                    '. Destination: ' .
+                    ($booking->destination_address ?? 'Not available') .
+                    '. Please review the booking details and proceed with the assignment.',
                     'ambulance_booking',
                     $booking->id,
                     'booking_details',
@@ -573,7 +580,7 @@ class AmbulanceBookingController extends Controller
                     ]
                 );
             } catch (\Exception $e) {
-                \Log::error('Ambulance assignment notification failed: ' . $e->getMessage());
+                Log::error('Ambulance assignment notification failed: ' . $e->getMessage());
             }
 
 
@@ -583,7 +590,15 @@ class AmbulanceBookingController extends Controller
                     $ambulance->id,
                     'ambulance',
                     'New Booking Assigned',
-                    'A new ambulance booking has been assigned to you.',
+                    'A new ambulance booking ' .
+                    $booking->booking_no .
+                    ' has been assigned to you. Pickup Location: ' .
+                    ($booking->pickup_address ?? 'Not available') .
+                    '. Destination: ' .
+                    ($booking->destination_address ?? 'Not available') .
+                    '. Booking Amount: ₹' .
+                    number_format((float) $booking->total_amount, 2) .
+                    '. Please review the booking details and accept or proceed with the assignment.',
                     'ambulance_booking',
                     $booking->id,
                     'booking_details',
@@ -598,7 +613,7 @@ class AmbulanceBookingController extends Controller
                     ]
                 );
             } catch (\Throwable $e) {
-                \Log::error('Ambulance app assignment notification failed', [
+                Log::error('Ambulance app assignment notification failed', [
                     'booking_id' => $booking->id,
                     'ambulance_id' => $ambulance->id,
                     'error' => $e->getMessage(),
@@ -717,7 +732,11 @@ class AmbulanceBookingController extends Controller
                 $booking->customer_id,
                 'ambulance',
                 'Ambulance Request Rejected',
-                'Your ambulance booking request has been rejected.',
+                'Unfortunately, your ambulance booking request ' .
+                $booking->booking_no .
+                ' has been rejected. Reason: ' .
+                ($booking->cancel_reason ?? 'No reason provided') .
+                '. You can try booking another ambulance or contact support for assistance.',
                 'ambulance_booking',
                 $booking->id,
                 'booking_details',
@@ -729,7 +748,7 @@ class AmbulanceBookingController extends Controller
                 ]
             );
         } catch (\Exception $e) {
-            \Log::error('Ambulance rejection notification failed: ' . $e->getMessage());
+            Log::error('Ambulance rejection notification failed: ' . $e->getMessage());
         }
 
         return response()->json([
@@ -843,7 +862,9 @@ class AmbulanceBookingController extends Controller
                 $booking->customer_id,
                 'ambulance',
                 'Ambulance On The Way',
-                'Your assigned ambulance is on the way.',
+                'Your assigned ambulance for booking ' .
+                $booking->booking_no .
+                ' has started its trip and is on the way to your pickup location. Please be ready at the pickup location.',
                 'ambulance_booking',
                 $booking->id,
                 'booking_details',
@@ -854,7 +875,7 @@ class AmbulanceBookingController extends Controller
                 ]
             );
         } catch (\Exception $e) {
-            \Log::error('Ambulance trip start notification failed: ' . $e->getMessage());
+            Log::error('Ambulance trip start notification failed: ' . $e->getMessage());
         }
 
         if ($booking->ambulance_id) {
@@ -864,7 +885,13 @@ class AmbulanceBookingController extends Controller
                     $booking->ambulance_id,
                     'ambulance',
                     'Trip Started',
-                    'The ambulance trip has been started.',
+                    'The trip for ambulance booking ' .
+                    $booking->booking_no .
+                    ' has been started successfully. Pickup: ' .
+                    ($booking->pickup_address ?? 'Not available') .
+                    '. Destination: ' .
+                    ($booking->destination_address ?? 'Not available') .
+                    '. Please proceed with the assigned trip.',
                     'ambulance_booking',
                     $booking->id,
                     'booking_details',
@@ -876,7 +903,7 @@ class AmbulanceBookingController extends Controller
                     ]
                 );
             } catch (\Throwable $e) {
-                \Log::error('Ambulance app trip start notification failed', [
+                Log::error('Ambulance app trip start notification failed', [
                     'booking_id' => $booking->id,
                     'error' => $e->getMessage(),
                 ]);
@@ -1071,7 +1098,11 @@ class AmbulanceBookingController extends Controller
                     $booking->customer_id,
                     'ambulance',
                     'Ambulance Trip Completed',
-                    'Your ambulance trip has been completed successfully.',
+                    'Your ambulance trip for booking ' .
+                    $booking->booking_no .
+                    ' has been completed successfully. Total Amount: ₹' .
+                    number_format((float) $booking->total_amount, 2) .
+                    '. Thank you for using our ambulance service. Please check your booking details for more information.',
                     'ambulance_booking',
                     $booking->id,
                     'booking_details',
@@ -1084,7 +1115,7 @@ class AmbulanceBookingController extends Controller
                     ]
                 );
             } catch (\Exception $e) {
-                \Log::error('Ambulance trip completion notification failed: ' . $e->getMessage());
+                Log::error('Ambulance trip completion notification failed: ' . $e->getMessage());
             }
 
 
@@ -1095,7 +1126,11 @@ class AmbulanceBookingController extends Controller
                         $booking->ambulance_id,
                         'ambulance',
                         'Trip Completed',
-                        'The ambulance trip has been completed successfully.',
+                        'The ambulance trip for booking ' .
+                        $booking->booking_no .
+                        ' has been completed successfully. Total Booking Amount: ₹' .
+                        number_format((float) $booking->total_amount, 2) .
+                        '. Please check the booking details for the trip summary.',
                         'ambulance_booking',
                         $booking->id,
                         'booking_details',
@@ -1109,7 +1144,7 @@ class AmbulanceBookingController extends Controller
                         ]
                     );
                 } catch (\Throwable $e) {
-                    \Log::error('Ambulance app trip completion notification failed', [
+                    Log::error('Ambulance app trip completion notification failed', [
                         'booking_id' => $booking->id,
                         'error' => $e->getMessage(),
                     ]);

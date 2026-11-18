@@ -14,6 +14,7 @@ use App\Models\Prescription;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class MedicineOrderController extends Controller
@@ -867,7 +868,23 @@ class MedicineOrderController extends Controller
                 'Medicine Order Placed',
                 'Your medicine order ' .
                 $order->order_no .
-                ' has been placed successfully.',
+                ' has been placed successfully. Subtotal: ₹' .
+                number_format((float) $order->subtotal, 2) .
+                '. Delivery Charge: ₹' .
+                number_format((float) $order->delivery_charge, 2) .
+                '. Discount: ₹' .
+                number_format((float) $order->discount, 2) .
+                '. Tax: ₹' .
+                number_format((float) $order->tax, 2) .
+                '. Total Amount: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Payment Method: ' .
+                ucfirst(str_replace('_', ' ', $order->payment_method)) .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Order Status: ' .
+                ucfirst(str_replace('_', ' ', $order->order_status)) .
+                '. Your order will be processed shortly. You can track its status through the app.',
                 'medicine_order_created',
                 $order->id,
                 'medicine_order_details',
@@ -912,7 +929,25 @@ class MedicineOrderController extends Controller
                 $order->hospital_id,
                 'medicine',
                 'New Medicine Order Received',
-                'You have received a new medicine order ' . $order->order_no . '.',
+                'A new medicine order has been received. Order No: ' .
+                $order->order_no .
+                '. Customer Name: ' .
+                ($customer->name ?? 'Customer') .
+                '. Total Amount: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Payment Method: ' .
+                ucfirst(str_replace('_', ' ', $order->payment_method)) .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Delivery Address: ' .
+                $order->delivery_address .
+                ', ' .
+                $order->delivery_city .
+                ', ' .
+                $order->delivery_state .
+                ' - ' .
+                $order->delivery_pincode .
+                '. Please review the order and proceed with medicine preparation and processing.',
                 'medicine_order_created',
                 $order->id,
                 'medicine_order_details',
@@ -1662,7 +1697,17 @@ class MedicineOrderController extends Controller
                 $customer->id,
                 'medicine',
                 'Medicine Order Cancelled',
-                'Your medicine order ' . $order->order_no . ' has been cancelled successfully.',
+                'Your medicine order ' .
+                $order->order_no .
+                ' has been cancelled successfully. Total Amount: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Cancellation Reason: ' .
+                ($order->cancel_reason ?: 'No reason provided') .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Order Status: ' .
+                ucfirst(str_replace('_', ' ', $order->order_status)) .
+                '. If you still require these medicines, you can place a new order through the app.',
                 'medicine_order_cancelled',
                 $order->id,
                 'medicine_order_details',
@@ -1683,7 +1728,19 @@ class MedicineOrderController extends Controller
                 $order->hospital_id,
                 'medicine',
                 'Medicine Order Cancelled',
-                'Medicine order ' . $order->order_no . ' has been cancelled by the customer.',
+                'The customer ' .
+                ($customer->name ?? 'Customer') .
+                ' has cancelled medicine order ' .
+                $order->order_no .
+                '. Total Amount: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Cancellation Reason: ' .
+                ($order->cancel_reason ?: 'No reason provided') .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Order Status: ' .
+                ucfirst(str_replace('_', ' ', $order->order_status)) .
+                '. Please review the cancellation and update your order records accordingly.',
                 'medicine_order_cancelled',
                 $order->id,
                 'medicine_order_details',
@@ -1888,7 +1945,17 @@ class MedicineOrderController extends Controller
                 $customer->id,
                 'medicine',
                 'Medicine Order Payment Successful',
-                'Payment for your medicine order ' . $order->order_no . ' has been completed successfully.',
+                'Your payment for medicine order ' .
+                $order->order_no .
+                ' has been received and verified successfully. Amount Paid: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Payment Method: ' .
+                ucfirst(str_replace('_', ' ', $order->payment_method)) .
+                '. Transaction ID: ' .
+                ($order->transaction_id ?: 'N/A') .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Your medicine order is now being processed. You can track your order status through the app.',
                 'medicine_payment_successful',
                 $order->id,
                 'medicine_order_details',
@@ -1910,7 +1977,21 @@ class MedicineOrderController extends Controller
                 $order->hospital_id,
                 'medicine',
                 'Medicine Order Payment Received',
-                'Payment for medicine order ' . $order->order_no . ' has been completed successfully.',
+                'Payment has been successfully received and verified for medicine order ' .
+                $order->order_no .
+                '. Customer Name: ' .
+                ($customer->name ?? 'Customer') .
+                '. Amount Received: ₹' .
+                number_format((float) $order->total_amount, 2) .
+                '. Payment Method: ' .
+                ucfirst(str_replace('_', ' ', $order->payment_method)) .
+                '. Transaction ID: ' .
+                ($order->transaction_id ?: 'N/A') .
+                '. Payment Status: ' .
+                ucfirst($order->payment_status) .
+                '. Order Status: ' .
+                ucfirst(str_replace('_', ' ', $order->order_status)) .
+                '. Please proceed with the medicine order processing.',
                 'medicine_payment_received',
                 $order->id,
                 'medicine_order_details',
@@ -1970,7 +2051,7 @@ class MedicineOrderController extends Controller
 
             DB::rollBack();
 
-            \Log::error('Medicine order payment failed', [
+            Log::error('Medicine order payment failed', [
 
                 'order_id' => $order->id ?? null,
 

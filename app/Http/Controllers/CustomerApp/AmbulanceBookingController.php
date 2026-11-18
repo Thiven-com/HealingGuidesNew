@@ -330,11 +330,14 @@ class AmbulanceBookingController extends Controller
             $customer->id,
             'ambulance',
             $booking->is_emergency
-            ? 'Emergency Ambulance Requested'
-            : 'Ambulance Request Sent',
-            'Your ambulance request has been sent to ' .
+            ? 'Emergency Ambulance Request Submitted'
+            : 'Ambulance Request Submitted',
+            'Your ' .
+            ($booking->is_emergency ? 'emergency ' : '') .
+            'ambulance request has been successfully submitted to ' .
             $hospital->hospital_name .
-            '.',
+            '. Your booking number is ' . $booking->booking_no .
+            '. Please wait while the hospital reviews your request.',
             'ambulance_booked',
             $booking->id,
             'ambulance_booking_details',
@@ -362,7 +365,13 @@ class AmbulanceBookingController extends Controller
                 $booking->hospital_id,
                 'ambulance',
                 'New Ambulance Request',
-                'A new ambulance request has been received.',
+                'A new ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance request has been received from ' .
+                $customer->name .
+                '. Pickup Location: ' . $booking->pickup_address .
+                '. Booking No: ' . $booking->booking_no .
+                '. Please review the booking and take the necessary action.',
                 'ambulance_booked',
                 $booking->id,
                 'ambulance_booking_details',
@@ -391,7 +400,13 @@ class AmbulanceBookingController extends Controller
                 $booking->ambulance_id,
                 'ambulance',
                 'New Ambulance Booking',
-                'A new booking has been assigned to your ambulance.',
+                'A new ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance booking has been assigned to you. Pickup Location: ' .
+                $booking->pickup_address .
+                '. Destination: ' . $booking->destination_address .
+                '. Booking No: ' . $booking->booking_no .
+                '. Please review the booking details and proceed accordingly.',
                 'ambulance_booked',
                 $booking->id,
                 'ambulance_booking_details',
@@ -783,9 +798,17 @@ class AmbulanceBookingController extends Controller
             $customer->id,
             'ambulance',
             'Ambulance Booking Cancelled',
-            'Your ambulance booking ' .
+            'Your ' .
+            ($booking->is_emergency ? 'emergency ' : '') .
+            'ambulance booking has been cancelled successfully. Booking No: ' .
             $booking->booking_no .
-            ' has been cancelled successfully.',
+            '. Hospital: ' .
+            ($booking->hospital->hospital_name ?? 'N/A') .
+            '. Pickup Location: ' . $booking->pickup_address .
+            '. Destination: ' . $booking->destination_address .
+            '. Cancellation Reason: ' .
+            ($booking->cancel_reason ?: 'Not specified') .
+            '. If you still require ambulance service, please submit a new booking.',
             'ambulance_booking_cancelled',
             $booking->id,
             'ambulance_booking_details',
@@ -805,6 +828,82 @@ class AmbulanceBookingController extends Controller
                 'cancelled_at' => $booking->cancelled_at,
             ]
         );
+
+        if ($booking->hospital_id) {
+
+            NotificationService::send(
+                'hospital',
+                $booking->hospital_id,
+                'ambulance',
+                'Ambulance Booking Cancelled',
+                'The ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance booking has been cancelled by ' .
+                $customer->name .
+                '. Booking No: ' . $booking->booking_no .
+                '. Pickup Location: ' . $booking->pickup_address .
+                '. Destination: ' . $booking->destination_address .
+                '. Cancellation Reason: ' .
+                ($booking->cancel_reason ?: 'Not specified') .
+                '. Please update your records accordingly.',
+                'ambulance_booking_cancelled',
+                $booking->id,
+                'ambulance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'hospital_id' => $booking->hospital_id,
+                    'hospital_name' => $booking->hospital->hospital_name ?? null,
+                    'ambulance_type_id' => $booking->ambulance_type_id,
+                    'ambulance_id' => $booking->ambulance_id,
+                    'pickup_address' => $booking->pickup_address,
+                    'destination_address' => $booking->destination_address,
+                    'is_emergency' => (bool) $booking->is_emergency,
+                    'booking_status' => $booking->booking_status,
+                    'cancel_reason' => $booking->cancel_reason,
+                    'cancelled_at' => $booking->cancelled_at,
+                ]
+            );
+        }
+
+        if ($booking->ambulance_id) {
+
+            NotificationService::send(
+                'ambulance',
+                $booking->ambulance_id,
+                'ambulance',
+                'Ambulance Booking Cancelled',
+                'The ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance booking assigned to you has been cancelled by the customer ' .
+                $customer->name .
+                '. Booking No: ' . $booking->booking_no .
+                '. Pickup Location: ' . $booking->pickup_address .
+                '. Destination: ' . $booking->destination_address .
+                '. Cancellation Reason: ' .
+                ($booking->cancel_reason ?: 'Not specified') .
+                '. You are no longer required to attend this booking.',
+                'ambulance_booking_cancelled',
+                $booking->id,
+                'ambulance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'ambulance_id' => $booking->ambulance_id,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'hospital_id' => $booking->hospital_id,
+                    'pickup_address' => $booking->pickup_address,
+                    'destination_address' => $booking->destination_address,
+                    'is_emergency' => (bool) $booking->is_emergency,
+                    'booking_status' => $booking->booking_status,
+                    'cancel_reason' => $booking->cancel_reason,
+                    'cancelled_at' => $booking->cancelled_at,
+                ]
+            );
+        }
 
         return response()->json([
             'success' => 1,
@@ -965,9 +1064,16 @@ class AmbulanceBookingController extends Controller
             $customer->id,
             'ambulance',
             'Ambulance Payment Successful',
-            'Your payment for ambulance booking ' .
+            'Your payment for the ' .
+            ($booking->is_emergency ? 'emergency ' : '') .
+            'ambulance booking has been completed successfully. Booking No: ' .
             $booking->booking_no .
-            ' has been completed successfully.',
+            '. Hospital: ' .
+            ($booking->hospital->hospital_name ?? 'N/A') .
+            '. Amount Paid: ₹' . number_format((float) $booking->total_amount, 2) .
+            '. Payment Method: ' . $booking->payment_method .
+            '. Transaction ID: ' . ($booking->transaction_id ?: 'N/A') .
+            '. Your payment is confirmed. Thank you for choosing our ambulance service.',
             'ambulance_booking_payment_successful',
             $booking->id,
             'ambulance_booking_details',
@@ -989,6 +1095,82 @@ class AmbulanceBookingController extends Controller
                 'booking_status' => $booking->booking_status,
             ]
         );
+
+        if ($booking->hospital_id) {
+
+            NotificationService::send(
+                'hospital',
+                $booking->hospital_id,
+                'ambulance',
+                'Ambulance Booking Payment Received',
+                'The payment for the ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance booking has been completed successfully by ' .
+                $customer->name .
+                '. Booking No: ' . $booking->booking_no .
+                '. Amount Received: ₹' . number_format((float) $booking->total_amount, 2) .
+                '. Payment Method: ' . $booking->payment_method .
+                '. Transaction ID: ' . ($booking->transaction_id ?: 'N/A') .
+                '. Please review the booking details and proceed with the ambulance service.',
+                'ambulance_booking_payment_successful',
+                $booking->id,
+                'ambulance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'customer_id' => $customer->id,
+                    'customer_name' => $customer->name,
+                    'hospital_id' => $booking->hospital_id,
+                    'hospital_name' => $booking->hospital->hospital_name ?? null,
+                    'ambulance_id' => $booking->ambulance_id,
+                    'pickup_address' => $booking->pickup_address,
+                    'destination_address' => $booking->destination_address,
+                    'is_emergency' => (bool) $booking->is_emergency,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_method' => $booking->payment_method,
+                    'payment_id' => $booking->payment_id,
+                    'transaction_id' => $booking->transaction_id,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        }
+
+        if ($booking->ambulance_id) {
+
+            NotificationService::send(
+                'ambulance',
+                $booking->ambulance_id,
+                'ambulance',
+                'Ambulance Booking Payment Confirmed',
+                'The payment for the ' .
+                ($booking->is_emergency ? 'emergency ' : '') .
+                'ambulance booking assigned to you has been completed successfully. Booking No: ' .
+                $booking->booking_no .
+                '. Pickup Location: ' . $booking->pickup_address .
+                '. Destination: ' . $booking->destination_address .
+                '. Payment Status: ' . ucfirst($booking->payment_status) .
+                '. Please proceed with the assigned ambulance service.',
+                'ambulance_booking_payment_successful',
+                $booking->id,
+                'ambulance_booking_details',
+                [
+                    'booking_id' => $booking->id,
+                    'booking_no' => $booking->booking_no,
+                    'ambulance_id' => $booking->ambulance_id,
+                    'hospital_id' => $booking->hospital_id,
+                    'pickup_address' => $booking->pickup_address,
+                    'destination_address' => $booking->destination_address,
+                    'is_emergency' => (bool) $booking->is_emergency,
+                    'total_amount' => (float) $booking->total_amount,
+                    'payment_method' => $booking->payment_method,
+                    'payment_id' => $booking->payment_id,
+                    'transaction_id' => $booking->transaction_id,
+                    'payment_status' => $booking->payment_status,
+                    'booking_status' => $booking->booking_status,
+                ]
+            );
+        }
 
         return response()->json([
             'success' => 1,
