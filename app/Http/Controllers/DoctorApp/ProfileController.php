@@ -406,15 +406,20 @@ class ProfileController extends Controller
             ], 401);
         }
 
+        // Validation
         $validator = Validator::make($request->all(), [
 
             'consultation_fee' => 'nullable|numeric|min:0',
+            'actual_fee' => 'nullable|numeric|min:0',
 
             'video_consultation_fee' => 'nullable|numeric|min:0',
+            'actual_video_consultation_fee' => 'nullable|numeric|min:0',
 
             'chat_consultation_fee' => 'nullable|numeric|min:0',
+            'actual_chat_consultation_fee' => 'nullable|numeric|min:0',
 
             'home_visit_fee' => 'nullable|numeric|min:0',
+            'actual_home_visit_fee' => 'nullable|numeric|min:0',
 
         ]);
 
@@ -422,49 +427,38 @@ class ProfileController extends Controller
             return response()->json([
                 'success' => 0,
                 'message' => $validator->errors()->first()
-            ]);
+            ], 422);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Check At Least One Fee
-        |--------------------------------------------------------------------------
-        */
+        // Check at least one fee is provided
+        $feeFields = [
+            'consultation_fee',
+            'actual_fee',
+            'video_consultation_fee',
+            'actual_video_consultation_fee',
+            'chat_consultation_fee',
+            'actual_chat_consultation_fee',
+            'home_visit_fee',
+            'actual_home_visit_fee',
+        ];
 
-        if (
-            !$request->has('consultation_fee') &&
-            !$request->has('video_consultation_fee') &&
-            !$request->has('chat_consultation_fee') &&
-            !$request->has('home_visit_fee')
-        ) {
+        $providedFields = [];
+
+        foreach ($feeFields as $field) {
+            if ($request->exists($field)) {
+                $providedFields[] = $field;
+                $doctor->$field = $request->input($field);
+            }
+        }
+
+        if (empty($providedFields)) {
             return response()->json([
                 'success' => 0,
                 'message' => 'Please provide at least one consultation fee.'
-            ]);
+            ], 422);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update Only Provided Fees
-        |--------------------------------------------------------------------------
-        */
-
-        if ($request->has('consultation_fee')) {
-            $doctor->consultation_fee = $request->consultation_fee;
-        }
-
-        if ($request->has('video_consultation_fee')) {
-            $doctor->video_consultation_fee = $request->video_consultation_fee;
-        }
-
-        if ($request->has('chat_consultation_fee')) {
-            $doctor->chat_consultation_fee = $request->chat_consultation_fee;
-        }
-
-        if ($request->has('home_visit_fee')) {
-            $doctor->home_visit_fee = $request->home_visit_fee;
-        }
-
+        // Save updated fees
         $doctor->save();
 
         return response()->json([
@@ -472,9 +466,16 @@ class ProfileController extends Controller
             'message' => 'Consultation fees updated successfully.',
             'data' => [
                 'consultation_fee' => $doctor->consultation_fee,
+                'actual_fee' => $doctor->actual_fee,
+
                 'video_consultation_fee' => $doctor->video_consultation_fee,
+                'actual_video_consultation_fee' => $doctor->actual_video_consultation_fee,
+
                 'chat_consultation_fee' => $doctor->chat_consultation_fee,
+                'actual_chat_consultation_fee' => $doctor->actual_chat_consultation_fee,
+
                 'home_visit_fee' => $doctor->home_visit_fee,
+                'actual_home_visit_fee' => $doctor->actual_home_visit_fee,
             ]
         ]);
     }
