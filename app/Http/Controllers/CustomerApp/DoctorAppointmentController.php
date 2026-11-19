@@ -2915,4 +2915,145 @@ class DoctorAppointmentController extends Controller
             "copy_code" => $fields['field_1'] ?? '',
         ];
     }
+
+
+    public function endVideoCall(Request $request)
+    {
+        $customer = auth('sanctum')->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Please login first.'
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'appointment_id' => 'required|exists:doctor_appointments,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => 0,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $appointment = DoctorAppointment::where('id', $request->appointment_id)
+            ->where('customer_id', $customer->id)
+            ->where('consultation_type', 'video')
+            ->first();
+
+        if (!$appointment) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Appointment not found.'
+            ]);
+        }
+
+        $room = VideoRoom::where('appointment_id', $appointment->id)
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        if (!$room) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Video room not found.'
+            ]);
+        }
+
+        if ($room->status === 'ended') {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Video consultation has already ended.'
+            ]);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $room->status = 'ended';
+            $room->ended_at = now();
+            $room->ended_by = 'customer';
+
+            $room->customer_online = false;
+            $room->doctor_online = false;
+
+            if ($room->started_at) {
+                $room->duration = max(
+                    0,
+                    now()->timestamp - Carbon::parse($room->started_at)->timestamp
+                );
+            }
+
+            $room->save();
+
+            $appointment->appointment_status = 'completed';
+            $appointment->meeting_status = 'ended';
+            $appointment->meeting_ended_at = now();
+            $appointment->save();
+
+            DB::commit();
+
+            // Notify Doctor
+            if ($appointment->doctor_id) {
+
+                NotificationService::send(
+                    'doctor',
+                    $appointment->doctor_id,
+                    'video_consultation',
+                    'Video Consultation Ended',
+                    'The customer ' . ($customer->name ?? 'Customer') .
+                    ' has ended the video consultation for appointment ' .
+                    $appointment->appointment_no . '.',
+                    'video_consultation_customer_ended',
+                    $appointment->id,
+                    'appointment_details',
+                    [
+                        'appointment_id' => $appointment->id,
+                        'appointment_no' => $appointment->appointment_no,
+                        'customer_id' => $customer->id,
+                        'customer_name' => $customer->name,
+                        'doctor_id' => $appointment->doctor_id,
+                        'consultation_type' => $appointment->consultation_type,
+                        'room_id' => $room->room_id,
+                        'meeting_status' => $room->status,
+                        'ended_by' => 'customer',
+                        'duration_seconds' => $room->duration,
+                    ]
+                );
+            }
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'Video consultation ended successfully.',
+                'data' => [
+                    'appointment_id' => $appointment->id,
+                    'room_id' => $room->room_id,
+                    'meeting_status' => $room->status,
+                    'ended_by' => $room->ended_by,
+                    'ended_at' => $room->ended_at,
+                    'duration_seconds' => $room->duration,
+                    'appointment_status' => $appointment->appointment_status,
+                ]
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::error('Customer end video call failed', [
+                'appointment_id' => $request->appointment_id,
+                'customer_id' => $customer->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'Unable to end video consultation.'
+            ], 500);
+        }
+    }
+
 }

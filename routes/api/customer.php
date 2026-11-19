@@ -318,6 +318,7 @@ Route::group(['middleware' => ['customertokenCheck']], function () {
     Route::post('reschedule-appointment', [DoctorAppointmentController::class, 'rescheduleAppointment']);
     Route::post('pay-appointment', [DoctorAppointmentController::class, 'payAppointment']);
     Route::post('join-video-room', [DoctorAppointmentController::class, 'joinVideoRoom']);
+    Route::post('end-video-call',[DoctorAppointmentController::class, 'endVideoCall']);
 
 
     // Diagnostic Booking
