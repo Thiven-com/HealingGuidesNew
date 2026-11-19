@@ -269,7 +269,7 @@ class VideoCallController extends Controller
         $room->save();
 
         $appointment->appointment_status = 'completed';
-        $appointment->meeting_status = 'completed';
+        $appointment->meeting_status = 'ended';
         $appointment->meeting_ended_at = now();
         $appointment->save();
 
